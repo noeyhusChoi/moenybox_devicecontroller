@@ -203,7 +203,10 @@ namespace DeviceController.Devices.Scanner
                             continue;
                         }
 
-                        await _responses.Writer.WriteAsync(frame, token).ConfigureAwait(false);
+                        if (IsResponseOpcode(opcode))
+                        {
+                            await _responses.Writer.WriteAsync(frame, token).ConfigureAwait(false);
+                        }
                     }
                     catch (OperationCanceledException)
                     {
@@ -245,6 +248,11 @@ namespace DeviceController.Devices.Scanner
                 return false;
             }
 
+            if (!VerifyChecksum(frame))
+            {
+                return false;
+            }
+
             var payload = frame.Slice(offset, bodyLength);
             opcode = payload[0];
             status = payload[2];
@@ -258,6 +266,31 @@ namespace DeviceController.Devices.Scanner
             var type = data[0];
             var payload = Encoding.ASCII.GetString(data.Slice(1));
             return new ScannerDecodeData(type, payload);
+        }
+
+        private static bool IsResponseOpcode(byte opcode) =>
+            opcode == 0xD0 // ACK
+            || opcode == 0xD1 // NAK
+            || opcode == 0xA4; // Revision response
+
+        private static bool VerifyChecksum(ReadOnlySpan<byte> frame)
+        {
+            if (frame.Length < 3) return false;
+            var data = frame[..^2];
+            var provided = frame[^2..];
+            var (h, l) = ComputeChecksum(data);
+            return h == provided[0] && l == provided[1];
+        }
+
+        private static (byte high, byte low) ComputeChecksum(ReadOnlySpan<byte> data)
+        {
+            int sum = 0;
+            foreach (var b in data)
+            {
+                sum += b;
+            }
+            var checksum = (ushort)((0x10000 - (sum & 0xFFFF)) & 0xFFFF);
+            return ((byte)((checksum >> 8) & 0xFF), (byte)(checksum & 0xFF));
         }
     }
 }

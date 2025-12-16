@@ -1,0 +1,156 @@
+<Window x:Class="DeviceController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Device Controller" Height="520" Width="940">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <DataTemplate DataType="{x:Type viewModels:DeviceViewModel}" x:Key="DeviceDetailTemplate" xmlns:viewModels="clr-namespace:DeviceController.ViewModels">
+            <Border CornerRadius="12" Padding="12" Background="#111827" BorderBrush="#1E293B" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="{Binding DeviceId}" Foreground="#E2E8F0" FontSize="20" FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,12">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                            <TextBlock Text="Connection:" Foreground="#CBD5E1" />
+                                        <TextBlock Text="{Binding ConnectionState}" Foreground="#38BDF8" Margin="6,0,0,0" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                                        <TextBlock Text="Health:" Foreground="#CBD5E1" />
+                                        <TextBlock Text="{Binding DisplayHealth}" Foreground="#A3E635" Margin="6,0,0,0" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Detail}" Foreground="#94A3B8" />
+                                </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding Commands}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="8" Background="#0B1220" BorderBrush="#1E293B" BorderThickness="1" Padding="8" Margin="0,2,0,2">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DisplayName}" Foreground="#E2E8F0" FontWeight="SemiBold" />
+                                            <TextBlock Text="{Binding Description}" Foreground="#94A3B8" Margin="8,0,0,0" />
+                                            <TextBlock Text="Status" Foreground="#38BDF8" Margin="8,0,0,0"
+                                                       Visibility="{Binding IsStatus, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <TextBlock Text="Blocked" Foreground="#F97316" Margin="8,0,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsAllowed}" Value="False">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Text="Allowed" Foreground="#A3E635" Margin="8,0,0,0"
+                                                       Visibility="{Binding IsAllowed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBox Width="140" Height="28" Padding="4" Margin="0,0,6,0"
+                                                     Text="{Binding ParameterText, UpdateSourceTrigger=PropertyChanged}">
+                                                <TextBox.Style>
+                                                    <Style TargetType="TextBox">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ParameterType}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBox.Style>
+                                            </TextBox>
+                                            <Button Content="Run" Padding="10,4" Command="{Binding ExecuteCommand}" />
+                                            <TextBlock Text="{Binding LastMessage}" Foreground="#F8FAFC" Margin="8,0,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Background="#0F172A" Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Summary list -->
+        <Border Grid.Column="0" Margin="4" Background="#0B1220" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="10">
+            <StackPanel>
+                <TextBlock Text="Devices" Margin="12,8,12,4" Foreground="#E2E8F0" FontSize="16" FontWeight="Bold" />
+                <ListBox ItemsSource="{Binding Devices}"
+                         SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="#E2E8F0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="8,4" Padding="8" CornerRadius="8" Background="#111827" BorderBrush="#1E293B" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding DeviceId}" FontWeight="SemiBold" />
+                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                        <TextBlock Text="{Binding ConnectionState}" Foreground="#38BDF8" />
+                                        <TextBlock Text="{Binding DisplayHealth}" Foreground="#A3E635" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Detail}" Foreground="#94A3B8" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+
+        <!-- Detail -->
+        <Border Grid.Column="1" Margin="4" Background="#0B1220" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <ContentControl Content="{Binding SelectedDevice}" ContentTemplate="{StaticResource DeviceDetailTemplate}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedDevice}" Value="{x:Null}">
+                                    <Setter Property="Content" Value="{x:Null}" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ContentControl">
+                                                <Grid>
+                                                    <TextBlock Text="Select a device to view details." Foreground="#94A3B8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+                <StackPanel Grid.Row="1" Margin="8">
+                    <TextBlock Text="Decode Log" Foreground="#E2E8F0" FontSize="14" FontWeight="Bold" Margin="0,0,0,6" />
+                    <Border Background="#111827" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="8">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Decodes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="#E2E8F0" Padding="6,4" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -3,19 +3,30 @@ using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Channels;
 using DeviceController.Core.Abstractions;
+using System.Text;
 
 namespace DeviceController.Devices.Scanner
 {
     public class ScannerClient : IDeviceClient
     {
         private readonly ScannerDeviceConfig _config;
+        private readonly Services.IDecodeEventBus? _decodeBus;
         private SerialPort? _serial;
         private readonly SemaphoreSlim _exchangeLock = new(1, 1);
+        private readonly Channel<ReadOnlyMemory<byte>> _responses = Channel.CreateUnbounded<ReadOnlyMemory<byte>>(new UnboundedChannelOptions
+        {
+            SingleReader = true,
+            SingleWriter = false
+        });
+        private CancellationTokenSource? _cts;
+        private Task? _receiveLoop;
 
-        public ScannerClient(ScannerDeviceConfig config)
+        public ScannerClient(ScannerDeviceConfig config, Services.IDecodeEventBus? decodeBus = null)
         {
             _config = config;
+            _decodeBus = decodeBus;
             ClientId = $"ScannerClient-{config.PortName}";
         }
 
@@ -36,6 +47,7 @@ namespace DeviceController.Devices.Scanner
             {
                 // swallow; closing errors are non-fatal
             }
+            _cts?.Cancel();
             return Task.CompletedTask;
         }
 
@@ -55,6 +67,7 @@ namespace DeviceController.Devices.Scanner
                 };
 
                 _serial.Open();
+                StartReceiveLoop();
                 return new ConnectionResult(true, "Port opened.");
             }
             catch (Exception ex)
@@ -73,16 +86,13 @@ namespace DeviceController.Devices.Scanner
             await _exchangeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
+                while (_responses.Reader.TryRead(out _)) { }
+
                 var stream = _serial.BaseStream;
                 await stream.WriteAsync(payload, cancellationToken).ConfigureAwait(false);
                 await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
 
-                var frame = await ReadFrameAsync(stream, cancellationToken).ConfigureAwait(false);
-                if (frame.Length == 0)
-                {
-                    return new ClientExchangeResult(false, ReadOnlyMemory<byte>.Empty, "No response.");
-                }
-
+                var frame = await _responses.Reader.ReadAsync(cancellationToken).ConfigureAwait(false);
                 return new ClientExchangeResult(true, frame, "OK");
             }
             catch (OperationCanceledException)
@@ -158,9 +168,96 @@ namespace DeviceController.Devices.Scanner
 
         public ValueTask DisposeAsync()
         {
+            _cts?.Cancel();
             _serial?.Dispose();
             _exchangeLock.Dispose();
             return ValueTask.CompletedTask;
+        }
+
+        private void StartReceiveLoop()
+        {
+            _cts?.Cancel();
+            _cts = new CancellationTokenSource();
+            var token = _cts.Token;
+            _receiveLoop = Task.Run(async () =>
+            {
+                if (_serial?.BaseStream is not Stream stream) return;
+                while (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var frame = await ReadFrameAsync(stream, token).ConfigureAwait(false);
+                        if (frame.Length == 0) continue;
+                        if (!TryParseFrame(frame, out var opcode, out var data, out _))
+                        {
+                            continue;
+                        }
+
+                        if (opcode == 0xF4)
+                        {
+                            var decode = ParseDecode(data);
+                            if (decode != null)
+                            {
+                                _decodeBus?.Publish(decode);
+                            }
+                            continue;
+                        }
+
+                        await _responses.Writer.WriteAsync(frame, token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        break;
+                    }
+                    catch
+                    {
+                        // ignore and continue
+                    }
+                }
+            }, token);
+        }
+
+        private static bool TryParseFrame(ReadOnlySpan<byte> frame, out byte opcode, out ReadOnlySpan<byte> data, out byte status)
+        {
+            opcode = 0;
+            data = ReadOnlySpan<byte>.Empty;
+            status = 0;
+            if (frame.Length < 5) return false;
+
+            int offset;
+            int bodyLength;
+            if (frame[0] == 0xFF)
+            {
+                if (frame.Length < 6) return false;
+                var lenValue = (frame[1] << 8) | frame[2];
+                bodyLength = lenValue - 2;
+                offset = 3;
+            }
+            else
+            {
+                var lenValue = frame[0];
+                bodyLength = lenValue - 1;
+                offset = 1;
+            }
+
+            if (bodyLength < 3 || offset + bodyLength > frame.Length - 2)
+            {
+                return false;
+            }
+
+            var payload = frame.Slice(offset, bodyLength);
+            opcode = payload[0];
+            status = payload[2];
+            data = payload.Length > 3 ? payload.Slice(3) : ReadOnlySpan<byte>.Empty;
+            return true;
+        }
+
+        private static ScannerDecodeData? ParseDecode(ReadOnlySpan<byte> data)
+        {
+            if (data.Length < 2) return null;
+            var type = data[0];
+            var payload = Encoding.ASCII.GetString(data.Slice(1));
+            return new ScannerDecodeData(type, payload);
         }
     }
 }

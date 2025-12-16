@@ -105,26 +105,32 @@ namespace DeviceController.Devices.Scanner
 
         private static async Task<byte[]> ReadFrameAsync(Stream stream, CancellationToken cancellationToken)
         {
-            // Length prefix
             var first = await ReadExactAsync(stream, 1, cancellationToken).ConfigureAwait(false);
             if (first.Length == 0) return Array.Empty<byte>();
 
-            int length;
             bool extended = first[0] == 0xFF;
+            int bodyLength;
             byte[] header;
             if (extended)
             {
                 var lenBytes = await ReadExactAsync(stream, 2, cancellationToken).ConfigureAwait(false);
-                length = (lenBytes[0] << 8) | lenBytes[1];
+                var lenValue = (lenBytes[0] << 8) | lenBytes[1]; // includes LenH/LenL but excludes checksum
+                bodyLength = lenValue - 2; // minus LenH/LenL already read
                 header = new[] { first[0], lenBytes[0], lenBytes[1] };
             }
             else
             {
-                length = first[0];
+                var lenValue = first[0]; // includes Length byte itself
+                bodyLength = lenValue - 1; // minus the length byte already read
                 header = new[] { first[0] };
             }
 
-            var body = await ReadExactAsync(stream, length, cancellationToken).ConfigureAwait(false);
+            if (bodyLength < 0)
+            {
+                return Array.Empty<byte>();
+            }
+
+            var body = await ReadExactAsync(stream, bodyLength, cancellationToken).ConfigureAwait(false);
             var checksum = await ReadExactAsync(stream, 2, cancellationToken).ConfigureAwait(false);
 
             var frame = new byte[header.Length + body.Length + checksum.Length];

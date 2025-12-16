@@ -126,36 +126,41 @@ namespace DeviceController.Devices.Scanner
 
         private static byte[] BuildFrame(byte opcode, byte source, byte status, byte[] data)
         {
-            var payloadLength = 4 + data.Length; // opcode + source + status + one extra + data? matches provided lengths
-            Span<byte> lengthBytes = stackalloc byte[3];
-            bool extended = payloadLength > 0xFF;
-            int headerLen = 1;
+            // Length includes the length field(s) themselves and everything up to data (checksum excluded).
+            var baseLength = 1 /*opcode*/ + 1 /*source*/ + 1 /*status*/ + data.Length;
+            bool extended = baseLength + 1 > 0xFF; // +1 if single-length byte is used
+
+            int totalLengthFieldValue;
+            int headerLen;
             if (extended)
             {
-                lengthBytes[0] = 0xFF;
-                lengthBytes[1] = (byte)((payloadLength >> 8) & 0xFF);
-                lengthBytes[2] = (byte)(payloadLength & 0xFF);
+                // total length excludes checksum but includes LenH/LenL
+                totalLengthFieldValue = baseLength + 2; // LenH+LenL counted
                 headerLen = 3;
             }
             else
             {
-                lengthBytes[0] = (byte)payloadLength;
+                totalLengthFieldValue = baseLength + 1; // Length byte counted
+                headerLen = 1;
             }
 
-            var totalLen = headerLen + payloadLength + 2; // + checksum
-            var buffer = new byte[totalLen];
+            var totalWithoutChecksum = headerLen + baseLength;
+            var buffer = new byte[totalWithoutChecksum + 2]; // + checksum
             var offset = 0;
-            buffer[offset++] = lengthBytes[0];
             if (extended)
             {
-                buffer[offset++] = lengthBytes[1];
-                buffer[offset++] = lengthBytes[2];
+                buffer[offset++] = 0xFF;
+                buffer[offset++] = (byte)((totalLengthFieldValue >> 8) & 0xFF);
+                buffer[offset++] = (byte)(totalLengthFieldValue & 0xFF);
+            }
+            else
+            {
+                buffer[offset++] = (byte)totalLengthFieldValue;
             }
 
             buffer[offset++] = opcode;
             buffer[offset++] = source;
             buffer[offset++] = status;
-            buffer[offset++] = 0x00; // reserved/empty data length alignment to match length formula
 
             if (data.Length > 0)
             {
@@ -163,44 +168,46 @@ namespace DeviceController.Devices.Scanner
                 offset += data.Length;
             }
 
-            var checksum = ComputeChecksum(buffer.AsSpan(0, offset));
-            buffer[offset++] = checksum.high;
-            buffer[offset] = checksum.low;
+            var (high, low) = ComputeChecksum(buffer.AsSpan(0, offset));
+            buffer[offset++] = high;
+            buffer[offset] = low;
             return buffer;
         }
 
         private static (bool success, byte opcode, byte status, byte[] data, string? message) ParseFrame(ReadOnlySpan<byte> frame)
         {
-            if (frame.Length < 6) return (false, 0, 0, Array.Empty<byte>(), "Frame too short.");
+            if (frame.Length < 5) return (false, 0, 0, Array.Empty<byte>(), "Frame too short.");
 
-            int offset = 0;
-            int length;
+            int offset;
+            int bodyLength;
             if (frame[0] == 0xFF)
             {
-                if (frame.Length < 7) return (false, 0, 0, Array.Empty<byte>(), "Extended frame too short.");
-                length = (frame[1] << 8) | frame[2];
+                if (frame.Length < 6) return (false, 0, 0, Array.Empty<byte>(), "Extended frame too short.");
+                var lenValue = (frame[1] << 8) | frame[2]; // includes LenH/LenL, excludes checksum
+                bodyLength = lenValue - 2; // minus LenH/LenL
                 offset = 3;
             }
             else
             {
-                length = frame[0];
+                var lenValue = frame[0]; // includes length byte itself
+                bodyLength = lenValue - 1;
                 offset = 1;
             }
 
-            var checksumIndex = offset + length;
+            if (bodyLength < 3) return (false, 0, 0, Array.Empty<byte>(), "Payload too short.");
+
+            var checksumIndex = offset + bodyLength;
             if (checksumIndex + 2 > frame.Length)
             {
                 return (false, 0, 0, Array.Empty<byte>(), "Length mismatch.");
             }
 
-            var checksumOk = VerifyChecksum(frame.Slice(0, checksumIndex + 2));
-            if (!checksumOk)
+            if (!VerifyChecksum(frame.Slice(0, checksumIndex + 2)))
             {
                 return (false, 0, 0, Array.Empty<byte>(), "Checksum invalid.");
             }
 
-            var payload = frame.Slice(offset, length);
-            if (payload.Length < 3) return (false, 0, 0, Array.Empty<byte>(), "Payload too short.");
+            var payload = frame.Slice(offset, bodyLength);
             var opcode = payload[0];
             var status = payload[2];
             var data = payload.Length > 3 ? payload.Slice(3).ToArray() : Array.Empty<byte>();

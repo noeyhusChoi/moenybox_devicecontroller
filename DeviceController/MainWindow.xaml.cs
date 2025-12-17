@@ -1,14 +1,15 @@
+using System;
 using System.Windows;
 using DeviceController.ViewModels;
 
-namespace DeviceController
+namespace DeviceController;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow(MainWindowViewModel viewModel)
     {
-        public MainWindow(MainViewModel viewModel)
-        {
-            InitializeComponent();
-            DataContext = viewModel;
-        }
+        InitializeComponent();
+        DataContext = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
     }
 }
+

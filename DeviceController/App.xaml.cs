@@ -1,101 +1,90 @@
-using System.Threading;
+using System;
+using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-using DeviceController.Core.Abstractions;
-using DeviceController.Devices.Diagnostics;
-using DeviceController.Devices.Simulated;
-using DeviceController.Devices.Scanner;
-using DeviceController.Services;
+using System.Windows.Threading;
 using DeviceController.ViewModels;
+using KIOSK.Devices.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace DeviceController
+namespace DeviceController;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    private IHost? _host;
+
+    protected override async void OnStartup(StartupEventArgs e)
     {
-        private ServiceProvider? _serviceProvider;
-        private StatusPollingService? _statusPolling;
+        base.OnStartup(e);
 
-        protected override async void OnStartup(StartupEventArgs e)
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+        DispatcherUnhandledException += OnDispatcherUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+
+        _host = Host.CreateDefaultBuilder()
+            .ConfigureAppConfiguration(cfg =>
+            {
+                cfg.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            })
+            .ConfigureServices((ctx, services) =>
+            {
+                services.AddDevicePlatform(ctx.Configuration);
+
+                services.Configure<HostOptions>(o =>
+                {
+                    // 장치 연결/재시도 중 발생하는 예외로 앱 전체가 내려가는 것을 방지
+                    o.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+                });
+
+                services.AddSingleton<MainWindowViewModel>();
+                services.AddSingleton<MainWindow>();
+            })
+            .Build();
+
+        await _host.StartAsync().ConfigureAwait(false);
+        var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+        mainWindow.Show();
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        if (_host is not null)
         {
-            base.OnStartup(e);
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
-
-            var registry = _serviceProvider.GetRequiredService<IDeviceRegistry>();
-            await registry.StartAsync(CancellationToken.None);
-
-            _statusPolling = _serviceProvider.GetRequiredService<StatusPollingService>();
-            await _statusPolling.StartAsync(CancellationToken.None);
-
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            try { await _host.StopAsync().ConfigureAwait(false); } catch { }
+            _host.Dispose();
+            _host = null;
         }
 
-        protected override async void OnExit(ExitEventArgs e)
-        {
-            if (_serviceProvider?.GetService<IDeviceRegistry>() is { } registry)
-            {
-                await registry.StopAsync(CancellationToken.None);
-            }
+        base.OnExit(e);
+    }
 
-            if (_statusPolling != null)
-            {
-                await _statusPolling.StopAsync();
-                await _statusPolling.DisposeAsync();
-            }
+    private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        try { Trace.WriteLine($"[UI] Unhandled: {e.Exception}"); } catch { }
 
-            _serviceProvider?.Dispose();
-            base.OnExit(e);
-        }
+        // 장치 포트 제거 등 외부 요인으로 발생한 예외는 앱이 종료되지 않도록 처리.
+        e.Handled = e.Exception is
+            OperationCanceledException or
+            ObjectDisposedException or
+            System.IO.IOException or
+            UnauthorizedAccessException or
+            InvalidOperationException;
+    }
 
-        private static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<SimulatedProtocol>();
-            services.AddSingleton<DiagnosticsProtocol>();
-            services.AddSingleton<ScannerProtocol>();
-            services.AddSingleton<IDecodeEventBus, DecodeEventBus>();
+    private static void OnUnhandledException(object? sender, UnhandledExceptionEventArgs e)
+    {
+        try { Trace.WriteLine($"[AppDomain] Unhandled: {e.ExceptionObject}"); } catch { }
+    }
 
-            var simulatedConfigs = new[]
-            {
-                new SimulatedDeviceConfig("Simulated-01", "SimulatedSerial-01"),
-                new SimulatedDeviceConfig("Simulated-02", "SimulatedSerial-02")
-            };
-
-            foreach (var config in simulatedConfigs)
-            {
-                services.AddSingleton<IDevice>(sp =>
-                    new SimulatedDevice(config.DeviceId, new SimulatedDeviceClient(config.ClientId),
-                        sp.GetRequiredService<SimulatedProtocol>()));
-            }
-
-            var diagnosticsConfigs = new[]
-            {
-                new DiagnosticsDeviceConfig("Diagnostics-01", "Tcp-01")
-            };
-
-            foreach (var config in diagnosticsConfigs)
-            {
-                services.AddSingleton<IDevice>(sp =>
-                    new DiagnosticsDevice(config.DeviceId, new DiagnosticsDeviceClient(config.ClientId),
-                        sp.GetRequiredService<DiagnosticsProtocol>()));
-            }
-
-            var scannerConfigs = new[]
-            {
-                new ScannerDeviceConfig("Scanner-01", "COM3", 115200)
-            };
-
-            foreach (var config in scannerConfigs)
-            {
-                services.AddSingleton<IDevice>(sp =>
-                    new ScannerDevice(config.DeviceId, new ScannerClient(config), sp.GetRequiredService<ScannerProtocol>()));
-            }
-
-            services.AddSingleton<IDeviceRegistry, DeviceRegistry>();
-            services.AddSingleton(sp => new StatusPollingService(sp.GetRequiredService<IDeviceRegistry>(), TimeSpan.FromSeconds(2)));
-            services.AddSingleton<MainViewModel>();
-            services.AddSingleton<MainWindow>();
-        }
+    private static void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        try { Trace.WriteLine($"[Task] Unobserved: {e.Exception}"); } catch { }
+        e.SetObserved();
     }
 }
+

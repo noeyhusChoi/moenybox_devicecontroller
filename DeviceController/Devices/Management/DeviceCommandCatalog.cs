@@ -20,10 +20,16 @@ public interface IDeviceCommandCatalog
 public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
 {
     private readonly IDeviceRuntime _runtime;
+    private readonly IReadOnlyDictionary<string, IDeviceCommandProvider> _providers;
 
-    public DeviceCommandCatalog(IDeviceRuntime runtime)
+    public DeviceCommandCatalog(
+        IDeviceRuntime runtime,
+        IEnumerable<IDeviceCommandProvider> providers)
     {
         _runtime = runtime;
+        _providers = providers
+            .GroupBy(p => p.Model, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
     }
 
     public IReadOnlyCollection<DeviceCommandDescriptor> GetFor(string deviceName)
@@ -41,25 +47,11 @@ public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
             .ToDictionary(s => s.Name, s => (IReadOnlyCollection<DeviceCommandDescriptor>)GetByModel(s.Model), StringComparer.OrdinalIgnoreCase);
     }
 
-    private static IReadOnlyCollection<DeviceCommandDescriptor> GetByModel(string model)
+    private IReadOnlyCollection<DeviceCommandDescriptor> GetByModel(string model)
     {
-        if (model.Equals("QR_TOTINFO", StringComparison.OrdinalIgnoreCase))
-        {
-            return new[]
-            {
-                new DeviceCommandDescriptor("SCAN_ENABLE", "스캔 활성화"),
-                new DeviceCommandDescriptor("SCAN_DISABLE", "스캔 비활성화"),
-                new DeviceCommandDescriptor("START_DECODE", "디코드 시작"),
-                new DeviceCommandDescriptor("STOP_DECODE", "디코드 중지"),
-                new DeviceCommandDescriptor("RESET", "리셋"),
-                new DeviceCommandDescriptor("SET_HOST_TRIGGER", "Host Trigger 모드"),
-                new DeviceCommandDescriptor("SET_AUTO_TRIGGER", "Auto-Induction 모드"),
-                new DeviceCommandDescriptor("SET_PACKET_MODE", "Packet 모드"),
-                new DeviceCommandDescriptor("REQUEST_REVISION", "Revision 조회"),
-            };
-        }
+        if (_providers.TryGetValue(model, out var provider))
+            return provider.GetCommands();
 
         return Array.Empty<DeviceCommandDescriptor>();
     }
 }
-

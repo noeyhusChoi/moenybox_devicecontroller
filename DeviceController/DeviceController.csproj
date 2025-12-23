@@ -6,10 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
@@ -17,7 +19,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="MPOST">
+      <HintPath>..\..\MONEYBOX_2\KIOSK\libs\x86\MPOST.dll</HintPath>
+    </Reference>
+    <Reference Include="Pr22">
+      <HintPath>..\..\..\OneDrive\Dokumen\MoneyBox\1. 프로젝트\1. 키오스크\프로토콜\1. 신분증 스캐너\신분증 스캐너_Adaptive Recognition Combo Scan\pr-sdk-2.2.0.20\pr-sdk-2.2.0.20\dotnet\Pr22.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MPOST.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Pr22.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

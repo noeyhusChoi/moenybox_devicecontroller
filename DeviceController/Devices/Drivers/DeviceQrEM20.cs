@@ -6,8 +6,6 @@ namespace KIOSK.Device.Drivers;
 
 public sealed class DeviceQrEM20 : DeviceBase
 {
-    private int _failThreshold;
-
     public DeviceQrEM20(DeviceDescriptor desc, ITransport transport)
         : base(desc, transport)
     {
@@ -23,13 +21,11 @@ public sealed class DeviceQrEM20 : DeviceBase
                 await transport.CloseAsync(ct).ConfigureAwait(false);
 
             await transport.OpenAsync(ct).ConfigureAwait(false);
-            _failThreshold = 0;
 
             return CreateSnapshot();
         }
         catch (Exception)
         {
-            _failThreshold++;
             return CreateSnapshot(new[]
             {
                 CreateAlarm("QR", "미연결")
@@ -37,15 +33,13 @@ public sealed class DeviceQrEM20 : DeviceBase
         }
     }
 
-    public override async Task<DeviceStatusSnapshot> GetStatusAsync(
-        CancellationToken ct = default,
-        string temp = "임시메소드")
+    public override async Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default)
     {
         var alarms = new List<DeviceAlarm>();
 
+        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
         try
         {
-            using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
             var transport = RequireTransport();
 
             await EnsureTransportOpenAsync(ct).ConfigureAwait(false);
@@ -61,11 +55,10 @@ public sealed class DeviceQrEM20 : DeviceBase
 
             if (read > 0)
             {
-                _failThreshold = 0;
             }
             else
             {
-                _failThreshold++;
+                alarms.Add(CreateAlarm("QR", "응답 없음", Severity.Warning));
             }
         }
         catch (OperationCanceledException)
@@ -74,11 +67,8 @@ public sealed class DeviceQrEM20 : DeviceBase
         }
         catch (Exception)
         {
-            _failThreshold++;
-        }
-
-        if (_failThreshold > 0)
             alarms.Add(CreateAlarm("QR", "응답 없음", Severity.Warning));
+        }
 
         return CreateSnapshot(alarms);
     }
@@ -116,18 +106,18 @@ public sealed class DeviceQrEM20 : DeviceBase
                             : new CommandResult(false, "No data");
                     }
 
-                default:
-                    return new CommandResult(false, $"[{command.Name}] UNKNOWN COMMAND");
             }
         }
         catch (OperationCanceledException)
         {
-            return new CommandResult(false, $"[{command.Name}] CANCELED COMMAND");
+            throw;
         }
         catch (Exception ex)
         {
             return new CommandResult(false, $"[{command.Name}] ERROR COMMAND: {ex.Message}");
         }
+
+        return new CommandResult(false, $"[{command.Name}] UNKNOWN COMMAND");
     }
 
     private async Task<CommandResult> ScanOnceAsync(ITransport transport, CancellationToken ct)

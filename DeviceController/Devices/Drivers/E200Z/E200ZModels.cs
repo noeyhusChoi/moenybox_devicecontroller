@@ -115,3 +115,8 @@ public sealed class DecodeMessage
 
 internal readonly record struct SsiParsed(SsiOpcode Opcode, byte Source, byte Status, byte[] Data, bool Extended);
 
+internal static class E200ZTimeouts
+{
+    public const int DefaultCommandMs = 1000;
+    public const int ResetMs = 2000;
+}

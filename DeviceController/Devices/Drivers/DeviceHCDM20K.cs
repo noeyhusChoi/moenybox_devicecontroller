@@ -20,8 +20,6 @@ namespace KIOSK.Devices.Drivers
     /// </summary>
     public sealed class DeviceHCDM20K : DeviceBase
     {
-        private int _failThreshold;
-
         // Protocol bytes
         private const byte STX = 0x02;
         private const byte ETX = 0x03;
@@ -48,7 +46,6 @@ namespace KIOSK.Devices.Drivers
                     await transport.CloseAsync(ct).ConfigureAwait(false);
 
                 await transport.OpenAsync(ct).ConfigureAwait(false);
-                _failThreshold = 0;
 
                 if (!transport.IsOpen)
                 {
@@ -75,7 +72,6 @@ namespace KIOSK.Devices.Drivers
                 var initRes = await SendAsciiCommandAsync('T', initData, overallTimeoutMs: 8000, ct: ct);
                 if (!initRes.success)
                 {
-                    _failThreshold++;
                     return CreateSnapshot(new[] { CreateAlarm("T0", $"Init 실패: {initRes.message}", Severity.Error) });
                 }
 
@@ -83,12 +79,11 @@ namespace KIOSK.Devices.Drivers
             }
             catch
             {
-                _failThreshold++;
                 return CreateSnapshot(new[] { CreateAlarm("00", "미연결", Severity.Error) });
             }
         }
 
-        public async override Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default, string temp = "")
+        public async override Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default)
         {
             var alarms = new List<DeviceAlarm>();
 
@@ -97,7 +92,7 @@ namespace KIOSK.Devices.Drivers
                 var res = await SendAsciiCommandAsync('S', null, overallTimeoutMs: 2000, ct: ct);
                 if (!res.success)
                 {
-                    _failThreshold++;
+                    alarms.Add(CreateAlarm("01", "통신오류", Severity.Warning));
                 }
                 else
                 {
@@ -134,16 +129,12 @@ namespace KIOSK.Devices.Drivers
                         if (data[11] == '1') alarms.Add(CreateAlarm("RB", "REJECT BOX 열림", Severity.Warning)); // Byte12 bit0
                         if (data[12] == '1') alarms.Add(CreateAlarm("RB", "CISssss BOX 열림", Severity.Warning)); // Byte12 bit0
                     }
-                    _failThreshold = 0;
                 }
             }
             catch
             {
-                _failThreshold++;
-            }
-
-            if (_failThreshold > 5)
                 alarms.Add(CreateAlarm("01", "통신오류", Severity.Warning));
+            }
 
             return CreateSnapshot(alarms);
         }
@@ -152,10 +143,10 @@ namespace KIOSK.Devices.Drivers
         #region Commands
         public async override Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default)
         {
+            using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
+
             try
             {
-                using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
-
                 switch (command)
                 {
                     case { Name: string name } when name.Equals("SENSOR", StringComparison.OrdinalIgnoreCase):
@@ -169,7 +160,7 @@ namespace KIOSK.Devices.Drivers
                             var r = await SendAsciiCommandRawAsync('T', data, overallTimeoutMs: 8000, ct: ct);
                             return r.success ? new CommandResult(true, Data: r.data) : new CommandResult(false, r.message);
                         }
-                    case { Name: string name} when name.Equals("VERSION", StringComparison.OrdinalIgnoreCase):
+                    case { Name: string name } when name.Equals("VERSION", StringComparison.OrdinalIgnoreCase):
                         {
                             var r = await SendAsciiCommandAsync('V', null, overallTimeoutMs: 2000, ct: ct);
                             return r.success ? new CommandResult(true, Data: r.data) : new CommandResult(false, r.message);
@@ -193,19 +184,18 @@ namespace KIOSK.Devices.Drivers
                             var r = await SendAsciiCommandRawAsync('D', data, overallTimeoutMs: Math.Max(timeoutMs, 15000), ct: ct, isLongOpWithEnq: true);
                             return r.success ? new CommandResult(true, Data: r.data) : new CommandResult(false, r.message);
                         }
-
-                    default:
-                        return new CommandResult(false, $"[{command.Name}] UNKNOWN COMMAND");
                 }
             }
             catch (OperationCanceledException)
             {
-                return new CommandResult(false, $"[{command.Name}] CANCELED COMMAND");
+                throw;
             }
             catch (Exception ex)
             {
                 return new CommandResult(false, $"[{command.Name}] ERROR COMMAND: {ex.Message}");
             }
+
+            return new CommandResult(false, $"[{command.Name}] UNKNOWN COMMAND");
         }
         #endregion
 

@@ -16,11 +16,14 @@ namespace KIOSK.Devices.Management
 
         bool TryGetSupervisor(string name, out DeviceSupervisorV2 sup);
         IEnumerable<DeviceSupervisorV2> GetAllSupervisors();
+
+        Task<CommandResult> ExecuteAsync(string name, DeviceCommand cmd, CancellationToken ct = default);
     }
 
     public sealed class DeviceRuntime : IDeviceRuntime
     {
         private readonly IDeviceStatusStore _statusStore;
+        private readonly IDeviceStatusPipeline _statusPipeline;
         private readonly ITransportFactory _transportFactory;
         private readonly IDeviceFactory _deviceFactory;
         private readonly ConcurrentDictionary<string, DeviceSupervisorV2> _supers = new();
@@ -28,10 +31,12 @@ namespace KIOSK.Devices.Management
 
         public DeviceRuntime(
             IDeviceStatusStore statusStore,
+            IDeviceStatusPipeline statusPipeline,
             ITransportFactory transportFactory,
             IDeviceFactory deviceFactory)
         {
             _statusStore = statusStore;
+            _statusPipeline = statusPipeline;
             _transportFactory = transportFactory;
             _deviceFactory = deviceFactory;
         }
@@ -47,7 +52,7 @@ namespace KIOSK.Devices.Management
             _statusStore.Initialize(desc);
 
             // SupervisorV2 상태를 Store에 반영
-            sup.StatusUpdated += (id, snap) => { _statusStore.Update(id, snap); };
+            sup.StatusUpdated += (id, snap) => { _statusPipeline.Process(id, snap); };
             sup.Connected += HandleConnected;
             sup.Disconnected += HandleDisconnected;
             sup.Faulted += HandleFaulted;
@@ -61,6 +66,14 @@ namespace KIOSK.Devices.Management
             _ = sup.RunAsync(linkedCts.Token).ContinueWith(_ => linkedCts.Dispose());
 
             return Task.CompletedTask;
+        }
+
+        public Task<CommandResult> ExecuteAsync(string name, DeviceCommand cmd, CancellationToken ct = default)
+        {
+            if (!_supers.TryGetValue(name, out var sup))
+                return Task.FromResult(new CommandResult(false, $"Device not found: {name}"));
+
+            return sup.ExecuteAsync(cmd, ct);
         }
 
         public bool TryGetSupervisor(string name, out DeviceSupervisorV2 sup)
@@ -81,7 +94,7 @@ namespace KIOSK.Devices.Management
         private void HandleConnected(string name)
         {
             var prev = _statusStore.TryGet(name);
-            _statusStore.Update(name, new DeviceStatusSnapshot
+            _statusPipeline.Process(name, new DeviceStatusSnapshot
             {
                 Name = name,
                 Model = ResolveModel(name),
@@ -94,7 +107,7 @@ namespace KIOSK.Devices.Management
         private void HandleDisconnected(string name)
         {
             var prev = _statusStore.TryGet(name);
-            _statusStore.Update(name, new DeviceStatusSnapshot
+            _statusPipeline.Process(name, new DeviceStatusSnapshot
             {
                 Name = name,
                 Model = ResolveModel(name),
@@ -108,9 +121,16 @@ namespace KIOSK.Devices.Management
         {
             var prev = _statusStore.TryGet(name);
             var alarms = prev?.Alarms?.ToList() ?? new List<DeviceAlarm>();
-            alarms.Add(new DeviceAlarm("FAULT", ex.Message, Severity.Error, DateTimeOffset.UtcNow));
+            var now = DateTimeOffset.UtcNow;
+            var existingIndex = alarms.FindIndex(a =>
+                a.Code == "FAULT" &&
+                string.Equals(a.Message, ex.Message, StringComparison.OrdinalIgnoreCase) &&
+                a.Severity == Severity.Error);
 
-            _statusStore.Update(name, new DeviceStatusSnapshot
+            if (existingIndex < 0)
+                alarms.Add(new DeviceAlarm("FAULT", ex.Message, Severity.Error, now));
+
+            _statusPipeline.Process(name, new DeviceStatusSnapshot
             {
                 Name = name,
                 Model = ResolveModel(name),

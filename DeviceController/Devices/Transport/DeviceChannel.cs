@@ -94,12 +94,50 @@ public sealed class DeviceChannel : IAsyncDisposable
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, _cts.Token);
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(linked.Token);
         timeoutCts.CancelAfter(timeoutMs);
-        using var reg = timeoutCts.Token.Register(() => waiter.Tcs.TrySetCanceled(timeoutCts.Token));
+        using var reg = timeoutCts.Token.Register(() => waiter.Tcs.TrySetException(new TimeoutException($"WaitAsync timed out after {timeoutMs}ms.")));
 
         try
         {
             var frame = _framer.MakeFrame(payload.Span);
             await _transport.WriteAsync(frame, linked.Token).ConfigureAwait(false);
+            return await waiter.Tcs.Task.ConfigureAwait(false);
+        }
+        finally
+        {
+            lock (_pendingLock)
+            {
+                _pending.Remove(waiter);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 전송 없이, 지정된 matcher에 일치하는 다음 프레임을 기다립니다.
+    /// </summary>
+    public async Task<byte[]> WaitAsync(
+        Func<ReadOnlyMemory<byte>, bool>? matcher = null,
+        int timeoutMs = 1000,
+        CancellationToken ct = default)
+    {
+        if (!IsRunning)
+            await StartAsync(ct).ConfigureAwait(false);
+
+        if (_cts is null)
+            throw new InvalidOperationException("Channel not started.");
+
+        var waiter = new PendingResponse(matcher ?? (_ => true));
+        lock (_pendingLock)
+        {
+            _pending.Add(waiter);
+        }
+
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, _cts.Token);
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(linked.Token);
+        timeoutCts.CancelAfter(timeoutMs);
+        using var reg = timeoutCts.Token.Register(() => waiter.Tcs.TrySetCanceled(timeoutCts.Token));
+
+        try
+        {
             return await waiter.Tcs.Task.ConfigureAwait(false);
         }
         finally
@@ -273,4 +311,3 @@ public sealed class PassthroughFramer : IFramer
     public byte[] MakeFrame(ReadOnlySpan<byte> payload)
         => payload.ToArray();
 }
-

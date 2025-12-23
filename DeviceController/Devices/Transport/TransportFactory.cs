@@ -40,6 +40,11 @@ public sealed class TransportFactory : ITransportFactory
                 {
                     return new TransportPr22();
                 }
+            case "MPOST":
+            case "DEPOSIT":
+                {
+                    return new TransportMpost(d.TransportPort);
+                }
             case "NONE":
                 {
                     return new TransportNone();
@@ -61,4 +66,3 @@ public sealed class TransportFactory : ITransportFactory
         return (baudRate, dataBits, stopBits, parity);
     }
 }
-

@@ -15,7 +15,6 @@ namespace KIOSK.Device.Drivers;
 public sealed class DeviceQrE200Z : DeviceBase
 {
     private E200ZClient? _client;
-    private int _failThreshold;
     private string? _lastRevision;
 
     public event Action<string>? Log;
@@ -31,7 +30,6 @@ public sealed class DeviceQrE200Z : DeviceBase
         try
         {
             await EnsureTransportOpenAsync(ct).ConfigureAwait(false);
-
             await DisposeClientAsync().ConfigureAwait(false);
 
             var channel = CreateChannel(new E200ZFramer());
@@ -42,7 +40,6 @@ public sealed class DeviceQrE200Z : DeviceBase
             _client = client;
 
             await client.StartAsync(ct).ConfigureAwait(false);
-            _failThreshold = 0;
 
             // 초기 설정(실패해도 장치 연결 자체는 유지)
             _ = TryInitSettingsAsync(client, ct);
@@ -51,7 +48,6 @@ public sealed class DeviceQrE200Z : DeviceBase
         }
         catch (Exception ex)
         {
-            _failThreshold++;
             Log?.Invoke($"[E200Z] Initialize error: {ex.Message}");
             return CreateSnapshot(new[]
             {
@@ -60,7 +56,7 @@ public sealed class DeviceQrE200Z : DeviceBase
         }
     }
 
-    public override async Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default, string snapshotId = "")
+    public override async Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default)
     {
         var alarms = new List<DeviceAlarm>();
 
@@ -71,72 +67,69 @@ public sealed class DeviceQrE200Z : DeviceBase
 
             var result = await _client.RequestRevisionAsync(ct).ConfigureAwait(false);
             if (!result.Success)
-                _failThreshold++;
-            else
-                _failThreshold = 0;
+                alarms.Add(CreateAlarm("01", "QR 스캐너 통신오류", Severity.Warning));
         }
         catch
         {
-            _failThreshold++;
-        }
-
-        if (_failThreshold > 5)
             alarms.Add(CreateAlarm("01", "QR 스캐너 통신오류", Severity.Warning));
+        }
 
         return CreateSnapshot(alarms);
     }
 
     public override async Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default)
     {
+        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
+
         try
         {
-            using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
-
             if (_client is null)
-                return new CommandResult(false, "E200Z not connected");
+                return new CommandResult(false, "Device not connected");
+
+            var client = _client;
 
             switch (command)
             {
                 case { Name: string name } when name.Equals("SCAN_ENABLE", StringComparison.OrdinalIgnoreCase):
-                    return await _client.ScanEnableAsync(ct).ConfigureAwait(false);
+                    return await client.ScanEnableAsync(ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("SCAN_DISABLE", StringComparison.OrdinalIgnoreCase):
-                    return await _client.ScanDisableAsync(ct).ConfigureAwait(false);
+                    return await client.ScanDisableAsync(ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("START_DECODE", StringComparison.OrdinalIgnoreCase):
-                    return await _client.StartDecodeAsync(ct).ConfigureAwait(false);
+                    return await client.StartDecodeAsync(ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("STOP_DECODE", StringComparison.OrdinalIgnoreCase):
-                    return await _client.StopDecodeAsync(ct).ConfigureAwait(false);
+                    return await client.StopDecodeAsync(ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("RESET", StringComparison.OrdinalIgnoreCase):
-                    return await _client.ResetAsync(ct).ConfigureAwait(false);
+                    return await client.ResetAsync(ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("SET_HOST_TRIGGER", StringComparison.OrdinalIgnoreCase):
-                    return await _client.SetHostTriggerModeAsync(true, ct).ConfigureAwait(false);
+                    return await client.SetHostTriggerModeAsync(true, ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("SET_AUTO_TRIGGER", StringComparison.OrdinalIgnoreCase):
-                    return await _client.SetAutoInductionTriggerModeAsync(true, ct).ConfigureAwait(false);
+                    return await client.SetAutoInductionTriggerModeAsync(true, ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("SET_PACKET_MODE", StringComparison.OrdinalIgnoreCase):
-                    return await _client.SetDecodeDataPacketFormatAsync(0x01, true, ct).ConfigureAwait(false);
+                    return await client.SetDecodeDataPacketFormatAsync(0x01, true, ct).ConfigureAwait(false);
 
                 case { Name: string name } when name.Equals("REQUEST_REVISION", StringComparison.OrdinalIgnoreCase):
                     {
-                        var res = await _client.RequestRevisionAsync(ct).ConfigureAwait(false);
+                        var res = await client.RequestRevisionAsync(ct).ConfigureAwait(false);
                         return res.Success ? new CommandResult(true, Data: _lastRevision) : res;
                     }
-            }
 
-            return new CommandResult(false, $"[{command.Name}] UNKNOWN COMMAND");
+                default:
+                    return new CommandResult(false, $"[{command.Name}] UNKNOWN COMMAND");
+            }
         }
         catch (OperationCanceledException)
         {
-            return new CommandResult(false, $"[{command.Name}] CANCELED COMMAND");
+            throw;
         }
         catch (Exception ex)
         {
-            Log?.Invoke($"[E200Z] ExecuteAsync error: {ex.Message}");
             return new CommandResult(false, $"[{command.Name}] ERROR COMMAND: {ex.Message}");
         }
     }
@@ -160,7 +153,10 @@ public sealed class DeviceQrE200Z : DeviceBase
         _client = null;
     }
 
+    private void OnClientLog(string message) => Log?.Invoke(message);
+
     private async Task TryInitSettingsAsync(E200ZClient client, CancellationToken ct)
+
     {
         try
         {
@@ -173,11 +169,7 @@ public sealed class DeviceQrE200Z : DeviceBase
             Log?.Invoke($"[E200Z] Init settings failed: {ex.Message}");
         }
     }
-
-    private void OnClientLog(string message) => Log?.Invoke(message);
-
     private void OnClientDecoded(object? sender, DecodeMessage msg) => Decoded?.Invoke(this, msg);
 
     private void OnRevisionReceived(string rev) => _lastRevision = rev;
 }
-

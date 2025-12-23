@@ -15,11 +15,10 @@ namespace KIOSK.Devices.Management
         private readonly ITransportFactory _transportFactory;
         private readonly IDeviceFactory _deviceFactory;
         private readonly SemaphoreSlim _gate = new(1, 1);
-        private CancellationTokenSource? _pollingCts;
+        private CancellationTokenSource? _attemptCts;
 
         private ITransport? _transport;
         private IDevice? _device;
-        private DeviceProxy? _deviceProxy;
 
         public string Name => _desc.Name;
         public string Model => _desc.Model;
@@ -29,15 +28,10 @@ namespace KIOSK.Devices.Management
         public event Action<string, DeviceStatusSnapshot>? StatusUpdated;
         public event Action<string, Exception>? Faulted;
 
-        public IDevice? Device => _deviceProxy ?? _device;
+        public IDevice? Device => _device;
 
         internal T? GetInnerDevice<T>() where T : class, IDevice
-        {
-            if (_deviceProxy != null)
-                return _deviceProxy.GetInner<T>();
-
-            return _device as T;
-        }
+            => _device as T;
 
         public DeviceSupervisorV2(DeviceDescriptor desc, ITransportFactory transportFactory, IDeviceFactory deviceFactory)
         {
@@ -48,117 +42,54 @@ namespace KIOSK.Devices.Management
 
         public async Task RunAsync(CancellationToken ct)
         {
-            // 무한 재접속 루프 (취소될 때까지)
             while (!ct.IsCancellationRequested)
             {
+                var reconnectDelayMs = Math.Max(100, _desc.PollingMs);
+
                 try
                 {
                     using var attemptCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
                     var attemptToken = attemptCts.Token;
+                    _attemptCts = attemptCts;
 
-                    // 1. 트랜스포트/디바이스 생성
                     _transport = _transportFactory.Create(_desc);
                     _transport.Disconnected += (_, __) =>
                     {
-                        // 장치 쪽에서 끊겼다고 알려줄 때
                         SafeInvokeDisconnected();
                         try { attemptCts.Cancel(); } catch { }
-                        RequestReconnect();
                     };
 
-                    var newDevice = _deviceFactory.Create(_desc, _transport);
-                    if (_deviceProxy is null)
-                    {
-                        _deviceProxy = new DeviceProxy(newDevice);
-                    }
-                    else
-                    {
-                        _deviceProxy.Swap(newDevice);
-                    }
+                    _device = _deviceFactory.Create(_desc, _transport);
 
-                    _device = newDevice;
-
-                    // 2. 물리 연결
                     await _transport.OpenAsync(attemptToken).ConfigureAwait(false);
 
-                    // 3. 디바이스 초기화
                     var initSnapshot = await _device.InitializeAsync(attemptToken).ConfigureAwait(false);
-                    var hasError = HasError(initSnapshot);
-
                     if (initSnapshot != null)
                         SafeInvokeStatusUpdated(initSnapshot);
 
-                    if (!hasError)
+                    if (!HasError(initSnapshot))
                     {
                         SafeInvokeConnected();
-
-                        // 4. 상태 폴링 루프
-                        using var linked = CreatePollingCts(attemptToken);
-                        var pollToken = linked.Token;
-                        var pollMs = Math.Max(100, _desc.PollingMs);
-
-                        while (!pollToken.IsCancellationRequested)
-                        {
-                            try
-                            {
-                                if (_device is null)
-                                    throw new InvalidOperationException("Device not ready");
-
-                                await _gate.WaitAsync(pollToken).ConfigureAwait(false);
-                                try
-                                {
-                                    var sn = await _device.GetStatusAsync(pollToken, string.Empty).ConfigureAwait(false);
-                                    if (sn == null)
-                                        break;
-
-                                    SafeInvokeStatusUpdated(sn);
-                                }
-                                finally
-                                {
-                                    _gate.Release();
-                                }
-                            }
-                            catch (OperationCanceledException)
-                            {
-                                break;
-                            }
-                            catch (Exception)
-                            {
-                                RequestReconnect();
-                                throw;
-                            }
-
-                            await Task.Delay(pollMs, pollToken).ConfigureAwait(false);
-                        }
+                        await PollAsync(attemptToken).ConfigureAwait(false);
                     }
-                    else
-                    {
-                        // 초기화에서 에러 → 일정 시간 후 재시도
-                        var reconnectDelayMs = Math.Max(100, _desc.PollingMs);
-                        await Task.Delay(reconnectDelayMs, attemptToken).ConfigureAwait(false);
-                    }
+
+                    await Task.Delay(reconnectDelayMs, attemptToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException) when (ct.IsCancellationRequested)
                 {
-                    // 외부 취소 → 종료
                     break;
                 }
                 catch (OperationCanceledException)
                 {
-                    // 내부 취소(재연결 요청) → 재시도 전 백오프
-                    var reconnectDelayMs = Math.Max(100, _desc.PollingMs);
                     try
                     {
                         await Task.Delay(reconnectDelayMs, ct).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException) { break; }
-                    continue;
                 }
                 catch (Exception ex)
                 {
-                    // 예기치 못한 오류 → Faulted + 재접속 대기
                     SafeInvokeFaulted(ex);
-                    var reconnectDelayMs = Math.Max(100, _desc.PollingMs);
                     try
                     {
                         await Task.Delay(reconnectDelayMs, ct).ConfigureAwait(false);
@@ -170,11 +101,8 @@ namespace KIOSK.Devices.Management
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _pollingCts, null)?.Dispose();
-                    // 연결 종료/정리
+                    _attemptCts = null;
                     await CleanupAsync(ct).ConfigureAwait(false);
-                    // 여기서 Disconnected 이벤트를 한 번 더 보낼지 여부는 선택사항
-                    // Disconnected?.Invoke(_desc.Name);
                 }
             }
         }
@@ -205,17 +133,37 @@ namespace KIOSK.Devices.Management
             }
         }
 
-        private CancellationTokenSource CreatePollingCts(CancellationToken ct)
-        {
-            var linked = CancellationTokenSource.CreateLinkedTokenSource(ct);
-            Interlocked.Exchange(ref _pollingCts, linked)?.Dispose();
-            return linked;
-        }
-
         private void RequestReconnect()
         {
-            try { _pollingCts?.Cancel(); }
+            try { _attemptCts?.Cancel(); }
             catch { }
+        }
+
+        private async Task PollAsync(CancellationToken ct)
+        {
+            var pollMs = Math.Max(100, _desc.PollingMs);
+
+            while (!ct.IsCancellationRequested)
+            {
+                if (_device is null)
+                    throw new InvalidOperationException("Device not ready");
+
+                await _gate.WaitAsync(ct).ConfigureAwait(false);
+                try
+                {
+            var sn = await _device.GetStatusAsync(ct).ConfigureAwait(false);
+                    if (sn == null)
+                        break;
+
+                    SafeInvokeStatusUpdated(sn);
+                }
+                finally
+                {
+                    _gate.Release();
+                }
+
+                await Task.Delay(pollMs, ct).ConfigureAwait(false);
+            }
         }
 
         private async Task CleanupAsync(CancellationToken ct)

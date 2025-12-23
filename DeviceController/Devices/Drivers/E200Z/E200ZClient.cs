@@ -36,45 +36,46 @@ internal sealed class E200ZClient : IAsyncDisposable
     }
 
     public Task<CommandResult> ScanEnableAsync(CancellationToken ct) =>
-        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.SCAN_ENABLE), SsiOpcode.CMD_ACK, 1000, ct);
+        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.SCAN_ENABLE), SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
 
     public Task<CommandResult> ScanDisableAsync(CancellationToken ct) =>
-        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.SCAN_DISABLE), SsiOpcode.CMD_ACK, 1000, ct);
+        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.SCAN_DISABLE), SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
 
     public Task<CommandResult> StartDecodeAsync(CancellationToken ct) =>
-        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.START_DECODE), SsiOpcode.CMD_ACK, 1000, ct);
+        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.START_DECODE), SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
 
     public Task<CommandResult> StopDecodeAsync(CancellationToken ct) =>
-        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.STOP_DECODE), SsiOpcode.CMD_ACK, 1000, ct);
+        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.STOP_DECODE), SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
 
     public Task<CommandResult> ResetAsync(CancellationToken ct) =>
-        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.RESET), SsiOpcode.CMD_ACK, 2000, ct);
+        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.RESET), SsiOpcode.CMD_ACK, E200ZTimeouts.ResetMs, ct);
 
     public Task<CommandResult> RequestRevisionAsync(CancellationToken ct) =>
-        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.REQUEST_REVISION), SsiOpcode.REPLY_REVISION, 1000, ct);
+        SendPacketAsync(SsiPacket.CreateSimple(SsiOpcode.REQUEST_REVISION), SsiOpcode.REPLY_REVISION, E200ZTimeouts.DefaultCommandMs, ct);
 
     public Task<CommandResult> SetHostTriggerModeAsync(bool saveToFlash, CancellationToken ct)
     {
         var pkt = SsiPacket.CreateParamByte(0x8A, 0x08, saveToFlash);
-        return SendPacketAsync(pkt, SsiOpcode.CMD_ACK, 1000, ct);
+        return SendPacketAsync(pkt, SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
     }
 
     public Task<CommandResult> SetAutoInductionTriggerModeAsync(bool saveToFlash, CancellationToken ct)
     {
         var pkt = SsiPacket.CreateParamByte(0x8A, 0x09, saveToFlash);
-        return SendPacketAsync(pkt, SsiOpcode.CMD_ACK, 1000, ct);
+        return SendPacketAsync(pkt, SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
     }
 
     public Task<CommandResult> SetDecodeDataPacketFormatAsync(byte value, bool saveToFlash, CancellationToken ct)
     {
         var pkt = SsiPacket.CreateParamByte(0xEE, value, saveToFlash);
-        return SendPacketAsync(pkt, SsiOpcode.CMD_ACK, 1000, ct);
+        return SendPacketAsync(pkt, SsiOpcode.CMD_ACK, E200ZTimeouts.DefaultCommandMs, ct);
     }
 
     private async Task<CommandResult> SendPacketAsync(SsiPacket packet, SsiOpcode expected, int timeoutMs, CancellationToken ct)
     {
         try
         {
+            await EnsureStartedAsync(ct).ConfigureAwait(false);
             var tx = packet.ToBytes();
             Log?.Invoke($"[E200Z] TX: {BitConverter.ToString(tx)}");
 
@@ -92,9 +93,16 @@ internal sealed class E200ZClient : IAsyncDisposable
             HandlePacket(parsedResp);
             return new CommandResult(true, Data: parsedResp.Data);
         }
+        catch (TimeoutException ex)
+        {
+            return new CommandResult(false, $"Timeout: {ex.Message}");
+        }
         catch (OperationCanceledException)
         {
-            throw;
+            if (ct.IsCancellationRequested)
+                throw;
+
+            return new CommandResult(false, "Canceled");
         }
         catch (Exception ex)
         {
@@ -196,6 +204,7 @@ internal sealed class E200ZClient : IAsyncDisposable
     {
         try
         {
+            await EnsureStartedAsync(CancellationToken.None).ConfigureAwait(false);
             var pkt = new SsiPacket
             {
                 Length = 0x04,
@@ -217,6 +226,9 @@ internal sealed class E200ZClient : IAsyncDisposable
             Log?.Invoke($"[E200Z] SendAck error: {ex.Message}");
         }
     }
+
+    private Task EnsureStartedAsync(CancellationToken ct)
+        => _started ? Task.CompletedTask : StartAsync(ct);
 
     private static bool TryParseFrame(ReadOnlySpan<byte> frame, out SsiParsed parsed)
     {
@@ -264,4 +276,3 @@ internal sealed class E200ZClient : IAsyncDisposable
         await _channel.DisposeAsync().ConfigureAwait(false);
     }
 }
-

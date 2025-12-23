@@ -1,5 +1,10 @@
 using KIOSK.Device.Core;
+using KIOSK.Device.Drivers.Deposit;
+using KIOSK.Device.Drivers.E200Z;
+using KIOSK.Device.Drivers.IdScanner;
+using KIOSK.Device.Drivers.Printer;
 using KIOSK.Device.Transport;
+using KIOSK.Devices.Drivers.HCDM;
 using KIOSK.Devices.Management;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,9 +23,13 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IDeviceStatusStore, DeviceStatusStore>();
         services.AddSingleton<IDeviceRuntime, DeviceRuntime>();
-        services.AddSingleton<IDeviceCommandBus, DeviceCommandBus>();
         services.AddSingleton<IDeviceCommandCatalog, DeviceCommandCatalog>();
-        services.AddSingleton<DeviceErrorEventService>();
+        services.AddSingleton<IDeviceStatusPipeline, DeviceStatusPipeline>();
+        services.AddSingleton<IDeviceCommandProvider, E200ZCommandProvider>();
+        services.AddSingleton<IDeviceCommandProvider, PrinterCommandProvider>();
+        services.AddSingleton<IDeviceCommandProvider, Hcdm10kCommandProvider>();
+        services.AddSingleton<IDeviceCommandProvider, DepositCommandProvider>();
+        services.AddSingleton<IDeviceCommandProvider, IdScannerCommandProvider>();
         services.AddSingleton<IDeviceManager, DeviceManagerV2>();
 
         services.AddHostedService<DeviceBootstrapper>();
@@ -28,4 +37,3 @@ public static class ServiceCollectionExtensions
         return services;
     }
 }
-

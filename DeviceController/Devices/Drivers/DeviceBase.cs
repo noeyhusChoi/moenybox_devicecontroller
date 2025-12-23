@@ -70,7 +70,7 @@ public abstract class DeviceBase : IDevice, IAsyncDisposable
         => new DeviceChannel(RequireTransport(), framer);
 
     public abstract Task<DeviceStatusSnapshot> InitializeAsync(CancellationToken ct = default);
-    public abstract Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default, string snapshotId = "");
+    public abstract Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default);
     public abstract Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default);
 
     public virtual ValueTask DisposeAsync()

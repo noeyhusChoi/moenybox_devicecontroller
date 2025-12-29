@@ -7,7 +7,7 @@ using Pr22;
 namespace KIOSK.Device.Transport;
 
 /// <summary>
-/// PR22 DLL 기반 트랜스포트: DocumentReaderDevice를 열고 닫기만 담당한다.
+/// PR22 DLL 기반 트랜스포트: DocumentReaderDevice를 열고 닫기를 담당한다.
 /// </summary>
 internal class TransportPr22 : ITransport
 {
@@ -26,6 +26,15 @@ internal class TransportPr22 : ITransport
             return Task.CompletedTask;
 
         _device = new DocumentReaderDevice();
+        var list = DocumentReaderDevice.GetDeviceList();
+        if (list.Count == 0)
+        {
+            _device.Dispose();
+            _device = null;
+            throw new Pr22.Exceptions.NoSuchDevice("No device found.");
+        }
+
+        _device.UseDevice(list[0]);
         _isOpen = true;
         return Task.CompletedTask;
     }

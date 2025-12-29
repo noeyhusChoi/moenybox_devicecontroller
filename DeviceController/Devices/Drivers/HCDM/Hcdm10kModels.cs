@@ -25,7 +25,8 @@ internal enum Hcdm10kCommand : byte
 
 internal enum Hcdm10kSensorIndex
 {
-    Door = 3,
+    Shutter = 2,
+    Status = 3,
     Gate = 4,
     Cassette1 = 5,
     Cassette2 = 6,
@@ -36,23 +37,35 @@ internal enum Hcdm10kSensorIndex
 [Flags]
 internal enum Hcdm10kGateFlags : byte
 {
-    EjectDetected = 1 << 0,
-    CollectDetected = 1 << 1,
+    Exit1Detected = 1 << 0,
+    RejectInDetected = 1 << 1,
     Gate1Detected = 1 << 2,
-    Gate2Detected = 1 << 3
+    Gate2Detected = 1 << 3,
+    ScanStart = 1 << 4
 }
 
-internal static class Hcdm10kDoorBits
+internal static class Hcdm10kShutterBits
+{
+    public const byte ShutIn1 = 1 << 0;
+    public const byte ShutIn2 = 1 << 1;
+    public const byte ShutIn3 = 1 << 2;
+    public const byte ShutClose = 1 << 3;
+    public const byte ShutOpen = 1 << 4;
+}
+
+internal static class Hcdm10kStatusBits
 {
     public const byte RejectBoxOpen = 1 << 0;
+    public const byte CisOpen = 1 << 1;
+    public const byte Msol = 1 << 2;
 }
 
 internal static class Hcdm10kCassetteBits
 {
     public const byte Skew1 = 1 << 0;
-    public const byte Present = 1 << 1;
-    public const byte LowLevel = 1 << 2;   // 0이면 부족/오류로 해석
-    public const byte Mounted = 1 << 3;    // 0이면 미장착
-    public const byte DipSwitch1 = 1 << 4;
-    public const byte DipSwitch2 = 1 << 5;
+    public const byte Skew2 = 1 << 1;
+    public const byte NearEnd = 1 << 2;
+    public const byte Mount = 1 << 3;
+    public const byte Id1A = 1 << 4;
+    public const byte Id2A = 1 << 5;
 }

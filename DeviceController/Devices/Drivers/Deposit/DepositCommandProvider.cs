@@ -1,14 +1,15 @@
 using System.Collections.Generic;
-using KIOSK.Devices.Management;
+using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers.Deposit;
 
-internal sealed class DepositCommandProvider : IDeviceCommandProvider
+internal sealed class DepositCommandProvider : ICommandProvider
 {
     public string Model => "DEPOSIT";
 
     public IReadOnlyCollection<DeviceCommandDescriptor> GetCommands() => new[]
     {
+        new DeviceCommandDescriptor("RESTART", "재시작"),
         new DeviceCommandDescriptor("START", "입금 시작"),
         new DeviceCommandDescriptor("STOP", "입금 중지"),
         new DeviceCommandDescriptor("STACK", "스택 처리"),

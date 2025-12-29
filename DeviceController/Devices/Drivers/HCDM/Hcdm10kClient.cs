@@ -11,12 +11,12 @@ namespace KIOSK.Devices.Drivers.HCDM;
 /// </summary>
 internal sealed class Hcdm10kClient : IAsyncDisposable
 {
-    private readonly DeviceChannel _channel;
+    private readonly TransportChannel _channel;
     private bool _started;
 
     public event Action<string>? Log;
 
-    public Hcdm10kClient(DeviceChannel channel)
+    public Hcdm10kClient(TransportChannel channel)
     {
         _channel = channel ?? throw new ArgumentNullException(nameof(channel));
     }
@@ -41,7 +41,7 @@ internal sealed class Hcdm10kClient : IAsyncDisposable
 
         // ACK 대기 + ENQ 재시도
         if (!await WaitAckWithEnqAsync(ct).ConfigureAwait(false))
-            return new CommandResult(false, "ACK timeout");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "HCDM", "TIMEOUT", "RESPONSE"), Retryable: true);
 
         int timeout = processTimeoutMs;
         int nak = 0;
@@ -60,11 +60,11 @@ internal sealed class Hcdm10kClient : IAsyncDisposable
                 if (ct.IsCancellationRequested)
                     throw;
 
-                return new CommandResult(false, "Canceled");
+                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "HCDM", "TIMEOUT", "RESPONSE"), Retryable: true);
             }
             catch (TimeoutException)
             {
-                return new CommandResult(false, "Timeout");
+                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "HCDM", "TIMEOUT", "RESPONSE"), Retryable: true);
             }
 
             Log?.Invoke($"[HCDM10K] RX: {BitConverter.ToString(full)}");
@@ -75,12 +75,12 @@ internal sealed class Hcdm10kClient : IAsyncDisposable
                 await _channel.WriteAsync(new byte[] { Hcdm10kProtocol.ACK }, ct).ConfigureAwait(false);  // 정상 응답에는 ACK
                 return parsed.Value.ok
                     ? new CommandResult(true, Data: parsed.Value.data)
-                    : new CommandResult(false, "NAK", parsed.Value.data);
+                    : new CommandResult(false, string.Empty, parsed.Value.data, new ErrorCode("DEV", "HCDM", "STATUS", "ERROR"));
             }
 
             nak++;
             if (nak > Hcdm10kProtocol.MaxNak)
-                return new CommandResult(false, "NAK");
+                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "HCDM", "STATUS", "ERROR"));
 
             await _channel.WriteAsync(new byte[] { Hcdm10kProtocol.NAK }, ct).ConfigureAwait(false);
             await Task.Delay(50, ct).ConfigureAwait(false);

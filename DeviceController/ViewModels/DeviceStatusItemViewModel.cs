@@ -25,7 +25,7 @@ public sealed partial class DeviceStatusItemViewModel : ObservableObject
     [ObservableProperty]
     private string alarmsText = string.Empty;
 
-    public void UpdateFrom(DeviceStatusSnapshot snapshot)
+    public void UpdateFrom(StatusSnapshot snapshot)
     {
         Name = snapshot.Name ?? string.Empty;
         Model = snapshot.Model ?? string.Empty;

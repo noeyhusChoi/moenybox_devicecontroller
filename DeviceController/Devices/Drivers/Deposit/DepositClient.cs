@@ -60,7 +60,7 @@ internal sealed class DepositClient : IAsyncDisposable
         {
             UnsubscribeEscrow();
             _billAcceptor.EnableAcceptance = false;
-            return Task.FromResult(new CommandResult(false, ex.Message));
+            return Task.FromResult(new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "STATUS", "ERROR")));
         }
     }
 
@@ -75,7 +75,7 @@ internal sealed class DepositClient : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new CommandResult(false, ex.Message));
+            return Task.FromResult(new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "STATUS", "ERROR")));
         }
     }
 
@@ -93,19 +93,21 @@ internal sealed class DepositClient : IAsyncDisposable
 
             bool ok = _isStack;
             _isStack = false;
-            return new CommandResult(ok);
+            return ok
+                ? new CommandResult(true)
+                : new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "ERROR", "STACK_FAIL"));
         }
         catch (OperationCanceledException)
         {
             if (ct.IsCancellationRequested)
                 throw;
 
-            return new CommandResult(false, "Canceled");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (Exception ex)
         {
             Trace.WriteLine(ex);
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "ERROR", "STACK_FAIL"));
         }
     }
 
@@ -123,19 +125,21 @@ internal sealed class DepositClient : IAsyncDisposable
 
             bool ok = _isReturn;
             _isReturn = false;
-            return new CommandResult(ok);
+            return ok
+                ? new CommandResult(true)
+                : new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "ERROR", "RETURN_FAIL"));
         }
         catch (OperationCanceledException)
         {
             if (ct.IsCancellationRequested)
                 throw;
 
-            return new CommandResult(false, "Canceled");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (Exception ex)
         {
             Trace.WriteLine(ex);
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "ERROR", "RETURN_FAIL"));
         }
     }
 
@@ -151,19 +155,21 @@ internal sealed class DepositClient : IAsyncDisposable
 
             bool ok = _isRejected;
             _isRejected = false;
-            return new CommandResult(ok);
+            return ok
+                ? new CommandResult(true)
+                : new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "STATUS", "REJECT_DETECTED"));
         }
         catch (OperationCanceledException)
         {
             if (ct.IsCancellationRequested)
                 throw;
 
-            return new CommandResult(false, "Canceled");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (Exception ex)
         {
             Trace.WriteLine(ex);
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "CASH", "STATUS", "ERROR"));
         }
     }
 

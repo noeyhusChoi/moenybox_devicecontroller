@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using KIOSK.Devices.Management;
+using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers.E200Z;
 
-internal sealed class E200ZCommandProvider : IDeviceCommandProvider
+internal sealed class E200ZCommandProvider : ICommandProvider
 {
     public string Model => "QR_TOTINFO";
 
@@ -14,6 +14,7 @@ internal sealed class E200ZCommandProvider : IDeviceCommandProvider
         new DeviceCommandDescriptor("START_DECODE", "디코드 시작"),
         new DeviceCommandDescriptor("STOP_DECODE", "디코드 중지"),
         new DeviceCommandDescriptor("RESET", "리셋"),
+        new DeviceCommandDescriptor("RESTART", "재시작"),
         new DeviceCommandDescriptor("SET_HOST_TRIGGER", "Host Trigger 모드"),
         new DeviceCommandDescriptor("SET_AUTO_TRIGGER", "Auto-Induction 모드"),
         new DeviceCommandDescriptor("SET_PACKET_MODE", "Packet 모드"),

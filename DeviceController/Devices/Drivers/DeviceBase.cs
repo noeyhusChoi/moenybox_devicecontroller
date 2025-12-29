@@ -31,18 +31,21 @@ public abstract class DeviceBase : IDevice, IAsyncDisposable
     protected DeviceDescriptor Descriptor { get; }
     protected ITransport? Transport { get; }
 
-    protected DeviceStatusSnapshot CreateSnapshot(IEnumerable<DeviceAlarm>? alarms = null)
+    protected StatusSnapshot CreateSnapshot(IEnumerable<StatusEvent>? alarms = null)
         => new()
         {
             Name = Name,
             Model = Model,
             Health = DeviceHealth.Online,
             Timestamp = DateTimeOffset.UtcNow,
-            Alarms = alarms?.ToList() ?? new List<DeviceAlarm>()
+            Alarms = alarms?.ToList() ?? new List<StatusEvent>()
         };
 
-    protected DeviceAlarm CreateAlarm(string code, string message, Severity severity = Severity.Error)
+    protected StatusEvent CreateAlarm(string code, string message, Severity severity = Severity.Error)
         => new(code, message, severity, DateTimeOffset.UtcNow);
+
+    protected StatusEvent CreateAlarm(ErrorCode code, string message, Severity severity = Severity.Error)
+        => new(code.ToString(), string.Empty, severity, DateTimeOffset.UtcNow, ErrorCode: code);
 
     protected async Task<IDisposable> AcquireIoAsync(CancellationToken ct)
     {
@@ -66,11 +69,11 @@ public abstract class DeviceBase : IDevice, IAsyncDisposable
     protected ITransport RequireTransport()
         => Transport ?? throw new InvalidOperationException($"{GetType().Name} has no transport assigned.");
 
-    protected DeviceChannel CreateChannel(IFramer? framer = null)
-        => new DeviceChannel(RequireTransport(), framer);
+    protected TransportChannel CreateChannel(IFramer? framer = null)
+        => new TransportChannel(RequireTransport(), framer);
 
-    public abstract Task<DeviceStatusSnapshot> InitializeAsync(CancellationToken ct = default);
-    public abstract Task<DeviceStatusSnapshot> GetStatusAsync(CancellationToken ct = default);
+    public abstract Task<StatusSnapshot> InitializeAsync(CancellationToken ct = default);
+    public abstract Task<StatusSnapshot> GetStatusAsync(CancellationToken ct = default);
     public abstract Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default);
 
     public virtual ValueTask DisposeAsync()

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +10,8 @@ using KIOSK.Devices.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Formatting.Compact;
 
 namespace DeviceController;
 
@@ -30,6 +33,29 @@ public partial class App : Application
             .ConfigureAppConfiguration(cfg =>
             {
                 cfg.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            })
+            .UseSerilog((ctx, services, cfg) =>
+            {
+                var basePath = AppContext.BaseDirectory ?? Directory.GetCurrentDirectory();
+                var logDir = Path.Combine(basePath, "Logs");
+                Directory.CreateDirectory(logDir);
+                var logPath = Path.Combine(logDir, "m24h_log_.log");
+
+                cfg.MinimumLevel.Verbose()
+                    .Enrich.FromLogContext()
+                    .WriteTo.File(
+                        new CompactJsonFormatter(),
+                        logPath,
+                        rollingInterval: RollingInterval.Day,
+                        retainedFileTimeLimit: TimeSpan.FromDays(30),
+                        fileSizeLimitBytes: 100L * 1024 * 1024,
+                        rollOnFileSizeLimit: true,
+                        shared: true);
+
+#if DEBUG
+                cfg.WriteTo.Debug();
+                cfg.WriteTo.Seq("http://localhost:5341", apiKey: "l9RG3NsYsflCV22Dpkr5");
+#endif
             })
             .ConfigureServices((ctx, services) =>
             {
@@ -55,7 +81,7 @@ public partial class App : Application
     {
         if (_host is not null)
         {
-            try { await _host.StopAsync().ConfigureAwait(false); } catch { }
+            try { await _host.StopAsync(); } catch { }
             _host.Dispose();
             _host = null;
         }
@@ -87,4 +113,3 @@ public partial class App : Application
         e.SetObserved();
     }
 }
-

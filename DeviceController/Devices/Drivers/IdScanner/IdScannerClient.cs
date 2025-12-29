@@ -46,12 +46,6 @@ internal sealed class IdScannerClient : IAsyncDisposable
 
         await _transport.OpenAsync(ct).ConfigureAwait(false);
         _device = _transport.Device;
-
-        var list = DocumentReaderDevice.GetDeviceList();
-        if (list.Count == 0)
-            throw new Pr22.Exceptions.NoSuchDevice("No device found.");
-
-        _device.UseDevice(list[0]);
         Log?.Invoke($"[IDSCANNER] Device connected: {_device.DeviceName}");
     }
 
@@ -68,7 +62,7 @@ internal sealed class IdScannerClient : IAsyncDisposable
         catch (Exception ex)
         {
             Log?.Invoke($"[IDSCANNER] 상태 조회 실패: {ex.Message}");
-            return new CommandResult(false, ex.Message, IdScannerState.Error);
+            return new CommandResult(false, string.Empty, IdScannerState.Error, new ErrorCode("DEV", "IDSCANNER", "STATUS", "ERROR"));
         }
     }
 
@@ -98,7 +92,7 @@ internal sealed class IdScannerClient : IAsyncDisposable
         catch (Exception ex)
         {
             Log?.Invoke($"[IDSCANNER] ScanStart 실패: {ex.Message}");
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "IDSCANNER", "ERROR", "SCAN"));
         }
     }
 
@@ -126,7 +120,7 @@ internal sealed class IdScannerClient : IAsyncDisposable
         catch (Exception ex)
         {
             Log?.Invoke($"[IDSCANNER] ScanStop 실패: {ex.Message}");
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "IDSCANNER", "ERROR", "SCAN"));
         }
     }
 
@@ -168,13 +162,13 @@ internal sealed class IdScannerClient : IAsyncDisposable
             catch (Exception ex)
             {
                 Log?.Invoke($"[IDSCANNER] 이미지 저장 실패: {ex.Message}");
-                return new CommandResult(false, ex.Message);
+                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "IDSCANNER", "ERROR", "IMAGE_SAVE"));
             }
         }
         catch (Exception ex)
         {
             Log?.Invoke($"[IDSCANNER] Scan/Save 처리 중 예외: {ex.Message}");
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "IDSCANNER", "ERROR", "IMAGE_SAVE"));
         }
     }
 

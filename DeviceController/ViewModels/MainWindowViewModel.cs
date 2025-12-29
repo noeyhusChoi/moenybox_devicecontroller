@@ -41,9 +41,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     public IAsyncRelayCommand SendCommand { get; }
 
-    private DeviceQrE200Z? _subscribedQr;
-    private DeviceIdScanner? _subscribedIdScanner;
-    private DeviceDeposit? _subscribedDeposit;
+    private QrE200ZDriver? _subscribedQr;
+    private IdScannerDriver? _subscribedIdScanner;
+    private DepositDriver? _subscribedDeposit;
     private object? _logSource;
     private System.Reflection.EventInfo? _logEventInfo;
     private Delegate? _logHandler;
@@ -81,7 +81,10 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
             object? payloadObj = string.IsNullOrWhiteSpace(Payload) ? null : Payload;
             var cmd = new DeviceCommand(SelectedCommand.Name, payloadObj);
-            var result = await _deviceManager.SendAsync(SelectedDevice.Name, cmd);
+            var result = await _deviceManager.SendAsync(
+                SelectedDevice.Name,
+                cmd,
+                CommandContext.Manual("UI"));
 
             if (result.Data is not null)
             {
@@ -119,7 +122,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
         SelectedCommand = Commands.FirstOrDefault();
     }
 
-    private void OnStatusUpdated(string name, DeviceStatusSnapshot snapshot)
+    private void OnStatusUpdated(string name, StatusSnapshot snapshot)
     {
         if (Application.Current?.Dispatcher == null)
             UpdateCollection(snapshot);
@@ -137,7 +140,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
             });
     }
 
-    private void UpdateCollection(DeviceStatusSnapshot snapshot)
+    private void UpdateCollection(StatusSnapshot snapshot)
     {
         var existing = Devices.FirstOrDefault(d => d.Name.Equals(snapshot.Name, StringComparison.OrdinalIgnoreCase));
         if (existing != null)
@@ -169,7 +172,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
         if (device is not null)
             AttachLog(device);
 
-        var qr = _deviceManager.GetDevice<DeviceQrE200Z>(SelectedDevice.Name);
+        var qr = _deviceManager.GetDevice<QrE200ZDriver>(SelectedDevice.Name);
         if (ReferenceEquals(qr, _subscribedQr))
             return;
 
@@ -187,7 +190,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
             //qr.Log += OnQrLog;
         }
 
-        var idScanner = _deviceManager.GetDevice<DeviceIdScanner>(SelectedDevice.Name);
+        var idScanner = _deviceManager.GetDevice<IdScannerDriver>(SelectedDevice.Name);
         if (ReferenceEquals(idScanner, _subscribedIdScanner))
             return;
 
@@ -203,7 +206,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
             idScanner.Detected += OnIdScannerDetected;
         }
 
-        var deposit = _deviceManager.GetDevice<DeviceDeposit>(SelectedDevice.Name);
+        var deposit = _deviceManager.GetDevice<DepositDriver>(SelectedDevice.Name);
         if (ReferenceEquals(deposit, _subscribedDeposit))
             return;
 
@@ -238,7 +241,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
             if (SelectedDevice is null)
                 return;
 
-            await _deviceManager.SendAsync(SelectedDevice.Name, new DeviceCommand("SCANSTOP")).ConfigureAwait(false);
+            await _deviceManager.SendAsync(
+                SelectedDevice.Name,
+                new DeviceCommand("SCANSTOP"),
+                CommandContext.Auto("IdScannerDetected"))
+                .ConfigureAwait(false);
             AppendAsyncEvent($"[{SelectedDevice.Name}] SCANSTOP");
         }
         catch (Exception ex)

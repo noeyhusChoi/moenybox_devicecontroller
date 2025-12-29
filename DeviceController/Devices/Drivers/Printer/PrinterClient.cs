@@ -9,17 +9,17 @@ namespace KIOSK.Device.Drivers.Printer;
 
 /// <summary>
 /// ESC/POS 기반 프린터 클라이언트.
-/// - DeviceChannel(Passthrough) 위에서 명령 송신/상태 요청을 수행한다.
+/// - TransportChannel(Passthrough) 위에서 명령 송신/상태 요청을 수행한다.
 /// </summary>
 internal sealed class PrinterClient : IAsyncDisposable
 {
-    private readonly DeviceChannel _channel;
+    private readonly TransportChannel _channel;
     private readonly Encoding _ksEncoding = Encoding.GetEncoding("ks_c_5601-1987");
     private bool _started;
 
     public event Action<string>? Log;
 
-    public PrinterClient(DeviceChannel channel)
+    public PrinterClient(TransportChannel channel)
     {
         _channel = channel ?? throw new ArgumentNullException(nameof(channel));
     }
@@ -53,11 +53,11 @@ internal sealed class PrinterClient : IAsyncDisposable
 
             return bytes.Length > 0
                 ? new CommandResult(true, Data: bytes)
-                : new CommandResult(false, "No response");
+                : new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (TimeoutException ex)
         {
-            return new CommandResult(false, $"Timeout: {ex.Message}");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (OperationCanceledException oce)
         {
@@ -65,11 +65,11 @@ internal sealed class PrinterClient : IAsyncDisposable
             if (ct.IsCancellationRequested)
                 throw;
 
-            return new CommandResult(false, $"Canceled: {oce.Message}");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (Exception ex)
         {
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
         }
     }
 
@@ -95,6 +95,7 @@ internal sealed class PrinterClient : IAsyncDisposable
         byte[] buf = new byte[] { 0x1B, 0x69 };
         return SendSimpleAsync(buf, ct);
     }
+
 
     public async Task<CommandResult> TextStyleAsync(int width, int height, int under, int bold, CancellationToken ct = default)
     {
@@ -123,7 +124,7 @@ internal sealed class PrinterClient : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
         }
     }
 
@@ -143,7 +144,7 @@ internal sealed class PrinterClient : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, ex.Message, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
         }
     }
 
@@ -188,7 +189,7 @@ internal sealed class PrinterClient : IAsyncDisposable
     public async Task<CommandResult> PrintQrAutoSizeAsync(string data, CancellationToken ct = default)
     {
         if (data is null)
-            return new CommandResult(false, "Invalid Data");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
 
         int type = data.Length switch
         {
@@ -241,7 +242,7 @@ internal sealed class PrinterClient : IAsyncDisposable
     public async Task<CommandResult> PrintQrAsync(string data, int version, CancellationToken ct = default)
     {
         if (string.IsNullOrEmpty(data))
-            return new CommandResult(false, "Invalid Data");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
 
         byte[] buf = _ksEncoding.GetBytes(data);
 
@@ -255,10 +256,10 @@ internal sealed class PrinterClient : IAsyncDisposable
         };
 
         if (maxLength < 0)
-            return new CommandResult(false, "Unsupported Version");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
 
         if (buf.Length > maxLength)
-            return new CommandResult(false, "Data Length Exceeded");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
 
         byte mode = 0x02;
         byte dataLength = (byte)(buf.Length & 0xFF);
@@ -275,7 +276,7 @@ internal sealed class PrinterClient : IAsyncDisposable
     public async Task<CommandResult> PrintBarcodeAsync(string data, int size, CancellationToken ct = default)
     {
         if (string.IsNullOrEmpty(data))
-            return new CommandResult(false, "Invalid Data");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
 
         byte[] buf = _ksEncoding.GetBytes(data);
 
@@ -306,7 +307,7 @@ internal sealed class PrinterClient : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, ex.Message, Code: new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"));
         }
     }
 

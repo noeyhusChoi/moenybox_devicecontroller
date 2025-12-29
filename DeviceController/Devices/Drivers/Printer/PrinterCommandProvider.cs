@@ -1,14 +1,15 @@
 using System.Collections.Generic;
-using KIOSK.Devices.Management;
+using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers.Printer;
 
-internal sealed class PrinterCommandProvider : IDeviceCommandProvider
+internal sealed class PrinterCommandProvider : ICommandProvider
 {
     public string Model => "PRINTER";
 
     public IReadOnlyCollection<DeviceCommandDescriptor> GetCommands() => new[]
     {
+        new DeviceCommandDescriptor("RESTART", "장치 재시작"),
         new DeviceCommandDescriptor("PRINTCONTENT", "본문 인쇄"),
         new DeviceCommandDescriptor("PRINTTITLE", "제목 인쇄"),
         new DeviceCommandDescriptor("CUT", "용지 컷"),

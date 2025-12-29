@@ -12,7 +12,7 @@ namespace KIOSK.Device.Drivers.E200Z;
 /// </summary>
 internal sealed class E200ZClient : IAsyncDisposable
 {
-    private readonly DeviceChannel _channel;
+    private readonly TransportChannel _channel;
     private readonly Encoding _decodeEncoding = Encoding.GetEncoding("euc-kr");
     private bool _started;
 
@@ -20,7 +20,7 @@ internal sealed class E200ZClient : IAsyncDisposable
     public event EventHandler<DecodeMessage>? Decoded;
     public event Action<string>? RevisionReceived;
 
-    public E200ZClient(DeviceChannel channel)
+    public E200ZClient(TransportChannel channel)
     {
         _channel = channel ?? throw new ArgumentNullException(nameof(channel));
     }
@@ -86,7 +86,7 @@ internal sealed class E200ZClient : IAsyncDisposable
                 ct).ConfigureAwait(false);
 
             if (!TryParseFrame(bytes, out var parsedResp))
-                return new CommandResult(false, "Malformed response");
+                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "QR", "STATUS", "ERROR"));
 
             Log?.Invoke($"[E200Z] RX: Op=0x{(byte)parsedResp.Opcode:X2}, Len={parsedResp.Data.Length}");
 
@@ -95,18 +95,18 @@ internal sealed class E200ZClient : IAsyncDisposable
         }
         catch (TimeoutException ex)
         {
-            return new CommandResult(false, $"Timeout: {ex.Message}");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "QR", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (OperationCanceledException)
         {
             if (ct.IsCancellationRequested)
                 throw;
 
-            return new CommandResult(false, "Canceled");
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "QR", "TIMEOUT", "RESPONSE"), Retryable: true);
         }
         catch (Exception ex)
         {
-            return new CommandResult(false, ex.Message);
+            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", "QR", "STATUS", "ERROR"));
         }
     }
 

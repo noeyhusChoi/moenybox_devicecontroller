@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KIOSK.Device.Abstractions;
+using KIOSK.Devices.Management;
 
-namespace KIOSK.Devices.Management;
+namespace KIOSK.Device.Abstractions;
 
 public sealed record DeviceCommandDescriptor(string Name, string Description = "");
 
@@ -19,12 +20,12 @@ public interface IDeviceCommandCatalog
 /// </summary>
 public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
 {
-    private readonly IDeviceRuntime _runtime;
-    private readonly IReadOnlyDictionary<string, IDeviceCommandProvider> _providers;
+    private readonly IDeviceHost _runtime;
+    private readonly IReadOnlyDictionary<string, ICommandProvider> _providers;
 
     public DeviceCommandCatalog(
-        IDeviceRuntime runtime,
-        IEnumerable<IDeviceCommandProvider> providers)
+        IDeviceHost runtime,
+        IEnumerable<ICommandProvider> providers)
     {
         _runtime = runtime;
         _providers = providers

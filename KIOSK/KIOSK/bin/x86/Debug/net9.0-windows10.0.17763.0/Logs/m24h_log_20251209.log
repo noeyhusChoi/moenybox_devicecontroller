@@ -1,0 +1,408 @@
+{"@t":"2025-12-09T04:54:41.0707814Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:54:41.1480006Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:54:42.3005005Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T04:54:42.9491180Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T04:54:43.7870616Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T04:54:44.0914672Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T04:54:47.2768201Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T04:54:47.4055697Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T04:54:47.4055710Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T04:54:47.4110479Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T04:54:47.7203142Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T04:54:47.7370505Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T04:54:47.7409417Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T04:54:48.8127563Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:54:48.9659041Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:55:19.7502961Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:55:19.8015429Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:55:50.7503853Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:55:50.7979717Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:56:21.7491633Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:56:21.7977860Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:56:52.7500177Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:56:52.8242435Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:57:06.1756070Z","@mt":"Play Audio (sync): Click.wav","Member":"Play()","SourceFile":"AudioPlayService.cs:184"}
+{"@t":"2025-12-09T04:57:06.2800407Z","@mt":"Start -> Language via Next","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:57:08.6741264Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ar-SA.xaml' -> IOException: 'assets/language/stringresources.ar-sa.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.6963314Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ar.xaml' -> IOException: 'assets/language/stringresources.ar.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.7168054Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.7385244Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ar.xaml' -> IOException: 'assets/language/stringresources.ar.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.7590124Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.7804180Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.en.xaml' -> IOException: 'assets/language/stringresources.en.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.7999107Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T04:57:08.8049365Z","@mt":"Language -> IdScanConsent via Next","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:57:21.6084798Z","@mt":"IdScanConsent -> IdScanGuide via Next","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:57:22.9295367Z","@mt":"IdScanGuide -> Exit via Exit","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:57:23.7504413Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:57:23.7978785Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:57:36.0196879Z","@mt":"Play Audio (sync): Click.wav","Member":"Play()","SourceFile":"AudioPlayService.cs:184"}
+{"@t":"2025-12-09T04:57:36.0404957Z","@mt":"Start -> Language via Next","Member":".ctor()","SourceFile":"ExchangeSellStateMachine.cs:51"}
+{"@t":"2025-12-09T04:57:40.7649917Z","@mt":"Language -> Exit via Exit","Member":".ctor()","SourceFile":"ExchangeSellStateMachine.cs:51"}
+{"@t":"2025-12-09T04:57:54.7497306Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:57:54.7965156Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:57:55.4551746Z","@mt":"Play Audio (sync): Click.wav","Member":"Play()","SourceFile":"AudioPlayService.cs:184"}
+{"@t":"2025-12-09T04:57:55.4574527Z","@mt":"Start -> Language via Next","Member":".ctor()","SourceFile":"ExchangeSellStateMachine.cs:51"}
+{"@t":"2025-12-09T04:57:56.9273802Z","@mt":"Language -> Exit via Exit","Member":".ctor()","SourceFile":"ExchangeSellStateMachine.cs:51"}
+{"@t":"2025-12-09T04:58:00.5595885Z","@mt":"Play Audio (sync): Click.wav","Member":"Play()","SourceFile":"AudioPlayService.cs:184"}
+{"@t":"2025-12-09T04:58:00.5617172Z","@mt":"Start -> Language via Next","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:58:01.7715568Z","@mt":"Language -> IdScanConsent via Next","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:58:03.4514707Z","@mt":"IdScanConsent -> Exit via Exit","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T04:58:25.7528133Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T04:58:25.7974631Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:56:17.4016103Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T07:56:17.4536775Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T07:56:18.4685396Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T07:56:19.1703317Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T07:56:19.9851802Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T07:56:20.2890474Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T07:56:23.1162837Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T07:56:23.2066283Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T07:56:23.2066495Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T07:56:23.2138533Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T07:56:23.5209279Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T07:56:23.5365059Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T07:56:23.5396354Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T07:56:24.6075536Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:56:24.7666141Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:56:55.5467947Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:56:55.6016674Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:57:26.5466377Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:57:26.5962957Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:57:57.5479409Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:57:57.6036535Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:58:28.5466289Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:58:28.6173438Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:58:59.5475792Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:58:59.5969717Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:59:30.5462605Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T07:59:30.5946303Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:00:01.5489397Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:00:01.5961425Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:00:32.5472980Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:00:32.6286626Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:03:56.5985483Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:03:56.6463392Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:03:57.2571999Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:03:58.0813378Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:03:58.9449768Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:03:59.2487557Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:01.4848026Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:01.5238409Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:04:01.5238431Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:04:01.5256553Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:04:01.8338323Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:01.8516666Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T08:04:01.8556097Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T08:04:02.9261673Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:04:03.0773602Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:04:49.8829761Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:04:49.9347629Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:04:50.5757690Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:51.0866774Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:51.9216178Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:52.2295318Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:54.4618751Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:54.5091605Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 338696","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:04:54.5128807Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:04:54.5376034Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:04:54.8421854Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:04:54.8585252Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T08:04:54.8636014Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T08:04:55.9277905Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:04:56.0859875Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:05:26.8719083Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:05:26.9210933Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:06:06.8667880Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:06:06.9147616Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:06:07.5547006Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:06:08.2701999Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:06:09.1029761Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:06:09.4068217Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:06:11.6243488Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:06:11.6678493Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 338696","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:06:11.6718106Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:06:11.6818332Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:06:11.9855687Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:06:12.0011482Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T08:06:12.0046127Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T08:06:13.0788524Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:06:13.2289087Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:06:44.0137731Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:06:44.0705857Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:07:15.0140480Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:07:15.0627825Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:07:46.0150952Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:07:46.0638047Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:08:17.0126277Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:08:17.0940225Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:08:48.0139101Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:08:48.0642441Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:09:19.0137812Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:09:19.0708712Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:09:50.0155264Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:09:50.0644801Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:10:21.0147025Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:10:21.0947783Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:10:52.0145691Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:10:52.0657986Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:11:23.0133698Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:11:23.0657348Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:11:53.0253587Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:11:54.0547754Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:12:24.0441362Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:12:25.0766248Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:12:55.0133942Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:12:56.0505475Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:13:11.0221442Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:13:11.0710758Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:13:11.7062202Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:13:12.2171206Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:13:13.0311212Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:13:13.3381234Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:13:15.6232812Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:13:15.6626765Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 338696","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:13:15.6641803Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:13:15.6691372Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:13:15.9772387Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:13:15.9924834Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T08:13:15.9955229Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T08:13:17.0611929Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:13:17.2043944Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:13:48.0025112Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:13:48.0552965Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:14:19.0032579Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:14:19.0545194Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:14:50.0030282Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:14:50.0501698Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:15:21.0030107Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:15:21.0738663Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:15:52.0037730Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:15:52.0524255Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:16:23.0035372Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:16:23.0506901Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:16:54.0026814Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:16:54.0488494Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:17:25.0024033Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:17:25.0777661Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:17:56.0021100Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:17:56.0498261Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:18:27.0033641Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:18:27.0518747Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:18:58.0032550Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:18:58.0508613Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:19:29.0053613Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:19:29.0764541Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:20:00.0037233Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:20:00.0597494Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:20:31.0039178Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:20:31.0553993Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:21:02.0114112Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:21:02.0592454Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:21:33.0030102Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:21:33.0774024Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:22:04.0031051Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:22:04.0658946Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:22:35.0043382Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:22:35.0578495Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:23:05.4585595Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:23:05.5046320Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:23:36.4592636Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:23:36.5367530Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:24:07.4599641Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:24:07.5102865Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:24:22.7660616Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:24:22.8138406Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T08:24:23.4629061Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:24:23.9721358Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:24:24.8519644Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:24:25.1577420Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:24:27.3934574Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:24:27.4338749Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 338696","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:24:27.4361124Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:24:27.4417454Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T08:24:27.7475268Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T08:24:27.7632314Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T08:24:27.7657745Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T08:24:28.8293546Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T08:24:29.1844287Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:01:26.0483249Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:01:26.0952780Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:01:26.7720326Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:01:27.2965537Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:01:28.1103286Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:01:28.4157839Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:01:30.6293256Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:01:30.6729250Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:01:30.6729249Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:01:30.6832441Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:01:30.9864268Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:01:31.0032534Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:01:31.0064317Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:01:32.0785156Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:01:32.2353939Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:02:03.0159810Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:02:03.0728194Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:02:44.5805160Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:02:44.6276505Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:02:45.2474746Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:02:45.7801957Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:02:46.6726976Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:02:46.9762461Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:02:49.2357044Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:02:49.2751987Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:02:49.2751833Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:02:49.3036219Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:02:49.6085333Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:02:49.6248377Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:02:49.6284014Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:02:50.6947605Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:02:50.8334725Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:02:53.8457975Z","@mt":"Play Audio (sync): Click.wav","Member":"Play()","SourceFile":"AudioPlayService.cs:184"}
+{"@t":"2025-12-09T09:02:53.9451801Z","@mt":"Start -> Language via Next","Member":".ctor()","SourceFile":"GtfStateMachine.cs:66"}
+{"@t":"2025-12-09T09:07:51.0007521Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:07:51.0478064Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:07:51.7551136Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:07:52.3462975Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:07:53.1706304Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:07:53.4754640Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:07:55.6726644Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:07:55.7132451Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 338696","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:07:55.7357811Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:07:55.7400837Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:07:56.0475595Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:07:56.0668020Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:07:56.0712534Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:07:57.1355580Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:07:57.5356648Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:17:45.0889236Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:17:45.1496744Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:17:45.8016769Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:17:46.3174236Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:17:47.1087070Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:17:47.4154208Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:17:49.6531785Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:17:49.6978345Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:17:49.6978603Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:17:49.7051100Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:17:50.0089119Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:17:50.0253863Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:17:50.0295178Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:17:51.0999357Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:17:51.2538526Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:18:22.0401159Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:18:22.0929318Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:18:53.0376473Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:18:53.0872858Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:19:24.0380512Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:19:24.0854246Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:19:55.0382928Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:19:55.1066339Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:20:26.0385080Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:20:26.0873728Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:20:57.0379964Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:20:57.0858012Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:21:28.0386706Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:21:28.0892345Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:21:59.0374122Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:21:59.1153330Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:22:29.9797491Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:22:30.0278988Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:23:11.0877418Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:23:11.1384233Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:23:11.7320307Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:23:12.3856184Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:23:13.1937336Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:23:13.4977683Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:23:15.7050236Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:23:15.7405049Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:23:15.7405050Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:23:15.7476244Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:23:16.0516074Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:23:16.0682213Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:23:16.0711541Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:23:17.1365063Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:23:17.2975372Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:24:12.3742698Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:24:12.3971414Z","@mt":"Skipped UPDATE_EXCHANGE_RATE because previous run is still executing.","@l":"Debug","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:151"}
+{"@t":"2025-12-09T09:24:12.4025475Z","@mt":"Skipped UPDATE_EXCHANGE_RATE because previous run is still executing.","@l":"Debug","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:151"}
+{"@t":"2025-12-09T09:24:12.4441542Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:24:52.6111741Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:24:52.6595593Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:24:53.3358788Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:24:53.8450684Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:24:54.6957948Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:24:55.0000211Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:24:57.1892126Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:24:57.2304153Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:24:57.2304202Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:24:57.2372466Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:24:57.5454703Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:24:57.5620739Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:24:57.5649795Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:24:58.7990894Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:24:58.9474829Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:25:29.5719349Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:25:29.6270361Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:25:59.6040396Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:26:00.6174873Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:26:30.5729493Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:26:31.6154570Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:27:01.5721661Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:27:02.6794601Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:27:32.5749022Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:27:33.6169123Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:28:03.5726015Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:28:04.7640269Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:28:34.5731834Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:28:35.6171616Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:29:05.5752272Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:29:06.6522107Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:29:36.5726834Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:29:37.6118916Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:30:07.5728017Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:30:08.6140269Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:30:38.5737246Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:30:39.6107371Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:31:09.5732609Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:31:10.6376135Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:31:40.5721316Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:31:41.6083270Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:32:11.5728211Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:32:12.6185653Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:32:48.2042498Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:32:48.2507444Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:33:19.1585542Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:33:19.2326686Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:33:50.1615019Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:33:50.2097397Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:34:21.1591867Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:34:21.2075413Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:34:52.1592818Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:34:52.2058371Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:35:23.1612086Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:35:23.2408797Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:35:54.1610410Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:35:54.2098126Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:36:25.1603247Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:36:25.2066974Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:36:56.1578120Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:36:56.2057844Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:37:27.1598417Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:37:27.2331461Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:37:58.1601411Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:37:58.2078509Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:39:26.7504873Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.ko.xaml' -> IOException: 'assets/language/stringresources.ko.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:39:26.7975057Z","@mt":"Failed to load 'Assets/LANGUAGE\\StringResources.xaml' -> IOException: 'assets/language/stringresources.xaml' 리소스가 없습니다.","@l":"Debug","Member":"LoadDictionaryForCulture()","SourceFile":"LocalizationService.cs:163"}
+{"@t":"2025-12-09T09:39:27.4022833Z","@mt":"[Init] DB Connecting ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:39:27.9140639Z","@mt":"[Init] Cache Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:39:28.7941678Z","@mt":"[Init] Language Loading ...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:39:29.0984654Z","@mt":"[Init] Devices Loading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:39:31.3288873Z","@mt":"[Init] Audio Preloading...","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:39:31.3683943Z","@mt":"Cached audio loaded: Bill.wav (338696 bytes). Total cache bytes: 338696","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:39:31.3715423Z","@mt":"Cached audio loaded: Coin.wav (560360 bytes). Total cache bytes: 899056","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:39:31.3787380Z","@mt":"Cached audio loaded: Click.wav (175360 bytes). Total cache bytes: 1074416","Member":"GetOrLoadCachedSound()","SourceFile":"AudioPlayService.cs:119"}
+{"@t":"2025-12-09T09:39:31.6859551Z","@mt":"[Init] Initialize Complete","Member":"Update()","SourceFile":"AppInitializer.cs:102"}
+{"@t":"2025-12-09T09:39:31.7036853Z","@mt":"BackgroundTaskService starting.","Member":"StartAsync()","SourceFile":"BackgroundTaskService.cs:47"}
+{"@t":"2025-12-09T09:39:31.7083345Z","@mt":"BackgroundTaskService ExecuteAsync loop started.","Member":"ExecuteAsync()","SourceFile":"BackgroundTaskService.cs:75"}
+{"@t":"2025-12-09T09:39:32.7846030Z","@mt":"Background Task Excute  >> [SENT_CEMS_TX_RESULT]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}
+{"@t":"2025-12-09T09:39:32.9514910Z","@mt":"Background Task Excute  >> [UPDATE_EXCHANGE_RATE]","Member":"RunJobSafe()","SourceFile":"BackgroundTaskService.cs:166"}

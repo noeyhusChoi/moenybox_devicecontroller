@@ -1,0 +1,372 @@
+<UserControl
+    x:Class="KIOSK.Views.ExchangeCurrencyView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Views"
+    xmlns:lx="clr-namespace:Localization"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:KIOSK.ViewModels"
+    d:DesignHeight="980"
+    d:DesignWidth="1920"
+    d:Language="ko-KR"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="IconTextRoundedButton" TargetType="Button">
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="15">
+                            <Grid Margin="{TemplateBinding Padding}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  아이콘  -->
+                                <Image
+                                    Grid.Column="0"
+                                    Width="32"
+                                    Height="32"
+                                    Source="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                                <!--  텍스트  -->
+                                <ContentPresenter
+                                    Grid.Column="2"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="IconTextRoundedButton2" TargetType="Button">
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <!-- 툴팁을 데이터로 쓰지 않게 하려면 ↓ 주석 해제
+    <Setter Property="ToolTipService.IsEnabled" Value="False"/>
+            -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="15">
+                            <Grid
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="12" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Ellipse
+                                    Width="64"
+                                    Height="64"
+                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                    SnapsToDevicePixels="True"
+                                    Stroke="#1A000000"
+                                    StrokeThickness="1">
+                                    <Ellipse.Fill>
+                                        <VisualBrush Stretch="UniformToFill">
+                                            <VisualBrush.Visual>
+                                                <Image Source="{Binding FlagUri}" />
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+
+                                <!--  오른쪽 2줄 텍스트  -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="24"
+                                        FontWeight="Medium"
+                                        Foreground="Gray"
+                                        Text="{Binding Currency}" />
+
+                                    <TextBlock
+                                        FontFamily="{StaticResource Pretendard}"
+                                        FontSize="34"
+                                        FontWeight="Bold"
+                                        Foreground="Black"
+                                        Text="{Binding Sell, StringFormat={}{0:F2}}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--<Style.Triggers>
+                <DataTrigger Binding="{Binding Currency}" Value="USD">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Opacity" Value="0.6" />
+                </DataTrigger>
+            </Style.Triggers>-->
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#2222F0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="168" />
+            <!--  진행  -->
+            <RowDefinition Height="64" />
+            <RowDefinition Height="103" />
+            <!--  텍스트  -->
+            <RowDefinition Height="*" />
+            <!--  환율버튼  -->
+        </Grid.RowDefinitions>
+
+        <Grid
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="72,0,72,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Width="150"
+                Height="70"
+                Background="Transparent"
+                BorderBrush="White"
+                BorderThickness="1"
+                Command="{Binding MainCommand}"
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_XS}"
+                Foreground="White">
+                <Button.Content>
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Source="/Assets/Image/bx-home-smile.png" />
+                        <TextBlock Margin="8,0,0,0" Text="HOME" />
+                    </StackPanel>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                Width="150"
+                Height="70"
+                Background="Transparent"
+                BorderBrush="White"
+                BorderThickness="1"
+                Command="{Binding PreviousCommand}"
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_XS}"
+                Foreground="White">
+                <Button.Content>
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Source="/Assets/Image/bx-up-arrow-alt.png" />
+                        <TextBlock Margin="8,0,0,0" Text="BACK" />
+                    </StackPanel>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <StackPanel Margin="0,0,60,0" Orientation="Horizontal">
+                    <Grid Margin="0,0,10,0">
+                        <Ellipse
+                            Width="40"
+                            Height="40"
+                            Fill="#FF482F"
+                            Stroke="White"
+                            StrokeThickness="1" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource Pretendard}"
+                            FontSize="32"
+                            Foreground="White"
+                            Text="1" />
+                    </Grid>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{lx:Loc ExchangeSellProcess.SelectCurrency}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,60,0" Orientation="Horizontal">
+                    <Grid Margin="0,0,10,0">
+                        <Ellipse
+                            Width="40"
+                            Height="40"
+                            Fill="#A5A5A5"
+                            Stroke="White"
+                            StrokeThickness="1" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource Pretendard}"
+                            FontSize="32"
+                            Foreground="White"
+                            Text="2" />
+                    </Grid>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{lx:Loc ExchangeSellProcess.IDScan}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,60,0" Orientation="Horizontal">
+                    <Grid Margin="0,0,10,0">
+                        <Ellipse
+                            Width="40"
+                            Height="40"
+                            Fill="#A5A5A5"
+                            Stroke="White"
+                            StrokeThickness="1" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource Pretendard}"
+                            FontSize="32"
+                            Foreground="White"
+                            Text="3" />
+                    </Grid>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{lx:Loc ExchangeSellProcess.Deposit}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,60,0" Orientation="Horizontal">
+                    <Grid Margin="0,0,10,0">
+                        <Ellipse
+                            Width="40"
+                            Height="40"
+                            Fill="#A5A5A5"
+                            Stroke="White"
+                            StrokeThickness="1" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource Pretendard}"
+                            FontSize="32"
+                            Foreground="White"
+                            Text="4" />
+                    </Grid>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{lx:Loc ExchangeSellProcess.Withdraw}" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Rectangle
+            Height="0.6"
+            Margin="72,0,72,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
+            Stroke="#DCDEE0" />
+
+        <TextBlock
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="40"
+            FontWeight="Regular"
+            Foreground="White"
+            Style="{StaticResource BodyTextStyle}"
+            Text="{lx:Loc ExchangeSell.Title}" />
+
+        <ItemsControl Grid.Row="3" ItemsSource="{Binding ExchangeRates}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Columns="5" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Width="282"
+                        Height="150"
+                        Margin="16"
+                        Padding="23,34,23,34"
+                        Background="White"
+                        Command="{Binding DataContext.NextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        CommandParameter="{Binding}"
+                        Foreground="White"
+                        Style="{StaticResource IconTextRoundedButton2}"
+                        Tag="{Binding Path=FlagUri, StringFormat='/Assets/FLAG/{0}.png'}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--<UniformGrid Rows="1" Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <Button Margin="10" Content="확인" Command="{Binding OkayCommand}"/>
+            <Button Margin="10" Content="취소" Command="{Binding CancelCommand}"/>
+        </UniformGrid >-->
+    </Grid>
+</UserControl>

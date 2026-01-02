@@ -1,0 +1,99 @@
+﻿<UserControl
+    x:Class="KIOSK.Views.Exchange.Popup.ExchangePopupIDScanInfoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Views.Exchange.Popup"
+    xmlns:lx="clr-namespace:Localization"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:KIOSK.ViewModels.Exchange.Popup"
+    Width="1540"
+    Height="780"
+    d:DataContext="{d:DesignInstance Type=viewModels:ExchangePopupIDScanInfoViewModel,
+                                     IsDesignTimeCreatable=False}"
+    d:Language="ko-KR"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <Border
+        Background="White"
+        BorderBrush="Gray"
+        BorderThickness="1"
+        CornerRadius="30"
+        SnapsToDevicePixels="True">
+        <Grid Margin="70,0,70,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="49" />
+                <RowDefinition Height="103" />
+                <RowDefinition Height="22" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="64" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_3XL}"
+                FontWeight="{StaticResource FontWeight_M}"
+                Text="{lx:Loc ExchangeIDScanPopup.Title}" />
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  좌측  -->
+                <Border
+                    Grid.Column="0"
+                    Background="{Binding BackgroundBrush}"
+                    BorderBrush="Transparent"
+                    BorderThickness="2"
+                    CornerRadius="20" />
+
+                <!--  우측  -->
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom">
+                    <Image
+                        Width="520"
+                        Height="305"
+                        Source="{Binding ImgPath}"
+                        Stretch="Uniform" />
+                    <Separator Height="16" Background="Transparent" />
+                    <TextBlock
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_M}"
+                        Text="{lx:Loc ExchangeIDScanPopup.Info}"
+                        TextWrapping="Wrap" />
+                    <Separator Height="50" Background="Transparent" />
+                    <Button
+                        Height="72"
+                        Background="{StaticResource PrimaryBrush}"
+                        BorderBrush="{StaticResource PrimaryBrush}"
+                        Command="{Binding CloseCommand}"
+                        Content="확인"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="{StaticResource FontSize_S}"
+                        FontWeight="{StaticResource FontWeight_M}"
+                        Foreground="{StaticResource WhiteBrush}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Border>
+</UserControl>

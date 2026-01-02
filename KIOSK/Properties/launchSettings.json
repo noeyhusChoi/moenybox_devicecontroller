@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "KIOSK": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false,
+      "remoteDebugMachine": "",
+      "authenticationMode": "Windows"
+    },
+    "KIOSK_REMOTE": {
+      "commandName": "Project",
+      "workingDirectory": "\\\\172.30.1.61\\Public\\Debug",
+      "remoteDebugEnabled": true,
+      "remoteDebugMachine": "172.30.1.61:4026",
+      "authenticationMode": "Windows"
+    }
+  }
+}

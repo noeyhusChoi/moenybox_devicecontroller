@@ -1,0 +1,956 @@
+﻿<UserControl
+    x:Class="KIOSK.Views.EnvironmentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:KIOSK.ViewModels"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--  행 스타일  -->
+        <Style x:Key="CleanDataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Cursor" Value="None" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Style.Triggers>
+                <!--  홀수행(AlternationIndex=1) 색상  -->
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#F2F2F2" />
+                    <!--  아주 연한 회색  -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--  범용 DataGrid 스타일  -->
+        <Style x:Key="CleanDataGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="CanUserDeleteRows" Value="False" />
+            <Setter Property="CanUserResizeRows" Value="False" />
+            <Setter Property="CanUserSortColumns" Value="False" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="RowHeight" Value="32" />
+            <Setter Property="ColumnHeaderHeight" Value="38" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#F3F4F6" />
+            <Setter Property="VerticalGridLinesBrush" Value="#F3F4F6" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="RowStyle" Value="{StaticResource CleanDataGridRowStyle}" />
+        </Style>
+
+        <!--  좌측 정렬  -->
+        <Style x:Key="LeftCellTextStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Left" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+        </Style>
+        <Style x:Key="LeftHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Background" Value="#F2F2F2" />
+            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+        </Style>
+
+        <!--  중앙 정렬  -->
+        <Style x:Key="CenterCellTextStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+        </Style>
+        <Style x:Key="CenterHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#F2F2F2" />
+            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+        </Style>
+
+        <!--  우측 정렬  -->
+        <Style x:Key="RightCellTextStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+        </Style>
+        <Style x:Key="RightHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="Background" Value="#F2F2F2" />
+            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+        </Style>
+
+        <!--  공통 뱃지 스타일 (필요 시)  -->
+        <Style x:Key="BadgeStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F9FAFB" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Padding" Value="14" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+
+
+        <!--  버튼 스타일  -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="1.2" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="border"
+                            Padding="10,0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="ButtonGhost"
+            BasedOn="{StaticResource RoundedButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Foreground" Value="#374151" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+        </Style>
+
+        <Style
+            x:Key="ButtonPrimary"
+            BasedOn="{StaticResource RoundedButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#2563EB" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#1D4ED8" />
+            <!--<Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="border"
+                            Padding="10,0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+
+            -->
+            <!--  상태별 효과  -->
+            <!--
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1D4ED8" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1E40AF" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#E5E7EB" />
+                                <Setter Property="Foreground" Value="#9CA3AF" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="#D1D5DB" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>-->
+        </Style>
+
+        <Style
+            x:Key="ButtonDanger"
+            BasedOn="{StaticResource RoundedButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#FEE2E2" />
+            <Setter Property="Foreground" Value="#B91C1C" />
+            <Setter Property="BorderBrush" Value="#FECACA" />
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Background" Value="#FFFFFF" />
+        </Style>
+
+        <Style x:Key="SegmentedRadioStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#374151" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border
+                            x:Name="border"
+                            Padding="10,2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!--  Hover  -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E5E7EB" />
+                            </Trigger>
+                            <!--  Checked  -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="White" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="White" />
+                                <Setter Property="Foreground" Value="#111827" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border
+        Width="1280"
+        MaxHeight="960"
+        VerticalAlignment="Center"
+        Background="White"
+        CornerRadius="20">
+
+        <Grid Margin="24" Background="#FFFFFF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  헤더  -->
+            <Border
+                Grid.Row="0"
+                Padding="0,0,0,16"
+                BorderBrush="#E5E7EB"
+                BorderThickness="0,0,0,1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  헤더 왼쪽  -->
+                    <StackPanel
+                        Grid.Column="0"
+                        Margin="0,0,16,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,12,0"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="시재 / 입금 설정" />
+
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                Margin="0,0,6,0"
+                                VerticalAlignment="Center"
+                                FontSize="13"
+                                Text="서울역 지점" />
+                        </Grid>
+
+                        <Button
+                            Margin="8,0,0,0"
+                            Padding="8,4"
+                            Command="{Binding WithdrawalCassetteCommand}"
+                            Content="시재/입금 조기경보 설정"
+                            Style="{StaticResource ButtonGhost}" />
+                    </StackPanel>
+
+                    <!--  헤더 오른쪽  -->
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Border
+                            Margin="8"
+                            Background="#F3F4F6"
+                            Style="{StaticResource BadgeStyle}">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Foreground="#4B5563"
+                                Opacity="0.7"
+                                Text="기준일시 : 2025-11-04 15:19:48" />
+                        </Border>
+
+                        <Button
+                            Margin="0,0,6,0"
+                            Content="점검중"
+                            Style="{StaticResource ButtonGhost}" />
+                        <Button
+                            Margin="0,0,6,0"
+                            Content="프로그램 종료"
+                            Style="{StaticResource ButtonDanger}" />
+                        <Button Content="닫기" Style="{StaticResource ButtonGhost}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!--  메인 컨텐츠  -->
+            <ScrollViewer
+                Grid.Row="1"
+                Margin="0"
+                VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="1.1*" MinWidth="280" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  왼쪽: 현금 + 입금 관리  -->
+                    <StackPanel Grid.Column="0">
+                        <!--  현금 관리 카드  -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!--  카드 헤더  -->
+                                <Grid Grid.Row="0" Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        FontSize="15"
+                                        FontWeight="SemiBold"
+                                        Text="현금 관리 (시재금 + 출금 현황)" />
+                                    <Border
+                                        Grid.Column="1"
+                                        Background="#FFFFFF"
+                                        BorderBrush="#E5E7EB"
+                                        BorderThickness="1"
+                                        Style="{StaticResource BadgeStyle}">
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="#4B5563"
+                                            Text="금고 현황" />
+                                    </Border>
+                                </Grid>
+
+                                <!--  툴바 라인  -->
+                                <Grid Grid.Row="1" Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Grid.Column="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="#6B7280"
+                                            Text="보기 유형" />
+                                        <Border
+                                            Grid.Column="1"
+                                            Background="#e5e7eb"
+                                            CornerRadius="12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <RadioButton
+                                                    Grid.Column="0"
+                                                    Content="원금"
+                                                    GroupName="CashMode"
+                                                    IsChecked="True"
+                                                    Style="{StaticResource SegmentedRadioStyle}" />
+
+                                                <RadioButton
+                                                    Grid.Column="1"
+                                                    Content="잔금"
+                                                    GroupName="CashMode"
+                                                    Style="{StaticResource SegmentedRadioStyle}" />
+
+                                                <RadioButton
+                                                    Grid.Column="2"
+                                                    Content="출금"
+                                                    GroupName="CashMode"
+                                                    Style="{StaticResource SegmentedRadioStyle}" />
+
+                                                <RadioButton
+                                                    Grid.Column="3"
+                                                    Content="반환"
+                                                    GroupName="CashMode"
+                                                    Style="{StaticResource SegmentedRadioStyle}" />
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+
+
+
+                                <!--  상태 라인  -->
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Margin="0,0,0,10"
+                                    Orientation="Horizontal">
+                                    <Border
+                                        Margin="0,0,6,0"
+                                        Background="#ECFDF3"
+                                        BorderBrush="#CCF8F5"
+                                        BorderThickness="1"
+                                        Style="{StaticResource BadgeStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse
+                                                Width="6"
+                                                Height="6"
+                                                Margin="0,0,4,0"
+                                                VerticalAlignment="Center"
+                                                Fill="#22C55E" />
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="#15803D"
+                                                Text="정상" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border
+                                        Margin="0,0,6,0"
+                                        Background="#FEF2F2"
+                                        BorderBrush="#FECACA"
+                                        BorderThickness="1"
+                                        Style="{StaticResource BadgeStyle}">
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="#B91C1C"
+                                            Text="오류 권종 2건" />
+                                    </Border>
+                                    <TextBlock
+                                        FontSize="11"
+                                        Foreground="#9CA3AF"
+                                        Text="※ 원금 기준 시재입니다." />
+                                </StackPanel>
+
+                                <!--  테이블  -->
+                                <Border
+                                    Grid.Row="3"
+                                    Margin="0,0,0,10"
+                                    Background="#FFFFFF"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="1"
+                                    ClipToBounds="True"
+                                    CornerRadius="10">
+                                    <DataGrid
+                                        AlternationCount="2"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False"
+                                        ItemsSource="{Binding WithdrawalCassettes}"
+                                        Style="{StaticResource CleanDataGridStyle}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                                Width="100"
+                                                Binding="{Binding CurrencyCode}"
+                                                ElementStyle="{StaticResource LeftCellTextStyle}"
+                                                Header="권종"
+                                                HeaderStyle="{StaticResource LeftHeaderStyle}" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Denomination}"
+                                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                                Header="단가"
+                                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Count}"
+                                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                                Header="수량"
+                                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Amount}"
+                                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                                Header="금액"
+                                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Border>
+
+                                <!--  푸터 액션  -->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button
+                                            Margin="0,0,6,0"
+                                            Content="시재 재계산"
+                                            Style="{StaticResource ButtonGhost}" />
+                                        <Button Content="시재 설정" Style="{StaticResource ButtonPrimary}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!--  입금 관리 카드  -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!--  카드 헤더  -->
+                                <Grid Grid.Row="0" Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        FontSize="15"
+                                        FontWeight="SemiBold"
+                                        Text="입금 관리 (원화 + 외화)" />
+                                    <Border
+                                        Grid.Column="1"
+                                        Background="#FFFFFF"
+                                        BorderBrush="#E5E7EB"
+                                        BorderThickness="1"
+                                        Style="{StaticResource BadgeStyle}">
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="#4B5563"
+                                            Text="입금 현황" />
+                                    </Border>
+                                </Grid>
+
+                                <!--  툴바  -->
+                                <Grid Grid.Row="1" Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,6,0"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="#6B7280"
+                                            Text="입금 구분" />
+                                        <Border
+                                            Grid.Column="1"
+                                            Background="#e5e7eb"
+                                            CornerRadius="12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <RadioButton
+                                                    Grid.Column="0"
+                                                    Content="원화 입금"
+                                                    GroupName="Deposit"
+                                                    IsChecked="True"
+                                                    Style="{StaticResource SegmentedRadioStyle}" />
+
+                                                <RadioButton
+                                                    Grid.Column="1"
+                                                    Content="외화 입금"
+                                                    GroupName="Deposit"
+                                                    Style="{StaticResource SegmentedRadioStyle}" />
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!--  컨텐츠 (원화/외화 탭)  -->
+                                <Border
+                                    Grid.Row="2"
+                                    Margin="0,0,0,10"
+                                    Background="#FFFFFF"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                    <DataGrid
+                                        AlternationCount="2"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False"
+                                        ItemsSource="{Binding CashItems}"
+                                        Style="{StaticResource CleanDataGridStyle}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                                Width="100"
+                                                Binding="{Binding Currency}"
+                                                ElementStyle="{StaticResource LeftCellTextStyle}"
+                                                Header="권종"
+                                                HeaderStyle="{StaticResource LeftHeaderStyle}" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Denomination}"
+                                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                                Header="단가"
+                                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Denomination}"
+                                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                                Header="수량"
+                                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                                            <DataGridTextColumn
+                                                Width="*"
+                                                Binding="{Binding Quantity}"
+                                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                                Header="금액"
+                                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Border>
+
+                                <!--  푸터  -->
+                                <Grid Grid.Row="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button
+                                            Margin="0,0,6,0"
+                                            Content="입금 내역 보기"
+                                            Style="{StaticResource ButtonGhost}" />
+                                        <Button Content="입금 통계 저장" Style="{StaticResource ButtonPrimary}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <!--  오른쪽: 사이드 카드  -->
+                    <StackPanel Grid.Column="21">
+                        <!--  장치 상태  -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="0,0,0,6"
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Text="장치 상태" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Margin="0,0,0,6"
+                                    FontSize="11"
+                                    Foreground="#6B7280"
+                                    Text="장치별 상태 및 초기화 / 설정" />
+                                <ItemsControl
+                                    Grid.Row="2"
+                                    Margin="0,0,0,8"
+                                    ItemsSource="{Binding DeviceStatuses}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!--  왼쪽: 상태 점 + 장치 이름  -->
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                    <Ellipse
+                                                        Width="8"
+                                                        Height="8"
+                                                        Margin="0,0,6,0"
+                                                        VerticalAlignment="Center">
+                                                        <Ellipse.Style>
+                                                            <Style TargetType="Ellipse">
+                                                                <!--  기본: 정상(초록)  -->
+                                                                <Setter Property="Fill" Value="#22C55E" />
+                                                                <Style.Triggers>
+                                                                    <!--  HasError == true 이면 빨간색  -->
+                                                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                                        <Setter Property="Fill" Value="#EF4444" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Ellipse.Style>
+                                                    </Ellipse>
+
+                                                    <!--  장치 이름  -->
+                                                    <TextBlock
+                                                        Width="100"
+                                                        VerticalAlignment="Center"
+                                                        Text="{Binding Name}" />
+                                                </StackPanel>
+
+                                                <!--  가운데: 상태 텍스트 (정상/오류)  -->
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    Margin="0,0,6,0"
+                                                    VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="정상" />
+                                                            <Setter Property="Foreground" Value="#4B5563" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                                    <Setter Property="Text" Value="오류" />
+                                                                    <Setter Property="Foreground" Value="#EF4444" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+
+                                                <!--  오른쪽: 버튼 영역 (나중에 로직 연결)  -->
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                    <Button
+                                                        Margin="0,0,3,0"
+                                                        Command="{Binding ResetDeviceCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding Name}"
+                                                        Content="초기화"
+                                                        Style="{StaticResource ButtonGhost}" />
+                                                    <Button Content="설정" Style="{StaticResource ButtonGhost}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Button
+                                    Grid.Row="3"
+                                    Content="장치 상태 새로고침"
+                                    Style="{StaticResource ButtonGhost}" />
+
+                            </Grid>
+                        </Border>
+
+                        <!--  네트워크 / 저장공간  -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="0,0,0,6"
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Text="네트워크 / 저장공간" />
+
+                                <Grid Grid.Row="1" Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        FontSize="12"
+                                        Text="네트워크" />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Ellipse
+                                            Width="6"
+                                            Height="6"
+                                            Margin="0,0,4,0"
+                                            VerticalAlignment="Center"
+                                            Fill="#22C55E" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="#15803D"
+                                            Text="연결됨" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <ItemsControl Grid.Row="2" ItemsSource="{Binding StorageList}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="1*" />
+                                                    <ColumnDefinition Width="2*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!--  1. 드라이브 이름  -->
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    FontSize="12"
+                                                    Text="{Binding DriveName, StringFormat={}저장공간({0})}" />
+
+                                                <!--  2. 게이지  -->
+                                                <Border
+                                                    Grid.Column="1"
+                                                    Height="6"
+                                                    Margin="0,0,4,0"
+                                                    Background="#E5E7EB"
+                                                    CornerRadius="3">
+                                                    <Border
+                                                        Width="{Binding FreePercent}"
+                                                        HorizontalAlignment="Left"
+                                                        CornerRadius="3">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Offset="0.0" Color="#22C55E" />
+                                                                <GradientStop Offset="0.7" Color="#15803D" />
+                                                                <GradientStop Offset="1.0" Color="#1E88E5" />
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                    </Border>
+                                                </Border>
+
+                                                <!--  3. 여유율 텍스트  -->
+                                                <TextBlock
+                                                    Grid.Column="2"
+                                                    FontSize="11"
+                                                    Foreground="#9CA3AF"
+                                                    Text="{Binding FreePercent, StringFormat={}{0:F0}% 여유}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Grid Grid.Row="3" Margin="0,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="4" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Stretch"
+                                        Content="네트워크 점검"
+                                        Style="{StaticResource ButtonGhost}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Stretch"
+                                        Content="저장공간 상세"
+                                        Style="{StaticResource ButtonGhost}" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!--  마감 / 로그  -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="0,0,0,8"
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Text="마감 / 로그" />
+
+                                <UniformGrid
+                                    Grid.Row="1"
+                                    Margin="0,0,0,6"
+                                    Columns="2">
+                                    <Button
+                                        HorizontalAlignment="Stretch"
+                                        Content="매출 출력"
+                                        Style="{StaticResource ButtonGhost}" />
+                                    <Button
+                                        Margin="4,0,0,0"
+                                        Content="매출 저장"
+                                        Style="{StaticResource ButtonGhost}" />
+                                </UniformGrid>
+
+                                <Button
+                                    Grid.Row="2"
+                                    Margin="0,0,0,6"
+                                    Content="영수증 출력"
+                                    Style="{StaticResource ButtonGhost}" />
+
+                                <UniformGrid Grid.Row="3" Columns="2">
+                                    <Button
+                                        Padding="8,3"
+                                        Content="프로그램 재실행"
+                                        Style="{StaticResource ButtonGhost}" />
+                                    <Button
+                                        Margin="4,0,0,0"
+                                        Content="로그 전송"
+                                        Style="{StaticResource ButtonGhost}" />
+                                </UniformGrid>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

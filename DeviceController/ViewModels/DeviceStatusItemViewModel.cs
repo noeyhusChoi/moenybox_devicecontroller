@@ -20,10 +20,10 @@ public sealed partial class DeviceStatusItemViewModel : ObservableObject
     private DateTimeOffset timestamp;
 
     [ObservableProperty]
-    private int alarmCount;
+    private int alertCount;
 
     [ObservableProperty]
-    private string alarmsText = string.Empty;
+    private string alertsText = string.Empty;
 
     public void UpdateFrom(StatusSnapshot snapshot)
     {
@@ -32,11 +32,11 @@ public sealed partial class DeviceStatusItemViewModel : ObservableObject
         Health = snapshot.Health;
         Timestamp = snapshot.Timestamp;
 
-        var alarms = snapshot.Alarms ?? new();
-        AlarmCount = alarms.Count;
-        AlarmsText = alarms.Count == 0
-            ? "알람 없음"
-            : string.Join(Environment.NewLine, alarms.Select(a => $"{a.Severity} {a.Code}: {a.Message}"));
+        var alerts = snapshot.Alerts ?? new();
+        AlertCount = alerts.Count;
+        AlertsText = alerts.Count == 0
+            ? "알림 없음"
+            : string.Join(Environment.NewLine, alerts.Select(a => $"{a.Severity} {a.Code}: {a.Message}"));
     }
 }
 

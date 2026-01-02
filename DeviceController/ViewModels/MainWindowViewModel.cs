@@ -10,12 +10,14 @@ using KIOSK.Device.Abstractions;
 using KIOSK.Device.Drivers;
 using KIOSK.Device.Drivers.E200Z;
 using KIOSK.Devices.Management;
+using KIOSK.Status;
 
 namespace DeviceController.ViewModels;
 
 public sealed partial class MainWindowViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
+    private readonly IStatusStore _statusStore;
     private readonly IDeviceCommandCatalog _commandCatalog;
 
     [ObservableProperty]
@@ -48,19 +50,23 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private System.Reflection.EventInfo? _logEventInfo;
     private Delegate? _logHandler;
 
-    public MainWindowViewModel(IDeviceManager deviceManager, IDeviceCommandCatalog commandCatalog)
+    public MainWindowViewModel(
+        IDeviceManager deviceManager,
+        IStatusStore statusStore,
+        IDeviceCommandCatalog commandCatalog)
     {
         _deviceManager = deviceManager;
+        _statusStore = statusStore;
         _commandCatalog = commandCatalog;
 
-        foreach (var snap in _deviceManager.GetLatestSnapshots().OrderBy(x => x.Name))
+        foreach (var snap in _statusStore.GetAll().OrderBy(x => x.Name))
         {
             var vm = new DeviceStatusItemViewModel();
             vm.UpdateFrom(snap);
             Devices.Add(vm);
         }
 
-        _deviceManager.StatusUpdated += OnStatusUpdated;
+        _statusStore.StatusUpdated += OnStatusUpdated;
 
         SendCommand = new AsyncRelayCommand(ExecuteCommandAsync, () => !IsBusy);
     }

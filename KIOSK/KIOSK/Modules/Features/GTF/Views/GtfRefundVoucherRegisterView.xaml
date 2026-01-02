@@ -1,0 +1,354 @@
+﻿<UserControl
+    x:Class="KIOSK.Modules.GTF.Views.GtfRefundVoucherRegisterView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="clr-namespace:System.Data;assembly=System.Data"
+    xmlns:local="clr-namespace:KIOSK.Modules.GTF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:viewModels="clr-namespace:KIOSK.Modules.GTF.ViewModels"
+    d:DesignHeight="1820"
+    d:DesignWidth="960"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <!--  DataGrid  -->
+        <!--  헤더 스타일  -->
+        <Style x:Key="BaseHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F2F2F2" />
+            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="LeftHeaderStyle"
+            BasedOn="{StaticResource BaseHeaderStyle}"
+            TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+
+        <Style
+            x:Key="CenterHeaderStyle"
+            BasedOn="{StaticResource BaseHeaderStyle}"
+            TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="RightHeaderStyle"
+            BasedOn="{StaticResource BaseHeaderStyle}"
+            TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+        </Style>
+
+        <!--  셀 스타일  -->
+        <Style x:Key="BaseCellTextStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="6,0,6,0" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="LeftCellTextStyle"
+            BasedOn="{StaticResource BaseCellTextStyle}"
+            TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Left" />
+        </Style>
+
+        <Style
+            x:Key="CenterCellTextStyle"
+            BasedOn="{StaticResource BaseCellTextStyle}"
+            TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="RightCellTextStyle"
+            BasedOn="{StaticResource BaseCellTextStyle}"
+            TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
+
+        <!--  그리드 스타일  -->
+        <Style x:Key="CleanDataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Cursor" Value="None" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#F2F2F2" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CleanDataGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="CanUserDeleteRows" Value="False" />
+            <Setter Property="CanUserResizeRows" Value="False" />
+            <Setter Property="CanUserSortColumns" Value="False" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="RowHeight" Value="32" />
+            <Setter Property="ColumnHeaderHeight" Value="38" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="RowStyle" Value="{StaticResource CleanDataGridRowStyle}" />
+        </Style>
+    </UserControl.Resources>
+    <Grid Width="1000">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row=" 1"
+            Margin="32"
+            Padding="32"
+            Background="LightGray"
+            CornerRadius="20">
+
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image
+                        Width="300"
+                        HorizontalAlignment="Stretch"
+                        Source="/Assets/Image/GTF_LOGO2.bmp" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="{StaticResource FontSize_M}"
+                        FontWeight="{StaticResource FontWeight_L}"
+                        Foreground="{StaticResource BlackBrush}"
+                        TextAlignment="Center">
+                        <Run Text="소지하고 계신 환급전표의" />
+                        <LineBreak />
+                        <Run Text="QR코드 또는 바코드를" />
+                        <LineBreak />
+                        <Run Text="그림과 같이 스캔하세요." />
+                        <LineBreak />
+                        <LineBreak />
+                        <Run Text="환급전표 등록을 모두 마쳤으면" />
+                        <LineBreak />
+                        <Run Text="아래의 다음 버튼을 누르세요." />
+                    </TextBlock>
+                </Grid>
+                <Separator Height="16" Background="Transparent" />
+
+                <Border
+                    Height="70"
+                    Background="White"
+                    SnapsToDevicePixels="True">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  HEADER  -->
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Background="#F2F2F2">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Text="성명" />
+                        </Border>
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Background="#F2F2F2">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Text="건수" />
+                        </Border>
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Background="#F2F2F2">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Text="구매금액" />
+                        </Border>
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Background="#F2F2F2">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Text="환급 금액" />
+                        </Border>
+
+                        <!--  DATA  -->
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Style="{StaticResource CenterCellTextStyle}"
+                            Text="{Binding Current.Name}" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource CenterCellTextStyle}"
+                            Text="{Binding Current.SlipItems.Count}" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Style="{StaticResource CenterCellTextStyle}"
+                            Text="{Binding Current.TotalBuyAmtSum}" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Style="{StaticResource CenterCellTextStyle}"
+                            Text="{Binding Current.TotalRefundAmtSum}" />
+                    </Grid>
+                </Border>
+                <Separator Height="16" Background="Transparent" />
+                <Border
+                    Height="560"
+                    Padding="0"
+                    Background="White"
+                    SnapsToDevicePixels="True">
+                    <DataGrid
+                        Height="560"
+                        VerticalAlignment="Top"
+                        AlternationCount="9999"
+                        ItemsSource="{Binding Current.SlipItems}"
+                        Style="{StaticResource CleanDataGridStyle}">
+
+                        <DataGrid.RowHeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=(ItemsControl.AlternationIndex), StringFormat={}{0}}" />
+                            </DataTemplate>
+                        </DataGrid.RowHeaderTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="60"
+                                Binding="{Binding SellDate}"
+                                ElementStyle="{StaticResource LeftCellTextStyle}"
+                                Header="No."
+                                HeaderStyle="{StaticResource LeftHeaderStyle}" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding SellDate}"
+                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                Header="구매일자"
+                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding BuySerialNo}"
+                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                Header="구매일련번호"
+                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding TotalBuyAmt}"
+                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                Header="구매금액"
+                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding TotalRefundAmt}"
+                                ElementStyle="{StaticResource RightCellTextStyle}"
+                                Header="환급금액"
+                                HeaderStyle="{StaticResource RightHeaderStyle}" />
+                        </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style BasedOn="{StaticResource CleanDataGridRowStyle}" TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <!--  숙박(Y)  -->
+                                    <DataTrigger Binding="{Binding HotelRefundYn}" Value="Y">
+                                        <Setter Property="Background" Value="#FFF9D9D9" />
+                                        <Setter Property="Foreground" Value="#B00000" />
+                                    </DataTrigger>
+                                    <!--  의료(Y)  -->
+                                    <DataTrigger Binding="{Binding MediRefundYn}" Value="Y">
+                                        <Setter Property="Background" Value="#FFF9D9D9" />
+                                        <Setter Property="Foreground" Value="#B00000" />
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                </Border>
+                <Separator Height="16" Background="Transparent" />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Pretendard}"
+                    FontSize="{StaticResource FontSize_2XS}"
+                    FontWeight="{StaticResource FontWeight_L}"
+                    Foreground="{StaticResource PrimaryBrush}"
+                    TextAlignment="Left">
+                    <Run Text="* 숙박/의료 용역 환급전표를 등록하면 붉은색 리스트로 표시됩니다." />
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Width="200"
+                Height="80"
+                Command="{Binding MainCommand}"
+                Content="취소" />
+            <Button
+                Grid.Column="2"
+                Width="200"
+                Height="80"
+                Command="{Binding NextCommand}"
+                Content="다음" />
+        </Grid>
+    </Grid>
+</UserControl>

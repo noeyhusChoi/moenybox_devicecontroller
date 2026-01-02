@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <sys:String x:Key="Common.Next">次へ</sys:String>
+  <sys:String x:Key="Common.Ok">確認</sys:String>
+  <sys:String x:Key="Error.Network.Timeout">
+    <!-- 네트워크 타임아웃 오류 메시지 -->ネットワーク遅延（{seconds}秒）</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Deposit">韓国ウォン入金</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.IDScan">身分証スキャン</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SelectCurrency">通貨選択</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SetAmount">金額設定</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Withdraw">外貨受領</sys:String>
+  <sys:String x:Key="ExchangeDeposit.DailyLimit">1日の最大両替限度額 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Denomination">入金可能な券種</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Deposited">投入された外貨金額</sys:String>
+  <sys:String x:Key="ExchangeDeposit.End">取引終了</sys:String>
+  <sys:String x:Key="ExchangeDeposit.PerTransactionLimit">1回の最大両替可能金額 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Receive">受け取るウォン金額</sys:String>
+  <sys:String x:Key="ExchangeDeposit.RemainDailyLimit">残りの1日両替限度額 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Title">外貨を1枚ずつ入金口に入れてください。</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Info">顔写真がある面を下にして、スキャナーに置いてください。</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Title">以下のようにスキャンを進めてください。</sys:String>
+  <sys:String x:Key="ExchangeSell.Title">両替したい外貨を選択してください。</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Deposit">外貨入金</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.IDScan">身分証スキャン</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.SelectCurrency">通貨選択</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Withdraw">KRW出金</sys:String>
+  <sys:String x:Key="ExchangeTerms.Agreement">個人情報収集利用および第三者提供同意</sys:String>
+  <sys:String x:Key="ExchangeTerms.Detail">利用規約を見る</sys:String>
+  <sys:String x:Key="ExchangeTerms.Info">利用規約に同意していただくと次に進めます。</sys:String>
+  <sys:String x:Key="ExchangeTerms.Title">パスポート、または大韓民国で発行された身分証明書をご用意ください。</sys:String>
+  <sys:String x:Key="ExchangeTermsPopup.Title">利用規約をご確認ください。</sys:String>
+  <sys:String x:Key="Menu.BuySub">外貨をウォンに両替</sys:String>
+  <sys:String x:Key="Menu.BuyTitle">韓国ウォン購入</sys:String>
+  <sys:String x:Key="Menu.SellSub">ウォンを外貨に両替</sys:String>
+  <sys:String x:Key="Menu.SellTitle">外貨購入</sys:String>
+  <sys:String x:Key="Menu.Title">ご希望のサービスをお選びください。</sys:String>
+  <sys:String x:Key="Receipt.Printing">
+    <!-- 영수증 인쇄 중 상태 메시지 -->レシート印刷中です</sys:String>
+  <sys:String x:Key="Scan.ID">韓国で発行された身分証明書の顔写真がある面を下にして、スキャナーに置いてください。</sys:String>
+  <sys:String x:Key="Scan.Passport">パスポートの顔写真がある面を下にして、スキャナーに置いてください。</sys:String>
+  <sys:String x:Key="Scan.Title">パスポート、または韓国で発行されたIDを以下のようにスキャンしてください。</sys:String>
+  <sys:String x:Key="ScanComplete.Info">紛失の責任は当社では負いかねます。</sys:String>
+  <sys:String x:Key="ScanComplete.SubTitle">紛失防止のため、身分証明書またはパスポートを必ず回収してから両替を進めてください。</sys:String>
+  <sys:String x:Key="ScanComplete.Title">身分証明書のスキャンが正常に完了しました。</sys:String>
+  <sys:String x:Key="Scanning.Info">最大20〜30秒かかります。少々お待ちください。</sys:String>
+  <sys:String x:Key="Terms.Agreement">個人情報収集利用および第三者提供同意</sys:String>
+  <sys:String x:Key="Terms.Info">利用規約に同意していただくと次に進めます。</sys:String>
+  <sys:String x:Key="Terms.More">利用規約を見る</sys:String>
+  <sys:String x:Key="Terms.Title">パスポート、または大韓民国で発行された身分証明書をご用意ください。</sys:String>
+</ResourceDictionary>

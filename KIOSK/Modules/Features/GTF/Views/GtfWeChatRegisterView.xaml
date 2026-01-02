@@ -1,0 +1,210 @@
+﻿<UserControl
+    x:Class="KIOSK.Modules.GTF.Views.GtfWeChatRegisterView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Modules.GTF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1820"
+    d:DesignWidth="1080"
+    Background="{StaticResource SecondaryBrush}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Background" Value="#1F2937" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="border"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12">
+                            <!--  버튼 내용은 전부 여기로 들어감  -->
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Width="1000" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="1"
+            Margin="32"
+            Background="WhiteSmoke"
+            CornerRadius="16">
+
+            <Grid Margin="64">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="6*" />
+                </Grid.RowDefinitions>
+
+                <Grid.Resources>
+                    <DrawingAttributes
+                        x:Key="SignatureInkAttributes"
+                        Width="3"
+                        Height="3"
+                        FitToCurve="False"
+                        IgnorePressure="False"
+                        StylusTip="Ellipse"
+                        Color="Black" />
+                </Grid.Resources>
+                <!--  타이틀  -->
+                <TextBlock
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Pretendard}"
+                    FontSize="{StaticResource FontSize_XL}"
+                    FontWeight="{StaticResource FontWeight_M}"
+                    Foreground="Black"
+                    TextAlignment="Center">
+                    <Run Text="위챗(WeChat) 환급 등록을 선택하였습니다." />
+                </TextBlock>
+
+                <!--  환급 급액  -->
+                <Grid Grid.Row="1" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="36" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="{StaticResource FontSize_XL}"
+                        FontWeight="{StaticResource FontWeight_M}"
+                        Foreground="Black"
+                        TextAlignment="Center">
+                        <Run Text="환급 금액" />
+                    </TextBlock>
+                    <Border
+                        Grid.Column="2"
+                        Padding="8"
+                        Background="White"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="9*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource FontSize_L}"
+                                FontWeight="{StaticResource FontWeight_L}"
+                                Foreground="Black"
+                                TextAlignment="Center">
+                                <Run Text="\" />
+                            </TextBlock>
+                            <TextBlock
+                                Grid.Column="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource Pretendard}"
+                                FontSize="{StaticResource FontSize_2XL}"
+                                FontWeight="{StaticResource FontWeight_M}"
+                                Foreground="{StaticResource SecondaryBrush}"
+                                TextAlignment="Center">
+                                <Run Text="2,000" />
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <!--  이미지  -->
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Border
+                        Grid.Row="0"
+                        BorderBrush="Red"
+                        BorderThickness="1"
+                        CornerRadius="12">
+                        <Image
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="/Assets/Image/character-complete.png" />
+                    </Border>
+                    <TextBlock
+                        Grid.Row="1"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="{StaticResource FontSize_S}"
+                        TextAlignment="Center">
+                        <Run Text="모바일 화면의 바코드 혹은 QR코드를" />
+                        <LineBreak />
+                        <Run Text="그림과 같이 스캔해주세요." />
+                    </TextBlock>
+                    <TextBlock
+                        Grid.Row="2"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Pretendard}"
+                        FontSize="{StaticResource FontSize_S}"
+                        Foreground="{StaticResource PrimaryBrush}"
+                        TextAlignment="Center">
+                        <Run Text="(모바일에 그림과 같은 바코드나 QR코드가 나타나지 않은 경우" />
+                        <LineBreak />
+                        <Run Text="'이전' 버튼을 눌러 다시 안내 내용을 따라주세요." />
+                    </TextBlock>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Width="200"
+                Height="80"
+                Command="{Binding MainCommand}"
+                Content="취소" />
+            <Button
+                Grid.Column="1"
+                Width="200"
+                Height="80"
+                Command="{Binding PreviousCommand}"
+                Content="이전" />
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <sys:String x:Key="Common.Next">下一页</sys:String>
+  <sys:String x:Key="Common.Ok">确认</sys:String>
+  <sys:String x:Key="Error.Network.Timeout">
+    <!-- 네트워크 타임아웃 오류 메시지 -->-</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Deposit">存入韩元</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.IDScan">身份证扫描</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SelectCurrency">选择货币</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SetAmount">设置金额</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Withdraw">领取外币</sys:String>
+  <sys:String x:Key="ExchangeDeposit.DailyLimit">每日最大兑换限额 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Denomination">可存入的券种</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Deposited">已存入外币金额</sys:String>
+  <sys:String x:Key="ExchangeDeposit.End">结束交易</sys:String>
+  <sys:String x:Key="ExchangeDeposit.PerTransactionLimit">单笔最大兑换金额 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Receive">将收到的韩元金额</sys:String>
+  <sys:String x:Key="ExchangeDeposit.RemainDailyLimit">剩余的每日兑换限额 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Title">请将外币纸钞一张张放入存款机。</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Info">请将有照片的一面朝下放置在扫描仪上。</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Title">请按以下说明进行扫描。</sys:String>
+  <sys:String x:Key="ExchangeSell.Title">请选择您要出售的外币。</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Deposit">外币存款</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.IDScan">身份证扫描</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.SelectCurrency">选择货币</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Withdraw">韩元提款</sys:String>
+  <sys:String x:Key="ExchangeTerms.Agreement">同意个人信息收集、使用及向第三方提供</sys:String>
+  <sys:String x:Key="ExchangeTerms.Detail">查看使用条款</sys:String>
+  <sys:String x:Key="ExchangeTerms.Info">您必须同意使用条款才能继续。</sys:String>
+  <sys:String x:Key="ExchangeTerms.Title">请准备好您的护照或在韩国签发的身份证件。</sys:String>
+  <sys:String x:Key="ExchangeTermsPopup.Title">请查看使用条款。</sys:String>
+  <sys:String x:Key="Menu.BuySub">将外币兑换成韩元</sys:String>
+  <sys:String x:Key="Menu.BuyTitle">购买韩元</sys:String>
+  <sys:String x:Key="Menu.SellSub">将韩元兑换成外币</sys:String>
+  <sys:String x:Key="Menu.SellTitle">外币购买</sys:String>
+  <sys:String x:Key="Menu.Title">请选择您想要的服务。</sys:String>
+  <sys:String x:Key="Receipt.Printing">
+    <!-- 영수증 인쇄 중 상태 메시지 -->-</sys:String>
+  <sys:String x:Key="Scan.ID">请将韩国签发的身份证件中有照片的一面朝下放置在扫描仪上。</sys:String>
+  <sys:String x:Key="Scan.Passport">请将护照中有照片的一面朝下放置在扫描仪上。</sys:String>
+  <sys:String x:Key="Scan.Title">请按以下说明扫描您的护照或在韩国签发的身份证件。</sys:String>
+  <sys:String x:Key="ScanComplete.Info">本公司不承担任何遗失责任。</sys:String>
+  <sys:String x:Key="ScanComplete.SubTitle">为避免遗失，请务必取回您的身份证或护照后再进行换汇。</sys:String>
+  <sys:String x:Key="ScanComplete.Title">身份证扫描成功。</sys:String>
+  <sys:String x:Key="Scanning.Info">最长可能需要20-30秒。请稍候。</sys:String>
+  <sys:String x:Key="Terms.Agreement">同意个人信息收集、使用及向第三方提供</sys:String>
+  <sys:String x:Key="Terms.Info">您必须同意使用条款才能继续。</sys:String>
+  <sys:String x:Key="Terms.More">查看使用条款</sys:String>
+  <sys:String x:Key="Terms.Title">请准备好您的护照或在韩国签发的身份证件。</sys:String>
+</ResourceDictionary>

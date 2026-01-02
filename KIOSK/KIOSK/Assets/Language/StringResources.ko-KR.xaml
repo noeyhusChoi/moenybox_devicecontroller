@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <sys:String x:Key="Common.Next">다음</sys:String>
+  <sys:String x:Key="Common.Ok">확인</sys:String>
+  <sys:String x:Key="Error.Network.Timeout">
+    <!-- 네트워크 타임아웃 오류 메시지 -->네트워크 지연({seconds}초)</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Deposit">원화입금</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.IDScan">신분증스캔</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SelectCurrency">통화선택</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SetAmount">금액설정</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Withdraw">외화수령</sys:String>
+  <sys:String x:Key="ExchangeDeposit.DailyLimit">1일 최대 환전 한도 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Denomination">입금 가능한 권종</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Deposited">입금하신 외화금액</sys:String>
+  <sys:String x:Key="ExchangeDeposit.End">거래 종료</sys:String>
+  <sys:String x:Key="ExchangeDeposit.PerTransactionLimit">1회 최대 환전 가능 금액 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Receive">받으실 원화금액</sys:String>
+  <sys:String x:Key="ExchangeDeposit.RemainDailyLimit">잔여 1일 환전 한도 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Title">외화를 입금기에 1장씩 넣어주세요.</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Info">얼굴 사진이 있는 정보면을 아래로하여 스캐너에 올려 주세요.</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Title">아래와같이 스캔을 진행해주세요.</sys:String>
+  <sys:String x:Key="ExchangeSell.Title">판매하실 외화를 선택하세요.</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Deposit">외화입금</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.IDScan">신분증스캔</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.SelectCurrency">통화선택</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Withdraw">원화수령</sys:String>
+  <sys:String x:Key="ExchangeTerms.Agreement">개인정보 수집 이용 및 제3자 제공 동의</sys:String>
+  <sys:String x:Key="ExchangeTerms.Detail">이용약관 보기</sys:String>
+  <sys:String x:Key="ExchangeTerms.Info">이용약관에 동의하셔야 다음으로 넘어갈 수 있습니다.</sys:String>
+  <sys:String x:Key="ExchangeTerms.Title">신분증(여권,주민등록증,운전면허증, 외국인등록증 등)을 준비하세요.</sys:String>
+  <sys:String x:Key="ExchangeTermsPopup.Title">이용약관을 확인하세요.</sys:String>
+  <sys:String x:Key="Menu.BuySub">외화를 원화로 바꾸기</sys:String>
+  <sys:String x:Key="Menu.BuyTitle">외화판매</sys:String>
+  <sys:String x:Key="Menu.SellSub">원화를 외화로 바꾸기</sys:String>
+  <sys:String x:Key="Menu.SellTitle">외화구입</sys:String>
+  <sys:String x:Key="Menu.Title">원하시는 서비스를 선택해 주세요.</sys:String>
+  <sys:String x:Key="Receipt.Printing">
+    <!-- 영수증 인쇄 중 상태 메시지 -->영수증을 인쇄 중입니다</sys:String>
+  <sys:String x:Key="Scan.ID">한국에서 발급된 신분증의 얼굴 사진이 있는면을 아래로하여 스캐너에 올려 주세요.</sys:String>
+  <sys:String x:Key="Scan.Passport">여권의 얼굴 사진이 있는면을 아래로하여 스캐너에 올려 주세요.</sys:String>
+  <sys:String x:Key="Scan.Title">여권 또는 한국에서 발급된 ID를 아래처럼 스캔을 진행해주세요.</sys:String>
+  <sys:String x:Key="ScanComplete.Info">분실에 대한 책임은 당사가 지지 않습니다.</sys:String>
+  <sys:String x:Key="ScanComplete.SubTitle">신분증 또는 여권의 분실 방지를 위해 반드시 회수하신 후 환전을 진행해 주세요.</sys:String>
+  <sys:String x:Key="ScanComplete.Title">신분증 스캔을 성공적으로 마쳤습니다.</sys:String>
+  <sys:String x:Key="Scanning.Info">최장 20 ~ 30초 소요됩니다. 잠시만 기다려 주세요.</sys:String>
+  <sys:String x:Key="Terms.Agreement">개인정보 수집 이용 및 제3자 제공 동의</sys:String>
+  <sys:String x:Key="Terms.Info">이용약관에 동의하셔야 다음으로 넘어갈 수 있습니다.</sys:String>
+  <sys:String x:Key="Terms.More">이용약관 보기</sys:String>
+  <sys:String x:Key="Terms.Title">신분증(여권,주민등록증,운전면허증, 외국인등록증 등)을 준비하세요.</sys:String>
+</ResourceDictionary>

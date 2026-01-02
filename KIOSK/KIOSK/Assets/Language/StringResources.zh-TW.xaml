@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <sys:String x:Key="Common.Next">下一頁</sys:String>
+  <sys:String x:Key="Common.Ok">確認</sys:String>
+  <sys:String x:Key="Error.Network.Timeout">
+    <!-- 네트워크 타임아웃 오류 메시지 -->-</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Deposit">存入韓元</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.IDScan">身份證掃描</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SelectCurrency">貨幣選擇</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.SetAmount">設定金額</sys:String>
+  <sys:String x:Key="ExchangeBuyProcess.Withdraw">領取外幣</sys:String>
+  <sys:String x:Key="ExchangeDeposit.DailyLimit">每日最大兌換限額 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Denomination">可存入的券種</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Deposited">已存入外幣金額</sys:String>
+  <sys:String x:Key="ExchangeDeposit.End">結束交易</sys:String>
+  <sys:String x:Key="ExchangeDeposit.PerTransactionLimit">單筆最大兌換金額 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Receive">將收到的韓元金額</sys:String>
+  <sys:String x:Key="ExchangeDeposit.RemainDailyLimit">剩餘的每日兌換限額 :</sys:String>
+  <sys:String x:Key="ExchangeDeposit.Title">請將外幣紙鈔一張張放入存款機。</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Info">請將有照片的一面朝下放置在掃描儀上。</sys:String>
+  <sys:String x:Key="ExchangeIDScanPopup.Title">請按以下說明進行掃描。</sys:String>
+  <sys:String x:Key="ExchangeSell.Title">請選擇您要出售的外幣。</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Deposit">外幣存款</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.IDScan">身份證掃描</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.SelectCurrency">貨幣選擇</sys:String>
+  <sys:String x:Key="ExchangeSellProcess.Withdraw">韓元提款</sys:String>
+  <sys:String x:Key="ExchangeTerms.Agreement">同意個人資訊收集、使用及向第三方提供</sys:String>
+  <sys:String x:Key="ExchangeTerms.Detail">查看使用條款</sys:String>
+  <sys:String x:Key="ExchangeTerms.Info">您必須同意使用條款才能繼續。</sys:String>
+  <sys:String x:Key="ExchangeTerms.Title">請準備好您的護照或在韓國簽發的身份證件。</sys:String>
+  <sys:String x:Key="ExchangeTermsPopup.Title">請查看使用條款。</sys:String>
+  <sys:String x:Key="Menu.BuySub">將外幣兌換成韓元</sys:String>
+  <sys:String x:Key="Menu.BuyTitle">購買韓元</sys:String>
+  <sys:String x:Key="Menu.SellSub">將韓元兌換成外幣</sys:String>
+  <sys:String x:Key="Menu.SellTitle">外幣購買</sys:String>
+  <sys:String x:Key="Menu.Title">請選擇您想要的服務。</sys:String>
+  <sys:String x:Key="Receipt.Printing">
+    <!-- 영수증 인쇄 중 상태 메시지 -->-</sys:String>
+  <sys:String x:Key="Scan.ID">請將韓國簽發的身份證件中有照片的一面朝下放置在掃描儀上。</sys:String>
+  <sys:String x:Key="Scan.Passport">請將護照中有照片的一面朝下放置在掃描儀上。</sys:String>
+  <sys:String x:Key="Scan.Title">請按以下說明掃描您的護照或在韓國簽發的身份證件。</sys:String>
+  <sys:String x:Key="ScanComplete.Info">本公司不承擔任何遺失責任。</sys:String>
+  <sys:String x:Key="ScanComplete.SubTitle">為避免遺失，請務必取回您的身份證或護照後再進行換匯。</sys:String>
+  <sys:String x:Key="ScanComplete.Title">身份證掃描成功。</sys:String>
+  <sys:String x:Key="Scanning.Info">最長可能需要20-30秒。請稍候。</sys:String>
+  <sys:String x:Key="Terms.Agreement">同意個人資訊收集、使用及向第三方提供</sys:String>
+  <sys:String x:Key="Terms.Info">您必須同意使用條款才能繼續。</sys:String>
+  <sys:String x:Key="Terms.More">查看使用條款</sys:String>
+  <sys:String x:Key="Terms.Title">請準備好您的護照或在韓國簽發的身份證件。</sys:String>
+</ResourceDictionary>

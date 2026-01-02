@@ -1,0 +1,601 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+		<LiveSharpEnable>true</LiveSharpEnable>
+		<Platforms>AnyCPU;x86;x64</Platforms>
+		<Configurations>Debug;Release;Remote</Configurations>
+		<BaseOutputPath></BaseOutputPath>
+		<PackageOutputPath>$(OutputPath)</PackageOutputPath>
+		<ApplicationIcon>symbol.ico</ApplicationIcon>
+    </PropertyGroup>
+
+	<!-- 플랫폼별 개별 출력 디렉토리 설정 -->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Remote|x86'">
+		<OutputPath>\\172.30.1.61\Public\</OutputPath>
+		<DebugType>portable</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="KIOSK\**" />
+    <EmbeddedResource Remove="KIOSK\**" />
+    <None Remove="KIOSK\**" />
+    <Page Remove="KIOSK\**" />
+    <Compile Remove="Infrastructure\Devices_legacy\**" />
+    <Compile Remove="Infrastructure\Database_legacy\**" />
+    <Compile Remove="Domain\Entities_legacy\**" />
+    <EmbeddedResource Remove="Infrastructure\Devices_legacy\**" />
+    <EmbeddedResource Remove="Infrastructure\Database_legacy\**" />
+    <EmbeddedResource Remove="Domain\Entities_legacy\**" />
+    <None Remove="Infrastructure\Devices_legacy\**" />
+    <None Remove="Infrastructure\Database_legacy\**" />
+    <None Remove="Domain\Entities_legacy\**" />
+    <Page Remove="Infrastructure\Devices_legacy\**" />
+    <Page Remove="Infrastructure\Database_legacy\**" />
+    <Page Remove="Domain\Entities_legacy\**" />
+    <Compile Remove="Modules\Features\Exchange\NewFolder\**" />
+    <Compile Remove="Repository\**" />
+    <EmbeddedResource Remove="Modules\Features\Exchange\NewFolder\**" />
+    <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Modules\Features\Exchange\NewFolder\**" />
+    <None Remove="Repository\**" />
+    <Page Remove="Modules\Features\Exchange\NewFolder\**" />
+    <Page Remove="Repository\**" />
+  </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+      <PackageReference Include="Lib.Harmony" Version="2.4.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0-preview.6.25358.103" />
+      <PackageReference Include="MySqlConnector" Version="2.4.0" />
+      <PackageReference Include="NAudio" Version="2.2.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+      <PackageReference Include="QRCoder" Version="1.6.0" />
+      <PackageReference Include="Serilog" Version="4.3.0" />
+      <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+      <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
+      <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+      <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+      <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+      <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+      <PackageReference Include="Stateless" Version="5.18.0" />
+      <PackageReference Include="System.IO.Ports" Version="10.0.0-preview.6.25358.103" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\Branch_QR.png" />
+      <None Remove="Assets\Flag\AED.png" />
+      <None Remove="Assets\Flag\AUD.png" />
+      <None Remove="Assets\Flag\CAD.png" />
+      <None Remove="Assets\Flag\CHF.png" />
+      <None Remove="Assets\Flag\CNY.png" />
+      <None Remove="Assets\Flag\EUR.png" />
+      <None Remove="Assets\Flag\GBP.png" />
+      <None Remove="Assets\Flag\HKD.png" />
+      <None Remove="Assets\Flag\IDR.png" />
+      <None Remove="Assets\Flag\JPY.png" />
+      <None Remove="Assets\Flag\KOR.png" />
+      <None Remove="Assets\Flag\MYR.png" />
+      <None Remove="Assets\Flag\NZD.png" />
+      <None Remove="Assets\Flag\PHP.png" />
+      <None Remove="Assets\Flag\RUB.png" />
+      <None Remove="Assets\Flag\SGD.png" />
+      <None Remove="Assets\Flag\THB.png" />
+      <None Remove="Assets\Flag\TMP.png" />
+      <None Remove="Assets\Flag\TWD.png" />
+      <None Remove="Assets\Flag\USD.png" />
+      <None Remove="Assets\Flag\VND.png" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit1.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit2.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_AUD.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_CAD.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_CNY.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_EUR.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_GBP.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_HKD.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_IDR.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_JPY.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_KRW.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_MYR.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_PHP.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_SGD.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_THB.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_TWD.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_USD.gif" />
+      <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_VND.gif" />
+      <None Remove="Assets\Gif\IDScan_ID.gif" />
+      <None Remove="Assets\Gif\IDScan_Passport.gif" />
+      <None Remove="Assets\Image\character-complete.png" />
+      <None Remove="Assets\Image\Character.png" />
+      <None Remove="Assets\Image\Denomination\AUD_100.png" />
+      <None Remove="Assets\Image\Denomination\AUD_50.png" />
+      <None Remove="Assets\Image\Denomination\CAD_50.png" />
+      <None Remove="Assets\Image\Denomination\CNY_100.png" />
+      <None Remove="Assets\Image\Denomination\EUR_10.png" />
+      <None Remove="Assets\Image\Denomination\EUR_100.png" />
+      <None Remove="Assets\Image\Denomination\EUR_20.png" />
+      <None Remove="Assets\Image\Denomination\EUR_50.png" />
+      <None Remove="Assets\Image\Denomination\GBP_20.png" />
+      <None Remove="Assets\Image\Denomination\GBP_50.png" />
+      <None Remove="Assets\Image\Denomination\HKD_100.png" />
+      <None Remove="Assets\Image\Denomination\HKD_1000.png" />
+      <None Remove="Assets\Image\Denomination\HKD_500.png" />
+      <None Remove="Assets\Image\Denomination\IDR_100000.png" />
+      <None Remove="Assets\Image\Denomination\JPY_1000.png" />
+      <None Remove="Assets\Image\Denomination\JPY_10000.png" />
+      <None Remove="Assets\Image\Denomination\JPY_5000.png" />
+      <None Remove="Assets\Image\Denomination\KRW_1000.png" />
+      <None Remove="Assets\Image\Denomination\KRW_10000.png" />
+      <None Remove="Assets\Image\Denomination\KRW_5000.png" />
+      <None Remove="Assets\Image\Denomination\KRW_50000.png" />
+      <None Remove="Assets\Image\Denomination\MYR_100.png" />
+      <None Remove="Assets\Image\Denomination\PHP_1000.png" />
+      <None Remove="Assets\Image\Denomination\SGD_100.png" />
+      <None Remove="Assets\Image\Denomination\SGD_50.png" />
+      <None Remove="Assets\Image\Denomination\THB_1000.png" />
+      <None Remove="Assets\Image\Denomination\TWD_1000.png" />
+      <None Remove="Assets\Image\Denomination\TWD_500.png" />
+      <None Remove="Assets\Image\Denomination\USD_10.png" />
+      <None Remove="Assets\Image\Denomination\USD_100.png" />
+      <None Remove="Assets\Image\Denomination\USD_20.png" />
+      <None Remove="Assets\Image\Denomination\USD_50.png" />
+      <None Remove="Assets\Image\Denomination\VND_500000.png" />
+      <None Remove="Assets\Image\Error.png" />
+      <None Remove="Assets\Image\exchange_buy.png" />
+      <None Remove="Assets\Image\exchange_sell.png" />
+      <None Remove="Assets\Image\GTF_LOGO2.bmp" />
+      <None Remove="Assets\Image\Identification.png" />
+      <None Remove="Assets\Image\IDScan_ID.png" />
+      <None Remove="Assets\Image\IDScan_Passport.png" />
+      <None Remove="Assets\Image\Info.png" />
+      <None Remove="Assets\Image\Info_normal.png" />
+      <None Remove="Assets\Image\Info_warn.png" />
+      <None Remove="Assets\Image\succss.png" />
+      <None Remove="Assets\Image\Terms\Terms_ko-KR.png" />
+      <None Remove="Assets\Image\Withdrawal.png" />
+      <None Remove="Assets\Resources\Fonts\PretendardVariable.ttf" />
+      <None Remove="Assets\Image\bx-home-smile.png" />
+      <None Remove="Assets\Image\bx-up-arrow-alt.png" />
+      <None Remove="Assets\Image\Frame.png" />
+      <None Remove="Assets\Image\Light.png" />
+      <None Remove="Assets\Sound\Bill.wav" />
+      <None Remove="Assets\Sound\Click.wav" />
+      <None Remove="Assets\Sound\Coin.wav" />
+      <None Remove="Assets\Vector.png" />
+      <None Remove="Assets\Video\IDScan_ID.mp4" />
+      <None Remove="Assets\Video\IDScan_Passport.mp4" />
+      <None Remove="Assets\Video\Loading.mp4" />
+      <None Remove="Assets\Video\MoneyBoxVideo.mp4" />
+      <None Remove="Assets\Loading.gif" />
+      <None Remove="Assets\Progress.gif" />
+      <None Remove="Assets\Image\Branch_QRBase.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Assets\Language\StringResources.en-US.xaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Page>
+      <Page Update="Assets\Language\StringResources.ja-JP.xaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Page>
+      <Page Update="Assets\Language\StringResources.ko-KR.xaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Page>
+      <Page Update="Assets\Resources\Colors\Colors.Base.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Page>
+      <Page Update="Shell\Window\Main\Views\MainWindowView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Assets\Flag\TMP.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit1.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit2.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_AUD.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_CAD.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_CNY.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_EUR.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_GBP.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_HKD.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_IDR.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_JPY.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_KRW.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_MYR.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_PHP.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_SGD.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_THB.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_TWD.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_USD.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_VND.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Sound\Bill.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Sound\Click.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Sound\Coin.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Video\IDScan_ID.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Video\IDScan_Passport.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Video\Loading.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Video\MoneyBoxVideo.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Image\Vector.png" />
+      <Resource Include="Assets\Flag\AED.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\AUD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\CAD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\CHF.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\CNY.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\EUR.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\GBP.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\HKD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\IDR.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\JPY.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\KOR.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\MYR.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\NZD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\PHP.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\RUB.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\SGD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\THB.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\TWD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\USD.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Flag\VND.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Content Include="Assets\Image\Denomination\AUD_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\AUD_50.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\CAD_50.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\CNY_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\EUR_10.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\EUR_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\EUR_20.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\EUR_50.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\GBP_20.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\GBP_50.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\HKD_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\HKD_1000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\HKD_500.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\IDR_100000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\JPY_1000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\JPY_10000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\JPY_5000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\KRW_1000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\KRW_10000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\KRW_5000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\KRW_50000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\MYR_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\PHP_1000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\SGD_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\SGD_50.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\THB_1000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\TWD_1000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\TWD_500.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\USD_10.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\USD_100.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\USD_20.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\USD_50.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Image\Denomination\VND_500000.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="symbol.ico" />
+      <Resource Include="Assets\Image\character-complete.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Character.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Error.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\exchange_buy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\exchange_sell.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\GTF_LOGO2.bmp">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Identification.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\IDScan_ID.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\IDScan_Passport.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Info.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Info_normal.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Info_warn.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\succss.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Terms\Terms_ko-KR.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Resources\Fonts\PretendardVariable.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\bx-home-smile.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\bx-up-arrow-alt.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Frame.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Light.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\Vector.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Assets\Gif\Progress.gif" />
+      <Resource Include="Assets\Image\Withdrawal.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Gif\IDScan_ID.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Gif\IDScan_Passport.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Gif\Progress.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\Language\" />
+      <Folder Include="Domain\Services\" />
+      <Folder Include="KIOSK\bin\Debug\net9.0-windows10.0.17763.0\" />
+      <Folder Include="KIOSK\bin\x86\Debug\net8.0-windows\OCR\resultType\" />
+      <Folder Include="KIOSK\bin\x86\Debug\net8.0-windows\OCR\result\" />
+      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows10.0.17763.0\OCR\input\" />
+      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows10.0.17763.0\OCR\resultType\" />
+      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows10.0.17763.0\OCR\result\" />
+      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows7.0\" />
+      <Folder Include="KIOSK\Core\" />
+      <Folder Include="KIOSK\Domain\Services\" />
+      <Folder Include="KIOSK\Infrastructure\Navigation\Services\" />
+      <Folder Include="KIOSK\Models\Domain\" />
+      <Folder Include="KIOSK\Models\DTO\" />
+      <Folder Include="KIOSK\Models\Entity\" />
+      <Folder Include="KIOSK\Modules\Features\Exchange\API\" />
+      <Folder Include="KIOSK\Modules\Features\Exchange\Factories\" />
+      <Folder Include="KIOSK\Modules\Features\Exchange\Services\" />
+      <Folder Include="KIOSK\Modules\Features\GTF\API\" />
+      <Folder Include="KIOSK\Modules\Features\GTF\Factories\" />
+      <Folder Include="KIOSK\Modules\Features\GTF\NewFolder\" />
+      <Folder Include="KIOSK\Modules\Features\GTF\Services\" />
+      <Folder Include="KIOSK\obj\Debug\net9.0-windows10.0.17763.0\refint\" />
+      <Folder Include="KIOSK\obj\Debug\net9.0-windows10.0.17763.0\ref\" />
+      <Folder Include="KIOSK\obj\x86\Debug\net9.0-windows7.0\refint\" />
+      <Folder Include="KIOSK\obj\x86\Debug\net9.0-windows7.0\ref\" />
+      <Folder Include="KIOSK\Services\Initialization\" />
+      <Folder Include="Modules\Features\Exchange\Factories\" />
+      <Folder Include="Modules\Features\Exchange\Services\" />
+      <Folder Include="Modules\Features\GTF\Factories\" />
+      <Folder Include="Modules\Features\GTF\API\" />
+      <Folder Include="Modules\Features\GTF\NewFolder\" />
+      <Folder Include="Modules\Features\GTF\Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="MPOST">
+        <HintPath>libs\x86\MPOST.dll</HintPath>
+      </Reference>
+      <Reference Include="Pr22">
+        <HintPath>libs\x86\Pr22.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Properties\Settings.Designer.cs">
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Settings.settings</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="libs\x86\MPOST.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="libs\x86\Pr22.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Properties\Settings.settings">
+        <Generator>SettingsSingleFileGenerator</Generator>
+        <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+	
+	<!-- libs 폴더 밑의 모든 DLL을 빌드 결과 루트로 복사 -->
+	<ItemGroup>
+		<None Include="libs\**\*.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>%(Filename)%(Extension)</Link>
+		</None>
+	</ItemGroup>
+  <ItemGroup>
+    <None Remove="KIOSK\KIOSK.csproj" />
+    <None Remove="KIOSK\KIOSK.csproj.user" />
+  </ItemGroup>
+	
+	<!-- dll 루트로 복사했으니 libs 폴더 삭제 -->
+	<Target Name="RemoveLibsAfterBuild" AfterTargets="Build">
+	  <RemoveDir Directories="$(TargetDir)libs" />
+	</Target>
+	</Project>

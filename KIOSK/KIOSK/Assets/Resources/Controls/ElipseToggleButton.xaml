@@ -1,0 +1,52 @@
+﻿<UserControl
+    x:Class="KIOSK.Assets.Resources.Controls.EllipseToggleButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Name="root"
+    Width="44"
+    Height="44">
+    <ToggleButton
+        x:Name="PART_Toggle"
+        Width="{Binding Width, ElementName=root}"
+        Height="{Binding Height, ElementName=root}"
+        Background="{Binding ButtonBackgroundOff, ElementName=root}">
+        <ToggleButton.Template>
+            <ControlTemplate TargetType="ToggleButton">
+                <Grid>
+                    <!--  버튼 배경  -->
+                    <Border
+                        x:Name="ButtonBorder"
+                        Background="{Binding ButtonBackgroundOff, ElementName=root}"
+                        CornerRadius="22" />
+
+                    <!--  원형  -->
+                    <Ellipse x:Name="EllipsePart" Fill="{Binding EllipseBackgroundOff, ElementName=root}" />
+
+                    <!--  체크 마크  -->
+                    <Path
+                        x:Name="TickPart"
+                        Data="M0,12 L12,20 L24,2"
+                        Opacity="0"
+                        Stroke="{Binding TickStroke, ElementName=root}"
+                        StrokeDashArray="40 40"
+                        StrokeDashOffset="40"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="3.6" />
+                </Grid>
+
+                <!--  ✅ 트리거  -->
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="EllipsePart" Property="Fill" Value="{Binding EllipseBackgroundOn, ElementName=root}" />
+                        <Setter TargetName="ButtonBorder" Property="Background" Value="{Binding ButtonBackgroundOn, ElementName=root}" />
+                        <Setter TargetName="TickPart" Property="Stroke" Value="{Binding TickStrokeChecked, ElementName=root}" />
+                        <Setter TargetName="TickPart" Property="Opacity" Value="1" />
+                        <Setter TargetName="TickPart" Property="StrokeDashOffset" Value="0" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </ToggleButton.Template>
+    </ToggleButton>
+</UserControl>

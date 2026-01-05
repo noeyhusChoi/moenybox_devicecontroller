@@ -1,0 +1,2149 @@
+openapi: 3.0.3
+info:
+  title: Moneybox M24H API
+  version: 1.0.0
+  description: |-
+    M24H 키오스크 API 문서
+    - 실제 호출 형식: /api/cmdV2.php?cmd=...
+    - Swagger는 cmd별 가독성을 위해 가상 경로(/api/cmdV2.php/C010 등)로 분리
+    - POST 요청도 query parameter로 입력
+
+servers:
+  - url: https://stage-cems.moneybox.or.kr
+    description: Staging
+  - url: https://cems.moneybox.or.kr
+    description: Production
+tags:
+- name: Exchange
+  description: 환전
+- name: Vault
+  description: 시재/준비금
+- name: Notice
+  description: 오류/알림
+- name: System
+  description: 상태/Heartbeat
+- name: MPASS
+  description: M-PASS
+paths:
+  /api/cmdV2.php/C010:
+    get:
+      tags:
+      - Exchange
+      summary: 환전율(단일 통화)
+      description: '실제 호출: /api/cmdV2.php?cmd=C010&key=...&currency=USD'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C010
+          description: 요청
+          example: C010
+        example: C010
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: currency
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 통화종류 참조
+        example: USD
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    buy: "1464.9070"
+                    base: "1442.20"
+                    sell: "1442.2000"
+                    spbuy: "1467.43"
+                    spsell: "1416.97"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C011:
+    get:
+      tags:
+      - Exchange
+      summary: 환전율(전체 통화)
+      description: '실제 호출: /api/cmdV2.php?cmd=C011&key=...'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C011
+          description: 요청
+          example: C011
+        example: C011
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+        example: C4E7I4W5C4B6L3K4T2C4
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateListResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    data:
+                    - "0": "USD"
+                      currency: "USD"
+                      "1": "1442.80"
+                      base: "1442.80"
+                      "2": "1465.5160"
+                      buy: "1465.5160"
+                      "3": "1442.8000"
+                      sell: "1442.8000"
+                      "4": "1468.04"
+                      spbuy: "1468.04"
+                      "5": "1417.56"
+                      spsell: "1417.56"
+                    - "0": "JPY"
+                      currency: "JPY"
+                      "1": "920.71"
+                      base: "920.71"
+                      "2": "936.8200"
+                      buy: "936.8200"
+                      "3": "904.6000"
+                      sell: "904.6000"
+                      "4": "936.82"
+                      spbuy: "936.82"
+                      "5": "904.60"
+                      spsell: "904.60"
+                    - "0": "CNY"
+                      currency: "CNY"
+                      "1": "206.95"
+                      base: "206.95"
+                      "2": "217.2900"
+                      buy: "217.2900"
+                      "3": "196.6100"
+                      sell: "196.6100"
+                      "4": "217.29"
+                      spbuy: "217.29"
+                      "5": "196.61"
+                      spsell: "196.61"
+                    - "0": "EUR"
+                      currency: "EUR"
+                      "1": "1696.95"
+                      base: "1696.95"
+                      "2": "1730.7100"
+                      buy: "1730.7100"
+                      "3": "1663.1900"
+                      sell: "1663.1900"
+                      "4": "1730.71"
+                      spbuy: "1730.71"
+                      "5": "1663.19"
+                      spsell: "1663.19"
+                    - "0": "HKD"
+                      currency: "HKD"
+                      "1": "185.22"
+                      base: "185.22"
+                      "2": "188.8600"
+                      buy: "188.8600"
+                      "3": "181.5800"
+                      sell: "181.5800"
+                      "4": "188.86"
+                      spbuy: "188.86"
+                      "5": "181.58"
+                      spsell: "181.58"
+                    - "0": "TWD"
+                      currency: "TWD"
+                      "1": "45.88"
+                      base: "45.88"
+                      "2": "51.8900"
+                      buy: "51.8900"
+                      "3": "41.3000"
+                      sell: "41.3000"
+                      "4": "51.89"
+                      spbuy: "51.89"
+                      "5": "41.30"
+                      spsell: "41.30"
+                    - "0": "SGD"
+                      currency: "SGD"
+                      "1": "1123.76"
+                      base: "1123.76"
+                      "2": "1146.1200"
+                      buy: "1146.1200"
+                      "3": "1101.4000"
+                      sell: "1101.4000"
+                      "4": "1146.12"
+                      spbuy: "1146.12"
+                      "5": "1101.40"
+                      spsell: "1101.40"
+                    - "0": "THB"
+                      currency: "THB"
+                      "1": "45.93"
+                      base: "45.93"
+                      "2": "48.2200"
+                      buy: "48.2200"
+                      "3": "43.1800"
+                      sell: "43.1800"
+                      "4": "48.22"
+                      spbuy: "48.22"
+                      "5": "43.18"
+                      spsell: "43.18"
+                    - "0": "PHP"
+                      currency: "PHP"
+                      "1": "24.52"
+                      base: "24.52"
+                      "2": "26.9700"
+                      buy: "26.9700"
+                      "3": "22.5100"
+                      sell: "22.5100"
+                      "4": "26.97"
+                      spbuy: "26.97"
+                      "5": "22.51"
+                      spsell: "22.51"
+                    - "0": "MYR"
+                      currency: "MYR"
+                      "1": "355.63"
+                      base: "355.63"
+                      "2": "381.9400"
+                      buy: "381.9400"
+                      "3": "329.3200"
+                      sell: "329.3200"
+                      "4": "381.94"
+                      spbuy: "381.94"
+                      "5": "329.32"
+                      spsell: "329.32"
+                    - "0": "IDR"
+                      currency: "IDR"
+                      "1": "8.63"
+                      base: "8.63"
+                      "2": "9.4900"
+                      buy: "9.4900"
+                      "3": "7.7700"
+                      sell: "7.7700"
+                      "4": "9.49"
+                      spbuy: "9.49"
+                      "5": "7.77"
+                      spsell: "7.77"
+                    - "0": "VND"
+                      currency: "VND"
+                      "1": "5.49"
+                      base: "5.49"
+                      "2": "6.1300"
+                      buy: "6.1300"
+                      "3": "4.8500"
+                      sell: "4.8500"
+                      "4": "6.13"
+                      spbuy: "6.13"
+                      "5": "4.85"
+                      spsell: "4.85"
+                    - "0": "AUD"
+                      currency: "AUD"
+                      "1": "966.68"
+                      base: "966.68"
+                      "2": "985.7200"
+                      buy: "985.7200"
+                      "3": "947.6400"
+                      sell: "947.6400"
+                      "4": "985.72"
+                      spbuy: "985.72"
+                      "5": "947.64"
+                      spsell: "947.64"
+                    - "0": "GBP"
+                      currency: "GBP"
+                      "1": "1945.83"
+                      base: "1945.83"
+                      "2": "1984.1600"
+                      buy: "1984.1600"
+                      "3": "1907.5000"
+                      sell: "1907.5000"
+                      "4": "1984.16"
+                      spbuy: "1984.16"
+                      "5": "1907.50"
+                      spsell: "1907.50"
+                    - "0": "RUB"
+                      currency: "RUB"
+                      "1": "18.32"
+                      base: "18.32"
+                      "2": "20.0600"
+                      buy: "20.0600"
+                      "3": "15.1200"
+                      sell: "15.1200"
+                      "4": "20.06"
+                      spbuy: "20.06"
+                      "5": "15.12"
+                      spsell: "15.12"
+                    - "0": "CAD"
+                      currency: "CAD"
+                      "1": "1052.49"
+                      base: "1052.49"
+                      "2": "1073.2200"
+                      buy: "1073.2200"
+                      "3": "1031.7600"
+                      sell: "1031.7600"
+                      "4": "1073.22"
+                      spbuy: "1073.22"
+                      "5": "1031.76"
+                      spsell: "1031.76"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C020:
+    get:
+      tags:
+      - Exchange
+      summary: 한도조회
+      description: '실제 호출: /api/cmdV2.php?cmd=C020&key=...&number=...'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C020
+          description: 요청
+          example: C020
+        example: C020
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: number
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명번호
+        example: A12345678
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    remain: 3000000
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C030:
+    post:
+      tags:
+      - Exchange
+      summary: 환전 거래 등록
+      description: '실제 호출: /api/cmdV2.php (POST) query에 cmd=C030 포함'
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonAck'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C030
+          description: 요청
+          example: C030
+        example: C030
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: identity
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명구분
+          example: 1:여권, 2:주민등록증, 3:운전면허증, 4:기타
+        example: '1'
+      - name: number
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명번호(여권번호or주민번호)
+        example: M12345678
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명
+        example: HONG GILDONG
+      - name: nation
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 국적
+        example: KOR
+      - name: dt
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 환전일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+        example: '20260102103045'
+      - name: gubun
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 매입매출구분
+          example: "매입(고객이 외환을 원화로 교환):B, \n매출(고객이 원화를 외환으로 교환):S"
+        example: S
+      - name: currency_code
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 통화코드
+        example: USD
+      - name: unique_key
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 거래번호
+        example: TX-20260102-0001
+      - name: KIOSK_PID
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 키오스크번호
+        example: KIOSK-001
+      - name: rate
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 적용환율
+        example: 1330.0
+      - name: input_money
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 입금액
+          example: 원화, 외화
+        example: 200000
+      - name: output_money
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 출금액
+          example: 원화, 외화
+        example: 150.0
+      - name: give_change
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 거스름돈
+        example: 5000
+      - name: c1
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+        example: '100'
+      - name: qty1
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+        example: '1'
+      - name: c2
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+        example: '50'
+      - name: qty2
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+        example: '1'
+      - name: c3
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty3
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c4
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty4
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c5
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty5
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c6
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty6
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c7
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty7
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c8
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty8
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c9
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty9
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c10
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty10
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c11
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty11
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c12
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty12
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: krw1
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '50000'
+        example: '3'
+      - name: krw2
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '10000'
+        example: '0'
+      - name: krw3
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '5000'
+        example: '0'
+      - name: krw4
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '1000'
+        example: '0'
+      - name: krw5
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '500'
+        example: '0'
+      - name: krw6
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '100'
+        example: '0'
+      - name: krw7
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '50'
+        example: '0'
+      - name: krw8
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '10'
+        example: '0'
+      - name: withdrawal_error
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 출금에러
+          example: 에러 발생시에만 적용 (true)
+        example: 'false'
+      - name: error_amount
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 출금 에러금액(외화/원화)
+          example: 에러 발생시에만 적용
+        example: 0
+      - name: error_change_amount
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 거스름돈 출금 에러금액(원화)
+          example: 에러 발생시에만 적용
+        example: 0
+      - name: reject_krw_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 50000 리젝
+        example: 0
+      - name: reject_krw_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 10000 리젝
+        example: 0
+      - name: reject_krw_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 5000 리젝
+        example: 0
+      - name: reject_krw_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 1000 리젝
+        example: 0
+      - name: reject_for
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 외화 리젝
+        example: '0'
+  /api/cmdV2.php/C040:
+    get:
+      tags:
+      - Vault
+      summary: 시재금 설정
+      description: '실제 호출: /api/cmdV2.php?cmd=C040&key=...&krw_1=... (문서상 GET)'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C040
+          description: 요청
+          example: C040
+        example: C040
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: krw_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '50000'
+        example: 100
+      - name: krw_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '10000'
+        example: 200
+      - name: krw_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '5000'
+        example: 100
+      - name: krw_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '1000'
+        example: 500
+      - name: krw_5
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '500'
+        example: 0
+      - name: krw_6
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '100'
+        example: 0
+      - name: krw_7
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '50'
+        example: 0
+      - name: krw_8
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '10'
+        example: 0
+      - name: for_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: USD
+        example: 50
+      - name: for_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: EUR
+        example: 20
+      - name: for_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: CNY
+        example: 0
+      - name: for_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: JPY
+        example: 0
+      - name: for_5
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: HKD
+        example: 0
+      - name: for_6
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: TWD
+        example: 0
+      - name: for_7
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: PHP
+        example: 0
+      - name: for_8
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: VND
+        example: 0
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonAck'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C041:
+    get:
+      tags:
+      - Vault
+      summary: 잔여시재 알림
+      description: '실제 호출: /api/cmdV2.php?cmd=C041&key=...&krw_1=...&reject_*...'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C041
+          description: 요청
+          example: C041
+        example: C041
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: krw_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '50000'
+        example: 20
+      - name: krw_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '10000'
+        example: 50
+      - name: krw_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '5000'
+        example: 10
+      - name: krw_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '1000'
+        example: 100
+      - name: krw_5
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '500'
+        example: 0
+      - name: krw_6
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '100'
+        example: 0
+      - name: krw_7
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '50'
+        example: 0
+      - name: krw_8
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: '10'
+        example: 0
+      - name: for_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: USD
+        example: 10
+      - name: for_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: EUR
+        example: 5
+      - name: for_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: CNY
+        example: 0
+      - name: for_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: JPY
+        example: 0
+      - name: for_5
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: HKD
+        example: 0
+      - name: for_6
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: TWD
+        example: 0
+      - name: for_7
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: PHP
+        example: 0
+      - name: for_8
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: VND
+        example: 0
+      - name: reject_krw_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 50000 리젝
+        example: 0
+      - name: reject_krw_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 10000 리젝
+        example: 1
+      - name: reject_krw_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 5000 리젝
+        example: 0
+      - name: reject_krw_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 1000 리젝
+        example: 0
+      - name: reject_for_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: USD 리젝
+        example: 0
+      - name: reject_for_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: EUR 리젝
+        example: 0
+      - name: reject_for_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: CNY 리젝
+        example: 0
+      - name: reject_for_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: JPY 리젝
+        example: 0
+      - name: reject_for_5
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: HKD 리젝
+        example: 0
+      - name: reject_for_6
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: TWD 리젝
+        example: 0
+      - name: reject_for_7
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: PHP 리젝
+        example: 0
+      - name: reject_for_8
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: VND 리젝
+        example: 0
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonAck'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C081:
+    get:
+      tags:
+      - Vault
+      summary: 준비금 가져오기
+      description: '실제 호출: /api/cmdV2.php?cmd=C081&key=...'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C081
+          description: 요청
+          example: C081
+        example: C081
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaultReserveResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    ecode: '0000'
+                    KRW1: 100
+                    KRW2: 200
+                    KRW3: 100
+                    KRW4: 500
+                    KRW5: 0
+                    KRW6: 0
+                    USD: 20
+                    EUR: 10
+                    CNY: 0
+                    JPY: 0
+                    HKD: 0
+                    TWD: 0
+                    PHP: 0
+                    VND: 0
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C090:
+    post:
+      tags:
+      - Notice
+      summary: 오류 발생 보고
+      description: '실제 호출: /api/cmdV2.php (POST) query에 cmd=C090 포함'
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonAck'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C090
+          description: 요청
+          example: C090
+        example: C090
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: dt
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 오류일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+        example: '20260102103100'
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수신타입
+          example: ADM, OPR, DEV
+        example: DEV
+      - name: error
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 에러메시지
+          example: 스트링
+        example: Cassette pickup failure (40080)
+  /api/cmdV2.php/C091:
+    get:
+      tags:
+      - System
+      summary: Heartbeat
+      description: '실제 호출: /api/cmdV2.php?cmd=C091&key=...&dt=...'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C091
+          description: 요청
+          example: C091
+        example: C091
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: dt
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 전송일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+        example: '20260102103045'
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonAck'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C093:
+    get:
+      tags:
+      - System
+      summary: 점검 완료 예상 시간 가져오기
+      description: '실제 호출: /api/cmdV2.php?cmd=C093&key=...'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C093
+          description: 요청
+          example: C093
+        example: C093
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceTimeResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    ecode: '0000'
+                    dt: '202601021530'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/MPS_PRICE:
+    get:
+      tags:
+      - MPASS
+      summary: M-PASS 가격정보
+      description: '엑셀: ''m-pass 가격정보''. 실제 호출: /api/cmdV2.php?cmd=C010&key=...&currency=MPS'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - C010
+        example: C010
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: currency
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - MPS
+        example: MPS
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MpassPriceResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    ecode: '0000'
+                    buy: 4500
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/mpass.php:
+    get:
+      tags:
+      - MPASS
+      summary: M-PASS 거래정보
+      description: '실제 호출: /api/mpass.php?key=...&cardno=...&authno=...&amt=...'
+      parameters:
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: cardno
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 카드번호
+        example: 1234-****-****-5678
+      - name: authno
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 승인번호
+        example: A1B2C3
+      - name: amt
+        in: query
+        required: true
+        schema:
+          type: number
+          description: 충전액
+        example: 4500
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MpassTradeResponse'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+                    ecode: '0000'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  schemas:
+    CommonAck:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 처리결과/오류여부 (true=정상, false=오류)
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+    ExchangeRateResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 오류여부
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+        buy:
+          type: string
+          description: 매입기준환율
+        base:
+          type: string
+          description: 기준환율
+        sell:
+          type: string
+          description: 매각기준환율
+        spbuy:
+          type: string
+          description: 특별매입환율
+        spsell:
+          type: string
+          description: 특별매각환율
+    ExchangeRateListResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 오류여부
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExchangeRateListItem'
+    ExchangeRateListItem:
+      type: object
+      properties:
+        "0":
+          type: string
+          description: 통화코드(동일값 currency)
+        currency:
+          type: string
+          description: 통화코드
+        "1":
+          type: string
+          description: 기준환율(동일값 base)
+        base:
+          type: string
+          description: 기준환율
+        "2":
+          type: string
+          description: 매입기준환율(동일값 buy)
+        buy:
+          type: string
+          description: 매입기준환율
+        "3":
+          type: string
+          description: 매각기준환율(동일값 sell)
+        sell:
+          type: string
+          description: 매각기준환율
+        "4":
+          type: string
+          description: 특별매입환율(동일값 spbuy)
+        spbuy:
+          type: string
+          description: 특별매입환율
+        "5":
+          type: string
+          description: 특별매각환율(동일값 spsell)
+        spsell:
+          type: string
+          description: 특별매각환율
+    LimitResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+        remain:
+          type: number
+          description: 잔여한도(원화기준)
+    VaultReserveResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 처리결과
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+        KRW1:
+          type: integer
+          description: '50000'
+        KRW2:
+          type: integer
+          description: '10000'
+        KRW3:
+          type: integer
+          description: '5000'
+        KRW4:
+          type: integer
+          description: '1000'
+        KRW5:
+          type: integer
+          description: '500'
+        KRW6:
+          type: integer
+          description: '100'
+        USD:
+          type: integer
+          description: '100'
+        EUR:
+          type: integer
+          description: '100'
+        CNY:
+          type: integer
+          description: '100'
+        JPY:
+          type: integer
+          description: '10000'
+        HKD:
+          type: integer
+          description: '500'
+        TWD:
+          type: integer
+          description: '1000'
+        PHP:
+          type: integer
+          description: '1000'
+        VND:
+          type: integer
+          description: '500000'
+    MaintenanceTimeResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+        dt:
+          type: string
+          description: 점검 완료 예상 일시
+          pattern: ^\d{12}$
+    MpassPriceResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+        buy:
+          type: number
+          description: 판매가격
+    MpassTradeResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+    C010Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C010
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        currency:
+          type: string
+          description: 통화종류 참조
+    C011Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C011
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+    C020Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C020
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        number:
+          type: string
+          description: 실명번호
+    C030Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C030
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        identity:
+          type: string
+          description: 실명구분
+          example: 1:여권, 2:주민등록증, 3:운전면허증, 4:기타
+        number:
+          type: string
+          description: 실명번호(여권번호or주민번호)
+        name:
+          type: string
+          description: 실명
+        nation:
+          type: string
+          description: 국적
+        dt:
+          type: string
+          description: 환전일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+        gubun:
+          type: string
+          description: 매입매출구분
+          example: "매입(고객이 외환을 원화로 교환):B, \n매출(고객이 원화를 외환으로 교환):S"
+        currency_code:
+          type: string
+          description: 통화코드
+        unique_key:
+          type: string
+          description: 거래번호
+        KIOSK_PID:
+          type: string
+          description: 키오스크번호
+        rate:
+          type: number
+          description: 적용환율
+        input_money:
+          type: number
+          description: 입금액
+          example: 원화, 외화
+        output_money:
+          type: number
+          description: 출금액
+          example: 원화, 외화
+        give_change:
+          type: number
+          description: 거스름돈
+        c1:
+          type: string
+          description: 권종
+        qty1:
+          type: string
+          description: 수량
+        c2:
+          type: string
+          description: 권종
+        qty2:
+          type: string
+          description: 수량
+        c3:
+          type: string
+          description: 권종
+        qty3:
+          type: string
+          description: 수량
+        c4:
+          type: string
+          description: 권종
+        qty4:
+          type: string
+          description: 수량
+        c5:
+          type: string
+          description: 권종
+        qty5:
+          type: string
+          description: 수량
+        c6:
+          type: string
+          description: 권종
+        qty6:
+          type: string
+          description: 수량
+        c7:
+          type: string
+          description: 권종
+        qty7:
+          type: string
+          description: 수량
+        c8:
+          type: string
+          description: 권종
+        qty8:
+          type: string
+          description: 수량
+        c9:
+          type: string
+          description: 권종
+        qty9:
+          type: string
+          description: 수량
+        c10:
+          type: string
+          description: 권종
+        qty10:
+          type: string
+          description: 수량
+        c11:
+          type: string
+          description: 권종
+        qty11:
+          type: string
+          description: 수량
+        c12:
+          type: string
+          description: 권종
+        qty12:
+          type: string
+          description: 수량
+        krw1:
+          type: string
+          description: '50000'
+        krw2:
+          type: string
+          description: '10000'
+        krw3:
+          type: string
+          description: '5000'
+        krw4:
+          type: string
+          description: '1000'
+        krw5:
+          type: string
+          description: '500'
+        krw6:
+          type: string
+          description: '100'
+        krw7:
+          type: string
+          description: '50'
+        krw8:
+          type: string
+          description: '10'
+        withdrawal_error:
+          type: string
+          description: 출금에러
+          example: 에러 발생시에만 적용 (true)
+        error_amount:
+          type: number
+          description: 출금 에러금액(외화/원화)
+          example: 에러 발생시에만 적용
+        error_change_amount:
+          type: number
+          description: 거스름돈 출금 에러금액(원화)
+          example: 에러 발생시에만 적용
+        reject_krw_1:
+          type: integer
+          description: 50000 리젝
+        reject_krw_2:
+          type: integer
+          description: 10000 리젝
+        reject_krw_3:
+          type: integer
+          description: 5000 리젝
+        reject_krw_4:
+          type: integer
+          description: 1000 리젝
+        reject_for:
+          type: string
+          description: 외화 리젝
+    C040Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C040
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        krw_1:
+          type: integer
+          description: '50000'
+        krw_2:
+          type: integer
+          description: '10000'
+        krw_3:
+          type: integer
+          description: '5000'
+        krw_4:
+          type: integer
+          description: '1000'
+        krw_5:
+          type: integer
+          description: '500'
+        krw_6:
+          type: integer
+          description: '100'
+        krw_7:
+          type: integer
+          description: '50'
+        krw_8:
+          type: integer
+          description: '10'
+        for_1:
+          type: integer
+          description: USD
+        for_2:
+          type: integer
+          description: EUR
+        for_3:
+          type: integer
+          description: CNY
+        for_4:
+          type: integer
+          description: JPY
+        for_5:
+          type: integer
+          description: HKD
+        for_6:
+          type: integer
+          description: TWD
+        for_7:
+          type: integer
+          description: PHP
+        for_8:
+          type: integer
+          description: VND
+    C041Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C041
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        krw_1:
+          type: integer
+          description: '50000'
+        krw_2:
+          type: integer
+          description: '10000'
+        krw_3:
+          type: integer
+          description: '5000'
+        krw_4:
+          type: integer
+          description: '1000'
+        krw_5:
+          type: integer
+          description: '500'
+        krw_6:
+          type: integer
+          description: '100'
+        krw_7:
+          type: integer
+          description: '50'
+        krw_8:
+          type: integer
+          description: '10'
+        for_1:
+          type: integer
+          description: USD
+        for_2:
+          type: integer
+          description: EUR
+        for_3:
+          type: integer
+          description: CNY
+        for_4:
+          type: integer
+          description: JPY
+        for_5:
+          type: integer
+          description: HKD
+        for_6:
+          type: integer
+          description: TWD
+        for_7:
+          type: integer
+          description: PHP
+        for_8:
+          type: integer
+          description: VND
+        reject_krw_1:
+          type: integer
+          description: 50000 리젝
+        reject_krw_2:
+          type: integer
+          description: 10000 리젝
+        reject_krw_3:
+          type: integer
+          description: 5000 리젝
+        reject_krw_4:
+          type: integer
+          description: 1000 리젝
+        reject_for_1:
+          type: integer
+          description: USD 리젝
+        reject_for_2:
+          type: integer
+          description: EUR 리젝
+        reject_for_3:
+          type: integer
+          description: CNY 리젝
+        reject_for_4:
+          type: integer
+          description: JPY 리젝
+        reject_for_5:
+          type: integer
+          description: HKD 리젝
+        reject_for_6:
+          type: integer
+          description: TWD 리젝
+        reject_for_7:
+          type: integer
+          description: PHP 리젝
+        reject_for_8:
+          type: integer
+          description: VND 리젝
+    C081Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C081
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+    C090Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C090
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        dt:
+          type: string
+          description: 오류일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+        type:
+          type: string
+          description: 수신타입
+          example: ADM, OPR, DEV
+        error:
+          type: string
+          description: 에러메시지
+          example: 스트링
+    C091Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C091
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        dt:
+          type: string
+          description: 전송일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+    C093Request:
+      type: object
+      required:
+      - cmd
+      - key
+      properties:
+        cmd:
+          type: string
+          description: 요청
+          example: C093
+        key:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+    ErrorResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+          example: false
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+    ErrorCode:
+      type: string
+      description: CEMS 공통 오류 코드
+      enum:
+      - '0000'
+      - E001
+      - E002
+      - E003
+      - E004
+      - E005
+      - E006
+      - E007
+      x-enum-descriptions:
+      - 정상
+      - 매장정보 부족 (매장키값이 없을경우)
+      - 매장정보 없음 (매장키에 매칭된는 매장이 없을경우)
+      - 통화선택 오류 (환율조회시 통화선택을 하지 않은 경우)
+      - 해당통화 거래안됨 (환율조회시 통화종류(15가지)에 없는 통화를 조회할 경우, 키오스크에 대한 환전율 등록을 안했을 경우)
+      - 실명번호 무입력 (한도조회시)
+      - 입력정보에 값이 누락될 경우 (환전등록시 입력값이 없을 경우 발생)
+      - 환전내역 등록오류 (DB 저장 오류)
+  responses:
+    ErrorResponse:
+      description: 오류 응답
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missing_store_key:
+              summary: 매장정보 부족 (E001)
+              value:
+                result: false
+                ecode: E001
+            store_not_found:
+              summary: 매장정보 없음 (E002)
+              value:
+                result: false
+                ecode: E002
+            currency_missing:
+              summary: 통화선택 오류 (E003)
+              value:
+                result: false
+                ecode: E003
+            currency_not_allowed:
+              summary: 해당통화 거래안됨 (E004)
+              value:
+                result: false
+                ecode: E004
+            id_missing:
+              summary: 실명번호 무입력 (E005)
+              value:
+                result: false
+                ecode: E005
+            input_missing:
+              summary: 입력정보 누락 (E006)
+              value:
+                result: false
+                ecode: E006
+            exchange_register_error:
+              summary: 환전내역 등록오류 (E007)
+              value:
+                result: false
+                ecode: E007

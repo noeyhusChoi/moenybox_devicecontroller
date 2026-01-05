@@ -1,0 +1,819 @@
+openapi: 3.0.3
+info:
+  title: MoneyBox MPOS API
+  version: 1.0.0
+  description: |-
+    MPOS 포스 API 문서
+    - 실제 호출 형식: /api/cmdV2.php?cmd=...
+    - Swagger는 cmd별 가독성을 위해 가상 경로(/api/cmdV2.php/C010 등)로 분리
+servers:
+- url: https://stage-cems.moneybox.or.kr
+  description: Staging
+- url: https://cems.moneybox.or.kr
+  description: Production
+tags:
+- name: 거래
+  description: 환전율/거래 조회/조회
+- name: 환전 예약
+  description: 환전 예약 거래/조회
+- name: 온라인 예약
+  description: 온라인 예약 거래/조회
+paths:
+  /api/cmdV2.php/C011:
+    get:
+      tags:
+      - 거래
+      summary: 환전율
+      description: '실제 호출: /api/cmdV2.php?cmd=C011'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C011
+        example: C011
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 포스 설정 키
+        example: POS-KEY-EXAMPLE
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  data:
+                    type: array
+                    description: 통화별 환율 목록
+                    items:
+                      type: object
+                      properties:
+                        "0":
+                          type: string
+                          description: 통화코드(동일값 currency)
+                        currency:
+                          type: string
+                          description: 통화코드
+                        "1":
+                          type: string
+                          description: 기준환율(동일값 base)
+                        base:
+                          type: string
+                          description: 기준환율
+                        "2":
+                          type: string
+                          description: 매입기준환율(동일값 buy)
+                        buy:
+                          type: string
+                          description: 매입기준환율
+                        "3":
+                          type: string
+                          description: 매각기준환율(동일값 sell)
+                        sell:
+                          type: string
+                          description: 매각기준환율
+                        "4":
+                          type: string
+                          description: 특별매입환율(동일값 spbuy)
+                        spbuy:
+                          type: string
+                          description: 특별매입환율
+                        "5":
+                          type: string
+                          description: 특별매각환율(동일값 spsell)
+                        spsell:
+                          type: string
+                          description: 특별매각환율
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+                    data:
+                    - "0": "USD"
+                      currency: "USD"
+                      "1": "1442.80"
+                      base: "1442.80"
+                      "2": "1465.5160"
+                      buy: "1465.5160"
+                      "3": "1442.8000"
+                      sell: "1442.8000"
+                      "4": "1468.04"
+                      spbuy: "1468.04"
+                      "5": "1417.56"
+                      spsell: "1417.56"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C020:
+    get:
+      tags:
+      - 거래
+      summary: 한도 조회
+      description: '실제 호출: /api/cmdV2.php?cmd=C020'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C020
+        example: C020
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 포스 설정 키
+        example: POS-KEY-EXAMPLE
+      - name: number
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 실명번호
+        example: example
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 처리결과 (true=정상, false=오류)
+                  ecode:
+                    type: string
+                    description: 오류코드 (result가 false인 경우만)
+                  remain:
+                    type: string
+                    description: 잔여한도(원화기준)
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+                    remain: "3000000"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C033:
+    get:
+      tags:
+      - 환전 예약
+      summary: 환전 예약 거래
+      description: '실제 호출: /api/cmdV2.php?cmd=C033'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C033
+        example: C033
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 포스 설정 키
+        example: POS-KEY-EXAMPLE
+      - name: KIOSK_PID
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 포스 식별 코드
+        example: example
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 고객 이름
+        example: example
+      - name: identity
+        in: query
+        required: false
+        schema:
+          type: string
+        description: '신분증 구분 코드 (예: 1=주민등록증, 2=여권 등)'
+        example: example
+      - name: number
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 신분증 또는 여권 번호
+        example: example
+      - name: nation
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 국가 코드
+        example: example
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 키오스크 고유 식별 키
+        example: POS-KEY-EXAMPLE
+      - name: dt
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 거래 시각 (yyyyMMddHHmm)
+        example: example
+      - name: unique_key
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 거래 번호
+        example: example
+      - name: reserved
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 환전 예약의 예약번호
+        example: example
+      - name: add_krw
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 지불 금액(원화)
+        example: example
+      - name: give_change
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 거스름돈(원화)
+        example: example
+      - name: lists
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 거래 세부 내역 (매매방법#통화#환율#수량#원화|매매방법#통화#환율#수량#원화)
+        example: example
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  ecode:
+                    type: string
+                    description: 오류코드 (result가 false인 경우만)
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C050:
+    get:
+      tags:
+      - 환전 예약
+      summary: 환전 예약 조회
+      description: '실제 호출: /api/cmdV2.php?cmd=C050'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C050
+        example: C050
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 키오스크에 설정된 키
+        example: POS-KEY-EXAMPLE
+      - name: sdt
+        in: query
+        required: false
+        schema:
+          type: string
+        description: null
+        example: example
+      - name: edt
+        in: query
+        required: false
+        schema:
+          type: string
+        description: null
+        example: example
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 이름
+        example: example
+      - name: mobile
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 전화번호
+        example: example
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  ecode:
+                    type: string
+                    description: 오류코드 (result가 false인 경우만)
+                  RESERVE:
+                    type: string
+                    description: 예약 ID
+                  NAME:
+                    type: string
+                    description: 예약자 이름
+                  MOBILE:
+                    type: string
+                    description: 예약자 휴대폰 번호
+                  BIRTH:
+                    type: string
+                    description: 예약자 생년월일
+                  DT:
+                    type: string
+                    description: 예약일
+                  TM:
+                    type: string
+                    description: 예약 시간 범위 (시작~종료)
+                  REG_DTM:
+                    type: string
+                    description: 예약 등록 일시
+                  TTYPE:
+                    type: string
+                    description: 거래 유형 (B=BUY, S=SELL)
+                  CRC:
+                    type: string
+                    description: 거래 통화 코드
+                  RATE:
+                    type: string
+                    description: 적용 환율
+                  AMT:
+                    type: string
+                    description: 환전 금액
+                  BEF:
+                    type: string
+                    description: 예약 금액
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+                    RESERVE: "R-20250102-0001"
+                    NAME: "HONG GILDONG"
+                    MOBILE: "01012345678"
+                    BIRTH: "19900101"
+                    DT: "20250102"
+                    TM: "0900-1000"
+                    REG_DTM: "202501020930"
+                    TTYPE: "B"
+                    CRC: "USD"
+                    RATE: "1450.00"
+                    AMT: "100"
+                    BEF: "150000"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C060:
+    get:
+      tags:
+      - 거래
+      summary: 거래 조회
+      description: '실제 호출: /api/cmdV2.php?cmd=C060'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C060
+        example: C060
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 키오스크에 설정된 키
+        example: POS-KEY-EXAMPLE
+      - name: seq
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 전화번호
+        example: example
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  ecode:
+                    type: string
+                    description: 오류코드 (result가 false인 경우만)
+                  TTYPE:
+                    type: string
+                    description: 거래 유형 (B=BUY, S=SELL)
+                  NAME:
+                    type: string
+                    description: 고객 이름
+                  IDENT_NUM:
+                    type: string
+                    description: 고객 신분증/여권 번호
+                  REG_DTM:
+                    type: string
+                    description: 거래 등록 일시
+                  ADD_KRW:
+                    type: string
+                    description: 지불 금액(원화)
+                  GIVE:
+                    type: string
+                    description: 거스름돈(원화)
+                  CRC:
+                    type: string
+                    description: 거래 통화 코드
+                  RATE:
+                    type: string
+                    description: 적용 환율
+                  AMT:
+                    type: string
+                    description: 환전 금액
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+                    TTYPE: "S"
+                    NAME: "HONG GILDONG"
+                    IDENT_NUM: "M12345678"
+                    REG_DTM: "202501021005"
+                    ADD_KRW: "200000"
+                    GIVE: "5000"
+                    CRC: "USD"
+                    RATE: "1450.00"
+                    AMT: "130"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C071:
+    get:
+      tags:
+      - 온라인 예약
+      summary: 온라인 예약 거래
+      description: '실제 호출: /api/cmdV2.php?cmd=C071'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C071
+        example: C071
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 포스 설정 키
+        example: POS-KEY-EXAMPLE
+      - name: KIOSK_PID
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 포스 식별 코드
+        example: example
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 고객 이름
+        example: example
+      - name: identity
+        in: query
+        required: false
+        schema:
+          type: string
+        description: '신분증 구분 코드 (예: 1=주민등록증, 2=여권 등)'
+        example: example
+      - name: number
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 신분증 또는 여권 번호
+        example: example
+      - name: nation
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 국가 코드
+        example: example
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 키오스크 고유 식별 키
+        example: POS-KEY-EXAMPLE
+      - name: dt
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 거래 시각 (yyyyMMddHHmm)
+        example: example
+      - name: okey
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 온라인 예약의 예약번호
+        example: example
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  ecode:
+                    type: string
+                    description: 오류코드 (result가 false인 경우만)
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C070:
+    get:
+      tags:
+      - 온라인 예약
+      summary: 온라인 예약 조회
+      description: '실제 호출: /api/cmdV2.php?cmd=C070'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C070
+        example: C070
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 키오스크에 설정된 키
+        example: POS-KEY-EXAMPLE
+      - name: sdt
+        in: query
+        required: false
+        schema:
+          type: string
+        description: null
+        example: example
+      - name: edt
+        in: query
+        required: false
+        schema:
+          type: string
+        description: null
+        example: example
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 이름
+        example: example
+      - name: mobile
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 전화번호
+        example: example
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  ecode:
+                    type: string
+                    description: 오류코드 (result가 false인 경우만)
+                  OKEY:
+                    type: string
+                    description: 예약 ID
+                  NAME:
+                    type: string
+                    description: 예약자 이름
+                  MOBILE:
+                    type: string
+                    description: 예약자 휴대폰 번호
+                  IDENT:
+                    type: string
+                    description: 예약자 생년월일
+                  DT:
+                    type: string
+                    description: 예약일
+                  TM:
+                    type: string
+                    description: 예약 시간 범위 (시작~종료)
+                  REG_DTM:
+                    type: string
+                    description: 예약 등록 일시
+                  TTYPE:
+                    type: string
+                    description: 거래 유형 (B=BUY, S=SELL)
+                  CRC:
+                    type: string
+                    description: 거래 통화 코드
+                  RATE:
+                    type: string
+                    description: 적용 환율
+                  AMT:
+                    type: string
+                    description: 환전 금액
+                  XY:
+                    type: string
+                    description: 신분증 확인 여부
+                  MEMBER:
+                    type: string
+                    description: MEMBER ID
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+                    OKEY: "O-20250102-0001"
+                    NAME: "HONG GILDONG"
+                    MOBILE: "01012345678"
+                    IDENT: "19900101"
+                    DT: "20250102"
+                    TM: "0900-1000"
+                    REG_DTM: "202501020930"
+                    TTYPE: "B"
+                    CRC: "USD"
+                    RATE: "1450.00"
+                    AMT: "100"
+                    XY: "Y"
+                    MEMBER: "M-0001"
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C080:
+    get:
+      tags:
+      - 거래
+      summary: ' 조회'
+      description: '실제 호출: /api/cmdV2.php?cmd=C080'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          example: C080
+        example: C080
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 키오스크에 설정된 키
+        example: POS-KEY-EXAMPLE
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: 오류여부
+                  ecode:
+                    type: string
+                    description: 오류코드
+                  CRC:
+                    type: string
+                    description: 통화 코드
+                  AMT:
+                    type: string
+                    description: 해당 통화 총 금액
+              examples:
+                success:
+                  summary: 정상 응답 예시
+                  value:
+                    result: true
+                    ecode: '0000'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  schemas:
+    ErrorCode:
+      type: string
+      description: MoneyBox POS 공통 오류 코드
+      enum:
+      - '0000'
+      - E001
+      - E002
+      - E003
+      - E004
+      - E090
+      - E091
+      x-enum-descriptions:
+      - 정상
+      - 입력값 누락
+      - 숫자형 데이터 아님
+      - KEY 값 유효하지 않음
+      - DB 처리 중 오류
+      - 장비 오류
+      - 통신 오류
+    CommonAck:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: true=정상, false=오류
+        ecode:
+          $ref: '#/components/schemas/ErrorCode'
+  responses:
+    ErrorResponse:
+      description: 오류 응답
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+                example: false
+              ecode:
+                $ref: '#/components/schemas/ErrorCode'
+          examples:
+            missing_param:
+              summary: 필수값 누락
+              value:
+                result: false
+                ecode: E001
+            invalid_key:
+              summary: KEY 오류
+              value:
+                result: false
+                ecode: E003

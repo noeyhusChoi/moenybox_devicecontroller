@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>MoneyBox DeviceController API</title>
+  <title>MoneyBox API Documentation</title>
 
   <link
     rel="stylesheet"
@@ -14,29 +14,65 @@
       margin: 0;
       background: #fafafa;
     }
+
+    #top-bar {
+      padding: 10px 16px;
+      background: #1f2937;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    #api-selector {
+      padding: 6px 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- 상단 API 선택 바 -->
+  <div id="top-bar">
+    <strong>API 선택</strong>
+    <select id="api-selector">
+      <option value="m24h">M24H API</option>
+      <option value="mpos">MPOS API</option>
+    </select>
+  </div>
+
   <div id="swagger-ui"></div>
 
   <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
   <script>
-    window.onload = () => {
-      SwaggerUIBundle({
-        url: "./cems_api/cemsapi_final_full.yaml",
+    let swaggerUI;
 
-        dom_id: "#swagger-ui",
-
-        presets: [
-          SwaggerUIBundle.presets.apis
-        ],
-
-        layout: "BaseLayout",
-
-        supportedSubmitMethods: []
-      });
+    const apiMap = {
+      m24h: "./cems_api/m24h_api.yaml",
+      mpos: "./cems_api/mpos_api.yaml",
     };
+
+    function loadSwagger(apiKey) {
+      if (swaggerUI) {
+        swaggerUI.destroy();
+      }
+
+      swaggerUI = SwaggerUIBundle({
+        url: apiMap[apiKey],
+        dom_id: "#swagger-ui",
+        presets: [SwaggerUIBundle.presets.apis],
+        layout: "BaseLayout",
+        supportedSubmitMethods: [] // 문서 전용
+      });
+    }
+
+    document.getElementById("api-selector").addEventListener("change", (e) => {
+      loadSwagger(e.target.value);
+    });
+
+    loadSwagger("m24h");
   </script>
 </body>
 </html>

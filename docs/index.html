@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>MoneyBox API Documentation</title>
 
+  <!-- Swagger UI CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/swagger-ui-dist/swagger-ui.css"
@@ -43,35 +44,48 @@
     </select>
   </div>
 
+  <!-- Swagger UI 영역 -->
   <div id="swagger-ui"></div>
 
+  <!-- Swagger UI JS -->
   <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
   <script>
-    let swaggerUI;
-
+    /*
+     * Swagger 스펙 매핑
+     * (docs 기준 상대경로)
+     */
     const apiMap = {
       m24h: "./cems_api/m24h_api.yaml",
-      mpos: "./cems_api/mpos_api.yaml",
+      mpos: "./cems_api/mpos_api.yaml"
     };
 
+    /**
+     * Swagger UI 로드 (완전 초기화 방식)
+     */
     function loadSwagger(apiKey) {
-      if (swaggerUI) {
-        swaggerUI.destroy();
-      }
+      const container = document.getElementById("swagger-ui");
 
-      swaggerUI = SwaggerUIBundle({
+      container.innerHTML = "";
+
+      SwaggerUIBundle({
         url: apiMap[apiKey],
         dom_id: "#swagger-ui",
         presets: [SwaggerUIBundle.presets.apis],
         layout: "BaseLayout",
-        supportedSubmitMethods: [] // 문서 전용
+
+        // 문서 전용 (Try it out 비활성화)
+        supportedSubmitMethods: []
       });
     }
 
-    document.getElementById("api-selector").addEventListener("change", (e) => {
-      loadSwagger(e.target.value);
-    });
+    // API 선택 변경
+    document
+      .getElementById("api-selector")
+      .addEventListener("change", (e) => {
+        loadSwagger(e.target.value);
+      });
 
+    // 최초 로딩 (M24H)
     loadSwagger("m24h");
   </script>
 </body>

@@ -13,7 +13,12 @@
   <style>
     body {
       margin: 0;
-      background: #fafafa;
+      background: #f9fafb;
+      transition: background 0.2s;
+    }
+
+    body.dark {
+      background: #0f172a;
     }
 
     #top-bar {
@@ -22,71 +27,105 @@
       color: white;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    #api-selector {
+    #top-bar select,
+    #top-bar button {
       padding: 6px 10px;
       font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #top-bar button {
+      background: #374151;
+      color: white;
+    }
+
+    #top-bar button.active {
+      background: #2563eb;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- 상단 API 선택 바 -->
+  <!-- 상단 컨트롤 바 -->
   <div id="top-bar">
-    <strong>API 선택</strong>
+    <strong>API</strong>
     <select id="api-selector">
       <option value="m24h">M24H API</option>
       <option value="mpos">MPOS API</option>
     </select>
+
+    <button id="try-toggle">Try it out: OFF</button>
+    <button id="dark-toggle">🌙 Dark</button>
   </div>
 
-  <!-- Swagger UI 영역 -->
   <div id="swagger-ui"></div>
 
   <!-- Swagger UI JS -->
   <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
   <script>
-    /*
-     * Swagger 스펙 매핑
-     * (docs 기준 상대경로)
-     */
-    const apiMap = {
-      m24h: "./cems_api/m24h_api.yaml",
-      mpos: "./cems_api/mpos_api.yaml"
-    };
-
-    /**
-     * Swagger UI 로드 (완전 초기화 방식)
-     */
-    function loadSwagger(apiKey) {
-      const container = document.getElementById("swagger-ui");
-
-      container.innerHTML = "";
-
-      SwaggerUIBundle({
-        url: apiMap[apiKey],
-        dom_id: "#swagger-ui",
-        presets: [SwaggerUIBundle.presets.apis],
-        layout: "BaseLayout",
-
-        // 문서 전용 (Try it out 비활성화)
-        supportedSubmitMethods: []
-      });
-    }
-
-    // API 선택 변경
-    document
-      .getElementById("api-selector")
-      .addEventListener("change", (e) => {
-        loadSwagger(e.target.value);
-      });
-
-    // 최초 로딩 (M24H)
-    loadSwagger("m24h");
+	const apiMap = {
+		m24h: "./cems_api/m24h_api.yaml",
+		mpos: "./cems_api/mpos_api.yaml"
+	};
+	
+	let tryEnabled = false;
+	let darkMode = false;
+	
+	function loadSwagger(apiKey) {
+		const container = document.getElementById("swagger-ui");
+		container.innerHTML = "";
+	
+		SwaggerUIBundle({
+		url: apiMap[apiKey],
+		dom_id: "#swagger-ui",
+		presets: [SwaggerUIBundle.presets.apis],
+		layout: "BaseLayout",
+		supportedSubmitMethods: tryEnabled
+			? ["get", "post", "put", "delete", "patch"]
+			: []
+		});
+	}
+	
+	// URL ?api=xxx 파라미터 처리
+	function getInitialApi() {
+		const params = new URLSearchParams(window.location.search);
+		const api = params.get("api");
+		return apiMap[api] ? api : "m24h";
+	}
+	
+	// API 선택 변경
+	document.getElementById("api-selector").addEventListener("change", (e) => {
+		const api = e.target.value;
+		history.replaceState(null, "", `?api=${api}`);
+		loadSwagger(api);
+	});
+	
+	// Try it out 토글
+	document.getElementById("try-toggle").addEventListener("click", () => {
+		tryEnabled = !tryEnabled;
+		const btn = document.getElementById("try-toggle");
+		btn.textContent = `Try it out: ${tryEnabled ? "ON" : "OFF"}`;
+		btn.classList.toggle("active", tryEnabled);
+		loadSwagger(document.getElementById("api-selector").value);
+	});
+	
+	// 다크모드 토글
+	document.getElementById("dark-toggle").addEventListener("click", () => {
+		darkMode = !darkMode;
+		document.body.classList.toggle("dark", darkMode);
+	});
+	
+	// 최초 로딩 (URL 기준)
+	const initialApi = getInitialApi();
+	document.getElementById("api-selector").value = initialApi;
+	loadSwagger(initialApi);
   </script>
 </body>
 </html>

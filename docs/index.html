@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>MoneyBox DeviceController API</title>
 
-  <!-- Swagger UI CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/swagger-ui-dist/swagger-ui.css"
@@ -21,15 +20,11 @@
 <body>
   <div id="swagger-ui"></div>
 
-  <!-- Swagger UI JS -->
   <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
   <script>
     window.onload = () => {
       SwaggerUIBundle({
-        /*
-         * 실제 GitHub Pages에서 접근 가능한 YAML 경로
-         */
-        url: "/moenybox_devicecontroller/cems_api/cemsapi_final_full.yaml",
+        url: "../cems_api/cemsapi_final_full.yaml",
 
         dom_id: "#swagger-ui",
 
@@ -39,7 +34,6 @@
 
         layout: "BaseLayout",
 
-        // 문서 전용 (Try it out 비활성화)
         supportedSubmitMethods: []
       });
     };

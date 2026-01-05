@@ -27,9 +27,7 @@
     window.onload = () => {
       SwaggerUIBundle({
         /*
-         * GitHub Pages 기준 절대경로
-         * Pages URL:
-         * https://noeyhuschoi.github.io/moenybox_devicecontroller/
+         * 실제 GitHub Pages에서 접근 가능한 YAML 경로
          */
         url: "/moenybox_devicecontroller/cems_api/cemsapi_final_full.yaml",
 
@@ -41,7 +39,7 @@
 
         layout: "BaseLayout",
 
-        // 문서 전용이면 유지, API 테스트 필요하면 이 줄 삭제
+        // 문서 전용 (Try it out 비활성화)
         supportedSubmitMethods: []
       });
     };

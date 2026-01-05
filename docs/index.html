@@ -26,7 +26,11 @@
   <script>
     window.onload = () => {
       SwaggerUIBundle({
-        // 🔴 GitHub Pages에서는 "절대경로"가 가장 안전
+        /*
+         * GitHub Pages 기준 절대경로
+         * Pages URL:
+         * https://noeyhuschoi.github.io/moenybox_devicecontroller/
+         */
         url: "/moenybox_devicecontroller/cems_api/cemsapi_final_full.yaml",
 
         dom_id: "#swagger-ui",
@@ -37,8 +41,7 @@
 
         layout: "BaseLayout",
 
-        // 문서 전용으로 쓰면 권장 (Try it out 비활성화)
-        // 필요 없으면 이 줄 삭제
+        // 문서 전용이면 유지, API 테스트 필요하면 이 줄 삭제
         supportedSubmitMethods: []
       });
     };

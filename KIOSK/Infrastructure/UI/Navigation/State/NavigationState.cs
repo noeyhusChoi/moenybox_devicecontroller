@@ -1,4 +1,4 @@
-﻿using KIOSK.Shell.Contracts;
+﻿using KIOSK.Presentation.Shell.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.Infrastructure.UI.Navigation.State

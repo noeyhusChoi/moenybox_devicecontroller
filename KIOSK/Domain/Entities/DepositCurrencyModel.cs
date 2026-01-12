@@ -8,10 +8,10 @@ namespace KIOSK.Domain.Entities
 {
     public class DepositCurrencyModel
     {
-        public string CurrencyCode{get; set;}
+        public string CurrencyCode{get; set;} = string.Empty;
         
         public decimal Denomination { get; set;}
 
-        public string AttributeCode { get; set; }
+        public string AttributeCode { get; set; } = string.Empty;
     }
 }

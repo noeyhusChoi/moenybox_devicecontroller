@@ -1,6 +1,6 @@
 ﻿using KIOSK.Infrastructure.UI.Navigation.State;
-using KIOSK.Shell.Contracts;
-using KIOSK.Services;
+using KIOSK.Presentation.Shell.Contracts;
+using KIOSK.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

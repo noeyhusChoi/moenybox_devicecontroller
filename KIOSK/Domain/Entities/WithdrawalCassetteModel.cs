@@ -8,13 +8,13 @@ namespace KIOSK.Domain.Entities
 {
     public class WithdrawalCassetteModel
     {
-        public string DeviceID { get; set; }
+        public string DeviceID { get; set; } = string.Empty;
 
-        public string DeviceName { get; set; }
+        public string DeviceName { get; set; } = string.Empty;
         
         public int Slot { get; set; }
         
-        public string CurrencyCode { get; set; }
+        public string CurrencyCode { get; set; } = string.Empty;
         
         public decimal Denomination { get; set; }
         

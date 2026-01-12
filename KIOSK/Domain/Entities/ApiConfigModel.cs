@@ -8,11 +8,11 @@ namespace KIOSK.Domain.Entities
 {
     public class ApiConfigModel
     {
-        public string ServerName { get; set; }
+        public string ServerName { get; set; } = string.Empty;
 
-        public string ServerUrl { get; set; }
+        public string ServerUrl { get; set; } = string.Empty;
 
-        public string ServerKey { get; set; }
+        public string ServerKey { get; set; } = string.Empty;
 
         public int TimeoutSeconds { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿using KIOSK.Infrastructure.API.Core;
-using KIOSK.Models;
-using KIOSK.Services;
+using KIOSK.Domain.Entities;
+using KIOSK.Application.Services;
 using System.Net.Http;
 using Microsoft.Extensions.Options;
 

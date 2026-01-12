@@ -26,7 +26,6 @@ public interface IDeviceFactoryContributor
 /// </summary>
 public sealed class DeviceFactory : IDeviceFactory
 {
-    private readonly IReadOnlyDictionary<string, Func<DeviceDescriptor, ITransport, IDevice>> _builtIns;
     private readonly IReadOnlyCollection<IDeviceFactoryContributor> _contributors;
     private readonly ILoggerFactory? _loggerFactory;
 
@@ -34,16 +33,6 @@ public sealed class DeviceFactory : IDeviceFactory
     {
         _loggerFactory = loggerFactory;
         _contributors = contributors?.ToArray() ?? Array.Empty<IDeviceFactoryContributor>();
-        _builtIns = new Dictionary<string, Func<DeviceDescriptor, ITransport, IDevice>>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["PRINTER"] = (d, t) => new PrinterDriver(d, t, _loggerFactory?.CreateLogger<PrinterDriver>()),
-            ["QR_NEWLAND"] = (d, t) => new QrEM20Driver(d, t, _loggerFactory?.CreateLogger<QrEM20Driver>()),
-            ["QR_TOTINFO"] = (d, t) => new QrE200ZDriver(d, t, _loggerFactory?.CreateLogger<QrE200ZDriver>()),
-            ["IDSCANNER"] = (d, t) => new IdScannerDriver(d, t, _loggerFactory?.CreateLogger<IdScannerDriver>()),
-            ["HCDM10K"] = (d, t) => new Hcdm10kDriver(d, t, _loggerFactory?.CreateLogger<Hcdm10kDriver>()),
-            ["HCDM20K"] = (d, t) => new Hcdm20kDriver(d, t, _loggerFactory?.CreateLogger<Hcdm20kDriver>()),
-            ["DEPOSIT"] = (d, t) => new DepositDriver(d, t, _loggerFactory?.CreateLogger<DepositDriver>()),
-        };
     }
 
     public IDevice Create(DeviceDescriptor descriptor, ITransport transport)
@@ -54,10 +43,54 @@ public sealed class DeviceFactory : IDeviceFactory
                 return contributor.Create(descriptor, transport);
         }
 
-        var driverKey = DeviceDriverResolver.Resolve(descriptor);
-        if (_builtIns.TryGetValue(driverKey, out var factory))
-            return factory(descriptor, transport);
+        if (string.IsNullOrWhiteSpace(descriptor.Driver))
+            throw new NotSupportedException(
+                $"driver_type is required. name={descriptor.Name} deviceType={descriptor.DeviceType} vendor={descriptor.Vendor} model={descriptor.Model} transport={descriptor.TransportType}:{descriptor.TransportPort}/{descriptor.TransportParam}");
 
-        throw new NotSupportedException($"Unknown driver: {driverKey} (vendor={descriptor.Vendor}, model={descriptor.Model})");
+        if (TryCreateByDriverType(descriptor, transport, out var device))
+            return device;
+
+        throw new NotSupportedException(
+            $"Unknown driver_type: {descriptor.Driver}. name={descriptor.Name} deviceType={descriptor.DeviceType} vendor={descriptor.Vendor} model={descriptor.Model}");
     }
+
+    private static bool TryCreateByDriverType(DeviceDescriptor descriptor, ITransport transport, out IDevice device)
+    {
+        device = null!;
+        var driverType = NormalizeDriverType(descriptor.Driver);
+        if (string.IsNullOrWhiteSpace(driverType))
+            return false;
+
+        switch (driverType)
+        {
+            case "E200Z":
+                device = new QrE200ZDriver(descriptor, transport);
+                return true;
+            case "EM20-80":
+                device = new QrEM20Driver(descriptor, transport);
+                return true;
+            case "HCDM10K":
+                device = new Hcdm10kDriver(descriptor, transport);
+                return true;
+            case "HCDM20K":
+                device = new Hcdm20kDriver(descriptor, transport);
+                return true;
+            case "HMK-072":
+                device = new PrinterDriver(descriptor, transport);
+                return true;
+            case "COMBOSCAN2208":
+                device = new IdScannerDriver(descriptor, transport);
+                return true;
+            case "SC8307":
+                device = new DepositDriver(descriptor, transport);
+                return true;
+            default:
+                throw new NotSupportedException(
+                    $"Unknown driver_type: {descriptor.Driver} (normalized={driverType}). name={descriptor.Name} deviceType={descriptor.DeviceType} vendor={descriptor.Vendor} model={descriptor.Model}");
+        }
+    }
+
+    private static string NormalizeDriverType(string? driverType)
+        => (driverType ?? string.Empty).Trim().ToUpperInvariant();
+
 }

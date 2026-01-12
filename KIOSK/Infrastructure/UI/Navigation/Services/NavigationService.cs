@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using KIOSK.Shell.Contracts;
+using KIOSK.Presentation.Shell.Contracts;
 using KIOSK.Infrastructure.Logging;
 using KIOSK.Infrastructure.UI.Navigation.State;
 using KIOSK.ViewModels;

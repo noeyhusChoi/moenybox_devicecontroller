@@ -150,17 +150,17 @@ internal sealed class DepositClient : IAsyncDisposable
 
     private void HandleRejectedEvent(object sender, EventArgs e)
     {
-        //Trace.WriteLine($"[OnRejected]");
+        _isRejected = true;
     }
 
     private void HandleStackedEvent(object sender, EventArgs e)
     {
-        //_isStack = true;
+        _isStack = true;
     }
 
     private void HandleReturnedEvent(object sender, EventArgs e)
     {
-        //_isReturn = true;
+        _isReturn = true;
     }
 
 

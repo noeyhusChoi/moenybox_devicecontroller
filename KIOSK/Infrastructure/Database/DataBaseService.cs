@@ -192,7 +192,7 @@ namespace KIOSK.Infrastructure.Database
                 }
                 catch (Exception rbEx)
                 {
-                    _logging.LogError(ex, "Transaction RollBack Fail");
+                    _logging.LogError(rbEx, "Transaction RollBack Fail");
                     //Console.Error.WriteLine($"[WithTransactionAsync] RollBack Fail: {rbEx}");
                 }
 

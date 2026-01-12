@@ -100,7 +100,7 @@ namespace KIOSK.Infrastructure.Media
 
         private static void RunOnUi(Action action)
         {
-            var dispatcher = Application.Current?.Dispatcher;
+            var dispatcher = System.Windows.Application.Current?.Dispatcher;
             if (dispatcher == null)
             {
                 action();

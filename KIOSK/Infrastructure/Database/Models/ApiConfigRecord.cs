@@ -5,13 +5,13 @@ namespace KIOSK.Infrastructure.Database.Models
     public class ApiConfigRecord
     {
         [Column("SERVER_NAME")]
-        public string ServerName { get; set; }
+        public string ServerName { get; set; } = string.Empty;
 
         [Column("SERVER_URL")]
-        public string ServerUrl { get; set; }
+        public string ServerUrl { get; set; } = string.Empty;
 
         [Column("SERVER_KEY")]
-        public string ServerKey { get; set; }
+        public string ServerKey { get; set; } = string.Empty;
 
         [Column("TIMEOUT_SECONDS")]
         public int TimeoutSeconds { get; set; }

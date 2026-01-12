@@ -8,18 +8,24 @@ namespace KIOSK.Domain.Entities
     // 장비
     public class DeviceModel
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
-        public string Type { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string Vendor { get; set; }
+        public string Vendor { get; set; } = string.Empty;
 
-        public string Model { get; set; }
+        public string Model { get; set; } = string.Empty;
 
-        public string CommType { get; set; }
+        public string DriverType { get; set; } = string.Empty;
 
-        public string CommPort { get; set; }
+        public string DeviceType { get; set; } = string.Empty;
 
-        public string CommParam { get; set; }
+        public string CommType { get; set; } = string.Empty;
+
+        public string CommPort { get; set; } = string.Empty;
+
+        public string CommParam { get; set; } = string.Empty;
+
+        public int PollingMs { get; set; }
     }
 }

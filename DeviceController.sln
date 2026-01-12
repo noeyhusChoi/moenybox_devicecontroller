@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.1.11304.174 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceController", "DeviceController\DeviceController.csproj", "{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIOSK", "KIOSK\KIOSK.csproj", "{86EA713C-0A1D-4006-E950-5691E95AFEFC}"
 EndProject
 Global
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Debug|x86.ActiveCfg = Debug|x86
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Debug|x86.Build.0 = Debug|x86
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Release|x86.ActiveCfg = Release|x86
-		{561BF03A-AB7C-4F83-BB30-CE89E4DC300A}.Release|x86.Build.0 = Release|x86
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|x86.ActiveCfg = Debug|x86

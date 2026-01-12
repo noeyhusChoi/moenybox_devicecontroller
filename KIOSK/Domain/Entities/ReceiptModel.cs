@@ -8,10 +8,10 @@ namespace KIOSK.Domain.Entities
 {
     public class ReceiptModel
     {
-        public string Locale { get; set; }
+        public string Locale { get; set; } = string.Empty;
 
-        public string Key { get; set; }
+        public string Key { get; set; } = string.Empty;
 
-        public string Value { get; set; }
+        public string Value { get; set; } = string.Empty;
     }
 }

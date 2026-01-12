@@ -22,10 +22,15 @@ namespace KIOSK.Infrastructure.Database.Repositories
             => new DeviceModel
             {
                 Id = record.Id,
-                Type = record.Type,
+                Name = record.Name,
+                Vendor = record.Vendor,
+                Model = record.Model,
+                DriverType = record.DriverType,
+                DeviceType = record.DeviceType,
                 CommType = record.CommType,
                 CommPort = record.CommPort,
-                CommParam = record.CommParam
+                CommParam = record.CommParam,
+                PollingMs = record.PollingMs
             };
     }
 }

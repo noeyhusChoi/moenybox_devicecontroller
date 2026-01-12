@@ -1,12 +1,12 @@
 ﻿using KIOSK.Device.Abstractions;
-using KIOSK.Devices.Management;
+using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.Cache;
 using KIOSK.Infrastructure.Database;
 using KIOSK.Infrastructure.Database.Repositories;
 using KIOSK.Infrastructure.Initialization;
 using KIOSK.Infrastructure.Logging;
 using KIOSK.Infrastructure.Media;
-using KIOSK.Services;
+using KIOSK.Application.Services;
 using KIOSK.Domain.Entities;
 using Localization;
 using Microsoft.Extensions.DependencyInjection;
@@ -135,43 +135,21 @@ public class AppInitializer : IAppInitializer
     {
         foreach (var device in _staticCache.DeviceList)
         {
-            var (vendor, model) = ResolveVendorModel(device);
+            var name = string.IsNullOrWhiteSpace(device.Name) ? device.Id : device.Name;
             await _deviceManager.AddAsync(
                 new DeviceDescriptor(
-                    Name: device.Id,
-                    Vendor: vendor,
-                    Model: model,
+                    Name: name,
+                    Vendor: device.Vendor,
+                    Model: device.Model,
                     TransportType: device.CommType,
                     TransportPort: device.CommPort,
                     TransportParam: device.CommParam,
-                    ProtocolName: string.Empty
+                    ProtocolName: string.Empty,
+                    PollingMs: device.PollingMs,
+                    DeviceType: device.DeviceType,
+                    Driver: device.DriverType
                 ));
         }
-    }
-
-    private static (string Vendor, string Model) ResolveVendorModel(DeviceModel device)
-    {
-        var vendor = device.Vendor?.Trim();
-        var model = device.Model?.Trim();
-        if (!string.IsNullOrWhiteSpace(vendor) && !string.IsNullOrWhiteSpace(model))
-            return (vendor!, model!);
-
-        var type = device.Type?.Trim() ?? string.Empty;
-        return type.ToUpperInvariant() switch
-        {
-            "E200Z" => ("TOTINFO", "E200Z"),
-            "QR_TOTINFO" => ("TOTINFO", "E200Z"),
-            "EM20" => ("NEWLAND", "EM20"),
-            "QR_NEWLAND" => ("NEWLAND", "EM20"),
-            "IDSCANNER" => ("PR22", "IDSCANNER"),
-            "PR22" => ("PR22", "IDSCANNER"),
-            "HCDM10K" => ("HCDM", "10K"),
-            "HCDM20K" => ("HCDM", "20K"),
-            "DEPOSIT" => ("MPOS", "DEPOSIT"),
-            "MPOST" => ("MPOS", "DEPOSIT"),
-            "PRINTER" => ("GENERIC", "PRINTER"),
-            _ => ("GENERIC", type)
-        };
     }
 
     private async Task PreloadAudioAsync()

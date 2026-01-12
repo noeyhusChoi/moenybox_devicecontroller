@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
@@ -18,7 +19,7 @@ namespace KIOSK.Device.Drivers;
 public sealed class IdScannerDriver : DeviceBase
 {
     private IdScannerClient? _client;
-    private CommandDispatcher? _dispatcher;
+    private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<IdScannerDriver> _logger;
 
     public event EventHandler<(int page, Light light, string path)>? ImageSaved;
@@ -48,9 +49,7 @@ public sealed class IdScannerDriver : DeviceBase
             client.ScanSequence += (_, e) => ScanSequence?.Invoke(this, e);
             client.Detected += (_, _) => Detected?.Invoke(this, EventArgs.Empty);
             _client = client;
-            _dispatcher = new CommandDispatcher(
-                IdScannerCommandHandlers.Create(client),
-                CreateUnknownCommandResult);
+            _handlers = CreateHandlers(client);
             await client.StartAsync(ct).ConfigureAwait(false);
 
             return CreateSnapshot();
@@ -112,17 +111,23 @@ public sealed class IdScannerDriver : DeviceBase
 
         try
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
 
             if (_client is null)
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
 
-            if (_dispatcher is null)
+            if (_handlers is null)
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
 
-            return await _dispatcher.DispatchAsync(command, ct).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(command.Name))
+                return CreateUnknownCommandResult();
+
+            if (!_handlers.TryGetValue(command.Name, out var handler))
+                return CreateUnknownCommandResult();
+
+            return await handler.HandleAsync(command, ct).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -130,17 +135,17 @@ public sealed class IdScannerDriver : DeviceBase
         }
         catch (TimeoutException ex)
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
             _logger.LogWarning(ex, "IdScanner command timeout. device={Device} command={Command}", Name, command.Name);
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
         }
         catch (Exception ex)
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
             _logger.LogError(ex, "IdScanner command failed. device={Device} command={Command}", Name, command.Name);
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
         }
@@ -160,8 +165,13 @@ public sealed class IdScannerDriver : DeviceBase
         try { _client.Log -= OnClientLog; } catch { }
         try { await _client.DisposeAsync().ConfigureAwait(false); } catch { }
         _client = null;
-        _dispatcher = null;
+        _handlers = null;
     }
 
     private void OnClientLog(string msg) => Log?.Invoke(msg);
+
+    private static IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(IdScannerClient client)
+        => IdScannerCommandHandlers
+            .Create(client)
+            .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
 }

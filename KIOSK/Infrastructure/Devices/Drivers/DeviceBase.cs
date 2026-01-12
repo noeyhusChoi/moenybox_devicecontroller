@@ -50,9 +50,9 @@ public abstract class DeviceBase : IDevice, IAsyncDisposable
 
     protected CommandResult CreateUnknownCommandResult()
     {
-        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
             ? Model
-            : Descriptor.DeviceKey;
+            : Descriptor.DeviceType;
         return CommandResultFactory.UnknownCommand(deviceKey);
     }
 

@@ -29,11 +29,11 @@ namespace KIOSK.Device.Abstractions
     /// <param name="PollingMs">
     ///   상태 확인 주기(ms). DeviceManager의 GetStatusAsync 호출 간격
     /// </param>
-    /// <param name="DeviceKey">
-    ///   장치 그룹 키(예: "QR", "PRINTER"). 표준 코드 발행 시 사용
+    /// <param name="DeviceType">
+    ///   장치 타입(예: "QR", "PRINTER"). 표준 코드 발행 시 사용
     /// </param>
     /// <param name="Driver">
-    ///   향후 확장을 위한 드라이버 키(현재는 사용하지 않음)
+    ///   드라이버 타입(예: "QR_E200Z", "WITHDRAWAL_HCDM10K")
     /// </param>
     public sealed record DeviceDescriptor(
         string Name,                    // PRINTER-1
@@ -45,7 +45,7 @@ namespace KIOSK.Device.Abstractions
         string ProtocolName = "",       // ASCII, SimpleCRC 등 확장 가능
         int PollingMs = 10000,
         bool Validate = true,       // 유효성 검사 여부
-        string DeviceKey = "",       // 표준 코드 그룹 키
-        string Driver = "not_used"   // 현재는 미사용
+        string DeviceType = "",      // 표준 코드용 장치 타입
+        string Driver = ""           // 드라이버 타입
     );
 }

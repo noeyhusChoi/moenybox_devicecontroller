@@ -22,29 +22,25 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="KIOSK\**" />
-    <EmbeddedResource Remove="KIOSK\**" />
-    <None Remove="KIOSK\**" />
-    <Page Remove="KIOSK\**" />
     <Compile Remove="Infrastructure\Devices_legacy\**" />
     <Compile Remove="Infrastructure\Database_legacy\**" />
     <Compile Remove="Domain\Entities_legacy\**" />
+    <Compile Remove="Modules\**" />
     <EmbeddedResource Remove="Infrastructure\Devices_legacy\**" />
     <EmbeddedResource Remove="Infrastructure\Database_legacy\**" />
     <EmbeddedResource Remove="Domain\Entities_legacy\**" />
+    <EmbeddedResource Remove="Modules\**" />
     <None Remove="Infrastructure\Devices_legacy\**" />
     <None Remove="Infrastructure\Database_legacy\**" />
     <None Remove="Domain\Entities_legacy\**" />
+    <None Remove="Modules\**" />
     <Page Remove="Infrastructure\Devices_legacy\**" />
     <Page Remove="Infrastructure\Database_legacy\**" />
     <Page Remove="Domain\Entities_legacy\**" />
-    <Compile Remove="Modules\Features\Exchange\NewFolder\**" />
     <Compile Remove="Repository\**" />
-    <EmbeddedResource Remove="Modules\Features\Exchange\NewFolder\**" />
     <EmbeddedResource Remove="Repository\**" />
-    <None Remove="Modules\Features\Exchange\NewFolder\**" />
     <None Remove="Repository\**" />
-    <Page Remove="Modules\Features\Exchange\NewFolder\**" />
+    <Page Remove="Modules\**" />
     <Page Remove="Repository\**" />
   </ItemGroup>
 
@@ -519,37 +515,6 @@
     <ItemGroup>
       <Folder Include="Assets\Language\" />
       <Folder Include="Domain\Services\" />
-      <Folder Include="KIOSK\bin\Debug\net9.0-windows10.0.17763.0\" />
-      <Folder Include="KIOSK\bin\x86\Debug\net8.0-windows\OCR\resultType\" />
-      <Folder Include="KIOSK\bin\x86\Debug\net8.0-windows\OCR\result\" />
-      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows10.0.17763.0\OCR\input\" />
-      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows10.0.17763.0\OCR\resultType\" />
-      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows10.0.17763.0\OCR\result\" />
-      <Folder Include="KIOSK\bin\x86\Debug\net9.0-windows7.0\" />
-      <Folder Include="KIOSK\Core\" />
-      <Folder Include="KIOSK\Domain\Services\" />
-      <Folder Include="KIOSK\Infrastructure\Navigation\Services\" />
-      <Folder Include="KIOSK\Models\Domain\" />
-      <Folder Include="KIOSK\Models\DTO\" />
-      <Folder Include="KIOSK\Models\Entity\" />
-      <Folder Include="KIOSK\Modules\Features\Exchange\API\" />
-      <Folder Include="KIOSK\Modules\Features\Exchange\Factories\" />
-      <Folder Include="KIOSK\Modules\Features\Exchange\Services\" />
-      <Folder Include="KIOSK\Modules\Features\GTF\API\" />
-      <Folder Include="KIOSK\Modules\Features\GTF\Factories\" />
-      <Folder Include="KIOSK\Modules\Features\GTF\NewFolder\" />
-      <Folder Include="KIOSK\Modules\Features\GTF\Services\" />
-      <Folder Include="KIOSK\obj\Debug\net9.0-windows10.0.17763.0\refint\" />
-      <Folder Include="KIOSK\obj\Debug\net9.0-windows10.0.17763.0\ref\" />
-      <Folder Include="KIOSK\obj\x86\Debug\net9.0-windows7.0\refint\" />
-      <Folder Include="KIOSK\obj\x86\Debug\net9.0-windows7.0\ref\" />
-      <Folder Include="KIOSK\Services\Initialization\" />
-      <Folder Include="Modules\Features\Exchange\Factories\" />
-      <Folder Include="Modules\Features\Exchange\Services\" />
-      <Folder Include="Modules\Features\GTF\Factories\" />
-      <Folder Include="Modules\Features\GTF\API\" />
-      <Folder Include="Modules\Features\GTF\NewFolder\" />
-      <Folder Include="Modules\Features\GTF\Services\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -589,10 +554,6 @@
 			<Link>%(Filename)%(Extension)</Link>
 		</None>
 	</ItemGroup>
-  <ItemGroup>
-    <None Remove="KIOSK\KIOSK.csproj" />
-    <None Remove="KIOSK\KIOSK.csproj.user" />
-  </ItemGroup>
 	
 	<!-- dll 루트로 복사했으니 libs 폴더 삭제 -->
 	<Target Name="RemoveLibsAfterBuild" AfterTargets="Build">

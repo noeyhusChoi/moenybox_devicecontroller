@@ -7,8 +7,8 @@ namespace KIOSK.Domain.Entities
 {
     public class KioskModel
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
-        public string Pid { get; set; }
+        public string Pid { get; set; } = string.Empty;
     }
 }

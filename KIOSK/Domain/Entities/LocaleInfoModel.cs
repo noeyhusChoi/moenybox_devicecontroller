@@ -3,22 +3,22 @@ namespace KIOSK.Domain.Entities
 {
     public class LocaleInfoModel
     {
-        public string CurrencyCode { get; set; }
+        public string CurrencyCode { get; set; } = string.Empty;
 
-        public string LanguageCode { get; set; }
+        public string LanguageCode { get; set; } = string.Empty;
 
-        public string CountryCode { get; set; }
+        public string CountryCode { get; set; } = string.Empty;
 
-        public string CultureCode { get; set; }
+        public string CultureCode { get; set; } = string.Empty;
 
-        public string LanguageName { get; set; }
+        public string LanguageName { get; set; } = string.Empty;
 
-        public string LanguageNameKo { get; set; }
+        public string LanguageNameKo { get; set; } = string.Empty;
 
-        public string LanguageNameEn { get; set; }
+        public string LanguageNameEn { get; set; } = string.Empty;
         
-        public string CountryNameKo { get; set; }
+        public string CountryNameKo { get; set; } = string.Empty;
         
-        public string CountryNameEn { get; set; }
+        public string CountryNameEn { get; set; } = string.Empty;
     }
 }

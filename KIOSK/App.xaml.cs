@@ -1,6 +1,6 @@
-﻿using KIOSK.Composition;
-using KIOSK.Services;
-using KIOSK.Shell.Top.Main.ViewModels;
+﻿using KIOSK.Infrastructure.Hosting;
+using KIOSK.Application.Services;
+using KIOSK.Presentation.Shell.Top.Main.ViewModels;
 using KIOSK.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
@@ -9,16 +9,16 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using KIOSK.Shell.Window.Startup.ViewModels;
+using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
 
 namespace KIOSK;
 
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
-    private AppBootstrapper _bootstrapper;
+    private AppBootstrapper? _bootstrapper;
 
     protected override async void OnStartup(StartupEventArgs e)
     {

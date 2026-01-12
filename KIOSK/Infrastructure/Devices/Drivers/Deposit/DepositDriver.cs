@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
@@ -16,7 +17,7 @@ namespace KIOSK.Device.Drivers;
 public sealed class DepositDriver : DeviceBase
 {
     private DepositClient? _client;
-    private CommandDispatcher? _dispatcher;
+    private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<DepositDriver> _logger;
 
     // MPSOT 전용
@@ -43,9 +44,7 @@ public sealed class DepositDriver : DeviceBase
             client.Escrowed += OnEscrowedForward;
             client.Log += OnClientLog;
             _client = client;
-            _dispatcher = new CommandDispatcher(
-                DepositCommandHandlers.Create(client),
-                CreateUnknownCommandResult);
+            _handlers = CreateHandlers(client);
 
             await client.StartAsync(ct).ConfigureAwait(false);
 
@@ -66,7 +65,6 @@ public sealed class DepositDriver : DeviceBase
 
     public override async Task<StatusSnapshot> GetStatusAsync(CancellationToken ct = default)
     {
-        //TODO: 고장 코드 작성 필요
         var alerts = new List<StatusEvent>();
 
         using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
@@ -76,7 +74,7 @@ public sealed class DepositDriver : DeviceBase
                 throw new InvalidOperationException("Deposit not initialized.");
 
             if (_client.Connected != true)
-                alerts.Add(CreateAlert(new ErrorCode("DEV", "CASH", "STATUS", "TIMEOUT"), string.Empty, Severity.Warning));
+                alerts.Add(CreateAlert(new ErrorCode("DEV", "CASH", "STATUS", "ERROR"), string.Empty, Severity.Warning));
         }
         catch (TimeoutException ex)
         {
@@ -98,17 +96,23 @@ public sealed class DepositDriver : DeviceBase
 
         try
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
 
             if (_client is null)
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
 
-            if (_dispatcher is null)
+            if (_handlers is null)
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
 
-            return await _dispatcher.DispatchAsync(command, ct).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(command.Name))
+                return CreateUnknownCommandResult();
+
+            if (!_handlers.TryGetValue(command.Name, out var handler))
+                return CreateUnknownCommandResult();
+
+            return await handler.HandleAsync(command, ct).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -116,17 +120,17 @@ public sealed class DepositDriver : DeviceBase
         }
         catch (TimeoutException ex)
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
             _logger.LogWarning(ex, "Deposit command timeout. device={Device} command={Command}", Name, command.Name);
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
         }
         catch (Exception ex)
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
             _logger.LogError(ex, "Deposit command failed. device={Device} command={Command}", Name, command.Name);
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
         }
@@ -146,9 +150,14 @@ public sealed class DepositDriver : DeviceBase
         try { _client.Log -= OnClientLog; } catch { }
         try { await _client.DisposeAsync().ConfigureAwait(false); } catch { }
         _client = null;
-        _dispatcher = null;
+        _handlers = null;
     }
 
     private void OnClientLog(string msg) => Log?.Invoke(msg);
     private void OnEscrowedForward(object? sender, string value) => OnEscrowed?.Invoke(this, value);
+
+    private static IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(DepositClient client)
+        => DepositCommandHandlers
+            .Create(client)
+            .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
 }

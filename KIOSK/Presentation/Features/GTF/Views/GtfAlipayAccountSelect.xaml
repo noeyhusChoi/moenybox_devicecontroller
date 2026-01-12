@@ -1,0 +1,148 @@
+﻿<UserControl
+    x:Class="KIOSK.Presentation.Features.GTF.Views.GtfAlipayAccountSelect"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Presentation.Features.GTF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1820"
+    d:DesignWidth="1080"
+    Background="{StaticResource SecondaryBrush}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Background" Value="#1F2937" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="border"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12">
+                            <!--  버튼 내용은 전부 여기로 들어감  -->
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Width="1000" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="1"
+            Margin="32"
+            Background="WhiteSmoke"
+            CornerRadius="16">
+
+            <Grid Margin="64">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="11*" />
+                </Grid.RowDefinitions>
+
+                <Grid.Resources>
+                    <DrawingAttributes
+                        x:Key="SignatureInkAttributes"
+                        Width="3"
+                        Height="3"
+                        FitToCurve="False"
+                        IgnorePressure="False"
+                        StylusTip="Ellipse"
+                        Color="Black" />
+                </Grid.Resources>
+
+                <!--  타이틀  -->
+                <TextBlock
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Pretendard}"
+                    FontSize="{StaticResource FontSize_XL}"
+                    FontWeight="{StaticResource FontWeight_M}"
+                    Foreground="Black"
+                    TextAlignment="Center">
+                    <Run Text="환급 받으실 Alipay 계좌를 선택해주세요." />
+                </TextBlock>
+
+                <!--  버튼  -->
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding Current.AlipayUsers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                MinHeight="120"
+                                Margin="0,0,0,10"
+                                Command="{Binding DataContext.NextCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding LoginId}"
+                                Style="{StaticResource RoundedButtonStyle}">
+                                <TextBlock
+                                    FontFamily="{StaticResource Pretendard}"
+                                    FontSize="{StaticResource FontSize_L}"
+                                    FontWeight="{StaticResource FontWeight_L}"
+                                    Text="{Binding LoginId}"
+                                    TextAlignment="Center" />
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Width="200"
+                Height="80"
+                Command="{Binding MainCommand}"
+                Content="취소" />
+            <Button
+                Grid.Column="1"
+                Width="200"
+                Height="80"
+                Command="{Binding PreviousCommand}"
+                Content="이전" />
+            <Button
+                Grid.Column="3"
+                Width="200"
+                Height="80"
+                Command="{Binding NextCommand}"
+                Content="다음" />
+        </Grid>
+
+    </Grid>
+</UserControl>

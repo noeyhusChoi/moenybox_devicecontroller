@@ -1,0 +1,213 @@
+﻿<Window
+    x:Class="KIOSK.MainWindowView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:GtfViewModels="clr-namespace:KIOSK.Presentation.Features.GTF.ViewModels"
+    xmlns:Gtfviews="clr-namespace:KIOSK.Presentation.Features.GTF.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:envSubShellViews="clr-namespace:KIOSK.Presentation.Features.Environment.Shell.Views"
+    xmlns:envSubShellVm="clr-namespace:KIOSK.Presentation.Features.Environment.Shell.ViewModels"
+    xmlns:exchangeShellViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Shell.Views"
+    xmlns:exchangeShellVm="clr-namespace:KIOSK.Presentation.Features.Exchange.Shell.ViewModels"
+    xmlns:gtfShellViews="clr-namespace:KIOSK.Presentation.Features.GTF.Shell.Views"
+    xmlns:gtfShellVm="clr-namespace:KIOSK.Presentation.Features.GTF.Shell.ViewModels"
+    xmlns:local="clr-namespace:KIOSK"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:menuShellViews="clr-namespace:KIOSK.Presentation.Features.Menu.Shell.Views"
+    xmlns:menuShellVm="clr-namespace:KIOSK.Presentation.Features.Menu.Shell.ViewModels"
+    xmlns:popupViewModels="clr-namespace:KIOSK.ViewModels.Exchange.Popup"
+    xmlns:popupViews="clr-namespace:KIOSK.Views.Exchange.Popup"
+    xmlns:shellTopEnvViews="clr-namespace:KIOSK.Presentation.Shell.Top.Admin.Views"
+    xmlns:shellTopEnvVm="clr-namespace:KIOSK.Presentation.Shell.Top.Admin.ViewModels"
+    xmlns:shellTopMainViews="clr-namespace:KIOSK.Presentation.Shell.Top.Main.Views"
+    xmlns:shellTopMainVm="clr-namespace:KIOSK.Presentation.Shell.Top.Main.ViewModels"
+    xmlns:view="clr-namespace:KIOSK.Presentation.Features.Environment.Views"
+    xmlns:viewModel="clr-namespace:KIOSK.Presentation.Features.Environment.ViewModels"
+    xmlns:viewModels="clr-namespace:KIOSK.ViewModels"
+    xmlns:views="clr-namespace:KIOSK.Views"
+    Title="MainWindow"
+    Width="1920"
+    Height="1080"
+    d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel,
+                                     IsDesignTimeCreatable=False}"
+    Background="Transparent"
+    Loaded="Window_Loaded"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Opacity"
+                        From="0"
+                        To="1"
+                        Duration="0:0:0.6" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    <Window.Resources>
+        <!--  APP  -->
+
+        <!--  TOP Shell  -->
+        <DataTemplate DataType="{x:Type shellTopEnvVm:AdminShellViewModel}">
+            <shellTopEnvViews:AdminShellView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type shellTopMainVm:UserShellViewModel}">
+            <shellTopMainViews:UserShellView />
+        </DataTemplate>
+
+        <!--  SUB Shell  -->
+        <DataTemplate DataType="{x:Type envSubShellVm:EnvironmentShellViewModel}">
+            <envSubShellViews:EnvironmentShellView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type menuShellVm:MenuSubShellViewModel}">
+            <menuShellViews:MenuShellView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type gtfShellVm:GtfSubShellViewModel}">
+            <gtfShellViews:GtfShellView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type exchangeShellVm:ExchangeShellViewModel}">
+            <exchangeShellViews:ExchangeShellView />
+        </DataTemplate>
+
+        <!--  관리자  -->
+        <DataTemplate DataType="{x:Type viewModels:EnvironmentViewModel}">
+            <views:EnvironmentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DeviceStatusViewModel}">
+            <view:DeviceStatusView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:EnvironmentCassetteSettingViewModel}">
+            <view:EnvironmentCassetteSettingView />
+        </DataTemplate>
+
+        <!--  메뉴  -->
+        <DataTemplate DataType="{x:Type viewModels:MenuViewModel}">
+            <views:MenuView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type shellTopMainVm:LoadingViewModel}">
+            <shellTopMainViews:LoadingView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type shellTopMainVm:FooterViewModel}">
+            <shellTopMainViews:FooterView />
+        </DataTemplate>
+
+        <!--  환전  -->
+        <DataTemplate DataType="{x:Type viewModels:ExchangeLanguageViewModel}">
+            <views:ExchangeLanguageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeCurrencyViewModel}">
+            <views:ExchangeCurrencyView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeIDScanConsentViewModel}">
+            <views:ExchangeIDScanConsentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeIDScanGuideViewModel}">
+            <views:ExchangeIDScanGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeIDScanProcessViewModel}">
+            <views:ExchangeIDScanProcessView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeIDScanCompleteViewModel}">
+            <views:ExchangeIDScanCompleteView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeDepositViewModel}">
+            <views:ExchangeDepositView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeWithdrawalViewModel}">
+            <views:ExchangeWithdrawalView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeResultViewModel}">
+            <views:ExchangeResultView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ExchangeCompleteViewModel}">
+            <views:ExchangeCompleteView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type popupViewModels:ExchangePopupIDScanInfoViewModel}">
+            <popupViews:ExchangePopupIDScanInfoView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type popupViewModels:ExchangePopupTermsViewModel}">
+            <popupViews:ExchangePopupTermsView />
+        </DataTemplate>
+
+        <!--  GTF  -->
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfLanguageSelectViewModel}">
+            <Gtfviews:GtfLanguageSelectView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfIdScanConsentViewModel}">
+            <Gtfviews:GtfIdScanConsentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfIdScanGuideViewModel}">
+            <Gtfviews:GtfIdScanGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfIdScanProcessViewModel}">
+            <Gtfviews:GtfIdScanProcessView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfRefundMethodSelectViewModel}">
+            <Gtfviews:GtfRefundMethodSelectView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfRefundMethodGuideViewModel}">
+            <Gtfviews:GtfRefundMethodGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfCreditGuideViewModel}">
+            <Gtfviews:GtfCreditGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfAlipayGuideViewModel}">
+            <Gtfviews:GtfAlipayGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfWeChatGuideViewModel}">
+            <Gtfviews:GtfWeChatGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfRefundVoucherRegisterViewModel}">
+            <Gtfviews:GtfRefundVoucherRegisterView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfRefundSignatureViewModel}">
+            <Gtfviews:GtfRefundSignatureView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfCreditRegisterViewModel}">
+            <Gtfviews:GtfCreditRegisterView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfAlipayRegisterViewModel}">
+            <Gtfviews:GtfAlipayRegisterView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfWeChatRegisterGuideViewModel}">
+            <Gtfviews:GtfWeChatRegisterGuideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfWeChatRegisterViewModel}">
+            <Gtfviews:GtfWeChatRegisterView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfAlipayAccountSelectViewModel}">
+            <Gtfviews:GtfAlipayAccountSelect />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfRefundCompleteViewModel}">
+            <Gtfviews:GtfRefundCompleteView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type GtfViewModels:GtfTestPopupViewModel}">
+            <Gtfviews:GtfTestPopupView />
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <!--  ESC 홈으로(디버깅용도)  -->
+        <KeyBinding Key="Escape" Command="{Binding F0Command}" />
+        <!--  F1 홈으로(디버깅용도)  -->
+        <KeyBinding Key="F1" Command="{Binding F1Command}" />
+        <!--  F2 모니터 변경(디버깅용도)  -->
+        <KeyBinding Key="F2" Command="{Binding F2Command}" />
+        <!--  F3 장비 명령(디버깅용도)  -->
+        <KeyBinding Key="F3" Command="{Binding F3Command}" />
+        <!--  F4 장비 명령(디버깅용도)  -->
+        <KeyBinding Key="F4" Command="{Binding F4Command}" />
+        <!--  F5 장비 명령(디버깅용도)  -->
+        <KeyBinding Key="F5" Command="{Binding F5Command}" />
+    </Window.InputBindings>
+
+    <ContentControl Content="{Binding RootViewModel}" />
+</Window>

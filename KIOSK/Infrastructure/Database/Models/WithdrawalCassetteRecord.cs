@@ -5,16 +5,16 @@ namespace KIOSK.Infrastructure.Database.Models
     public class WithdrawalCassetteRecord
     {
         [Column("DEVICE_ID")]
-        public string DeviceID { get; set; }
+        public string DeviceID { get; set; } = string.Empty;
 
         [Column("DEVICE_NAME")]
-        public string DeviceName { get; set; }
+        public string DeviceName { get; set; } = string.Empty;
 
         [Column("SLOT")]
         public int Slot { get; set; }
 
         [Column("CURRENCY_CODE")]
-        public string CurrencyCode { get; set; }
+        public string CurrencyCode { get; set; } = string.Empty;
 
         [Column("DENOMINATION")]
         public decimal Denomination { get; set; }

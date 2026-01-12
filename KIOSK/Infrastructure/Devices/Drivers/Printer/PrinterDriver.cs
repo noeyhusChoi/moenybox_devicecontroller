@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
@@ -17,7 +18,7 @@ namespace KIOSK.Device.Drivers;
 public sealed class PrinterDriver : DeviceBase
 {
     private PrinterClient? _client;
-    private CommandDispatcher? _dispatcher;
+    private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<PrinterDriver> _logger;
 
     public event Action<string>? Log;
@@ -39,9 +40,7 @@ public sealed class PrinterDriver : DeviceBase
             var client = new PrinterClient(channel);
             client.Log += OnClientLog;
             _client = client;
-            _dispatcher = new CommandDispatcher(
-                PrinterCommandHandlers.Create(client, Descriptor.DeviceKey),
-                CreateUnknownCommandResult);
+            _handlers = CreateHandlers(client);
             await client.StartAsync(ct).ConfigureAwait(false);
 
             return CreateSnapshot();
@@ -74,7 +73,7 @@ public sealed class PrinterDriver : DeviceBase
             }
             else
             {
-                alerts.Add(CreateAlert(new ErrorCode("DEV", "PRINTER", "STATUS", "TIMEOUT"), string.Empty, Severity.Warning));
+                alerts.Add(CreateAlert(new ErrorCode("DEV", "PRINTER", "STATUS", "ERROR"), string.Empty, Severity.Warning));
             }
         }
         catch (OperationCanceledException)
@@ -100,17 +99,23 @@ public sealed class PrinterDriver : DeviceBase
 
         try
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
 
             if (_client is null)
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
 
-            if (_dispatcher is null)
+            if (_handlers is null)
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
 
-            return await _dispatcher.DispatchAsync(command, ct).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(command.Name))
+                return CreateUnknownCommandResult();
+
+            if (!_handlers.TryGetValue(command.Name, out var handler))
+                return CreateUnknownCommandResult();
+
+            return await handler.HandleAsync(command, ct).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -118,17 +123,17 @@ public sealed class PrinterDriver : DeviceBase
         }
         catch (TimeoutException)
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
             _logger.LogWarning("Printer command timeout. device={Device} command={Command}", Name, command.Name);
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
         }
         catch (Exception ex)
         {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceKey)
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
                 ? Descriptor.Model
-                : Descriptor.DeviceKey;
+                : Descriptor.DeviceType;
             _logger.LogError(ex, "Printer command failed. device={Device} command={Command}", Name, command.Name);
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
         }
@@ -154,7 +159,7 @@ public sealed class PrinterDriver : DeviceBase
         {
         }
         _client = null;
-        _dispatcher = null;
+        _handlers = null;
     }
 
     private void OnClientLog(string msg) => Log?.Invoke(msg);
@@ -178,5 +183,10 @@ public sealed class PrinterDriver : DeviceBase
         if (flags.HasFlag(PrinterStatusFlags.AuxPaperPresent))
             alerts.Add(CreateAlert(new ErrorCode("DEV", "PRINTER", "STATUS", "AUX_PAPER_PRESENT"), string.Empty, Severity.Warning));
     }
+
+    private IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(PrinterClient client)
+        => PrinterCommandHandlers
+            .Create(client, Descriptor.DeviceType)
+            .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
 
 }

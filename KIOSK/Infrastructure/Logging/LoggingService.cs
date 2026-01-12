@@ -78,7 +78,7 @@ namespace KIOSK.Infrastructure.Logging
 
 #if DEBUG
             lc.WriteTo.Debug();
-            lc.WriteTo.Seq("http://localhost:5341", apiKey: "l9RG3NsYsflCV22Dpkr5");
+            lc.WriteTo.Seq("http://4.218.15.147:5341", apiKey: "l9RG3NsYsflCV22Dpkr5");
 #endif
 
             return lc.CreateLogger();

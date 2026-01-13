@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Sub.Environment.View;
+using KIOSK.Presentation.Features.Environment.Shell.View;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Sub.Environment.View {
+namespace KIOSK.Presentation.Features.Environment.Shell.View {
     
     
     /// <summary>
@@ -53,7 +53,7 @@ namespace KIOSK.Shell.Sub.Environment.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/shell/sub/environment/view/environmentshellview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/shell/sub/environment/view/environmentshellview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\Shell\Sub\Environment\View\EnvironmentShellView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Sub.Menu.View;
+using KIOSK.Presentation.Features.Menu.Shell.View;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Sub.Menu.View {
+namespace KIOSK.Presentation.Features.Menu.Shell.View {
     
     
     /// <summary>

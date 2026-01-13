@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using KIOSK.Infrastructure.Database;
+using Microsoft.Extensions.Logging;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace KIOSK.Infrastructure.Database
             // TODO: ConnectionString 보안 처리 후 가져오기
             _connectionString =
                 connectionString ??
-                "Server=4.218.15.147;Port=3306;Database=m24h;User ID=dev;Password=devP@ss!;AllowUserVariables=True;ConnectionReset=false;DefaultCommandTimeout=300;SslMode=Required;";
+                DatabaseConfig.DefaultConnectionString;
             _timeoutSec = commandTimeoutSeconds;
         }
 

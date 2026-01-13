@@ -4,60 +4,66 @@ using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.Cache;
-using KIOSK.Infrastructure.Database.Interface;
-using MySqlConnector;
+using KIOSK.Infrastructure.Database.Ef;
+using KIOSK.Infrastructure.Database.Ef.Entities;
+using KIOSK.Domain.Entities;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.EntityFrameworkCore;
 
 namespace KIOSK.Infrastructure.Database.Repositories
 {
-    public sealed class DeviceStatusLogRepository : RepositoryBase
+    public sealed class DeviceStatusLogRepository
     {
-        private const string InsertProc = "sp_insert_device_status_log";
-        private readonly DatabaseCache _cache;
+        private readonly IMemoryCache _cache;
+        private readonly IDbContextFactory<KioskDbContext> _contextFactory;
 
-        public DeviceStatusLogRepository(IDatabaseService db, DatabaseCache cache) : base(db)
+        public DeviceStatusLogRepository(IDbContextFactory<KioskDbContext> contextFactory, IMemoryCache cache)
         {
             _cache = cache;
+            _contextFactory = contextFactory;
         }
 
-        public Task SaveAsync(string name, StatusSnapshot snapshot, CancellationToken ct = default)
+        public async Task SaveAsync(string name, StatusSnapshot snapshot, CancellationToken ct = default)
         {
             if (snapshot.Alerts is null || snapshot.Alerts.Count == 0)
-                return Task.CompletedTask;
+                return;
 
-            var kioskId = _cache.Kiosk.FirstOrDefault()?.Id;
+            var kiosks = _cache.Get<IReadOnlyList<KioskModel>>(DatabaseCacheKeys.Kiosk)
+                ?? Array.Empty<KioskModel>();
+            var kioskId = kiosks.FirstOrDefault()?.Id;
             if (string.IsNullOrWhiteSpace(kioskId))
-                return Task.CompletedTask;
+                return;
 
-            var deviceType = _cache.DeviceList
+            var devices = _cache.Get<IReadOnlyList<DeviceModel>>(DatabaseCacheKeys.DeviceList)
+                ?? Array.Empty<DeviceModel>();
+            var deviceType = devices
                 .FirstOrDefault(d =>
                     string.Equals(d.Name, name, StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(d.Id, name, StringComparison.OrdinalIgnoreCase))
                 ?.DeviceType;
             if (string.IsNullOrWhiteSpace(deviceType))
-                return Task.CompletedTask;
+                return;
 
-            var tasks = new List<Task>(snapshot.Alerts.Count);
+            await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+
+            var entries = new List<DeviceStatusLogEntity>(snapshot.Alerts.Count);
             foreach (var alert in snapshot.Alerts)
-                tasks.Add(InsertAsync(kioskId, name, deviceType, alert, ct));
-
-            return Task.WhenAll(tasks);
-        }
-
-        private Task InsertAsync(string kioskId, string name, string deviceType, StatusEvent alert, CancellationToken ct)
-        {
-            var parameters = new[]
             {
-                P("@p_kiosk_id", kioskId, MySqlDbType.VarChar),
-                P("@p_device_name", name, MySqlDbType.VarChar),
-                P("@p_device_type", deviceType, MySqlDbType.VarChar),
-                P("@p_source", alert.Source.ToString(), MySqlDbType.VarChar),
-                P("@p_code", alert.ErrorCode?.ToString() ?? alert.Code, MySqlDbType.VarChar),
-                P("@p_severity", alert.Severity.ToString(), MySqlDbType.VarChar),
-                P("@p_message", alert.Message, MySqlDbType.VarChar),
-                P("@p_created_at", alert.At.UtcDateTime, MySqlDbType.DateTime)
-            };
+                entries.Add(new DeviceStatusLogEntity
+                {
+                    KioskId = kioskId,
+                    DeviceName = name,
+                    DeviceType = deviceType,
+                    Source = alert.Source.ToString(),
+                    Code = alert.ErrorCode?.ToString() ?? alert.Code,
+                    Severity = alert.Severity.ToString(),
+                    Message = alert.Message,
+                    CreatedAt = alert.At.UtcDateTime
+                });
+            }
 
-            return ExecAsync(InsertProc, parameters, ct);
+            context.DeviceStatusLogs.AddRange(entries);
+            await context.SaveChangesAsync(ct).ConfigureAwait(false);
         }
     }
 }

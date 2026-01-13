@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 using KIOSK;
-using KIOSK.Modules.GTF.ViewModels;
-using KIOSK.Modules.GTF.Views;
+using KIOSK.Presentation.Features.GTF.ViewModels;
+using KIOSK.Presentation.Features.GTF.Views;
 using KIOSK.ViewModels;
 using KIOSK.Views;
 using System;

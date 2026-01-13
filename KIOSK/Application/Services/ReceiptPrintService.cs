@@ -1,9 +1,11 @@
 ﻿using KIOSK.Device.Abstractions;
 using KIOSK.Device.Core;
-using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Domain.Entities;
-using System.Text;
 using KIOSK.Infrastructure.Cache;
+using KIOSK.Infrastructure.Management.Devices;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Text;
 
 namespace KIOSK.Application.Services
 {
@@ -11,17 +13,19 @@ namespace KIOSK.Application.Services
     {
         private readonly RecieptFormater _formater = new RecieptFormater();
         private readonly IDeviceManager _deviceManager;
-        private readonly DatabaseCache _staticCache;
+        private readonly IMemoryCache _cache;
 
-        public ReceiptPrintService(IDeviceManager deviceManager, DatabaseCache staticCache)
+        public ReceiptPrintService(IDeviceManager deviceManager, IMemoryCache cache)
         {
             _deviceManager = deviceManager;
-            _staticCache = staticCache;
+            _cache = cache;
         }
 
         private string? GetValue(string locale, string key)
         {
-            return _staticCache.ReceiptList.FirstOrDefault(x => x.Locale == locale && x.Key == key)?.Value;
+            var list = _cache.Get<IReadOnlyList<ReceiptModel>>(DatabaseCacheKeys.ReceiptList)
+                ?? Array.Empty<ReceiptModel>();
+            return list.FirstOrDefault(x => x.Locale == locale && x.Key == key)?.Value;
         }
 
         public async Task PrintReceiptAsync(string locale, TransactionModelV2 result)

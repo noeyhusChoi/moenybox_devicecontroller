@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Window.Startup.ViewModels;
+using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Window.Startup.ViewModels {
+namespace KIOSK.Presentation.Shell.Window.Startup.ViewModels {
     
     
     /// <summary>
@@ -53,7 +53,7 @@ namespace KIOSK.Shell.Window.Startup.ViewModels {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/shell/window/startup/views/startupwindowview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/shell/window/startup/views/startupwindowview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\Shell\Window\Startup\Views\StartupWindowView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

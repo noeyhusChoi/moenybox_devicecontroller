@@ -9,6 +9,7 @@ using KIOSK.Infrastructure.Media;
 using KIOSK.Application.Services;
 using KIOSK.Domain.Entities;
 using Localization;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.IO;
@@ -21,7 +22,7 @@ public class AppInitializer : IAppInitializer
     private readonly IAudioPlayService _audioService;
     private readonly IDeviceManager _deviceManager;
 
-    private readonly DatabaseCache _staticCache;
+    private readonly IMemoryCache _cache;
     private readonly ApiConfigRepository _apiConfigRepo;
     private readonly DepositCurrencyRepository _depositCurrencyRepo;
     private readonly KioskRepository _kioskRepo;
@@ -43,7 +44,7 @@ public class AppInitializer : IAppInitializer
         _audioService = sp.GetRequiredService<IAudioPlayService>();
         _deviceManager = sp.GetRequiredService<IDeviceManager>();
 
-        _staticCache = sp.GetRequiredService<DatabaseCache>();
+        _cache = sp.GetRequiredService<IMemoryCache>();
         _apiConfigRepo = sp.GetRequiredService<ApiConfigRepository>();
         _depositCurrencyRepo = sp.GetRequiredService<DepositCurrencyRepository>();
         _kioskRepo = sp.GetRequiredService<KioskRepository>();
@@ -111,13 +112,13 @@ public class AppInitializer : IAppInitializer
 
     private async Task LoadStaticCacheAsync()
     {
-        _staticCache.ApiConfigList = await _apiConfigRepo.LoadAllAsync();
-        _staticCache.DepositCurrencyList = await _depositCurrencyRepo.LoadAllAsync();
-        _staticCache.Kiosk = await _kioskRepo.LoadAllAsync();
-        _staticCache.DeviceList = await _deviceRepo.LoadAllAsync();
-        _staticCache.ReceiptList = await _receiptRepo.LoadAllAsync();
-        _staticCache.LocaleInfoList = await _localeInfoRepo.LoadAllAsync();
-        _staticCache.WithdrawalCassetteList = await _withdrawalCassetteRepo.LoadAllAsync();
+        _cache.Set(DatabaseCacheKeys.Kiosk, await _kioskRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.ApiConfigList, await _apiConfigRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.DepositCurrencyList, await _depositCurrencyRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.DeviceList, await _deviceRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.ReceiptList, await _receiptRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.LocaleInfoList, await _localeInfoRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.WithdrawalCassetteList, await _withdrawalCassetteRepo.LoadAllAsync());
 
 
         await _withdrawalCassetteService.InitializeAsync();
@@ -133,7 +134,9 @@ public class AppInitializer : IAppInitializer
 
     private async Task InitializeDevicesAsync()
     {
-        foreach (var device in _staticCache.DeviceList)
+        var devices = _cache.Get<IReadOnlyList<DeviceModel>>(DatabaseCacheKeys.DeviceList)
+            ?? Array.Empty<DeviceModel>();
+        foreach (var device in devices)
         {
             var name = string.IsNullOrWhiteSpace(device.Name) ? device.Id : device.Name;
             await _deviceManager.AddAsync(

@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Modules.GTF.Views;
+using KIOSK.Presentation.Features.GTF.Views;
 using Localization;
 using System;
 using System.Diagnostics;
@@ -34,7 +34,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Modules.GTF.Views {
+namespace KIOSK.Presentation.Features.GTF.Views {
     
     
     /// <summary>
@@ -54,7 +54,7 @@ namespace KIOSK.Modules.GTF.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/modules/features/gtf/views/popup/gtftestpopupview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/modules/features/gtf/views/popup/gtftestpopupview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\..\Modules\Features\GTF\Views\Popup\GtfTestPopupView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

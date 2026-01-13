@@ -9,8 +9,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Modules.Features.Environment.View;
-using KIOSK.Modules.Features.Environment.ViewModel;
+using KIOSK.Presentation.Features.Features.Environment.View;
+using KIOSK.Presentation.Features.Features.Environment.ViewModel;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -34,7 +34,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Modules.Features.Environment.View {
+namespace KIOSK.Presentation.Features.Features.Environment.View {
     
     
     /// <summary>
@@ -45,7 +45,7 @@ namespace KIOSK.Modules.Features.Environment.View {
         
         #line 9 "..\..\..\..\..\..\..\..\Modules\Features\Environment\View\EnvironmentCassetteSettingView.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal KIOSK.Modules.Features.Environment.View.EnvironmentCassetteSettingView Root;
+        internal KIOSK.Presentation.Features.Features.Environment.View.EnvironmentCassetteSettingView Root;
         
         #line default
         #line hidden
@@ -82,7 +82,7 @@ namespace KIOSK.Modules.Features.Environment.View {
             switch (connectionId)
             {
             case 1:
-            this.Root = ((KIOSK.Modules.Features.Environment.View.EnvironmentCassetteSettingView)(target));
+            this.Root = ((KIOSK.Presentation.Features.Features.Environment.View.EnvironmentCassetteSettingView)(target));
             return;
             }
             this._contentLoaded = true;

@@ -4,9 +4,13 @@ using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.UI.Navigation.Services;
 using KIOSK.Application.Services.Devices;
 using KIOSK.Infrastructure.Management.Devices;
+using KIOSK.Infrastructure.Cache;
+using KIOSK.Infrastructure.Logging;
+using Microsoft.Extensions.Caching.Memory;
 using KIOSK.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using WpfApplication = System.Windows.Application;
 
@@ -17,6 +21,8 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
     private readonly IDeviceStatusService _statusService;
     private readonly IDeviceCommandCatalogService _commandCatalog;
     private readonly IDeviceManager _deviceManager;
+    private readonly IMemoryCache _cache;
+    private readonly ILoggingService _logging;
     private readonly INavigationService _nav;
     private SynchronizationContext? _uiContext;
 
@@ -36,11 +42,15 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
         IDeviceStatusService statusService,
         IDeviceCommandCatalogService commandCatalog,
         IDeviceManager deviceManager,
+        IMemoryCache cache,
+        ILoggingService logging,
         INavigationService nav)
     {
         _statusService = statusService;
         _commandCatalog = commandCatalog;
         _deviceManager = deviceManager;
+        _cache = cache;
+        _logging = logging;
         _nav = nav;
     }
 
@@ -68,6 +78,67 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
     private void Refresh()
     {
         LoadInitial();
+    }
+
+    [RelayCommand]
+    private void DumpCache()
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = false
+        };
+
+        DumpCacheKey(DatabaseCacheKeys.Kiosk, options);
+        DumpCacheKey(DatabaseCacheKeys.DeviceList, options);
+        DumpCacheKey(DatabaseCacheKeys.ApiConfigList, options);
+        DumpCacheKey(DatabaseCacheKeys.DepositCurrencyList, options);
+        DumpCacheKey(DatabaseCacheKeys.ReceiptList, options);
+        DumpCacheKey(DatabaseCacheKeys.LocaleInfoList, options);
+        DumpCacheKey(DatabaseCacheKeys.WithdrawalCassetteList, options);
+    }
+
+    private void DumpCacheKey(string key, JsonSerializerOptions options)
+    {
+        if (!_cache.TryGetValue(key, out var value) || value is null)
+        {
+            _logging.Info($"[CacheDump] {key} = <missing>");
+            return;
+        }
+
+        if (value is System.Collections.IEnumerable enumerable && value is not string)
+        {
+            var index = 0;
+            foreach (var item in enumerable)
+            {
+                string payload;
+                try
+                {
+                    payload = JsonSerializer.Serialize(item, options);
+                }
+                catch (Exception ex)
+                {
+                    _logging.Error(ex, $"[CacheDump] {key}[{index}] serialize failed");
+                    index++;
+                    continue;
+                }
+
+                _logging.Info($"[CacheDump] {key}[{index}] {payload}");
+                index++;
+            }
+
+            _logging.Info($"[CacheDump] {key} count={index}");
+            return;
+        }
+
+        try
+        {
+            var payload = JsonSerializer.Serialize(value, options);
+            _logging.Info($"[CacheDump] {key} {payload}");
+        }
+        catch (Exception ex)
+        {
+            _logging.Error(ex, $"[CacheDump] {key} serialize failed");
+        }
     }
 
     private bool CanSendCommand()

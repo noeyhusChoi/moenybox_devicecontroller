@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Sub.Gtf.View;
+using KIOSK.Presentation.Features.GTF.Shell.View;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Sub.Gtf.View {
+namespace KIOSK.Presentation.Features.GTF.Shell.View {
     
     
     /// <summary>

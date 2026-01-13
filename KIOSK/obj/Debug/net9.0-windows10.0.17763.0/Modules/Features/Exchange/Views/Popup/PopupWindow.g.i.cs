@@ -54,7 +54,7 @@ namespace KIOSK.Views.Exchange.Popup {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/modules/features/exchange/views/popup/popupwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/modules/features/exchange/views/popup/popupwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\..\Modules\Features\Exchange\Views\Popup\PopupWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

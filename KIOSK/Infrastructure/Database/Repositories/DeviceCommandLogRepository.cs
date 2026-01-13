@@ -1,37 +1,42 @@
+using System.Threading;
+using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
+using KIOSK.Infrastructure.Database.Ef;
+using KIOSK.Infrastructure.Database.Ef.Entities;
 using KIOSK.Infrastructure.Database.Interface;
-using MySqlConnector;
+using Microsoft.EntityFrameworkCore;
 
 namespace KIOSK.Infrastructure.Database.Repositories
 {
     public sealed class DeviceCommandLogRepository
-        : RepositoryBase,
-          ICreateRepository<DeviceCommandRecord>
+        : ICreateRepository<DeviceCommandRecord>
     {
-        private const string InsertProc = "sp_insert_device_command_log";
+        private readonly IDbContextFactory<KioskDbContext> _contextFactory;
 
-        public DeviceCommandLogRepository(IDatabaseService db) : base(db)
+        public DeviceCommandLogRepository(IDbContextFactory<KioskDbContext> contextFactory)
         {
+            _contextFactory = contextFactory;
         }
 
         public Task SaveAsync(DeviceCommandRecord record)
             => InsertAsync(record);
 
-        public Task InsertAsync(DeviceCommandRecord record, CancellationToken ct = default)
+        public async Task InsertAsync(DeviceCommandRecord record, CancellationToken ct = default)
         {
-            var parameters = new[]
+            await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+            var entry = new DeviceCommandLogEntity
             {
-                P("@p_device_name", record.Name, MySqlDbType.VarChar),
-                P("@p_command", record.Command, MySqlDbType.VarChar),
-                P("@p_success", record.Success ? 1 : 0, MySqlDbType.Int32),
-                P("@p_error_code", record.ErrorCode?.ToString(), MySqlDbType.VarChar),
-                P("@p_origin", record.Origin.ToString(), MySqlDbType.VarChar),
-                P("@p_started_at", record.StartedAt.UtcDateTime, MySqlDbType.DateTime),
-                P("@p_finished_at", record.FinishedAt.UtcDateTime, MySqlDbType.DateTime),
-                P("@p_duration_ms", record.DurationMs, MySqlDbType.Int64),
+                DeviceName = record.Name,
+                CommandName = record.Command,
+                Success = record.Success,
+                ErrorCode = record.ErrorCode?.ToString(),
+                Origin = record.Origin.ToString(),
+                StartedAt = record.StartedAt.UtcDateTime,
+                FinishedAt = record.FinishedAt.UtcDateTime,
+                DurationMs = record.DurationMs
             };
-
-            return ExecAsync(InsertProc, parameters, ct);
+            context.DeviceCommandLogs.Add(entry);
+            await context.SaveChangesAsync(ct).ConfigureAwait(false);
         }
     }
 }

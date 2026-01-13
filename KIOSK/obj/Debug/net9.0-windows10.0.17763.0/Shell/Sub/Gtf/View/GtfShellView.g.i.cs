@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Sub.Gtf.View;
+using KIOSK.Presentation.Features.GTF.Shell.View;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Sub.Gtf.View {
+namespace KIOSK.Presentation.Features.GTF.Shell.View {
     
     
     /// <summary>
@@ -53,7 +53,7 @@ namespace KIOSK.Shell.Sub.Gtf.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/shell/sub/gtf/view/gtfshellview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/shell/sub/gtf/view/gtfshellview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\Shell\Sub\Gtf\View\GtfShellView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

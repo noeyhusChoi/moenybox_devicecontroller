@@ -1,7 +1,7 @@
-using KIOSK.Domain.Entities;
-using KIOSK.Infrastructure.Cache;
 using KIOSK.Infrastructure.Database;
+using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.Infrastructure.Hosting.Modules
@@ -11,7 +11,16 @@ namespace KIOSK.Infrastructure.Hosting.Modules
         public static IServiceCollection AddDatabaseModule(this IServiceCollection services)
         {
             services.AddSingleton<IDatabaseService, DatabaseService>();
-            services.AddSingleton<DatabaseCache>();
+            services.AddMemoryCache();
+            var connectionString = DatabaseConfig.DefaultConnectionString;
+            services.AddDbContext<KioskDbContext>(options =>
+            {
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            });
+            services.AddDbContextFactory<KioskDbContext>(options =>
+            {
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            });
 
             services.AddSingleton<ApiConfigRepository>();
             services.AddSingleton<DepositCurrencyRepository>();
@@ -21,8 +30,6 @@ namespace KIOSK.Infrastructure.Hosting.Modules
             services.AddSingleton<ReceiptRepository>();
             services.AddSingleton<LocaleInfoRepository>();
             services.AddSingleton<WithdrawalCassetteRepository>();
-            services.AddSingleton<WithdrawalCassetteModel>();
-
             return services;
         }
     }

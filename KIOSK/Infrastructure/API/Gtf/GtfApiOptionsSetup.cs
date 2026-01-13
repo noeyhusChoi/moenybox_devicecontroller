@@ -1,26 +1,29 @@
-﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KIOSK.Domain.Entities;
 using KIOSK.Infrastructure.Cache;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using System;
+using System.Linq;
 
 namespace KIOSK.Infrastructure.API.Gtf
 {
 
     public class GtfApiOptionsSetup : IConfigureOptions<GtfApiOptions>
     {
-        private readonly DatabaseCache _cache;
+        private readonly IMemoryCache _cache;
 
-        public GtfApiOptionsSetup(DatabaseCache cache)
+        public GtfApiOptionsSetup(IMemoryCache cache)
         {
             _cache = cache;
         }
 
         public void Configure(GtfApiOptions options)
         {
-            var cfg = _cache.ApiConfigList.FirstOrDefault(x => x.ServerName == "GTF");
+            var list = _cache.Get<IReadOnlyList<ApiConfigModel>>(DatabaseCacheKeys.ApiConfigList)
+                ?? Array.Empty<ApiConfigModel>();
+            var cfg = list.FirstOrDefault(x => x.ServerName == "GTF");
+            if (cfg is null)
+                return;
 
             options.BaseUrl = cfg.ServerUrl;
             options.TimeoutSeconds = cfg.TimeoutSeconds;

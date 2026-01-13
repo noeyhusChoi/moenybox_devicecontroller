@@ -1,26 +1,28 @@
-﻿using KIOSK.Infrastructure.API.Gtf;
+﻿using KIOSK.Domain.Entities;
+using KIOSK.Infrastructure.Cache;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KIOSK.Infrastructure.Cache;
 
 namespace KIOSK.Infrastructure.API.Cems
 {
     public class CemsApiOptionsSetup : IConfigureOptions<CemsApiOptions>
     {
-        private readonly DatabaseCache _cache;
+        private readonly IMemoryCache _cache;
 
-        public CemsApiOptionsSetup(DatabaseCache cache)
+        public CemsApiOptionsSetup(IMemoryCache cache)
         {
             _cache = cache;
         }
 
         public void Configure(CemsApiOptions options)
         {
-            var cfg = _cache.ApiConfigList.FirstOrDefault(x => x.ServerName == "CEMS");
+            var list = _cache.Get<IReadOnlyList<ApiConfigModel>>(DatabaseCacheKeys.ApiConfigList)
+                ?? Array.Empty<ApiConfigModel>();
+            var cfg = list.FirstOrDefault(x => x.ServerName == "CEMS");
+            if (cfg is null)
+                return;
 
             options.BaseUrl = cfg.ServerUrl;
             options.ApiKey = cfg.ServerKey;

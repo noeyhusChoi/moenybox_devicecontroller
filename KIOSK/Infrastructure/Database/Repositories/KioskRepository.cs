@@ -1,26 +1,38 @@
 ﻿using KIOSK.Domain.Entities;
+using KIOSK.Infrastructure.Database.Ef;
+using KIOSK.Infrastructure.Database.Ef.Entities;
 using KIOSK.Infrastructure.Database.Interface;
-using KIOSK.Infrastructure.Database.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace KIOSK.Infrastructure.Database.Repositories
 {
-    public class KioskRepository : RepositoryBase, IReadRepository<KioskModel>
+    public class KioskRepository : IReadRepository<KioskModel>
     {
-        public KioskRepository(IDatabaseService db) : base(db)
-        { }
+        private readonly IDbContextFactory<KioskDbContext> _contextFactory;
+
+        public KioskRepository(IDbContextFactory<KioskDbContext> contextFactory)
+            => _contextFactory = contextFactory;
 
         public async Task<IReadOnlyList<KioskModel>> LoadAllAsync(CancellationToken ct = default)
         {
-            var records = await QueryAsync<KioskRecord>("sp_get_kiosk_info", null, ct);
+            await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+            var records = await context.Kiosks
+                .AsNoTracking()
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
             return records.Select(Map).ToList();
         }
 
-        private static KioskModel Map(KioskRecord record)
+        private static KioskModel Map(KioskInfoEntity record)
             => new KioskModel
             {
                 Id = record.Id,
-                Pid = record.Pid
+                Pid = record.Pid,
+                IsValid = record.IsValid
             };
     }
 }

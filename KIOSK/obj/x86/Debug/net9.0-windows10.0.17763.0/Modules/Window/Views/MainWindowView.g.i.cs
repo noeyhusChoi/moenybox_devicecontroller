@@ -10,18 +10,18 @@
 //------------------------------------------------------------------------------
 
 using KIOSK;
-using KIOSK.Modules.GTF.ViewModels;
-using KIOSK.Modules.GTF.Views;
-using KIOSK.Shell.Sub.Exchange.View;
-using KIOSK.Shell.Sub.Exchange.ViewModel;
-using KIOSK.Shell.Sub.Gtf.View;
-using KIOSK.Shell.Sub.Gtf.ViewModel;
-using KIOSK.Shell.Sub.Menu.View;
-using KIOSK.Shell.Sub.Menu.ViewModel;
-using KIOSK.Shell.Top.Environment.ViewModels;
-using KIOSK.Shell.Top.Environment.Views;
-using KIOSK.Shell.Top.Main.ViewModels;
-using KIOSK.Shell.Top.Main.Views;
+using KIOSK.Presentation.Features.GTF.ViewModels;
+using KIOSK.Presentation.Features.GTF.Views;
+using KIOSK.Presentation.Features.Exchange.Shell.View;
+using KIOSK.Presentation.Features.Exchange.Shell.ViewModel;
+using KIOSK.Presentation.Features.GTF.Shell.View;
+using KIOSK.Presentation.Features.GTF.Shell.ViewModel;
+using KIOSK.Presentation.Features.Menu.Shell.View;
+using KIOSK.Presentation.Features.Menu.Shell.ViewModel;
+using KIOSK.Presentation.Shell.Top.Environment.ViewModels;
+using KIOSK.Presentation.Shell.Top.Environment.Views;
+using KIOSK.Presentation.Shell.Top.Main.ViewModels;
+using KIOSK.Presentation.Shell.Top.Main.Views;
 using KIOSK.ViewModels;
 using KIOSK.ViewModels.Exchange.Popup;
 using KIOSK.Views;

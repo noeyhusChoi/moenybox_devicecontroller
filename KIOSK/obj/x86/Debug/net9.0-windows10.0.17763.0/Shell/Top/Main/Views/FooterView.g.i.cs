@@ -9,8 +9,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Top.Main.ViewModels;
-using KIOSK.Shell.Top.Main.Views;
+using KIOSK.Presentation.Shell.Top.Main.ViewModels;
+using KIOSK.Presentation.Shell.Top.Main.Views;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -34,7 +34,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Top.Main.Views {
+namespace KIOSK.Presentation.Shell.Top.Main.Views {
     
     
     /// <summary>

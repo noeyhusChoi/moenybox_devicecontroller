@@ -1,20 +1,18 @@
-﻿using KIOSK.Infrastructure.Cache;
+﻿using KIOSK.Domain.Entities;
+using KIOSK.Infrastructure.Cache;
 using KIOSK.Infrastructure.Database.Repositories;
-using System;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using KIOSK.Domain.Entities;
 
 namespace KIOSK.Application.Services.DataBase
 {
     public class WithdrawalCassetteServiceV2
     {
         public readonly WithdrawalCassetteRepository _repo;
-        private readonly DatabaseCache _cache;
+        private readonly IMemoryCache _cache;
 
-        public WithdrawalCassetteServiceV2(WithdrawalCassetteRepository repo, DatabaseCache cache)
+        public WithdrawalCassetteServiceV2(WithdrawalCassetteRepository repo, IMemoryCache cache)
         {
             _repo = repo;
             _cache = cache;
@@ -22,20 +20,24 @@ namespace KIOSK.Application.Services.DataBase
 
         public async Task<IReadOnlyList<WithdrawalCassetteModel>> GetSlotsAsync()
         {
-            if (_cache.WithdrawalCassetteList == null || _cache.WithdrawalCassetteList.Count == 0)
+            var list = _cache.Get<IReadOnlyList<WithdrawalCassetteModel>>(DatabaseCacheKeys.WithdrawalCassetteList);
+            if (list is null || list.Count == 0)
             {
-                _cache.WithdrawalCassetteList = await _repo.LoadAllAsync();
+                list = await _repo.LoadAllAsync().ConfigureAwait(false);
+                _cache.Set(DatabaseCacheKeys.WithdrawalCassetteList, list);
             }
-            return _cache.WithdrawalCassetteList;
+
+            return list;
         }
 
         public async Task SaveAsync(IReadOnlyList<WithdrawalCassetteModel> edited)
         {
             // DB Update
-            await _repo.UpdateAsync(edited);
+            await _repo.UpdateAsync(edited).ConfigureAwait(false);
 
             // Refresh cache
-            _cache.WithdrawalCassetteList = await _repo.LoadAllAsync();
+            var list = await _repo.LoadAllAsync().ConfigureAwait(false);
+            _cache.Set(DatabaseCacheKeys.WithdrawalCassetteList, list);
         }
     }
 }

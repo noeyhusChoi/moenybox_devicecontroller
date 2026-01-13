@@ -1,30 +1,41 @@
-﻿using KIOSK.Infrastructure.Database.Interface;
-using KIOSK.Domain.Entities;
-using KIOSK.Infrastructure.Database.Models;
+﻿using KIOSK.Domain.Entities;
+using KIOSK.Infrastructure.Database.Ef;
+using KIOSK.Infrastructure.Database.Ef.Entities;
+using KIOSK.Infrastructure.Database.Interface;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace KIOSK.Infrastructure.Database.Repositories
 {
-    public  class ApiConfigRepository : RepositoryBase, IReadRepository<ApiConfigModel>
+    public class ApiConfigRepository : IReadRepository<ApiConfigModel>
     {
-        public ApiConfigRepository(IDatabaseService db) : base(db)
-        {
+        private readonly IDbContextFactory<KioskDbContext> _contextFactory;
 
-        }
+        public ApiConfigRepository(IDbContextFactory<KioskDbContext> contextFactory)
+            => _contextFactory = contextFactory;
 
         public async Task<IReadOnlyList<ApiConfigModel>> LoadAllAsync(CancellationToken ct = default)
         {
-            var records = await QueryAsync<ApiConfigRecord>("sp_get_server_info", null, ct);
+            await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+            var records = await context.ApiConfigs
+                .AsNoTracking()
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
             return records.Select(Map).ToList();
         }
 
-        private static ApiConfigModel Map(ApiConfigRecord record)
+        private static ApiConfigModel Map(ApiConfigEntity record)
             => new ApiConfigModel
             {
-                ServerName = record.ServerName,
-                ServerUrl = record.ServerUrl,
-                ServerKey = record.ServerKey,
-                TimeoutSeconds = record.TimeoutSeconds
+                KioskId = record.KioskId ?? string.Empty,
+                ServerName = record.ServerName ?? string.Empty,
+                ServerUrl = record.ServerUrl ?? string.Empty,
+                ServerKey = record.ServerKey ?? string.Empty,
+                TimeoutSeconds = record.TimeoutSeconds ?? 0,
+                IsValid = record.IsValid
             };
     }
 }

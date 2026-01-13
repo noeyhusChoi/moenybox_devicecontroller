@@ -150,6 +150,11 @@
                             Content="새로고침"
                             Style="{StaticResource ButtonGhost}" />
                         <Button
+                            Margin="0,0,6,0"
+                            Command="{Binding DumpCacheCommand}"
+                            Content="캐시 덤프"
+                            Style="{StaticResource ButtonGhost}" />
+                        <Button
                             Command="{Binding BackCommand}"
                             Content="뒤로"
                             Style="{StaticResource ButtonGhost}" />

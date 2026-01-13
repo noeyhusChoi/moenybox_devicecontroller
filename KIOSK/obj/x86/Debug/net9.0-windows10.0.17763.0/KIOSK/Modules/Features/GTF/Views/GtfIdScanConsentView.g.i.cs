@@ -32,7 +32,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Modules.GTF.Views {
+namespace KIOSK.Presentation.Features.GTF.Views {
     
     
     /// <summary>

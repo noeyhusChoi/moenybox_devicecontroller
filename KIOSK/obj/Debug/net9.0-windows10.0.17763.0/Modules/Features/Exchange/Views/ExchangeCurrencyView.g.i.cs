@@ -55,8 +55,7 @@ namespace KIOSK.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/modules/features/exchange/views/exchangecurrencyview.xa" +
-                    "ml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/modules/features/exchange/views/exchangecurrencyview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\Modules\Features\Exchange\Views\ExchangeCurrencyView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

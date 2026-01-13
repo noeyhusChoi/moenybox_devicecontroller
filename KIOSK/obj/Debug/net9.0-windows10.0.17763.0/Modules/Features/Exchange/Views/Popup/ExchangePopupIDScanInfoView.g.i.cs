@@ -55,8 +55,8 @@ namespace KIOSK.Views.Exchange.Popup {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/modules/features/exchange/views/popup/exchangepopupidsc" +
-                    "aninfoview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/modules/features/exchange/views/popup/exchangepopupidscaninfovie" +
+                    "w.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\..\Modules\Features\Exchange\Views\Popup\ExchangePopupIDScanInfoView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

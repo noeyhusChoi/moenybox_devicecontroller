@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using KIOSK.Shell.Window.Startup.ViewModels;
+using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace KIOSK.Shell.Window.Startup.ViewModels {
+namespace KIOSK.Presentation.Shell.Window.Startup.ViewModels {
     
     
     /// <summary>

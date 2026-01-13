@@ -10,5 +10,7 @@ namespace KIOSK.Domain.Entities
         public string Id { get; set; } = string.Empty;
 
         public string Pid { get; set; } = string.Empty;
+
+        public bool IsValid { get; set; }
     }
 }

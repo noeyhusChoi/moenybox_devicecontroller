@@ -68,7 +68,7 @@ namespace KIOSK.Assets.Resources.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KIOSK;V1.0.0.0;component/assets/resources/controls/elipsetogglebutton.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KIOSK;component/assets/resources/controls/elipsetogglebutton.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\..\Assets\Resources\Controls\ElipseToggleButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

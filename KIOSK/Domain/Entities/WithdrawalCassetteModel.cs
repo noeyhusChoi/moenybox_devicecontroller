@@ -8,6 +8,8 @@ namespace KIOSK.Domain.Entities
 {
     public class WithdrawalCassetteModel
     {
+        public string KioskId { get; set; } = string.Empty;
+
         public string DeviceID { get; set; } = string.Empty;
 
         public string DeviceName { get; set; } = string.Empty;
@@ -21,5 +23,7 @@ namespace KIOSK.Domain.Entities
         public int Capacity { get; set; }
         
         public int Count { get; set; }
+
+        public bool IsValid { get; set; } = true;
     }
 }

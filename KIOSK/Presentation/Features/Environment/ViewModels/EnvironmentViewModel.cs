@@ -112,7 +112,7 @@ namespace KIOSK.ViewModels
         [RelayCommand]
         private async Task WithdrawalCassette()
         {
-            _popup.ShowLocal<EnvironmentCassetteSettingViewModel>();
+            _popup.ShowPopup<EnvironmentCassetteSettingViewModel>();
         }
 
         [RelayCommand]

@@ -9,7 +9,6 @@ using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
 using KIOSK.Presentation.Features.MenuV2.ViewModels;
 using KIOSK.Presentation.Shared.Flow.ViewModels;
-using KIOSK.Presentation.Shell.Top.Admin.ViewModels;
 using KIOSK.Presentation.Shell.Top.Main.ViewModels;
 using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
 using KIOSK.ViewModels;

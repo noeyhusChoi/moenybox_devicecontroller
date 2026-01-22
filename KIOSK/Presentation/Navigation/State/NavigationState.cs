@@ -1,11 +1,12 @@
-﻿using KIOSK.Presentation.Shell.Contracts;
+﻿using KIOSK.Presentation.Shared.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.Presentation.Navigation.State
 {
     public sealed class NavigationState
     {
-        public IRootShellHost? RootShell { get; set; }
+        // Window: 최상위 윈도우 호스트
+        public IWindowHost? RootShell { get; set; }
 
         // Shell: MenuShell, ExchangeShell, GtfShell 등
         public IShellHost? ActiveShell { get; set; }

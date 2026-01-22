@@ -127,10 +127,6 @@ namespace KIOSK.Application.StateMachines
             _fsm.Configure(ExchangeState.Error)
                 .OnEntryAsync(async () => await ExitAsync())
                 .Permit(StateMachineTrigger.Exit, ExchangeState.Exit);
-
-            _fsm.Configure(ExchangeState.Exit)
-                .OnEntryAsync(async () => await ExitAsync())
-                .Permit(StateMachineTrigger.Exit, ExchangeState.Exit);
         }
 
         private async Task FireAsyncSafe(StateMachineTrigger trigger)

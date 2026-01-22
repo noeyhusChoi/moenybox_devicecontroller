@@ -1,6 +1,4 @@
-﻿using KIOSK.Presentation.Shared.Abstractions;
-
-namespace KIOSK.Presentation.Shell.Contracts
+﻿namespace KIOSK.Presentation.Shared.Abstractions
 {
     public interface IShellHost : INavigable, IPopupHost
     {

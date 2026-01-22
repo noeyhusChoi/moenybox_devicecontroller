@@ -24,7 +24,7 @@ namespace KIOSK.Presentation.Features.GTF.ViewModels
         [RelayCommand]
         private async Task Close()
         {
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
     }
 }

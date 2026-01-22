@@ -32,7 +32,7 @@ namespace KIOSK.ViewModels
         [RelayCommand]
         private async Task OpenTerms()
         {
-            _popup.ShowLocal<ExchangePopupTermsViewModel>();
+            _popup.ShowPopup<ExchangePopupTermsViewModel>();
         }
 
         [RelayCommand]

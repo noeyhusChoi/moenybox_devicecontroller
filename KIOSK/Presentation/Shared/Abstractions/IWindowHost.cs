@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KIOSK.Presentation.Shell.Contracts
+namespace KIOSK.Presentation.Shared.Abstractions
 {
-    public interface IRootShellHost
+    public interface IWindowHost
     {
         void SetShell(object? shell);
     }

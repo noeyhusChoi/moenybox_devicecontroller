@@ -25,19 +25,19 @@ namespace KIOSK.ViewModels.Exchange.Popup
          [RelayCommand]
         private void Close()
         {
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
 
         [RelayCommand]
         public void Accept()
         {
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
 
         [RelayCommand]
         public void Cancel()
         {
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
     }
 }

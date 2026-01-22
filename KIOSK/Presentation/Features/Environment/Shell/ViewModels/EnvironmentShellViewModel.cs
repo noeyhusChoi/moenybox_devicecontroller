@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KIOSK.Presentation.Navigation.Services;
-using KIOSK.Presentation.Shell.Contracts;
+using KIOSK.Presentation.Shared.Abstractions;
 using KIOSK.ViewModels;
 using System;
 using System.Collections.Generic;

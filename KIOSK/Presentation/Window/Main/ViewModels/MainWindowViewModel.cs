@@ -8,16 +8,16 @@ using KIOSK.Application.Services.Devices;
 using System.Collections.ObjectModel;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Features.Environment.ViewModels;
-using KIOSK.Presentation.Shell.Contracts;
 using KIOSK.Presentation.Features.Environment.Shell.ViewModels;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.ViewModels
 {
-    public partial class MainWindowViewModel : ObservableObject, IRootShellHost
+    public partial class MainWindowViewModel : ObservableObject, IWindowHost
     {
         private readonly INavigationService _nav;
         private readonly IDeviceCatalogService _repo;

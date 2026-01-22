@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using KIOSK.Presentation.Shell.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using KIOSK.Application.Services.ExchangeV2;
 using KIOSK.Presentation.Features.ExchangeV2.Flow;
 using KIOSK.Presentation.Features.ExchangeV2.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels
 {

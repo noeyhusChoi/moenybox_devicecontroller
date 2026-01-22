@@ -44,7 +44,7 @@ namespace KIOSK.Presentation.Features.ExchangeV2.ViewModels
         {
             try
             {
-                _popup.ShowLocal<ExchangePopupTermsViewModel>();
+                _popup.ShowPopup<ExchangePopupTermsViewModel>();
             }
             catch (Exception ex)
             {

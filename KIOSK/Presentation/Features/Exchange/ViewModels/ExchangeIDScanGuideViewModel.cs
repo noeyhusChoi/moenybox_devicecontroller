@@ -32,7 +32,7 @@ namespace KIOSK.ViewModels
             _scanCts = CancellationTokenSource.CreateLinkedTokenSource(pageCt);
             var ct = _scanCts.Token;
 
-            _popup.ShowLocal<ExchangePopupIDScanInfoViewModel>();
+            _popup.ShowPopup<ExchangePopupIDScanInfoViewModel>();
 
             var scanTask = _scanGuideUseCase.ScanUntilStableAsync(ct);
             var timeoutTask = Task.Delay(10000, ct);
@@ -50,7 +50,7 @@ namespace KIOSK.ViewModels
                 if (ct.IsCancellationRequested)
                     return;
 
-                _popup.CloseLocal();
+                _popup.ClosePopup();
                 await Task.Delay(150);
 
                 if (success)
@@ -72,7 +72,7 @@ namespace KIOSK.ViewModels
             try { await scanTask; } catch { }
 
             await _scanGuideUseCase.StopAsync(CancellationToken.None);
-            _popup.CloseLocal();
+            _popup.ClosePopup();
 
             if (!ct.IsCancellationRequested)
                 await Previous();

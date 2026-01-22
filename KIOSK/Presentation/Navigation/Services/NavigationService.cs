@@ -3,17 +3,13 @@ using KIOSK.Application.Abstractions;
 using KIOSK.Infrastructure.Logging;
 using KIOSK.Presentation.Navigation.State;
 using KIOSK.Presentation.Shared.Abstractions;
-using KIOSK.Presentation.Shell.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.Presentation.Navigation.Services;
 
-// ==========================================
-// Public API
-// ==========================================
 public interface INavigationService
 {
-    void AttachRootShell(IRootShellHost shell);
+    void AttachRootShell(IWindowHost shell);
 
     // Shell 전환 (ServiceShell, ExchangeShell, GtfShell)
     Task SwitchShell<TShell>()
@@ -23,10 +19,10 @@ public interface INavigationService
     Task NavigateTo<TView>(Action<TView>? init = null, object? parameter = null)
         where TView : class;
 
-    // 기존과 동일한 기본 기능
     T GetViewModel<T>() where T : class;
 
     IShellHost? ActiveShell { get; }
+
     object? ActiveFlowView { get; }
 }
 
@@ -52,14 +48,12 @@ public sealed class NavigationService : INavigationService
     public IShellHost? ActiveShell => _state.ActiveShell;
     public object? ActiveFlowView => _state.ActiveFlowView;
 
-    public void AttachRootShell(IRootShellHost shell)
+    public void AttachRootShell(IWindowHost shell)
     {
         _state.RootShell = shell;
     }
 
-    // ------------------------------
-    // 1. Shell 전환
-    // ------------------------------
+    // Shell 전환
     public async Task SwitchShell<TShell>()
         where TShell : class, IShellHost
     {
@@ -99,9 +93,7 @@ public sealed class NavigationService : INavigationService
         }
     }
 
-    // ------------------------------
-    // 2. FlowView 전환
-    // ------------------------------
+    // FlowView 전환
     public async Task NavigateTo<TView>(Action<TView>? init = null, object? parameter = null)
         where TView : class
     {

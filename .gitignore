@@ -5,3 +5,6 @@ bin/
 
 # Rider/IntelliJ / JetBrains
 .idea/
+
+## VS Code
+.vscode/

@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Presentation.Shell.Contracts;
 using KIOSK.Application.Services;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Menu.Shell.ViewModels
 {

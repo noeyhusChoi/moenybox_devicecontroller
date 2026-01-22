@@ -33,7 +33,7 @@ namespace KIOSK.ViewModels.Exchange.Popup
         {
             VideoPath = null;
 
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
 
         [RelayCommand]
@@ -41,7 +41,7 @@ namespace KIOSK.ViewModels.Exchange.Popup
         {
             VideoPath = null;
 
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
 
         [RelayCommand]
@@ -49,7 +49,7 @@ namespace KIOSK.ViewModels.Exchange.Popup
         {
             VideoPath = null;
 
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
     }
 }

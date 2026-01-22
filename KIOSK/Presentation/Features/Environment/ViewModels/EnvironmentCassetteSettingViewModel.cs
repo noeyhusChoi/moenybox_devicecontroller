@@ -106,7 +106,7 @@ namespace KIOSK.Presentation.Features.Environment.ViewModels
         [RelayCommand]
         private void Close(object obj)
         {
-            _popup.CloseLocal();
+            _popup.ClosePopup();
         }
 
         // 데이터 유효성 검사 (예시)

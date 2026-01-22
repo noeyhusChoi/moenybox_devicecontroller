@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Services.Exchange;
 using KIOSK.Domain.Entities;
-using KIOSK.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
+using KIOSK.Presentation.Shared.Abstractions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -15,8 +15,8 @@ public partial class ExchangeCurrencyViewModel : ObservableObject, IStepMain, IS
     public Func<string?, Task>? OnStepNext { get; set; }
     public Action<Exception>? OnStepError { get; set; }
 
-    private readonly IServiceProvider _provider;
-    private readonly ITransactionServiceV2 _transactionService;
+    private readonly IExchangeSelectCurrencyUseCase _selectCurrencyUseCase;
+    private readonly IExchangeRateListUseCase _rateListUseCase;
 
     [ObservableProperty]
     private ObservableCollection<ExchangeRate> exchangeRates;
@@ -25,29 +25,24 @@ public partial class ExchangeCurrencyViewModel : ObservableObject, IStepMain, IS
     private ObservableCollection<Uri> flagUri;
 
     [ObservableProperty]
-    private int _rows = 3;
+    private int rows = 3;
 
-    public ExchangeCurrencyViewModel(IServiceProvider provider, ITransactionServiceV2 transactionService)
+    public ExchangeCurrencyViewModel(IExchangeSelectCurrencyUseCase selectCurrencyUseCase, IExchangeRateListUseCase rateListUseCase)
     {
-        _provider = provider;
-        _transactionService = transactionService;
-
-        var exchangeRateModel = _provider.GetRequiredService<ExchangeRateModel>();
-        var excludeExchangeRateList = new[] { "RUB" };      // Á¦¿ÜÇÒ ÅëÈ­ ¸ñ·Ï (´ë¼Ò¹®ÀÚ ±¸ºÐ ¾øÀ½)   
-
-        ExchangeRates = new ObservableCollection<ExchangeRate>(
-            exchangeRateModel.Data.Where(er => !excludeExchangeRateList.Contains(er.Currency, StringComparer.OrdinalIgnoreCase))
-        );
+        _selectCurrencyUseCase = selectCurrencyUseCase;
+        _rateListUseCase = rateListUseCase;
+        ExchangeRates = new ObservableCollection<ExchangeRate>();
     }
 
     public async Task OnLoadAsync(object? parameter, CancellationToken ct)
     {
-        // TODO: ·Îµù ½Ã ÇÊ¿äÇÑ ÀÛ¾÷ ¼öÇà
+        var rates = await _rateListUseCase.LoadAsync(ct);
+        ExchangeRates = new ObservableCollection<ExchangeRate>(rates);
     }
 
     public async Task OnUnloadAsync()
     {
-        // TODO: ¾ð·Îµå ½Ã ÇÊ¿äÇÑ ÀÛ¾÷ ¼öÇà
+        // TODO: ì–¸ë¡œë“œ ì‹œ í•„ìš”í•œ ìž‘ì—… ìˆ˜í–‰
     }
 
     #region Commands
@@ -61,8 +56,7 @@ public partial class ExchangeCurrencyViewModel : ObservableObject, IStepMain, IS
         }
         catch (Exception ex)
         {
-            if (OnStepError is not null)
-                OnStepError(ex);
+            OnStepError?.Invoke(ex);
         }
     }
 
@@ -76,11 +70,9 @@ public partial class ExchangeCurrencyViewModel : ObservableObject, IStepMain, IS
         }
         catch (Exception ex)
         {
-            if (OnStepError is not null)
-                OnStepError(ex);
+            OnStepError?.Invoke(ex);
         }
     }
-
 
     [RelayCommand]
     private async Task Next(object? parameter)
@@ -90,26 +82,14 @@ public partial class ExchangeCurrencyViewModel : ObservableObject, IStepMain, IS
             Trace.WriteLine($"target_currency: {param.Currency} = {param.SpSell}");
             try
             {
-                // TODO: BaseCurrency¸¦ ¼³Á¤¿¡¼­ °¡Á®¿Àµµ·Ï ¼öÁ¤ ÇÊ¿ä
-                //await _transactionService.UpsertCustomerAsync("1", "È«±æµ¿", "M12341234", "KR");
-                await _transactionService.UpsertRateAsync(new CurrencyPair(param.Currency, param.SpSell ?? 0));
-                await _transactionService.UpsertPolicyAsync(param.Currency, "KRW", new ExchangePolicy
-                {
-                    FeePercent = 0m,
-                    FeeFlat = 0m,
-                    TargetIncrement = 100m,
-                    RoundingMode = RoundingMode.Down
-                });
-
-                await _transactionService.NewAsync(param.Currency, "KRW");
+                await _selectCurrencyUseCase.SelectAsync(param);
 
                 if (OnStepNext is not null)
                     await OnStepNext("");
             }
             catch (Exception ex)
             {
-                if (OnStepError is not null)
-                    OnStepError(ex);
+                OnStepError?.Invoke(ex);
             }
         }
     }

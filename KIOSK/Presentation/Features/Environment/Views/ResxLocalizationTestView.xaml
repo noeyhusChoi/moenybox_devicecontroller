@@ -1,0 +1,100 @@
+<UserControl
+    x:Class="KIOSK.Presentation.Features.Environment.Views.ResxLocalizationTestView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:Localization.Resx"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <Border
+        Width="1280"
+        MaxHeight="960"
+        VerticalAlignment="Center"
+        Background="White"
+        CornerRadius="20">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Text="Resx 다국어 테스트" />
+                <TextBlock
+                    Margin="0,6,0,0"
+                    FontSize="12"
+                    Foreground="#6B7280">
+                    <Run Text="현재 문화권: " />
+                    <Run Text="{Binding CurrentCultureName}" />
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="1"
+                Margin="0,16,0,0"
+                Orientation="Horizontal">
+                <Button
+                    Margin="0,0,8,0"
+                    Command="{Binding SetCultureCommand}"
+                    CommandParameter="ko-KR"
+                    Content="ko-KR" />
+                <Button
+                    Margin="0,0,8,0"
+                    Command="{Binding SetCultureCommand}"
+                    CommandParameter="en-US"
+                    Content="en-US" />
+                <Button
+                    Margin="0,0,8,0"
+                    Command="{Binding SetCultureCommand}"
+                    CommandParameter="ja-JP"
+                    Content="ja-JP" />
+                <Button
+                    Margin="0,0,8,0"
+                    Command="{Binding SetCultureCommand}"
+                    CommandParameter="zh-CN"
+                    Content="zh-CN" />
+                <Button
+                    Command="{Binding SetCultureCommand}"
+                    CommandParameter="zh-TW"
+                    Content="zh-TW" />
+            </StackPanel>
+
+            <Grid Grid.Row="2" Margin="0,24,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Text="{resx:ResxLoc Menu.Title}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,6,0,0"
+                    FontSize="13"
+                    Text="{resx:ResxLoc ExchangeTerms.Info}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Margin="0,6,0,0"
+                    FontSize="13"
+                    Text="{resx:ResxLoc Scan.Title}" />
+
+                <Button
+                    Grid.Row="3"
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Left"
+                    Command="{Binding BackCommand}"
+                    Content="환경 화면으로 돌아가기" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

@@ -2,17 +2,16 @@
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Presentation.Shell.Contracts;
 using KIOSK.Application.Services;
-using KIOSK.Infrastructure.UI.Navigation.Services;
-using KIOSK.Infrastructure.UI.Navigation.State;
+using KIOSK.Presentation.Navigation.Services;
 using KIOSK.ViewModels;
 
 namespace KIOSK.Presentation.Features.Menu.Shell.ViewModels
 {
-    public partial class MenuSubShellViewModel : ObservableObject, ISubShellHost
+    public partial class MenuShellViewModel : ObservableObject, IShellHost
     {
         private readonly INavigationService _nav;
 
-        public MenuSubShellViewModel(INavigationService nav)
+        public MenuShellViewModel(INavigationService nav)
         {
             _nav = nav;
         }

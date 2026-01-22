@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using KIOSK.Presentation.Shared.Abstractions;
 using System.Windows;
 using System.Windows.Threading;
 

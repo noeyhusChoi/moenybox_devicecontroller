@@ -1,7 +1,7 @@
-using KIOSK.Application.Services;
 using KIOSK.Application.StateMachines;
-using KIOSK.Infrastructure.Logging;
-using KIOSK.Infrastructure.UI.Navigation.Services;
+using KIOSK.Application.Abstractions;
+using KIOSK.Presentation.Navigation.Services;
+using KIOSK.Presentation.Services;
 using KIOSK.Presentation.Features.GTF.ViewModels;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 
@@ -210,7 +210,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.Exit => _nav.SwitchSubShell<MenuSubShellViewModel>(),
+                GtfState.Exit => _nav.SwitchShell<MenuShellViewModel>(),
                 _ => Task.CompletedTask
             };
         }

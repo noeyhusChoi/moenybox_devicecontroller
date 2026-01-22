@@ -1,6 +1,6 @@
 using KIOSK.Application.StateMachines;
-using KIOSK.Infrastructure.Logging;
-using KIOSK.Infrastructure.UI.Navigation.Services;
+using KIOSK.Application.Abstractions;
+using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 using KIOSK.ViewModels;
 using System.Windows.Threading;
@@ -138,7 +138,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Exit => _nav.SwitchSubShell<MenuSubShellViewModel>(),
+            ExchangeState.Exit => _nav.SwitchShell<MenuShellViewModel>(),
             _ => Task.CompletedTask
         };
     }

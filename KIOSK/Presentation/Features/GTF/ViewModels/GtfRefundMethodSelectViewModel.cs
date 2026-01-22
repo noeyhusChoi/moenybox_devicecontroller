@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 using System.Diagnostics;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels

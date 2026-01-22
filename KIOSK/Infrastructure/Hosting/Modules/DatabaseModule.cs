@@ -8,19 +8,14 @@ namespace KIOSK.Infrastructure.Hosting.Modules
 {
     public static class DatabaseModule
     {
-        public static IServiceCollection AddDatabaseModule(this IServiceCollection services)
+    public static IServiceCollection AddDatabaseModule(this IServiceCollection services)
+    {
+        services.AddMemoryCache();
+        var connectionString = DatabaseConfig.DefaultConnectionString;
+        services.AddDbContextFactory<KioskDbContext>(options =>
         {
-            services.AddSingleton<IDatabaseService, DatabaseService>();
-            services.AddMemoryCache();
-            var connectionString = DatabaseConfig.DefaultConnectionString;
-            services.AddDbContext<KioskDbContext>(options =>
-            {
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
-            services.AddDbContextFactory<KioskDbContext>(options =>
-            {
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        });
 
             services.AddSingleton<ApiConfigRepository>();
             services.AddSingleton<DepositCurrencyRepository>();

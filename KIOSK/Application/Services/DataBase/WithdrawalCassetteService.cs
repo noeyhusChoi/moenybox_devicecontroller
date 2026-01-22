@@ -1,7 +1,8 @@
-﻿using KIOSK.Infrastructure.Database;
+﻿using KIOSK.Infrastructure.Database.Ef;
+using KIOSK.Infrastructure.Database.Ef.Entities;
 using KIOSK.Infrastructure.Common.Utils;
+using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
-using System.Data;
 
 namespace KIOSK.Application.Services
 {
@@ -9,10 +10,10 @@ namespace KIOSK.Application.Services
 
     public sealed class WithdrawalCassetteService
     {
-        private readonly IDatabaseService _db;
+        private readonly IDbContextFactory<KioskDbContext> _contextFactory;
         private volatile HashSet<WithdrawalCassette> _withdrawalCassettes = new();
 
-        public WithdrawalCassetteService(IDatabaseService db) => _db = db;
+        public WithdrawalCassetteService(IDbContextFactory<KioskDbContext> contextFactory) => _contextFactory = contextFactory;
 
         public async Task InitializeAsync(CancellationToken ct = default)
         {
@@ -32,23 +33,26 @@ namespace KIOSK.Application.Services
         {
             try
             {
-                const string sql = @"sp_get_cassette_info"; 
+                await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+                var records = await context.WithdrawalCassettes
+                    .FromSqlRaw("CALL sp_get_cassette_info")
+                    .AsNoTracking()
+                    .ToListAsync(ct)
+                    .ConfigureAwait(false);
+                if (records.Count == 0)
+                    return;
 
-                var dataSet = await _db.QueryAsync<DataSet>(sql, type: CommandType.StoredProcedure);
-
-                if (dataSet.Tables.Count < 1) return;
-
-                var next = new HashSet<WithdrawalCassette>();
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var next = new HashSet<WithdrawalCassette>(records.Count);
+                foreach (var record in records)
                 {
                     next.Add(new WithdrawalCassette()
                     {
-                        DeviceID = row.Get<string>("DEVICE_ID"),
-                        Slot = row.Get<int>("SLOT"),
-                        CurrencyCode = row.Get<string>("CURRENCY_CODE"),
-                        Denomination = row.Get<decimal>("DENOMINATION"),
-                        Capacity = row.Get<int>("CAPACITY"),
-                        Count = row.Get<int>("CURRENT_COUNT"),
+                        DeviceID = record.DeviceID,
+                        Slot = record.Slot,
+                        CurrencyCode = record.CurrencyCode,
+                        Denomination = record.Denomination,
+                        Capacity = record.Capacity,
+                        Count = record.Count,
                     });
                 }
 
@@ -65,22 +69,22 @@ namespace KIOSK.Application.Services
         {
             try
             {
-                const string sql = @"sp_update_cassette_payout";
+                const string sql = @"CALL sp_update_cassette_payout(@p_kiosk_id, @p_device_id, @p_currency_code, @p_slot, @p_denomination, @p_succeeded_count)";
 
                 foreach (var result in results)
                 {
-                    var res = await _db.QueryAsync<DataSet>(
-                        sql,
-                        new[]
-                        {
-                          DatabaseService.Param("@p_kiosk_id", MySqlDbType.VarChar, "C4E7..."),
-                          DatabaseService.Param("@p_device_id", MySqlDbType.VarChar, result.deviceId),
-                          DatabaseService.Param("@p_currency_code", MySqlDbType.VarChar, result.currency_code),
-                          DatabaseService.Param("@p_slot", MySqlDbType.Int32, result.slot),
-                          DatabaseService.Param("@p_denomination", MySqlDbType.Decimal, result.denomination),
-                          DatabaseService.Param("@p_succeeded_count", MySqlDbType.Int32, result.succeeded_count)
-                        },
-                        CommandType.StoredProcedure);
+                    var parameters = new[]
+                    {
+                        new MySqlParameter("@p_kiosk_id", MySqlDbType.VarChar) { Value = "C4E7..." },
+                        new MySqlParameter("@p_device_id", MySqlDbType.VarChar) { Value = result.deviceId },
+                        new MySqlParameter("@p_currency_code", MySqlDbType.VarChar) { Value = result.currency_code },
+                        new MySqlParameter("@p_slot", MySqlDbType.Int32) { Value = result.slot },
+                        new MySqlParameter("@p_denomination", MySqlDbType.Decimal) { Value = result.denomination },
+                        new MySqlParameter("@p_succeeded_count", MySqlDbType.Int32) { Value = result.succeeded_count }
+                    };
+
+                    await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+                    await context.Database.ExecuteSqlRawAsync(sql, parameters, ct).ConfigureAwait(false);
                 }
             }
             catch (Exception)
@@ -92,15 +96,14 @@ namespace KIOSK.Application.Services
         // TODO: 거래 결과인데 방출기에 있는 부분 어색함, 수정 필요
         public async Task ResultAsync(string json, CancellationToken ct = default)
         {
-            const string sql = @"sp_save_tx_from_json";
+            const string sql = @"CALL sp_save_tx_from_json(@p_tx)";
+            var parameters = new[]
+            {
+                new MySqlParameter("@p_tx", MySqlDbType.JSON) { Value = json }
+            };
 
-            var res = await _db.QueryAsync<DataSet>(
-                sql,
-                new[]
-                {
-                   DatabaseService.Param("@p_tx", MySqlDbType.JSON, json)
-                },
-                CommandType.StoredProcedure);
+            await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+            await context.Database.ExecuteSqlRawAsync(sql, parameters, ct).ConfigureAwait(false);
         }
     }
 }

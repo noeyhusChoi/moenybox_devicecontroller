@@ -9,8 +9,7 @@ using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.FSM;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
-using KIOSK.Infrastructure.UI.Navigation.Services;
-using KIOSK.Infrastructure.UI.Navigation.State;
+using KIOSK.Presentation.Navigation.Services;
 using Microsoft.Extensions.Logging;
 using KIOSK.Presentation.Features.Exchange.Shell.ViewModels;
 using KIOSK.Presentation.Features.GTF.Shell.ViewModels;
@@ -21,6 +20,8 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Transactions;
+using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.ViewModels
 {
@@ -134,12 +135,13 @@ namespace KIOSK.ViewModels
                 switch (param)
                 {
                     case "1":
-                        await nav.SwitchSubShell<ExchangeShellViewModel>();
+                        await nav.SwitchShell<ExchangeShellViewModel>();
                         break;
                     case "2":
+                        await nav.SwitchShell<MenuV2ShellViewModel>();
                         break;
                     case "3":
-                        await nav.SwitchSubShell<GtfSubShellViewModel>();
+                        await nav.SwitchShell<GtfShellViewModel>();
                         break;
                     default:
                         break;

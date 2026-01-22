@@ -44,6 +44,7 @@
     <Page Remove="Repository\**" />
   </ItemGroup>
 
+
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
       <PackageReference Include="Lib.Harmony" Version="2.4.1" />
@@ -68,6 +69,9 @@
       <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+      <PackageReference Include="SkiaSharp" Version="2.88.8" />
+      <PackageReference Include="SkiaSharp.Skottie" Version="2.88.8" />
+      <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.8" />
       <PackageReference Include="Stateless" Version="5.18.0" />
       <PackageReference Include="System.IO.Ports" Version="10.0.0-preview.6.25358.103" />
     </ItemGroup>
@@ -117,6 +121,7 @@
       <None Remove="Assets\Gif\IDScan_Passport.gif" />
       <None Remove="Assets\Image\character-complete.png" />
       <None Remove="Assets\Image\Character.png" />
+      <None Remove="Assets\Image\Common_Logo.png" />
       <None Remove="Assets\Image\Denomination\AUD_100.png" />
       <None Remove="Assets\Image\Denomination\AUD_50.png" />
       <None Remove="Assets\Image\Denomination\CAD_50.png" />
@@ -163,7 +168,6 @@
       <None Remove="Assets\Image\succss.png" />
       <None Remove="Assets\Image\Terms\Terms_ko-KR.png" />
       <None Remove="Assets\Image\Withdrawal.png" />
-      <None Remove="Assets\Resources\Fonts\PretendardVariable.ttf" />
       <None Remove="Assets\Image\bx-home-smile.png" />
       <None Remove="Assets\Image\bx-up-arrow-alt.png" />
       <None Remove="Assets\Image\Frame.png" />
@@ -191,7 +195,7 @@
       <Page Update="Assets\Language\StringResources.ko-KR.xaml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Page>
-      <Page Update="Assets\Resources\Colors\Colors.Base.xaml">
+      <Page Update="Resources\Colors\Colors.Base.xaml">
         <Generator>MSBuild:Compile</Generator>
         <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </Page>
@@ -260,6 +264,9 @@
       <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_VND.gif">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <Resource Include="Assets\Image\Common_Logo.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Content Include="Assets\Sound\Bill.wav">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
@@ -484,9 +491,6 @@
       <Resource Include="Assets\Image\Terms\Terms_ko-KR.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Resources\Fonts\PretendardVariable.ttf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Assets\Image\bx-home-smile.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -520,7 +524,9 @@
     <ItemGroup>
       <Folder Include="Assets\Language\" />
       <Folder Include="Domain\Services\" />
+      <Folder Include="Resources\" />
     </ItemGroup>
+
 
     <ItemGroup>
       <Reference Include="MPOST">
@@ -564,4 +570,5 @@
 	<Target Name="RemoveLibsAfterBuild" AfterTargets="Build">
 	  <RemoveDir Directories="$(TargetDir)libs" />
 	</Target>
+
 	</Project>

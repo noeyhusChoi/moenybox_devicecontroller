@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

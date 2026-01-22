@@ -1,15 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Services.Exchange;
 using KIOSK.FSM;
-using KIOSK.Domain.Entities;
-using KIOSK.Application.Services;
-using Localization;
-using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.ViewModels;
 
@@ -20,21 +13,21 @@ public partial class ExchangeLanguageViewModel : ObservableObject, IStepMain, IS
     public Func<string?, Task>? OnStepNext { get; set; }
     public Action<Exception>? OnStepError { get; set; }
 
-    private readonly IServiceProvider _provider;
+    private readonly IExchangeSelectLanguageUseCase _selectLanguageUseCase;
 
-    public ExchangeLanguageViewModel(IServiceProvider provider)
+    public ExchangeLanguageViewModel(IExchangeSelectLanguageUseCase selectLanguageUseCase)
     {
-        _provider = provider;
+        _selectLanguageUseCase = selectLanguageUseCase;
     }
 
     public async Task OnLoadAsync(object? parameter, CancellationToken ct)
     {
-        // TODO: ·Îµù ½Ã ÇÊ¿äÇÑ ÀÛ¾÷ ¼öÇà
+        // TODO: ë¡œë”© ì‹œ í•„ìš”í•œ ìž‘ì—… ìˆ˜í–‰
     }
 
     public async Task OnUnloadAsync()
     {
-        // TODO: ¾ð·Îµå ½Ã ÇÊ¿äÇÑ ÀÛ¾÷ ¼öÇà
+        // TODO: ì–¸ë¡œë“œ ì‹œ í•„ìš”í•œ ìž‘ì—… ìˆ˜í–‰
     }
 
     #region Commands
@@ -48,8 +41,7 @@ public partial class ExchangeLanguageViewModel : ObservableObject, IStepMain, IS
         }
         catch (Exception ex)
         {
-            if (OnStepError is not null)
-                OnStepError(ex);
+            OnStepError?.Invoke(ex);
         }
     }
 
@@ -63,47 +55,25 @@ public partial class ExchangeLanguageViewModel : ObservableObject, IStepMain, IS
         }
         catch (Exception ex)
         {
-            if (OnStepError is not null)
-                OnStepError(ex);
+            OnStepError?.Invoke(ex);
         }
     }
 
     [RelayCommand]
     private async Task Next(object? parameter)
     {
-        var lang = _provider.GetRequiredService<ILocalizationService>();
         if (parameter is string param)
         {
             try
             {
-                CultureInfo culture = new CultureInfo("ko-KR");
-                switch (param)
-                {
-                    case "1":
-                        culture = new CultureInfo("en-US");
-                        break;
-                    case "2":
-                        culture = new CultureInfo("zh-CN");
-                        break;
-                    case "3":
-                        culture = new CultureInfo("zh-TW");
-                        break;
-                    case "4":
-                        culture = new CultureInfo("ja-JP");
-                        break;
-                    case "5":
-                        culture = new CultureInfo("ko-KR");
-                        break;
-                }
-                lang.SetCulture(culture);
+                await _selectLanguageUseCase.SelectAsync(param);
 
                 if (OnStepNext is not null)
                     await OnStepNext("");
             }
             catch (Exception ex)
             {
-                if (OnStepError is not null)
-                    OnStepError(ex);
+                OnStepError?.Invoke(ex);
             }
         }
     }

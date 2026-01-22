@@ -1,5 +1,6 @@
 // AppBootstrapper.cs (refactored)
-using KIOSK.Infrastructure.Hosting.Modules;
+using KIOSK.Application.Abstractions;
+using KIOSK.CompositionRoot.Modules;
 using KIOSK.Infrastructure.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

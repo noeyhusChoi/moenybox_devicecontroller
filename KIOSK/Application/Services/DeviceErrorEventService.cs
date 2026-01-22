@@ -1,21 +1,18 @@
 ﻿using KIOSK.Device.Abstractions;
-using KIOSK.Infrastructure.Database;
 using System.Diagnostics;
 
 namespace KIOSK.Application.Services
 {
     public class DeviceErrorEventService
     {
-        private readonly IDatabaseService _db;
         //private readonly IErrorRepository _repo;
         //private readonly NotificationDispatcher _dispatcher;
 
         private readonly Dictionary<string, HashSet<string>> _snapshot = new();
         private readonly HashSet<string> _initialized = new();
 
-        public DeviceErrorEventService(IDatabaseService db)
+        public DeviceErrorEventService()
         {
-            _db = db;
         }
 
         public async Task OnStatusUpdated(string deviceId, StatusSnapshot snap)

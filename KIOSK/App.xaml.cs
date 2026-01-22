@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
+using KIOSK.Presentation.Shell.Window.Startup.Views;
 
 namespace KIOSK;
 

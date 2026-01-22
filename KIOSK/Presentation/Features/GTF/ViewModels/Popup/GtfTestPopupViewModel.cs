@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Infrastructure.UI;
-using KIOSK.Infrastructure.UI.Navigation;
+using KIOSK.Presentation.Navigation.Popup;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

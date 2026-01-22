@@ -2,9 +2,7 @@
 using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Ef.Entities;
 using KIOSK.Infrastructure.Database.Interface;
-using KIOSK.Infrastructure.Cache;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,19 +14,23 @@ namespace KIOSK.Infrastructure.Database.Repositories
     public class DepositCurrencyRepository : IReadRepository<DepositCurrencyModel>
     {
         private readonly IDbContextFactory<KioskDbContext> _contextFactory;
-        private readonly IMemoryCache _cache;
 
-        public DepositCurrencyRepository(IDbContextFactory<KioskDbContext> contextFactory, IMemoryCache cache)
-        {
-            _contextFactory = contextFactory;
-            _cache = cache;
-        }
+        public DepositCurrencyRepository(IDbContextFactory<KioskDbContext> contextFactory)
+            => _contextFactory = contextFactory;
 
         public async Task<IReadOnlyList<DepositCurrencyModel>> LoadAllAsync(CancellationToken ct = default)
         {
-            var kiosks = _cache.Get<IReadOnlyList<KioskModel>>(DatabaseCacheKeys.Kiosk)
-                ?? Array.Empty<KioskModel>();
-            var kioskId = kiosks.FirstOrDefault()?.Id;
+            await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+            var records = await context.DepositCurrencies
+                .Where(x => x.IsValid)
+                .AsNoTracking()
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
+            return records.Select(Map).ToList();
+        }
+
+        public async Task<IReadOnlyList<DepositCurrencyModel>> LoadByKioskIdAsync(string kioskId, CancellationToken ct = default)
+        {
             if (string.IsNullOrWhiteSpace(kioskId))
                 return Array.Empty<DepositCurrencyModel>();
 

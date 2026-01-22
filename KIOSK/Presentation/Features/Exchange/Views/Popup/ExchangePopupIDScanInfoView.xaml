@@ -2,6 +2,7 @@
     x:Class="KIOSK.Views.Exchange.Popup.ExchangePopupIDScanInfoView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:KIOSK.Presentation.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:KIOSK.Views.Exchange.Popup"
     xmlns:lx="clr-namespace:Localization"
@@ -44,13 +45,19 @@
                 </Grid.ColumnDefinitions>
 
                 <!--  좌측  -->
-                <Border
+                <!--<Border
                     Grid.Column="0"
                     Background="{Binding BackgroundBrush}"
                     BorderBrush="Transparent"
                     BorderThickness="2"
-                    CornerRadius="20" />
-
+                    CornerRadius="20" />-->
+                <controls:VideoPlayerControl
+                    x:Name="VideoPlayer"
+                    Grid.Column="0"
+                    Margin="0,12,0,0"
+                    AutoPlay="True"
+                    Loop="True"
+                    SourcePath="{Binding VideoPath}" />
                 <!--  우측  -->
                 <StackPanel
                     Grid.Column="2"

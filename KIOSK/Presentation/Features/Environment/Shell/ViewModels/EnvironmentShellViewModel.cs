@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using KIOSK.Infrastructure.UI.Navigation.Services;
+using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Shell.Contracts;
 using KIOSK.ViewModels;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.Environment.Shell.ViewModels
 {
-    public partial class EnvironmentShellViewModel : ObservableObject, ISubShellHost
+    public partial class EnvironmentShellViewModel : ObservableObject, IShellHost
     {
         private readonly INavigationService _nav;
 

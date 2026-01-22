@@ -8,6 +8,6 @@ namespace KIOSK.Presentation.Shell.Contracts
 {
     public interface IRootShellHost
     {
-        void SetTopShell(ITopShellHost shell);
+        void SetShell(object? shell);
     }
 }

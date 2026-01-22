@@ -21,6 +21,7 @@ public sealed class KioskDbContext : DbContext
     public DbSet<ReceiptEntity> Receipts => Set<ReceiptEntity>();
     public DbSet<LocaleInfoEntity> LocaleInfos => Set<LocaleInfoEntity>();
     public DbSet<WithdrawalCassetteEntity> WithdrawalCassettes => Set<WithdrawalCassetteEntity>();
+    public DbSet<TransactionOutboxRow> TransactionOutboxRows => Set<TransactionOutboxRow>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -206,6 +207,14 @@ public sealed class KioskDbContext : DbContext
             entity.Property(x => x.IsValid).HasColumnName("VLD");
             entity.Property(x => x.CreatedAt).HasColumnName("CREATED_AT");
             entity.Property(x => x.UpdatedAt).HasColumnName("UPDATED_AT");
+        });
+
+        modelBuilder.Entity<TransactionOutboxRow>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToView(null);
+            entity.Property(x => x.TransactionId).HasColumnName("TRANSACTION_ID");
+            entity.Property(x => x.PayloadJson).HasColumnName("PAYLOAD_JSON");
         });
     }
 }

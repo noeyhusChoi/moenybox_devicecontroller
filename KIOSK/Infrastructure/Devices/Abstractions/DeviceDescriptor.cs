@@ -6,7 +6,7 @@ namespace KIOSK.Device.Abstractions
     /// DeviceRegistry가 이 정보를 바탕으로 Transport/Protocol/Device 인스턴스를 조립합니다.
     /// </summary>
     /// <param name="Name">
-    ///   장치의 고유 식별자(예: "scale-1", "prn-1"). DeviceManager.SendAsync시 해당 값 사용
+    ///   화면 표시용 이름(예: "Scale-1", "Printer-1")
     /// </param>
     /// <param name="Vendor">
     ///   제조사 식별자(예: "TOTINFO", "NEWLAND")
@@ -35,8 +35,11 @@ namespace KIOSK.Device.Abstractions
     /// <param name="Driver">
     ///   드라이버 타입(예: "QR_E200Z", "WITHDRAWAL_HCDM10K")
     /// </param>
+    /// <param name="DeviceId">
+    ///   제어/로직용 장치 ID(예: "printer-1"). Name은 화면 표시 전용
+    /// </param>
     public sealed record DeviceDescriptor(
-        string Name,                    // PRINTER-1
+        string Name,                    // PRINTER-1 (legacy)
         string Vendor,                  // TOTINFO
         string Model,                   // E200Z
         string TransportType,           // TCP
@@ -46,6 +49,16 @@ namespace KIOSK.Device.Abstractions
         int PollingMs = 10000,
         bool Validate = true,       // 유효성 검사 여부
         string DeviceType = "",      // 표준 코드용 장치 타입
-        string Driver = ""           // 드라이버 타입
-    );
+        string Driver = "",          // 드라이버 타입
+        string DeviceId = ""         // 내부 제어용 ID
+    )
+    {
+        public string Id
+        {
+            get => DeviceId;
+            init => DeviceId = value;
+        }
+
+        public string EffectiveId => string.IsNullOrWhiteSpace(DeviceId) ? Name : DeviceId;
+    }
 }

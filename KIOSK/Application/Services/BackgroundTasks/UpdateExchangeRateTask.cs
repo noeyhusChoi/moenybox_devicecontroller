@@ -1,4 +1,4 @@
-﻿using KIOSK.Infrastructure.Logging;
+﻿using KIOSK.Application.Abstractions;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services.API;
 using System.Collections.ObjectModel;

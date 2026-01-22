@@ -1,0 +1,125 @@
+<UserControl
+    x:Class="KIOSK.Presentation.Features.ExchangeV2.Views.ExchangeV2ExchangeCurrencySelectView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewModels:ExchangeV2ExchangeCurrencySelectViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="1920"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="CurrencyButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
+
+                            <Grid Margin="10,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image
+                                    Grid.Column="0"
+                                    Margin="10,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Source="{Binding FlagUri}" />
+
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="20,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        FontFamily="{StaticResource Pretendard}"
+                                        FontSize="{StaticResource FontSize_2XL}"
+                                        FontWeight="{StaticResource FontWeight_L}"
+                                        Foreground="{StaticResource BlackBrush}"
+                                        Text="{Binding Code}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        FontFamily="{StaticResource Pretendard}"
+                                        FontSize="{StaticResource FontSize_XL}"
+                                        FontWeight="{StaticResource FontWeight_L}"
+                                        Foreground="{StaticResource BlackBrush}"
+                                        Text="{Binding Rate}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="{StaticResource FontSize_3XL}"
+            FontWeight="{StaticResource FontWeight_L}"
+            Foreground="{StaticResource WhiteBrush}"
+            Text="환전 통화를 선택해주세요" />
+        <ScrollViewer
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Currencies}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Command="{Binding DataContext.NextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding Code}"
+                            Style="{DynamicResource CurrencyButtonStyle}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Button
+            Grid.Row="2"
+            Height="100"
+            Margin="10"
+            Command="{Binding PreviousCommand}"
+            Content="이전"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="{StaticResource FontSize_XL}"
+            FontWeight="{StaticResource FontWeight_M}"
+            Foreground="{StaticResource BlackBrush}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</UserControl>

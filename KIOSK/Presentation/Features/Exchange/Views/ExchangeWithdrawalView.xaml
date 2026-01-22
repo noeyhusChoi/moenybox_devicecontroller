@@ -2,6 +2,7 @@
     x:Class="KIOSK.Views.ExchangeWithdrawalView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:KIOSK.Presentation.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:KIOSK.Views"
@@ -134,10 +135,12 @@
             Stroke="#DCDEE0" />
 
         <StackPanel Grid.Row="2 " VerticalAlignment="Center">
-            <Border
+            <controls:VideoPlayerControl
                 Width="800"
                 Height="588"
-                Background="{Binding BackgroundBrush}" />
+                AutoPlay="True"
+                Loop="True"
+                SourcePath="{Binding VideoPath}" />
             <Separator Height="40" Background="Transparent" />
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <Image

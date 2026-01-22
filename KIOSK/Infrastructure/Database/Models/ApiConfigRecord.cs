@@ -2,6 +2,7 @@
 
 namespace KIOSK.Infrastructure.Database.Models
 {
+    // TODO: 이전 코드 잔제 정리 필요
     public class ApiConfigRecord
     {
         [Column("SERVER_NAME")]

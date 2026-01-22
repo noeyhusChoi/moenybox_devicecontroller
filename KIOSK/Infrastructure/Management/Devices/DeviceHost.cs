@@ -19,10 +19,10 @@ namespace KIOSK.Infrastructure.Management.Devices
         event Action<string>? Disconnected;
         event Action<string, StatusSnapshot>? StatusUpdated;
 
-        bool TryGetSupervisor(string name, out DeviceSupervisor sup);
+        bool TryGetSupervisor(string deviceId, out DeviceSupervisor sup);
         IEnumerable<DeviceSupervisor> GetAllSupervisors();
 
-        Task<CommandResult> ExecuteAsync(string name, DeviceCommand cmd, CommandContext context, CancellationToken ct = default);
+        Task<CommandResult> ExecuteAsync(string deviceId, DeviceCommand cmd, CommandContext context, CancellationToken ct = default);
     }
 
     public sealed class DeviceHost : IDeviceHost
@@ -60,8 +60,9 @@ namespace KIOSK.Infrastructure.Management.Devices
             sup.Disconnected += id => Disconnected?.Invoke(id);
 
             // Supervisor 등록
-            if (!_supers.TryAdd(desc.Name, sup))
-                throw new InvalidOperationException($"Duplicated device name: {desc.Name}");
+            var deviceId = desc.EffectiveId;
+            if (!_supers.TryAdd(deviceId, sup))
+                throw new InvalidOperationException($"Duplicated device id: {deviceId}");
 
             // Supervisor 실행
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token, ct);
@@ -70,9 +71,9 @@ namespace KIOSK.Infrastructure.Management.Devices
             return Task.CompletedTask;
         }
 
-        public async Task<CommandResult> ExecuteAsync(string name, DeviceCommand cmd, CommandContext context, CancellationToken ct = default)
+        public async Task<CommandResult> ExecuteAsync(string deviceId, DeviceCommand cmd, CommandContext context, CancellationToken ct = default)
         {
-            if (!_supers.TryGetValue(name, out var sup))
+            if (!_supers.TryGetValue(deviceId, out var sup))
             {
                 return new CommandResult(false, string.Empty, Code: new ErrorCode("SYS", "APP", "CONFIG", "INVALID"));
             }
@@ -81,8 +82,8 @@ namespace KIOSK.Infrastructure.Management.Devices
             return result;
         }
 
-        public bool TryGetSupervisor(string name, out DeviceSupervisor sup)
-            => _supers.TryGetValue(name, out sup);
+        public bool TryGetSupervisor(string deviceId, out DeviceSupervisor sup)
+            => _supers.TryGetValue(deviceId, out sup);
 
         public IEnumerable<DeviceSupervisor> GetAllSupervisors()
             => _supers.Values;

@@ -9,8 +9,8 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/Resources/Colors/Colors.Base.xaml" />
-                <ResourceDictionary Source="/Assets/Resources/Typography/Typography.xaml" />
+                <ResourceDictionary Source="/Resources/Colors/Colors.Base.xaml" />
+                <ResourceDictionary Source="/Resources/Typography/Typography.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

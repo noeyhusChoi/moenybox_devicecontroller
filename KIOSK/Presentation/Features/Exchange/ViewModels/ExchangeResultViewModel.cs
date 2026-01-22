@@ -1,12 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
-using KIOSK.Application.Services.Transactions;
-using KIOSK.Application.Services.API;
-using Localization;
+using KIOSK.Application.Services.Exchange;
+using KIOSK.Domain.Entities;
+using KIOSK.Presentation.Features.Exchange.Resources;
+using KIOSK.Presentation.Shared.Abstractions;
 using System.Diagnostics;
-using System.Transactions;
 
 namespace KIOSK.ViewModels
 {
@@ -26,81 +25,47 @@ namespace KIOSK.ViewModels
         [ObservableProperty]
         private decimal test = 12;
 
+        [ObservableProperty]
+        private string selectedCurrency;
 
         [ObservableProperty]
-        private string selectedCurrency;    // 선택 화폐
+        private decimal selectedExchangeRate;
 
         [ObservableProperty]
-        private decimal selectedExchangeRate;   // 선택 화폐 환율
+        private Uri selectedCurrencyFlag;
 
         [ObservableProperty]
-        private Uri selectedCurrencyFlag;   // 선택 화폐 플래그
+        private decimal depositAmount;
 
         [ObservableProperty]
-        private decimal depositAmount;  // 입금 금액
+        private decimal withdrawalAmount;
 
-        [ObservableProperty]
-        private decimal withdrawalAmount;  // 출금 금액
-
-        // 상세내용
         [ObservableProperty] private decimal withrawalAmount50000;
         [ObservableProperty] private decimal withrawalAmount10000;
         [ObservableProperty] private decimal withrawalAmount5000;
         [ObservableProperty] private decimal withrawalAmount1000;
 
-        private readonly ILocalizationService _localizationService;
-        private readonly ITransactionServiceV2 _transactionService;
-        private readonly ReceiptPrintService _receiptPrintService;
-        private readonly CemsApiService _cemsApiService;
-        private readonly ITransactionOutboxService _outboxService;
-        public TransactionModelV2 Transaction => _transactionService.Current;
+        private readonly ITransactionContext _transactionContext;
+        private readonly IExchangeResultUseCase _resultUseCase;
+        private readonly IExchangeResultViewDataProvider _viewDataProvider;
+        public TransactionModelV2 Transaction => _transactionContext.Current;
 
-        public ExchangeResultViewModel(ITransactionServiceV2 transactionService, ILocalizationService localizationService, ITransactionOutboxService outboxService, ReceiptPrintService receiptPrintService, CemsApiService cemsApiService)
+        public ExchangeResultViewModel(
+            ITransactionContext transactionContext,
+            IExchangeResultUseCase resultUseCase,
+            IExchangeResultViewDataProvider viewDataProvider)
         {
-            _localizationService = localizationService;
-            _transactionService = transactionService;
-            _receiptPrintService = receiptPrintService;
-            _cemsApiService = cemsApiService;
-            _outboxService = outboxService;
+            _transactionContext = transactionContext;
+            _resultUseCase = resultUseCase;
+            _viewDataProvider = viewDataProvider;
 
-            SelectedCurrency = Transaction.CurrencyPair.BaseCurrency;
-            SelectedExchangeRate = Transaction.CurrencyPair.Rate;
-            SelectedCurrencyFlag = new Uri($"pack://application:,,,/Assets/FLAG/{Transaction.CurrencyPair.BaseCurrency}.png", UriKind.Absolute);
-
-            DepositAmount = Transaction.SourceDepositedTotal;       // 입금 금액
-            WithdrawalAmount = Transaction.TargetComputedAmount;    // 환전 금액
-
-            // 상세내용
-
-            // 출금 성공 금액
-            WithrawalAmount50000 = Transaction.TargetPayouts
-                                              .Where(x => x.Denomination == 50_000m && x.CurrencyCode.Equals("KRW", StringComparison.OrdinalIgnoreCase))
-                                              .Sum(x => x.SucceededCount);
-            WithrawalAmount10000 = Transaction.TargetPayouts
-                                              .Where(x => x.Denomination == 10_000m && x.CurrencyCode.Equals("KRW", StringComparison.OrdinalIgnoreCase))
-                                              .Sum(x => x.SucceededCount);
-            WithrawalAmount5000 = Transaction.TargetPayouts
-                                              .Where(x => x.Denomination == 5_000m && x.CurrencyCode.Equals("KRW", StringComparison.OrdinalIgnoreCase))
-                                              .Sum(x => x.SucceededCount);
-            WithrawalAmount1000 = Transaction.TargetPayouts
-                                              .Where(x => x.Denomination == 1_000m && x.CurrencyCode.Equals("KRW", StringComparison.OrdinalIgnoreCase))
-                                              .Sum(x => x.SucceededCount);
-
-            Trace.WriteLine($"{WithrawalAmount50000} {WithrawalAmount10000} {WithrawalAmount5000} {WithrawalAmount1000}");
+            ApplyViewData(_viewDataProvider.Build(Transaction));
         }
 
         public async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
-            var res = await _cemsApiService.RegisterTransactionAsync(Transaction, ct);
-            if (res.Result && res.ECode == null)
-            {
-                await _outboxService.MarkSuccessAsync(Transaction.TransactionID, ct);
-            }
-            else
-            {
-                await _outboxService.MarkFailAsync(Transaction.TransactionID, ct);
-            }
-            Trace.WriteLine(res.Result);
+            await _resultUseCase.RegisterAsync(ct);
+            ApplyViewData(_viewDataProvider.Build(Transaction));
         }
 
         public async Task OnUnloadAsync()
@@ -114,29 +79,31 @@ namespace KIOSK.ViewModels
         {
             try
             {
-                if (parameter is bool b && b)
-                {
-                    var cultureName = _localizationService.CurrentCulture.Name;
-
-                    if (cultureName.StartsWith("ko"))
-                    {
-                        await _receiptPrintService.PrintReceiptAsync("ko-KR", Transaction);
-                    }
-                    else
-                    {
-                        await _receiptPrintService.PrintReceiptAsync("en-US", Transaction);
-                    }
-                }
+                await _resultUseCase.PrintReceiptAsync(parameter is bool b && b, CancellationToken.None);
 
                 if (OnStepNext is not null)
                     await OnStepNext("");
             }
             catch (Exception ex)
             {
-                if (OnStepError is not null)
-                    OnStepError(ex);
+                OnStepError?.Invoke(ex);
             }
         }
         #endregion
+
+        private void ApplyViewData(ExchangeResultViewData data)
+        {
+            SelectedCurrency = data.SelectedCurrency;
+            SelectedExchangeRate = data.SelectedExchangeRate;
+            SelectedCurrencyFlag = data.SelectedCurrencyFlag;
+            DepositAmount = data.DepositAmount;
+            WithdrawalAmount = data.WithdrawalAmount;
+            WithrawalAmount50000 = data.WithrawalAmount50000;
+            WithrawalAmount10000 = data.WithrawalAmount10000;
+            WithrawalAmount5000 = data.WithrawalAmount5000;
+            WithrawalAmount1000 = data.WithrawalAmount1000;
+
+            Trace.WriteLine($"{WithrawalAmount50000} {WithrawalAmount10000} {WithrawalAmount5000} {WithrawalAmount1000}");
+        }
     }
 }

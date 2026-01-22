@@ -1,0 +1,63 @@
+<UserControl
+    x:Class="KIOSK.Presentation.Features.ExchangeV2.Shell.Views.ExchangeV2FlowHeaderView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="120"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <Grid Margin="24,12">
+        <Grid.Resources>
+            <Style x:Key="StageText" TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="Foreground" Value="#666666" />
+            </Style>
+            <Style x:Key="StageCircle" TargetType="Border">
+                <Setter Property="Padding" Value="14,8" />
+                <Setter Property="CornerRadius" Value="18" />
+                <Setter Property="Background" Value="#E0E0E0" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                        <Setter Property="Background" Value="#FF482F" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <ItemsControl ItemsSource="{Binding Stages}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding DataContext.Stages.Count, RelativeSource={RelativeSource AncestorType=UserControl}}" Rows="1" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel HorizontalAlignment="Center">
+                        <Border Style="{StaticResource StageCircle}">
+                            <TextBlock
+                                x:Name="StageNumber"
+                                Style="{StaticResource StageText}"
+                                Text="{Binding Number}" />
+                        </Border>
+                        <TextBlock
+                            x:Name="StageTitle"
+                            Margin="0,6,0,0"
+                            FontSize="16"
+                            Foreground="#666666"
+                            HorizontalAlignment="Center"
+                            Text="{Binding Title}" />
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                            <Setter TargetName="StageNumber" Property="Foreground" Value="#FFFFFF" />
+                            <Setter TargetName="StageTitle" Property="Foreground" Value="#FFFFFF" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

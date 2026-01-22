@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Core;
 using KIOSK.Infrastructure.Management.Devices;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.ViewModels
 {

@@ -27,6 +27,7 @@ namespace KIOSK.Infrastructure.Management.Devices
         private ITransport? _transport;
         private IDevice? _device;
 
+        public string DeviceId => _desc.EffectiveId;
         public string Name => _desc.Name;
         public string Model => _desc.Model;
         public string Vendor => _desc.Vendor;
@@ -145,7 +146,7 @@ namespace KIOSK.Infrastructure.Management.Devices
         {
             _logger.LogInformation(
                 "Supervisor attempt start. device={Device} type={DeviceType} driver={Driver}",
-                _desc.Name,
+                _desc.EffectiveId,
                 _desc.DeviceType,
                 _desc.Driver);
 
@@ -188,19 +189,19 @@ namespace KIOSK.Infrastructure.Management.Devices
 
         private void SafeInvokeStatusUpdated(StatusSnapshot snapshot)
         {
-            try { StatusUpdated?.Invoke(_desc.Name, snapshot); }
+            try { StatusUpdated?.Invoke(_desc.EffectiveId, snapshot); }
             catch (Exception ex) { Trace.WriteLine(ex); }
         }
 
         private void SafeInvokeConnected()
         {
-            try { Connected?.Invoke(_desc.Name); }
+            try { Connected?.Invoke(_desc.EffectiveId); }
             catch (Exception ex) { Trace.WriteLine(ex); }
         }
 
         private void SafeInvokeDisconnected()
         {
-            try { Disconnected?.Invoke(_desc.Name); }
+            try { Disconnected?.Invoke(_desc.EffectiveId); }
             catch (Exception ex) { Trace.WriteLine(ex); }
         }
 
@@ -210,7 +211,7 @@ namespace KIOSK.Infrastructure.Management.Devices
                 return;
 
             _isOnline = false;
-            _logger.LogWarning("Transport disconnected. device={Device} model={Model}", _desc.Name, _desc.Model);
+            _logger.LogWarning("Transport disconnected. device={Device} model={Model}", _desc.EffectiveId, _desc.Model);
             SafeInvokeStatusUpdated(CreateDisconnectedSnapshot());
             SafeInvokeDisconnected();
             try { _attemptCts?.Cancel(); } catch { }
@@ -220,12 +221,12 @@ namespace KIOSK.Infrastructure.Management.Devices
         {
             if (connected)
             {
-                _logger.LogError(ex, "Supervisor run failed. device={Device} model={Model}", _desc.Name, _desc.Model);
+                _logger.LogError(ex, "Supervisor run failed. device={Device} model={Model}", _desc.EffectiveId, _desc.Model);
                 return;
             }
 
             if (!_connectFailEmitted)
-                _logger.LogError(ex, "Supervisor connect failed. device={Device} model={Model}", _desc.Name, _desc.Model);
+                _logger.LogError(ex, "Supervisor connect failed. device={Device} model={Model}", _desc.EffectiveId, _desc.Model);
         }
 
         private StatusSnapshot CreateConnectFailSnapshot()

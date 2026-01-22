@@ -3,6 +3,7 @@ using KIOSK.Device.Abstractions;
 namespace KIOSK.Application.Services.Devices
 {
     public sealed record DeviceStatusInfo(
+        string DeviceId,
         string Name,
         string Vendor,
         string Model,
@@ -21,6 +22,6 @@ namespace KIOSK.Application.Services.Devices
         IReadOnlyCollection<StatusSnapshot> GetAllSnapshots();
         StatusSnapshot? TryGet(string name);
         IReadOnlyList<DeviceStatusInfo> GetDevices();
-        bool TryGetDevice(string name, out DeviceStatusInfo info);
+        bool TryGetDevice(string deviceId, out DeviceStatusInfo info);
     }
 }

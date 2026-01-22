@@ -8,52 +8,6 @@
     d:DesignHeight="980"
     d:DesignWidth="1920"
     mc:Ignorable="d">
-
-    <UserControl.Resources>
-        <Style x:Key="ImageButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Focusable" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <!--  외부 Border: Background는 Button.Background로부터 온다  -->
-                        <Border
-                            x:Name="PART_Border"
-                            Width="{TemplateBinding Width}"
-                            Height="{TemplateBinding Height}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="0"
-                            Cursor="{TemplateBinding Cursor}"
-                            SnapsToDevicePixels="True">
-                            <!--  내용(문자열이면 내부적으로 TextBlock이 생성되어 Font 속성 상속)  -->
-                            <ContentPresenter
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                RecognizesAccessKey="True" />
-                        </Border>
-
-                        <!--  간단한 시각적 트리거(Pressed 등)  -->
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="PART_Border" Property="Opacity" Value="0.85" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="PART_Border" Property="Opacity" Value="0.6" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
-
     <Grid Background="{StaticResource SecondaryBrush}">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
@@ -61,7 +15,7 @@
                 Margin="0,0,0,66"
                 HorizontalAlignment="Center"
                 FontFamily="{StaticResource Pretendard}"
-                FontSize="{StaticResource FontSize_4XL}"
+                FontSize="{StaticResource FontSize_3XL}"
                 FontWeight="{StaticResource FontWeight_L}"
                 Foreground="{StaticResource WhiteBrush}"
                 Text="원하시는 서비스를 선택해 주세요." />
@@ -139,7 +93,10 @@
                 <Button
                     Width="780"
                     Height="280"
-                    Background="{StaticResource PrimaryBrush}">
+                    Background="{StaticResource PrimaryBrush}"
+                    Command="{Binding NextCommand}"
+                    CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}"
+                    Tag="2">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border

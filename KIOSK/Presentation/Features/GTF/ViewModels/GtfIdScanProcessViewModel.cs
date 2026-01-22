@@ -7,9 +7,8 @@ using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
 using KIOSK.Infrastructure.OCR;
 using KIOSK.Infrastructure.OCR.Models;
-using KIOSK.ViewModels;
 using Pr22.Processing;
-using System.Diagnostics;
+using System.Diagnostics;using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

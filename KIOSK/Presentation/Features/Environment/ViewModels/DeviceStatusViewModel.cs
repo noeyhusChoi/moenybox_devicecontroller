@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Device.Abstractions;
-using KIOSK.Infrastructure.UI.Navigation.Services;
+using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Application.Services.Devices;
 using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.Cache;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
-using KIOSK.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using WpfApplication = System.Windows.Application;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Environment.ViewModels;
 
@@ -155,7 +155,7 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
         {
             var command = new DeviceCommand(SelectedCommand.Name);
             await _deviceManager.SendAsync(
-                SelectedDevice.Name,
+                SelectedDevice.DeviceId,
                 command,
                 CommandContext.Manual(reason: "DeviceStatusView"));
         }
@@ -170,7 +170,7 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
         Devices.Clear();
         foreach (var device in _statusService.GetDevices())
         {
-            var snap = _statusService.TryGet(device.Name);
+            var snap = _statusService.TryGet(device.DeviceId);
             var item = new DeviceStatusItemViewModel(device);
             if (snap is not null)
                 item.UpdateSnapshot(snap);
@@ -184,7 +184,7 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
     {
         void ApplyUpdate()
         {
-            var existing = Devices.FirstOrDefault(d => d.Name == name);
+            var existing = Devices.FirstOrDefault(d => d.DeviceId == name);
             if (existing is not null)
             {
                 existing.UpdateSnapshot(snapshot);
@@ -210,7 +210,7 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
         if (value is null)
             return;
 
-        foreach (var cmd in _commandCatalog.GetFor(value.Name))
+        foreach (var cmd in _commandCatalog.GetFor(value.DeviceId))
             Commands.Add(cmd);
 
         NotifySendCanExecuteChanged();
@@ -247,6 +247,7 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
 
 public sealed partial class DeviceStatusItemViewModel : ObservableObject
 {
+    public string DeviceId { get; }
     public string Name { get; }
     public string Vendor { get; }
     public string Model { get; }
@@ -272,6 +273,7 @@ public sealed partial class DeviceStatusItemViewModel : ObservableObject
 
     public DeviceStatusItemViewModel(DeviceStatusInfo device)
     {
+        DeviceId = device.DeviceId;
         Name = device.Name;
         Vendor = device.Vendor;
         Model = device.Model;

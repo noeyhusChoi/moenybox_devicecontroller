@@ -32,6 +32,7 @@ namespace KIOSK.Infrastructure.Management.Devices
         private readonly IErrorMessageProvider _messages;
         private readonly DeviceCommandLogRepository _commandRepository;
         private readonly ILogger<DeviceService> _logger;
+        private readonly Dictionary<string, string> _displayNames = new(StringComparer.OrdinalIgnoreCase);
 
         public DeviceService(
             IDeviceHost host,
@@ -56,7 +57,8 @@ namespace KIOSK.Infrastructure.Management.Devices
             if (desc is null || !desc.Validate)
                 return Task.CompletedTask;
 
-            _statusPipeline.Process(desc.Name, new StatusSnapshot
+            _displayNames[desc.EffectiveId] = desc.Name;
+            _statusPipeline.Process(desc.EffectiveId, new StatusSnapshot
             {
                 Name = desc.Name,
                 Model = desc.Model,
@@ -83,7 +85,7 @@ namespace KIOSK.Infrastructure.Management.Devices
 
             _logger.LogInformation(
                 "[Command] {Device} {Command} success={Success} code={Code} durationMs={DurationMs}",
-                name,
+                GetDisplayName(name),
                 cmd.Name,
                 result.Success,
                 result.Code?.ToString(),
@@ -120,7 +122,7 @@ namespace KIOSK.Infrastructure.Management.Devices
         {
             var finishedAt = DateTimeOffset.UtcNow;
             var record = new DeviceCommandRecord(
-                name,
+                GetDisplayName(name),
                 cmd.Name,
                 result.Success,
                 result.Code,
@@ -135,6 +137,9 @@ namespace KIOSK.Infrastructure.Management.Devices
                 catch { }
             });
         }
+
+        private string GetDisplayName(string deviceId)
+            => _displayNames.TryGetValue(deviceId, out var name) ? name : deviceId;
 
     }
 }

@@ -6,8 +6,8 @@ using KIOSK.Infrastructure.Management.Status;
 using KIOSK.Infrastructure.Storage;
 using KIOSK.Application.Services;
 using System.Collections.ObjectModel;
-using KIOSK.Infrastructure.UI.Navigation;
-using KIOSK.Infrastructure.UI.Navigation.Services;
+using KIOSK.Presentation.Navigation.Popup;
+using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Features.Environment.ViewModels;
 
 namespace KIOSK.ViewModels
@@ -119,6 +119,12 @@ namespace KIOSK.ViewModels
         private async Task OpenDeviceStatus()
         {
             await _nav.NavigateTo<DeviceStatusViewModel>();
+        }
+
+        [RelayCommand]
+        private async Task OpenResxLocalizationTest()
+        {
+            await _nav.NavigateTo<ResxLocalizationTestViewModel>();
         }
     }
 }

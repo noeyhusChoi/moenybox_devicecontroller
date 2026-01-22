@@ -1,5 +1,5 @@
 using KIOSK.FSM;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using Stateless;
 
 namespace KIOSK.Application.StateMachines

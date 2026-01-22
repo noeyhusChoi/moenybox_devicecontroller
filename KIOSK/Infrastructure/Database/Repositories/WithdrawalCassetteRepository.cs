@@ -2,8 +2,6 @@
 using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Ef.Entities;
 using KIOSK.Infrastructure.Database.Interface;
-using KIOSK.Infrastructure.Cache;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,13 +14,9 @@ namespace KIOSK.Infrastructure.Database.Repositories
     public class WithdrawalCassetteRepository : IReadRepository<WithdrawalCassetteModel>, IUpdateRepository<WithdrawalCassetteModel>
     {
         private readonly IDbContextFactory<KioskDbContext> _contextFactory;
-        private readonly IMemoryCache _cache;
 
-        public WithdrawalCassetteRepository(IDbContextFactory<KioskDbContext> contextFactory, IMemoryCache cache)
-        {
-            _contextFactory = contextFactory;
-            _cache = cache;
-        }
+        public WithdrawalCassetteRepository(IDbContextFactory<KioskDbContext> contextFactory)
+            => _contextFactory = contextFactory;
 
         public async Task<IReadOnlyList<WithdrawalCassetteModel>> LoadAllAsync(CancellationToken ct = default)
         {
@@ -39,9 +33,7 @@ namespace KIOSK.Infrastructure.Database.Repositories
             if (entities == null || entities.Count == 0)
                 return;
 
-            var kiosks = _cache.Get<IReadOnlyList<KioskModel>>(DatabaseCacheKeys.Kiosk)
-                ?? Array.Empty<KioskModel>();
-            var kioskId = kiosks.FirstOrDefault()?.Id;
+            var kioskId = entities.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.KioskId))?.KioskId;
             if (string.IsNullOrWhiteSpace(kioskId))
                 return;
 

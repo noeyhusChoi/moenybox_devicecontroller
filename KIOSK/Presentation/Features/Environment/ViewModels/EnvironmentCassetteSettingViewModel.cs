@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Domain.Entities;
-using KIOSK.Infrastructure.UI.Navigation;
+using KIOSK.Presentation.Navigation.Popup;
 using KIOSK.Application.Services.DataBase;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Environment.ViewModels
 {

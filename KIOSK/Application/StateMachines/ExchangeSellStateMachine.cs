@@ -1,5 +1,5 @@
 using KIOSK.FSM;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using Stateless;
 
 namespace KIOSK.Application.StateMachines
@@ -125,6 +125,10 @@ namespace KIOSK.Application.StateMachines
                 .Permit(StateMachineTrigger.Error, ExchangeState.Error);
 
             _fsm.Configure(ExchangeState.Error)
+                .OnEntryAsync(async () => await ExitAsync())
+                .Permit(StateMachineTrigger.Exit, ExchangeState.Exit);
+
+            _fsm.Configure(ExchangeState.Exit)
                 .OnEntryAsync(async () => await ExitAsync())
                 .Permit(StateMachineTrigger.Exit, ExchangeState.Exit);
         }

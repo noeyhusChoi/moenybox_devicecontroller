@@ -10,11 +10,11 @@ using KIOSK.Presentation.Features.GTF.Flow;
 
 namespace KIOSK.Presentation.Features.GTF.Shell.ViewModels
 {
-    public partial class GtfSubShellViewModel : ObservableObject, ISubShellHost
+    public partial class GtfShellViewModel : ObservableObject, IShellHost
     {
         private readonly GtfFlowCoordinator _flow;
 
-        public GtfSubShellViewModel(GtfFlowCoordinator flow)
+        public GtfShellViewModel(GtfFlowCoordinator flow)
         {
             _flow = flow;
         }

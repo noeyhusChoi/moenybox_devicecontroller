@@ -4,11 +4,11 @@ using KIOSK.Infrastructure.API.Gtf;
 using KIOSK.Application.Services.Localization;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.ViewModels;
 using Localization;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using KIOSK.Domain.Entities;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

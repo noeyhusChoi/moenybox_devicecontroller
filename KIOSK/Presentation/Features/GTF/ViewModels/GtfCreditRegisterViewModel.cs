@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Device.Core;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.ViewModels;
 using static QRCoder.PayloadGenerator;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

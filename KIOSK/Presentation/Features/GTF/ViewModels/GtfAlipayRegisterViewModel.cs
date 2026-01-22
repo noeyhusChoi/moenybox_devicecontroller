@@ -8,12 +8,12 @@ using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.ViewModels;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Windows;
 using static QRCoder.PayloadGenerator;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

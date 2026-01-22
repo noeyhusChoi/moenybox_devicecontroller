@@ -1,6 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using KIOSK.Infrastructure.UI;
-using KIOSK.Application.Services;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using KIOSK.Presentation.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Timers;

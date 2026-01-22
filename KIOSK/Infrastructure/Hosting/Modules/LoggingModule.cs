@@ -1,3 +1,4 @@
+using KIOSK.Application.Abstractions;
 using KIOSK.Infrastructure.Logging;
 using Microsoft.Extensions.DependencyInjection;
 

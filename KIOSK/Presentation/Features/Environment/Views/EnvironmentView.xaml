@@ -306,6 +306,12 @@
                             Command="{Binding OpenDeviceStatusCommand}"
                             Content="장치 상태 상세"
                             Style="{StaticResource ButtonGhost}" />
+                        <Button
+                            Margin="8,0,0,0"
+                            Padding="8,4"
+                            Command="{Binding OpenResxLocalizationTestCommand}"
+                            Content="Resx 테스트"
+                            Style="{StaticResource ButtonGhost}" />
                     </StackPanel>
 
                     <!--  헤더 오른쪽  -->

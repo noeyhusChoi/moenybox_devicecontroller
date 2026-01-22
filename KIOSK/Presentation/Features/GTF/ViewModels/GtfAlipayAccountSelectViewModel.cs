@@ -4,13 +4,13 @@ using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

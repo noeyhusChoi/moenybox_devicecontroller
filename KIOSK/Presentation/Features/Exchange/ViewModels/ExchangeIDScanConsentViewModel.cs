@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using Localization;
 using System.Threading.Tasks;
-using KIOSK.Infrastructure.UI;
-using KIOSK.Infrastructure.UI.Navigation;
+using KIOSK.Presentation.Navigation.Popup;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.ViewModels
 {

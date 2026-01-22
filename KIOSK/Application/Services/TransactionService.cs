@@ -14,10 +14,13 @@ using System.Threading.Tasks;
 
 namespace KIOSK.Application.Services
 {
-    public interface ITransactionServiceV2 : INotifyPropertyChanged
+    public interface ITransactionContext : INotifyPropertyChanged
     {
         TransactionModelV2 Current { get; }
+    }
 
+    public interface ITransactionServiceV2 : ITransactionContext
+    {
         // 거래 라이프사이클
         Task NewAsync(string sourceCcy, string targetCcy, CancellationToken ct = default);
         Task UpsertCustomerAsync(string idType, string name, string number, string nationality, CancellationToken ct = default);

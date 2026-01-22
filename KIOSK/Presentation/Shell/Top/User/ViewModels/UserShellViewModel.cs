@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KIOSK.Presentation.Shell.Contracts;
-using KIOSK.Application.Services;
-using KIOSK.Infrastructure.UI.Navigation.Services;
-using KIOSK.Infrastructure.UI.Navigation.State;
+using KIOSK.Presentation.Navigation.Services;
+using KIOSK.Presentation.Services;
 
 namespace KIOSK.Presentation.Shell.Top.Main.ViewModels
 {
@@ -12,7 +11,7 @@ namespace KIOSK.Presentation.Shell.Top.Main.ViewModels
         private readonly IInactivityService _inactivityService;
 
         [ObservableProperty]
-        private object? currentSubShell;
+        private object? currentShell;
 
         [ObservableProperty]
         private object? footerViewModel;
@@ -28,9 +27,9 @@ namespace KIOSK.Presentation.Shell.Top.Main.ViewModels
             FooterViewModel = footerViewModel; // 푸터 고정
         }
 
-        public void SetSubShell(object? shell)
+        public void SetShell(object? shell)
         {
-            CurrentSubShell = shell;
+            CurrentShell = shell;
         }
 
         public async Task OnLoadAsync(object? parameter, CancellationToken ct)

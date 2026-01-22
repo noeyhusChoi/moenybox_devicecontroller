@@ -9,7 +9,7 @@ namespace KIOSK.Infrastructure.Hosting.Modules
     {
         public static IServiceCollection AddBackgroundModule(this IServiceCollection services)
         {
-            services.AddHostedService<BackgroundTaskService>();
+            //services.AddHostedService<BackgroundTaskService>();
             services.AddSingleton<SendCemsTxResultTask>();
             services.AddSingleton<UpdateExchangeRateTask>();
 

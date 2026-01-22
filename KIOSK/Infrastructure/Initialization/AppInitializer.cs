@@ -1,28 +1,31 @@
 ﻿using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.Cache;
-using KIOSK.Infrastructure.Database;
+using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Repositories;
 using KIOSK.Infrastructure.Initialization;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using KIOSK.Infrastructure.Media;
 using KIOSK.Application.Services;
 using KIOSK.Domain.Entities;
 using Localization;
+using Localization.Resx;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.IO;
 
 public class AppInitializer : IAppInitializer
 {
-    private readonly IDatabaseService _db;
-    private readonly ILocalizationService _localization;
+    private readonly IDbContextFactory<KioskDbContext> _dbContextFactory;
+    private readonly ILocalizationService _localization;            // xaml 기반 다국어 (resx 기반으로 변경 예정)
+    private readonly IResxLocalizationService _resxLocalization;    // resx 기반 다국어
     private readonly ILoggingService _logging;
     private readonly IAudioPlayService _audioService;
     private readonly IDeviceManager _deviceManager;
-
     private readonly IMemoryCache _cache;
+
     private readonly ApiConfigRepository _apiConfigRepo;
     private readonly DepositCurrencyRepository _depositCurrencyRepo;
     private readonly KioskRepository _kioskRepo;
@@ -38,8 +41,9 @@ public class AppInitializer : IAppInitializer
 
     public AppInitializer(IServiceProvider sp)
     {
-        _db = sp.GetRequiredService<IDatabaseService>();
+        _dbContextFactory = sp.GetRequiredService<IDbContextFactory<KioskDbContext>>();
         _localization = sp.GetRequiredService<ILocalizationService>();
+        _resxLocalization = sp.GetRequiredService<IResxLocalizationService>();
         _logging = sp.GetRequiredService<ILoggingService>();
         _audioService = sp.GetRequiredService<IAudioPlayService>();
         _deviceManager = sp.GetRequiredService<IDeviceManager>();
@@ -106,20 +110,27 @@ public class AppInitializer : IAppInitializer
 
     private async Task InitializeDatabaseAsync()
     {
-        if (!await _db.CanConnectAsync())
+        await using var context = await _dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
+        if (!await context.Database.CanConnectAsync().ConfigureAwait(false))
             throw new InvalidOperationException("DB 연결 실패");
     }
 
     private async Task LoadStaticCacheAsync()
     {
-        _cache.Set(DatabaseCacheKeys.Kiosk, await _kioskRepo.LoadAllAsync());
+        var kiosks = await _kioskRepo.LoadAllAsync();
+        _cache.Set(DatabaseCacheKeys.Kiosk, kiosks);
+        if (kiosks.Count == 0)
+        {
+            _logging.Warn("[Init] Kiosk cache is empty. Skip loading dependent caches.");
+            return;
+        }
+        
         _cache.Set(DatabaseCacheKeys.ApiConfigList, await _apiConfigRepo.LoadAllAsync());
-        _cache.Set(DatabaseCacheKeys.DepositCurrencyList, await _depositCurrencyRepo.LoadAllAsync());
+        _cache.Set(DatabaseCacheKeys.DepositCurrencyList, await _depositCurrencyRepo.LoadByKioskIdAsync(kiosks[0].Id));
         _cache.Set(DatabaseCacheKeys.DeviceList, await _deviceRepo.LoadAllAsync());
         _cache.Set(DatabaseCacheKeys.ReceiptList, await _receiptRepo.LoadAllAsync());
         _cache.Set(DatabaseCacheKeys.LocaleInfoList, await _localeInfoRepo.LoadAllAsync());
         _cache.Set(DatabaseCacheKeys.WithdrawalCassetteList, await _withdrawalCassetteRepo.LoadAllAsync());
-
 
         await _withdrawalCassetteService.InitializeAsync();
     }
@@ -127,8 +138,10 @@ public class AppInitializer : IAppInitializer
     private Task InitializeLocalizationAsync()
     {
         LocalizationProvider.Initialize(_localization);
+        ResxLocalizationProvider.Initialize(_resxLocalization);
         var culture = CultureInfo.CurrentUICulture;
         _localization.SetCulture(culture);
+        _resxLocalization.SetCulture(culture);
         return Task.CompletedTask;
     }
 
@@ -138,10 +151,10 @@ public class AppInitializer : IAppInitializer
             ?? Array.Empty<DeviceModel>();
         foreach (var device in devices)
         {
-            var name = string.IsNullOrWhiteSpace(device.Name) ? device.Id : device.Name;
             await _deviceManager.AddAsync(
                 new DeviceDescriptor(
-                    Name: name,
+                    DeviceId: device.Id,
+                    Name: device.Name,
                     Vendor: device.Vendor,
                     Model: device.Model,
                     TransportType: device.CommType,

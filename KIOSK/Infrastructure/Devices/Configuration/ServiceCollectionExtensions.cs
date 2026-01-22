@@ -1,7 +1,6 @@
 ﻿using KIOSK.Device.Core;
 using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Infrastructure.Database;
 using KIOSK.Infrastructure.Database.Repositories;
 using KIOSK.Infrastructure.Management.Status;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +15,6 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<DevicePlatformOptions>(config.GetSection(DevicePlatformOptions.SectionName));
 
-        services.AddSingleton<IDatabaseService, DatabaseService>();
         services.AddSingleton<ITransportFactory, TransportFactory>();
         services.AddSingleton<IDeviceFactory, DeviceFactory>();
 

@@ -1,46 +1,28 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
-using KIOSK.Infrastructure.Cache;
 using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Ef.Entities;
-using KIOSK.Domain.Entities;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace KIOSK.Infrastructure.Database.Repositories
 {
     public sealed class DeviceStatusLogRepository
     {
-        private readonly IMemoryCache _cache;
         private readonly IDbContextFactory<KioskDbContext> _contextFactory;
 
-        public DeviceStatusLogRepository(IDbContextFactory<KioskDbContext> contextFactory, IMemoryCache cache)
+        public DeviceStatusLogRepository(IDbContextFactory<KioskDbContext> contextFactory)
         {
-            _cache = cache;
             _contextFactory = contextFactory;
         }
 
-        public async Task SaveAsync(string name, StatusSnapshot snapshot, CancellationToken ct = default)
+        public async Task SaveAsync(string kioskId, string deviceType, string name, StatusSnapshot snapshot, CancellationToken ct = default)
         {
             if (snapshot.Alerts is null || snapshot.Alerts.Count == 0)
                 return;
-
-            var kiosks = _cache.Get<IReadOnlyList<KioskModel>>(DatabaseCacheKeys.Kiosk)
-                ?? Array.Empty<KioskModel>();
-            var kioskId = kiosks.FirstOrDefault()?.Id;
             if (string.IsNullOrWhiteSpace(kioskId))
                 return;
-
-            var devices = _cache.Get<IReadOnlyList<DeviceModel>>(DatabaseCacheKeys.DeviceList)
-                ?? Array.Empty<DeviceModel>();
-            var deviceType = devices
-                .FirstOrDefault(d =>
-                    string.Equals(d.Name, name, StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(d.Id, name, StringComparison.OrdinalIgnoreCase))
-                ?.DeviceType;
             if (string.IsNullOrWhiteSpace(deviceType))
                 return;
 

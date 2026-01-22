@@ -9,7 +9,7 @@ using KIOSK.Presentation.Features.Exchange.Flow;
 
 namespace KIOSK.Presentation.Features.Exchange.Shell.ViewModels
 {
-    public partial class ExchangeShellViewModel : ObservableObject, ISubShellHost
+    public partial class ExchangeShellViewModel : ObservableObject, IShellHost
     {
         private readonly ExchangeFlowCoordinator _flow;
 

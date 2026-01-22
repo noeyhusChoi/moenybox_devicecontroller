@@ -80,7 +80,7 @@ namespace KIOSK.Device.Abstractions
     // 단일 스냅샷(엔벨로프 + 유연 페이로드)
     public record StatusSnapshot()
     {
-        public string Name { get; init; } = string.Empty;                     // 장치 식별자 (desc.Name)
+        public string Name { get; init; } = string.Empty;                     // 화면 표시용 이름 (desc.Name)
         public string Model { get; init; } = string.Empty;                     // 모델 (desc.Model)
         public DeviceHealth Health { get; init; } = DeviceHealth.Offline;     // ← 추가
         public List<StatusEvent>? Alerts { get; init; } = new();              // 알람/에러 목록(선택)

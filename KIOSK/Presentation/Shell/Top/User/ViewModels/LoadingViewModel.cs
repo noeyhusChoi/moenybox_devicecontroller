@@ -1,28 +1,21 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using KIOSK.Infrastructure.Media;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Shell.Top.Main.ViewModels;
 
 public partial class LoadingViewModel : ObservableObject, INavigable
 {
     private readonly ILoggingService _logging;
-    private readonly IVideoPlayService _videoPlay;
-
     private Uri videoPath;
     
-    [ObservableProperty]
-    private Brush? backgroundBrush;
-
-    public LoadingViewModel(ILoggingService logging, IVideoPlayService videoPlay)
+    public LoadingViewModel(ILoggingService logging)
     {
         _logging = logging;
-        _videoPlay = videoPlay;
 
         // TODO: 로딩 시 필요한 작업 수행
         try
@@ -40,9 +33,6 @@ public partial class LoadingViewModel : ObservableObject, INavigable
             // 그 외 예외
             _logging?.Error(ex, ex.Message);
         }
-
-        BackgroundBrush = _videoPlay.BackgroundBrush;
-        _videoPlay.SetSource(videoPath, loop: true, mute: true, autoPlay: true);
     }
 
     public async Task OnLoadAsync(object? parameter, CancellationToken ct)
@@ -64,9 +54,6 @@ public partial class LoadingViewModel : ObservableObject, INavigable
             _logging?.Error(ex, ex.Message);
         }
 
-        BackgroundBrush = _videoPlay.BackgroundBrush;
-        _videoPlay.SetSource(videoPath, loop: true, mute: true, autoPlay: true);
-
         // 초기화 완료될 때까지 대기 (AppBootstrapper에서 실행됨)
         //await _initState.Initialization;
     }
@@ -74,7 +61,6 @@ public partial class LoadingViewModel : ObservableObject, INavigable
     public async Task OnUnloadAsync()
     {
         // TODO: 언로드 시 필요한 작업 수행
-        _videoPlay.Stop();
     }
 
 }

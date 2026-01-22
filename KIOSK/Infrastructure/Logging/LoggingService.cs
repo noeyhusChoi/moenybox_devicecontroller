@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using KIOSK.Application.Abstractions;
+using Serilog;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
@@ -9,17 +10,6 @@ using System.Runtime.CompilerServices;
 
 namespace KIOSK.Infrastructure.Logging
 {
-    public interface ILoggingService
-    {
-        void Debug(string message, object[]? args = null, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0, [CallerMemberName] string member = "");
-        void Info(string message, object[]? args = null, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0, [CallerMemberName] string member = "");
-        void Warn(string message, object[]? args = null, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0, [CallerMemberName] string member = "");
-        void Error(Exception? ex, string message, object[]? args = null, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0, [CallerMemberName] string member = "");
-
-        /// <summary>스코프(프로퍼티)를 사용하여 공통 속성 추가</summary>
-        IDisposable BeginScope(string name, object value);
-    }
-
     public sealed class LoggingService : ILoggingService, IDisposable
     {
         private readonly ILogger _logger;

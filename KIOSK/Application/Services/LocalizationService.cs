@@ -1,5 +1,5 @@
 ﻿using KIOSK.Application.Services;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -203,10 +203,17 @@ namespace Localization
         private static LocalizationProvider? _instance;
         private ILocalizationService? _svc;
 
-        public static LocalizationProvider Instance => _instance ??= new LocalizationProvider();
+        public static LocalizationProvider Instance => _instance ??= CreateInstance();
         public bool IsInitialized => _svc != null;
 
         private LocalizationProvider() { }
+
+        private static LocalizationProvider CreateInstance()
+        {
+            var instance = new LocalizationProvider();
+            instance.TryInitializeDesignTime();
+            return instance;
+        }
 
         public static void Initialize(ILocalizationService svc)
         {
@@ -216,6 +223,21 @@ namespace Localization
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public string this[string key] => _svc?.GetString(key) ?? $"[{key}]";
+
+        private void TryInitializeDesignTime()
+        {
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                return;
+
+            if (_svc != null)
+                return;
+
+            var logger = new DesignTimeLoggingService();
+            var options = Options.Create(new LocalizationOptions());
+            var initialCulture = CultureInfo.CurrentUICulture;
+            var svc = new LocalizationService(logger, options, initialCulture);
+            Attach(svc);
+        }
 
         private void Attach(ILocalizationService svc)
         {
@@ -228,6 +250,22 @@ namespace Localization
             // 초기 알림(디자이너에서 바인딩이 바로 반영되도록)
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
         }
+    }
+
+    internal sealed class DesignTimeLoggingService : ILoggingService
+    {
+        public void Debug(string message, object[]? args = null, string file = "", int line = 0, string member = "") { }
+        public void Info(string message, object[]? args = null, string file = "", int line = 0, string member = "") { }
+        public void Warn(string message, object[]? args = null, string file = "", int line = 0, string member = "") { }
+        public void Error(Exception? ex, string message, object[]? args = null, string file = "", int line = 0, string member = "") { }
+        public IDisposable BeginScope(string name, object value) => NoopDisposable.Instance;
+    }
+
+    internal sealed class NoopDisposable : IDisposable
+    {
+        public static readonly NoopDisposable Instance = new();
+        private NoopDisposable() { }
+        public void Dispose() { }
     }
 
     [MarkupExtensionReturnType(typeof(BindingExpression))]

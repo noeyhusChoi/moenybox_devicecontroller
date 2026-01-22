@@ -8,7 +8,7 @@ public sealed record DeviceCommandDescriptor(string Name, string Description = "
 
 public interface IDeviceCommandCatalog
 {
-    IReadOnlyCollection<DeviceCommandDescriptor> GetFor(string deviceName);
+    IReadOnlyCollection<DeviceCommandDescriptor> GetFor(string deviceId);
     IReadOnlyDictionary<string, IReadOnlyCollection<DeviceCommandDescriptor>> GetAll();
 }
 
@@ -35,9 +35,9 @@ public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
         };
     }
 
-    public IReadOnlyCollection<DeviceCommandDescriptor> GetFor(string deviceName)
+    public IReadOnlyCollection<DeviceCommandDescriptor> GetFor(string deviceId)
     {
-        if (!_runtime.TryGetSupervisor(deviceName, out var sup))
+        if (!_runtime.TryGetSupervisor(deviceId, out var sup))
             return Array.Empty<DeviceCommandDescriptor>();
 
         return GetByDeviceType(sup.DeviceType);
@@ -48,7 +48,7 @@ public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
         return _runtime.GetAllSupervisors()
             .OrderBy(s => s.Name, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(
-                s => s.Name,
+                s => s.DeviceId,
                 s => (IReadOnlyCollection<DeviceCommandDescriptor>)GetByDeviceType(s.DeviceType),
                 StringComparer.OrdinalIgnoreCase);
     }
@@ -63,17 +63,17 @@ public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
 
     private static readonly IReadOnlyCollection<DeviceCommandDescriptor> QrCommands = new[]
     {
+        new DeviceCommandDescriptor("RESTART", "재시작"),
         new DeviceCommandDescriptor("SCAN_ENABLE", "스캔 활성화"),
         new DeviceCommandDescriptor("SCAN_DISABLE", "스캔 비활성화"),
         new DeviceCommandDescriptor("START_DECODE", "디코드 시작"),
         new DeviceCommandDescriptor("STOP_DECODE", "디코드 중지"),
         new DeviceCommandDescriptor("RESET", "리셋"),
-        new DeviceCommandDescriptor("RESTART", "재시작"),
-        new DeviceCommandDescriptor("SCAN.ONCE", "QR 단일 스캔"),
-        new DeviceCommandDescriptor("SCAN.MANY", "QR 다중 스캔"),
-        new DeviceCommandDescriptor("SCAN.TRIGGERON", "트리거 ON"),
-        new DeviceCommandDescriptor("SCAN.TRIGGEROFF", "트리거 OFF"),
-        new DeviceCommandDescriptor("SCAN.READ", "버퍼 읽기"),
+        //new DeviceCommandDescriptor("SCAN.ONCE", "QR 단일 스캔"),
+        //new DeviceCommandDescriptor("SCAN.MANY", "QR 다중 스캔"),
+        //new DeviceCommandDescriptor("SCAN.TRIGGERON", "트리거 ON"),
+        //new DeviceCommandDescriptor("SCAN.TRIGGEROFF", "트리거 OFF"),
+        //new DeviceCommandDescriptor("SCAN.READ", "버퍼 읽기"),
         new DeviceCommandDescriptor("SET_HOST_TRIGGER", "Host Trigger 모드"),
         new DeviceCommandDescriptor("SET_AUTO_TRIGGER", "Auto-Induction 모드"),
         new DeviceCommandDescriptor("SET_PACKET_MODE", "Packet 모드"),
@@ -82,7 +82,7 @@ public sealed class DeviceCommandCatalog : IDeviceCommandCatalog
 
     private static readonly IReadOnlyCollection<DeviceCommandDescriptor> PrinterCommands = new[]
     {
-        new DeviceCommandDescriptor("RESTART", "장치 재시작"),
+        new DeviceCommandDescriptor("RESTART", "재시작"),
         new DeviceCommandDescriptor("PRINTCONTENT", "본문 인쇄"),
         new DeviceCommandDescriptor("PRINTTITLE", "제목 인쇄"),
         new DeviceCommandDescriptor("CUT", "용지 컷"),

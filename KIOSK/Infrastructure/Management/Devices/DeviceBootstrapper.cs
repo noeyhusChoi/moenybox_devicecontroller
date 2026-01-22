@@ -33,7 +33,7 @@ internal sealed class DeviceBootstrapper : BackgroundService
             }
             catch (Exception ex)
             {
-                try { Trace.WriteLine($"[DeviceBootstrapper] add failed: {d?.Name} / {ex.Message}"); } catch { }
+                try { Trace.WriteLine($"[DeviceBootstrapper] add failed: {d?.EffectiveId} / {ex.Message}"); } catch { }
             }
         }
 

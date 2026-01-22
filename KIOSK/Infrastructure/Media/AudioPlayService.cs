@@ -1,5 +1,5 @@
 ﻿using NAudio.Wave;
-using KIOSK.Infrastructure.Logging;
+using KIOSK.Application.Abstractions;
 using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Concurrent;

@@ -8,9 +8,9 @@ using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.ViewModels;
 using System.Diagnostics;
 using System.Windows;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

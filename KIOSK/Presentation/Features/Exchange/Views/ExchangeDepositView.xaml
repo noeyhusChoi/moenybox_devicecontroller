@@ -2,6 +2,7 @@
     x:Class="KIOSK.Views.ExchangeDepositView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:KIOSK.Presentation.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:KIOSK.Views"
     xmlns:lx="clr-namespace:Localization"
@@ -539,7 +540,15 @@
                     BorderBrush="Transparent"
                     BorderThickness="2"
                     CornerRadius="20">
-                    <Border Margin="12" Background="{Binding BackgroundBrush}" />
+                    <!--<Border Margin="12" Background="{Binding BackgroundBrush}" />-->
+                    <controls:VideoPlayerControl
+                        x:Name="VideoPlayer"
+                        Margin="0,12,0,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        AutoPlay="True"
+                        Loop="True"
+                        SourcePath="{Binding VideoPath}" />
                 </Border>
                 <Separator Height="18" Background="Transparent" />
                 <Grid Height="100">

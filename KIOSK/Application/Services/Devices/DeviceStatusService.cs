@@ -24,8 +24,8 @@ namespace KIOSK.Application.Services.Devices
         public IReadOnlyCollection<StatusSnapshot> GetAllSnapshots()
             => _store.GetAll();
 
-        public StatusSnapshot? TryGet(string name)
-            => _store.TryGet(name);
+        public StatusSnapshot? TryGet(string deviceId)
+            => _store.TryGet(deviceId);
 
         public IReadOnlyList<DeviceStatusInfo> GetDevices()
             => _host.GetAllSupervisors()
@@ -33,9 +33,9 @@ namespace KIOSK.Application.Services.Devices
                 .OrderBy(d => d.Name, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-        public bool TryGetDevice(string name, out DeviceStatusInfo info)
+        public bool TryGetDevice(string deviceId, out DeviceStatusInfo info)
         {
-            if (_host.TryGetSupervisor(name, out var sup))
+            if (_host.TryGetSupervisor(deviceId, out var sup))
             {
                 info = Map(sup);
                 return true;
@@ -47,6 +47,7 @@ namespace KIOSK.Application.Services.Devices
 
         private static DeviceStatusInfo Map(DeviceSupervisor sup)
             => new(
+                sup.DeviceId,
                 sup.Name,
                 sup.Vendor,
                 sup.Model,

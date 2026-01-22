@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.ViewModels;
 using Localization;
-using KIOSK.Infrastructure.UI.Navigation;
+using KIOSK.Presentation.Navigation.Popup;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.ViewModels
 {

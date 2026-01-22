@@ -37,8 +37,9 @@ namespace KIOSK.Infrastructure.Management.Status
                 Timestamp = DateTimeOffset.UtcNow
             };
 
-            _snapshots[desc.Name] = snap;
-            SafeInvokeStatusUpdated(desc.Name, snap);   // 처음부터 Offline 상태 알리기
+            var deviceId = desc.EffectiveId;
+            _snapshots[deviceId] = snap;
+            SafeInvokeStatusUpdated(deviceId, snap);   // 처음부터 Offline 상태 알리기
         }
 
         public bool TryUpdate(string name, StatusSnapshot snapshot, out StatusSnapshot effectiveSnapshot)

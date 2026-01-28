@@ -1,18 +1,21 @@
 using KIOSK.Presentation.Features.Environment.Shell.ViewModels;
-using KIOSK.Presentation.Features.Environment.ViewModels;
+using KIOSK.Presentation.Features.Environment.Pages.ViewModels;
 using KIOSK.Presentation.Features.Exchange.Shell.ViewModels;
+using KIOSK.Presentation.Features.Exchange.Pages.ViewModels;
 using KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels;
-using KIOSK.Presentation.Features.ExchangeV2.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels;
 using KIOSK.Presentation.Features.GTF.Shell.ViewModels;
-using KIOSK.Presentation.Features.GTF.ViewModels;
+using KIOSK.Presentation.Features.GTF.Pages.ViewModels;
+using KIOSK.Presentation.Features.GTF.Pages.ViewModels.Popup;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
+using KIOSK.Presentation.Features.Menu.Pages.ViewModels;
 using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
-using KIOSK.Presentation.Features.MenuV2.ViewModels;
+using KIOSK.Presentation.Features.MenuV2.Pages.ViewModels;
 using KIOSK.Presentation.Shared.Flow.ViewModels;
-using KIOSK.Presentation.Shell.Top.Main.ViewModels;
+using KIOSK.Presentation.Shell.Top.Main.Pages.ViewModels;
 using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
 using KIOSK.ViewModels;
-using KIOSK.ViewModels.Exchange.Popup;
+using KIOSK.Presentation.Features.Exchange.Pages.ViewModels.Popup;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.CompositionRoot.Modules

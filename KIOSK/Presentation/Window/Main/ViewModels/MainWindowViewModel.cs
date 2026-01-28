@@ -7,17 +7,16 @@ using KIOSK.Application.Services.API;
 using KIOSK.Application.Services.Devices;
 using System.Collections.ObjectModel;
 using KIOSK.Presentation.Navigation.Services;
-using KIOSK.Presentation.Features.Environment.ViewModels;
+using KIOSK.Presentation.Features.Environment.Pages.ViewModels;
 using KIOSK.Presentation.Features.Environment.Shell.ViewModels;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
-using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.ViewModels
 {
-    public partial class MainWindowViewModel : ObservableObject, IWindowHost
+    public partial class MainWindowViewModel : ObservableObject
     {
         private readonly INavigationService _nav;
         private readonly IDeviceCatalogService _repo;
@@ -31,20 +30,13 @@ namespace KIOSK.ViewModels
             _nav = nav;
             RootViewModel = null;
 
-            _nav.AttachRootShell(this);
-
             _repo = repo;
             _cems = cems;
         }
 
         public async Task InitializeAsync()
         {
-            await _nav.SwitchShell<MenuV2ShellViewModel>();
-        }
-
-        public void SetShell(object? shell)
-        {
-            RootViewModel = shell ?? throw new InvalidOperationException("Shell이 없습니다.");
+            await _nav.NavigateLayout<MenuV2ShellViewModel>();
         }
 
         [RelayCommand] private void F0() { }
@@ -61,9 +53,9 @@ namespace KIOSK.ViewModels
         private void F2()
         {
             if (_nav.ActiveShell is EnvironmentShellViewModel)
-                _nav.SwitchShell<MenuV2ShellViewModel>();
+                _nav.NavigateLayout<MenuV2ShellViewModel>();
             else
-                _nav.SwitchShell<EnvironmentShellViewModel>();
+                _nav.NavigateLayout<EnvironmentShellViewModel>();
         }
 
         [RelayCommand] private void F3() { MonitorMover.MoveActiveWindowToNextScreen(); }

@@ -2,7 +2,7 @@ using KIOSK.Application.StateMachines;
 using KIOSK.Application.Abstractions;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Features.Exchange.Pages.ViewModels;
 using System.Windows.Threading;
 
 namespace KIOSK.Presentation.Features.Exchange.Flow
@@ -29,7 +29,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
 
         private Task OnStateEnteredAsync(ExchangeState state) => state switch
         {
-            ExchangeState.Language => _nav.NavigateTo<ExchangeLanguageViewModel>(vm =>
+            ExchangeState.Language => _nav.NavigatePage<ExchangeLanguageViewModel>(vm =>
             {
                 vm.OnStepMain = async () => await _state.ExitAsync();
                 vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -40,7 +40,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Currency => _nav.NavigateTo<ExchangeCurrencyViewModel>(vm =>
+            ExchangeState.Currency => _nav.NavigatePage<ExchangeCurrencyViewModel>(vm =>
             {
                 vm.OnStepMain = async () => await _state.ExitAsync();
                 vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -51,7 +51,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Terms => _nav.NavigateTo<ExchangeIDScanConsentViewModel>(vm =>
+            ExchangeState.Terms => _nav.NavigatePage<ExchangeIDScanConsentViewModel>(vm =>
             {
                 vm.OnStepMain = async () => await _state.ExitAsync();
                 vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -63,7 +63,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                 };
             }),
             ExchangeState.IDScan => System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
-                await _nav.NavigateTo<ExchangeIDScanGuideViewModel>(vm =>
+                await _nav.NavigatePage<ExchangeIDScanGuideViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -75,7 +75,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     };
                 }), DispatcherPriority.ApplicationIdle).Task,
             ExchangeState.IDScanning => System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
-                await _nav.NavigateTo<ExchangeIDScanProcessViewModel>(vm =>
+                await _nav.NavigatePage<ExchangeIDScanProcessViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -87,7 +87,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     };
                 }), DispatcherPriority.ApplicationIdle).Task,
             ExchangeState.IDScanningComplete => System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
-                await _nav.NavigateTo<ExchangeIDScanCompleteViewModel>(vm =>
+                await _nav.NavigatePage<ExchangeIDScanCompleteViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -98,7 +98,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                         await _state.ErrorAsync();
                     };
                 }), DispatcherPriority.ApplicationIdle).Task,
-            ExchangeState.Deposit => _nav.NavigateTo<ExchangeDepositViewModel>(vm =>
+            ExchangeState.Deposit => _nav.NavigatePage<ExchangeDepositViewModel>(vm =>
             {
                 vm.OnStepMain = async () => await _state.ExitAsync();
                 vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -109,7 +109,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Withdrawal => _nav.NavigateTo<ExchangeWithdrawalViewModel>(vm =>
+            ExchangeState.Withdrawal => _nav.NavigatePage<ExchangeWithdrawalViewModel>(vm =>
             {
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
@@ -118,7 +118,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Result => _nav.NavigateTo<ExchangeResultViewModel>(vm =>
+            ExchangeState.Result => _nav.NavigatePage<ExchangeResultViewModel>(vm =>
             {
                 vm.OnStepMain = async () => await _state.ExitAsync();
                 vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -129,7 +129,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Complete => _nav.NavigateTo<ExchangeCompleteViewModel>(vm =>
+            ExchangeState.Complete => _nav.NavigatePage<ExchangeCompleteViewModel>(vm =>
             {
                 vm.OnStepMain = async () => await _state.ExitAsync();
                 vm.OnStepError = async ex =>
@@ -138,7 +138,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                     await _state.ErrorAsync();
                 };
             }),
-            ExchangeState.Exit => _nav.SwitchShell<MenuShellViewModel>(),
+            ExchangeState.Exit => _nav.NavigateLayout<MenuShellViewModel>(),
             _ => Task.CompletedTask
         };
     }

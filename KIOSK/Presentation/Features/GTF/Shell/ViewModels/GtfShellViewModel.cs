@@ -10,7 +10,7 @@ using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Shell.ViewModels
 {
-    public partial class GtfShellViewModel : ObservableObject, IShellHost
+    public partial class GtfShellViewModel : ObservableObject, ILayout
     {
         private readonly GtfFlowCoordinator _flow;
 
@@ -21,11 +21,6 @@ namespace KIOSK.Presentation.Features.GTF.Shell.ViewModels
 
         [ObservableProperty]
         private object? currentView;
-
-        public void SetInnerView(object view)
-        {
-            CurrentView = view;
-        }
 
         [ObservableProperty]
         private object? popupContent;

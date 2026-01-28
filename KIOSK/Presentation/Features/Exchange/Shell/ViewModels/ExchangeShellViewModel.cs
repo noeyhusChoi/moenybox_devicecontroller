@@ -9,7 +9,7 @@ using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Shell.ViewModels
 {
-    public partial class ExchangeShellViewModel : ObservableObject, IShellHost
+    public partial class ExchangeShellViewModel : ObservableObject, ILayout
     {
         private readonly ExchangeFlowCoordinator _flow;
 
@@ -20,11 +20,6 @@ namespace KIOSK.Presentation.Features.Exchange.Shell.ViewModels
 
         [ObservableProperty]
         private object? currentView;
-
-        public void SetInnerView(object view)
-        {
-            CurrentView = view;
-        }
 
         [ObservableProperty]
         private object? popupContent;

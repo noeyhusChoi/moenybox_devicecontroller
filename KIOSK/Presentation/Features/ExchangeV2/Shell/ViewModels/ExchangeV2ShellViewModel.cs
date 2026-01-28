@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using KIOSK.Application.Services.ExchangeV2;
 using KIOSK.Presentation.Features.ExchangeV2.Flow;
-using KIOSK.Presentation.Features.ExchangeV2.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels;
 using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels
 {
-    public partial class ExchangeV2ShellViewModel : ObservableObject, IShellHost
+    public partial class ExchangeV2ShellViewModel : ObservableObject, ILayout
     {
         private readonly ExchangeV2FlowCoordinator _flow;
         private readonly IExchangeV2TransactionContext _transactionContext;
@@ -29,11 +29,6 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels
 
         [ObservableProperty]
         private object? currentView;
-
-        public void SetInnerView(object view)
-        {
-            CurrentView = view;
-        }
 
         [ObservableProperty]
         private object? popupContent;

@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using KIOSK.Presentation.Features.ExchangeV2.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels;
 using KIOSK.Presentation.Shared.Flow.ViewModels;
 using System.Collections.ObjectModel;
 

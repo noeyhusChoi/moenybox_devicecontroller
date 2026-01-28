@@ -26,4 +26,8 @@
         Task OnLoadAsync(object? parameter, CancellationToken ct);
         Task OnUnloadAsync();
     }
+
+    public interface IShellHost : ILayout
+    {
+    }
 }

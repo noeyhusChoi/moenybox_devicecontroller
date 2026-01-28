@@ -1,0 +1,95 @@
+﻿<UserControl
+    x:Class="KIOSK.Presentation.Features.ExchangeV2.Pages.Views.ExchangeV2ExchangeTypeSelectView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Pages.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1920"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Image
+            Grid.Row="0"
+            Margin="20"
+            Source="/Assets/Image/Common_Logo.png" />
+        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+            <TextBlock
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_4XL}"
+                FontWeight="{StaticResource FontWeight_L}"
+                Foreground="{StaticResource WhiteBrush}"
+                Text="Travel Easy"
+                TextAlignment="Center" />
+            <TextBlock
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_4XL}"
+                FontWeight="{StaticResource FontWeight_L}"
+                Foreground="{StaticResource WhiteBrush}"
+                Text="Exchange Smart"
+                TextAlignment="Center" />
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <Button
+                Height="300"
+                Margin="10"
+                Command="{Binding NextCommand}"
+                CommandParameter="SELL">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontFamily="{StaticResource Pretendard}"
+                                    FontSize="{StaticResource FontSize_XL}"
+                                    FontWeight="{StaticResource FontWeight_M}"
+                                    Foreground="{StaticResource BlackBrush}"
+                                    Opacity="0.7"
+                                    Text="외화를 원화로 바꾸기" />
+                                <TextBlock
+                                    FontFamily="{StaticResource Pretendard}"
+                                    FontSize="{StaticResource FontSize_4XL}"
+                                    FontWeight="{StaticResource FontWeight_L}"
+                                    Foreground="{StaticResource BlackBrush}"
+                                    Text="외화판매 시작하기" />
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+        <Button
+            Grid.Row="3"
+            Height="100"
+            Margin="10"
+            Command="{Binding PreviousCommand}"
+            CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}"
+            Content="이전"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="{StaticResource FontSize_XL}"
+            FontWeight="{StaticResource FontWeight_M}"
+            Foreground="{StaticResource BlackBrush}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</UserControl>

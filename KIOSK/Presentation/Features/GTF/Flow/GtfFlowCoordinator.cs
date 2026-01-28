@@ -2,7 +2,7 @@ using KIOSK.Application.StateMachines;
 using KIOSK.Application.Abstractions;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Services;
-using KIOSK.Presentation.Features.GTF.ViewModels;
+using KIOSK.Presentation.Features.GTF.Pages.ViewModels;
 using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 
 namespace KIOSK.Presentation.Features.GTF.Flow
@@ -36,7 +36,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
 
             return state switch
             {
-                GtfState.Language => _nav.NavigateTo<GtfLanguageSelectViewModel>(vm =>
+                GtfState.Language => _nav.NavigatePage<GtfLanguageSelectViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -47,7 +47,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.IdScanConsent => _nav.NavigateTo<GtfIdScanConsentViewModel>(vm =>
+                GtfState.IdScanConsent => _nav.NavigatePage<GtfIdScanConsentViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -58,7 +58,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.IdScanGuide => _nav.NavigateTo<GtfIdScanGuideViewModel>(vm =>
+                GtfState.IdScanGuide => _nav.NavigatePage<GtfIdScanGuideViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -69,7 +69,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.IdScanProcess => _nav.NavigateTo<GtfIdScanProcessViewModel>(vm =>
+                GtfState.IdScanProcess => _nav.NavigatePage<GtfIdScanProcessViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -80,7 +80,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.RefundMethodSelect => _nav.NavigateTo<GtfRefundMethodSelectViewModel>(vm =>
+                GtfState.RefundMethodSelect => _nav.NavigatePage<GtfRefundMethodSelectViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -91,7 +91,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.CreditGuide => _nav.NavigateTo<GtfCreditGuideViewModel>(vm =>
+                GtfState.CreditGuide => _nav.NavigatePage<GtfCreditGuideViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -102,7 +102,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.AlipayGuide => _nav.NavigateTo<GtfAlipayGuideViewModel>(vm =>
+                GtfState.AlipayGuide => _nav.NavigatePage<GtfAlipayGuideViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -113,7 +113,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.WeChatGuide => _nav.NavigateTo<GtfWeChatGuideViewModel>(vm =>
+                GtfState.WeChatGuide => _nav.NavigatePage<GtfWeChatGuideViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -124,7 +124,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.RefundVoucherRegister => _nav.NavigateTo<GtfRefundVoucherRegisterViewModel>(vm =>
+                GtfState.RefundVoucherRegister => _nav.NavigatePage<GtfRefundVoucherRegisterViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -135,7 +135,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.Sign => _nav.NavigateTo<GtfRefundSignatureViewModel>(vm =>
+                GtfState.Sign => _nav.NavigatePage<GtfRefundSignatureViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -146,7 +146,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.CreditRegister => _nav.NavigateTo<GtfCreditRegisterViewModel>(vm =>
+                GtfState.CreditRegister => _nav.NavigatePage<GtfCreditRegisterViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -157,7 +157,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.AlipayRegister => _nav.NavigateTo<GtfAlipayRegisterViewModel>(vm =>
+                GtfState.AlipayRegister => _nav.NavigatePage<GtfAlipayRegisterViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -168,7 +168,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.WeChatRegisterGuide => _nav.NavigateTo<GtfWeChatRegisterGuideViewModel>(vm =>
+                GtfState.WeChatRegisterGuide => _nav.NavigatePage<GtfWeChatRegisterGuideViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -179,7 +179,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.AlipayAccountSelect => _nav.NavigateTo<GtfAlipayAccountSelectViewModel>(vm =>
+                GtfState.AlipayAccountSelect => _nav.NavigatePage<GtfAlipayAccountSelectViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -190,7 +190,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.WeChatRegister => _nav.NavigateTo<GtfWeChatRegisterViewModel>(vm =>
+                GtfState.WeChatRegister => _nav.NavigatePage<GtfWeChatRegisterViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepPrevious = async () => await _state.PreviousAsync();
@@ -201,7 +201,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.RefundComplete => _nav.NavigateTo<GtfRefundCompleteViewModel>(vm =>
+                GtfState.RefundComplete => _nav.NavigatePage<GtfRefundCompleteViewModel>(vm =>
                 {
                     vm.OnStepMain = async () => await _state.ExitAsync();
                     vm.OnStepError = async ex =>
@@ -210,7 +210,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                         await _state.ErrorAsync();
                     };
                 }),
-                GtfState.Exit => _nav.SwitchShell<MenuShellViewModel>(),
+                GtfState.Exit => _nav.NavigateLayout<MenuShellViewModel>(),
                 _ => Task.CompletedTask
             };
         }

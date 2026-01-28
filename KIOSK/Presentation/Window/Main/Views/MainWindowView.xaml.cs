@@ -1,4 +1,5 @@
 ﻿using KIOSK.ViewModels;
+using KIOSK.Presentation.Shared.Abstractions;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +16,7 @@ namespace KIOSK;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindowView : Window
+public partial class MainWindowView : Window, IWindow
 {
     public MainWindowView()
     {
@@ -40,4 +41,16 @@ public partial class MainWindowView : Window
             }
         }
     }
+
+    public void SetShell(object? shell)
+    {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.RootViewModel = shell ?? throw new InvalidOperationException("Shell이 없습니다.");
+            return;
+        }
+
+        throw new InvalidOperationException("MainWindowViewModel이 없습니다.");
+    }
+
 }

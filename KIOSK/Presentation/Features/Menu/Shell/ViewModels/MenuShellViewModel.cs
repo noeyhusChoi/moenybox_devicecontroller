@@ -2,12 +2,12 @@
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Presentation.Navigation.Services;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Features.Menu.Pages.ViewModels;
 using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Menu.Shell.ViewModels
 {
-    public partial class MenuShellViewModel : ObservableObject, IShellHost
+    public partial class MenuShellViewModel : ObservableObject, ILayout
     {
         private readonly INavigationService _nav;
 
@@ -19,17 +19,12 @@ namespace KIOSK.Presentation.Features.Menu.Shell.ViewModels
         [ObservableProperty]
         private object? currentView;
 
-        public void SetInnerView(object view)
-        {
-            CurrentView = view;
-        }
-
         [ObservableProperty]
         private object? popupContent;
 
         public async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
-            await _nav.NavigateTo<MenuViewModel>();
+            await _nav.NavigatePage<MenuViewModel>();
         }
 
         public async Task OnUnloadAsync()

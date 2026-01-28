@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using KIOSK.Application.Abstractions;
 using KIOSK.Infrastructure.Logging;
-using KIOSK.Presentation.Navigation.State;
 using KIOSK.Presentation.Shared.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,19 +8,20 @@ namespace KIOSK.Presentation.Navigation.Services;
 
 public interface INavigationService
 {
-    void AttachRootShell(IWindowHost shell);
+    void SetRootHost(IWindow host);
 
     // Shell 전환 (ServiceShell, ExchangeShell, GtfShell)
-    Task SwitchShell<TShell>()
-        where TShell : class, IShellHost;
+    Task NavigateLayout<TLayout>()
+        where TLayout : class, ILayout;
 
     // Flow 전환
-    Task NavigateTo<TView>(Action<TView>? init = null, object? parameter = null)
-        where TView : class;
+    Task NavigatePage<TPage>(Action<TPage>? init = null, object? parameter = null)
+        where TPage : class;
 
     T GetViewModel<T>() where T : class;
+    T GetShellViewModel<T>() where T : class;
 
-    IShellHost? ActiveShell { get; }
+    ILayout? ActiveShell { get; }
 
     object? ActiveFlowView { get; }
 }
@@ -30,59 +30,68 @@ public sealed class NavigationService : INavigationService
 {
     private readonly IServiceProvider _provider;
     private readonly ILoggingService _logging;
-    private readonly NavigationState _state;
+
     private readonly IUiDispatcher _uiDispatcher;
     private readonly SemaphoreSlim _navigateLock = new(1, 1);
+
+    private IWindow? _rootShell;
+    private ILayout? _activeShell;
+    private object? _activeFlowView;
+
+    private IServiceScope? _shellScope;
+    private IServiceScope? _flowScope;
+    private CancellationTokenSource? _flowCancellation;
 
     public NavigationService(
         IServiceProvider provider,
         ILoggingService logging,
-        NavigationState navState,
         IUiDispatcher uiDispatcher)
     {
         _provider = provider;
         _logging = logging;
-        _state = navState;
         _uiDispatcher = uiDispatcher;
     }
-    public IShellHost? ActiveShell => _state.ActiveShell;
-    public object? ActiveFlowView => _state.ActiveFlowView;
+    public ILayout? ActiveShell => _activeShell;
+    public object? ActiveFlowView => _activeFlowView;
 
-    public void AttachRootShell(IWindowHost shell)
+    public void SetRootHost(IWindow host)
     {
-        _state.RootShell = shell;
+        _rootShell = host;
     }
 
     // Shell 전환
-    public async Task SwitchShell<TShell>()
-        where TShell : class, IShellHost
+    public async Task NavigateLayout<TShell>()
+        where TShell : class, ILayout
     {
         try
         {
-            if (_state.RootShell == null)
-                throw new InvalidOperationException("RootShell이 없습니다.");
+            var rootShell = _rootShell ?? throw new InvalidOperationException("RootShell이 없습니다.");
 
-            if (_state.ActiveShell is TShell currentShell)
+            if (_activeShell is TShell currentShell)
             {
-                var currentProvider = _state.ShellScope?.ServiceProvider ?? _provider;
+                var currentProvider = _shellScope?.ServiceProvider ?? _provider;
                 var candidate = currentProvider.GetRequiredService<TShell>();
                 if (ReferenceEquals(currentShell, candidate))
                     return;
             }
 
-            await TryUnloadAsync(_state.ActiveFlowView);
-            await TryUnloadAsync(_state.ActiveShell);
+            await TryUnloadAsync(_activeFlowView);
+            await TryUnloadAsync(_activeShell);
 
-            _state.FlowScope?.Dispose();
-            _state.FlowScope = null;
+            _flowScope?.Dispose();
+            _flowScope = null;
 
-            _state.ShellScope?.Dispose();
-            _state.ShellScope = _provider.CreateScope();
+            _shellScope?.Dispose();
+            _shellScope = _provider.CreateScope();
 
-            var sub = _state.ShellScope.ServiceProvider.GetRequiredService<TShell>();
-            _state.ActiveShell = sub;
+            var sub = _shellScope.ServiceProvider.GetRequiredService<TShell>();
 
-            await _uiDispatcher.InvokeAsync(() => _state.RootShell.SetShell(sub));
+            await _uiDispatcher.InvokeAsync(() =>
+            {
+                _activeShell = sub;
+                _activeFlowView = null;
+                rootShell.SetShell(sub);
+            });
 
             if (sub is INavigable nav)
                 await nav.OnLoadAsync(null, CancellationToken.None);
@@ -94,37 +103,39 @@ public sealed class NavigationService : INavigationService
     }
 
     // FlowView 전환
-    public async Task NavigateTo<TView>(Action<TView>? init = null, object? parameter = null)
+    public async Task NavigatePage<TView>(Action<TView>? init = null, object? parameter = null)
         where TView : class
     {
         await _navigateLock.WaitAsync();
         try
         {
-            if (_state.ActiveShell == null)
-                throw new InvalidOperationException("Shell이 없습니다.");
+            var activeShell = _activeShell ?? throw new InvalidOperationException("Shell이 없습니다.");
 
-            if (_state.ActiveFlowView is TView currentFlowView && ReferenceEquals(_state.ActiveFlowView, currentFlowView))
+            if (_activeFlowView is TView currentFlowView && ReferenceEquals(_activeFlowView, currentFlowView))
                 return;
 
-            await TryUnloadAsync(_state.ActiveFlowView);
+            await TryUnloadAsync(_activeFlowView);
 
-            _state.FlowCancellation?.Cancel();
-            _state.FlowCancellation?.Dispose();
+            _flowCancellation?.Cancel();
+            _flowCancellation?.Dispose();
 
-            _state.FlowScope?.Dispose();
-            var flowRoot = _state.ShellScope?.ServiceProvider ?? _provider;
-            _state.FlowScope = flowRoot.CreateScope();
+            _flowScope?.Dispose();
+            var flowRoot = _shellScope?.ServiceProvider ?? _provider;
+            _flowScope = flowRoot.CreateScope();
 
-            var vm = _state.FlowScope.ServiceProvider.GetRequiredService<TView>();
+            var vm = _flowScope.ServiceProvider.GetRequiredService<TView>();
             init?.Invoke(vm);
 
-            _state.ActiveFlowView = vm;
-            await _uiDispatcher.InvokeAsync(() => _state.ActiveShell.SetInnerView(vm));
+            await _uiDispatcher.InvokeAsync(() =>
+            {
+                _activeFlowView = vm;
+                activeShell.CurrentView = vm;
+            });
 
-            _state.FlowCancellation = new CancellationTokenSource();
+            _flowCancellation = new CancellationTokenSource();
 
             if (vm is INavigable nav)
-                await nav.OnLoadAsync(parameter, _state.FlowCancellation.Token);
+                await nav.OnLoadAsync(parameter, _flowCancellation.Token);
         }
         finally
         {
@@ -134,6 +145,12 @@ public sealed class NavigationService : INavigationService
 
     public T GetViewModel<T>() where T : class =>
         _provider.GetRequiredService<T>();
+
+    public T GetShellViewModel<T>() where T : class
+    {
+        var provider = _shellScope?.ServiceProvider ?? _provider;
+        return provider.GetRequiredService<T>();
+    }
 
     private async Task TryUnloadAsync(object? target)
     {

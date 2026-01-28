@@ -1,6 +1,6 @@
 ﻿using KIOSK.Infrastructure.Hosting;
 using KIOSK.Application.Services;
-using KIOSK.Presentation.Shell.Top.Main.ViewModels;
+using KIOSK.Presentation.Shell.Top.Main.Pages.ViewModels;
 using KIOSK.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;

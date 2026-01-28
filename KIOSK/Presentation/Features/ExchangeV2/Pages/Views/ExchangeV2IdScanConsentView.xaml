@@ -1,0 +1,266 @@
+﻿<UserControl
+    x:Class="KIOSK.Presentation.Features.ExchangeV2.Pages.Views.ExchangeV2IdScanConsentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Pages.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1920"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--  (1) ToggleButton 스타일: Ellipse 색을 토글할 때 애니메이션  -->
+        <Style x:Key="EllipseToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <!--  Ellipse: Fill은 이름 있는 SolidColorBrush로  -->
+                            <Ellipse
+                                x:Name="PART_Ellipse"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                                <Ellipse.Fill>
+                                    <SolidColorBrush x:Name="EllipseBrush" Color="#FFDDDDDD" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <!--  체크 마크: Stroke에 이름있는 SolidColorBrush 사용  -->
+                            <Path
+                                x:Name="TickPath"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M0,12 L12,20 L24,2"
+                                Opacity="0"
+                                Stretch="None"
+                                StrokeDashArray="40 40"
+                                StrokeDashOffset="40"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="3.6">
+                                <Path.Stroke>
+                                    <SolidColorBrush x:Name="TickBrush" Color="#FF333333" />
+                                </Path.Stroke>
+                            </Path>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <!--  체크 되었을 때: 엘립스 색 및 체크마크 애니메이션  -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <!--  원 컬러 -> 진한 색  -->
+                                            <ColorAnimation
+                                                Storyboard.TargetName="EllipseBrush"
+                                                Storyboard.TargetProperty="(SolidColorBrush.Color)"
+                                                To="{StaticResource Primary500}"
+                                                Duration="0:0:0.18" />
+
+                                            <!--  체크 마크 색 -> 흰색(가시성 확보)  -->
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TickBrush"
+                                                Storyboard.TargetProperty="(SolidColorBrush.Color)"
+                                                To="{StaticResource White}"
+                                                Duration="0:0:0.1" />
+
+                                            <!--  스트로크 드로잉(StrokeDashOffset)  -->
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="TickPath"
+                                                Storyboard.TargetProperty="StrokeDashOffset"
+                                                From="60"
+                                                To="0"
+                                                Duration="0:0:0.70" />
+
+                                            <!--  불투명도 페이드인 (안전장치)  -->
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="TickPath"
+                                                Storyboard.TargetProperty="Opacity"
+                                                From="0"
+                                                To="1"
+                                                Duration="0:0:0.50" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <!--  체크 해제 시 역애니메이션  -->
+                                            <ColorAnimation
+                                                Storyboard.TargetName="EllipseBrush"
+                                                Storyboard.TargetProperty="(SolidColorBrush.Color)"
+                                                To="#FFDDDDDD"
+                                                Duration="0:0:0.12" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TickBrush"
+                                                Storyboard.TargetProperty="(SolidColorBrush.Color)"
+                                                To="#FF333333"
+                                                Duration="0:0:0.08" />
+
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="TickPath"
+                                                Storyboard.TargetProperty="StrokeDashOffset"
+                                                From="0"
+                                                To="60"
+                                                Duration="0:0:0.14" />
+
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="TickPath"
+                                                Storyboard.TargetProperty="Opacity"
+                                                From="1"
+                                                To="0"
+                                                Duration="0:0:0.10" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <!--  비활성화 상태  -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="PART_Ellipse" Property="Opacity" Value="0.5" />
+                                <Setter TargetName="TickPath" Property="Opacity" Value="0.3" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="{StaticResource FontSize_3XL}"
+            FontWeight="{StaticResource FontWeight_L}"
+            Foreground="{StaticResource WhiteBrush}"
+            Text="신분증을 준비해주세요" />
+
+        <Image
+            Grid.Row="1"
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Source="/Assets/Image/Identification.png" />
+
+        <TextBlock
+            Grid.Row="2"
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="{StaticResource FontSize_XL}"
+            FontWeight="{StaticResource FontWeight_M}"
+            Foreground="{StaticResource WhiteBrush}"
+            Text="이용약관에 동의하셔야 다음으로 넘어갈 수 있습니다." />
+
+        <Button
+            Grid.Row="3"
+            Margin="10"
+            Command="{Binding TermsCommand}"
+            CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}"
+            Content="이용약관 보기"
+            FontFamily="{StaticResource Pretendard}"
+            FontSize="{StaticResource FontSize_XL}"
+            FontWeight="{StaticResource FontWeight_M}"
+            Foreground="{StaticResource BlackBrush}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Border
+            Grid.Row="4"
+            Margin="10"
+            Background="{StaticResource WhiteBrush}"
+            BorderThickness="2"
+            CornerRadius="10">
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <ToggleButton x:Name="AgreeToggle" Style="{StaticResource EllipseToggleStyle}" />
+                <Separator Width="16" Background="Transparent" />
+                <TextBlock
+                    FontFamily="{StaticResource Pretendard}"
+                    FontSize="{StaticResource FontSize_XL}"
+                    FontWeight="{StaticResource FontWeight_M}"
+                    Text="개인정보 수집 이용 및 제 3자 이용 동의"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+
+        <UniformGrid Grid.Row="5" Columns="2">
+            <Button
+                Height="100"
+                Margin="10"
+                Command="{Binding PreviousCommand}"
+                CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}"
+                Content="이전"
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_XL}"
+                FontWeight="{StaticResource FontWeight_M}"
+                Foreground="{StaticResource BlackBrush}">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button
+                Height="100"
+                Margin="10"
+                Command="{Binding NextCommand}"
+                CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}"
+                Content="다음"
+                FontFamily="{StaticResource Pretendard}"
+                FontSize="{StaticResource FontSize_XL}"
+                FontWeight="{StaticResource FontWeight_M}"
+                Foreground="{StaticResource BlackBrush}">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+        </UniformGrid>
+    </Grid>
+</UserControl>

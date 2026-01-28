@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using KIOSK.Presentation.Shell.Window.Startup.Views;
+using KIOSK.Presentation.Navigation.Services;
+using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Shell.Window.Startup.ViewModels
 {
@@ -20,6 +22,7 @@ namespace KIOSK.Presentation.Shell.Window.Startup.ViewModels
         private readonly IAppInitializer _initializer;
         private readonly IHostController _hostController;
         private readonly IServiceProvider _sp;
+        private readonly INavigationService _nav;
 
         [ObservableProperty] private string message = "초기화 준비 중...";
 
@@ -29,11 +32,13 @@ namespace KIOSK.Presentation.Shell.Window.Startup.ViewModels
         public StartupWindowViewModel(
             IAppInitializer initializer,
             IHostController hostController,
-            IServiceProvider sp)
+            IServiceProvider sp,
+            INavigationService nav)
         {
             _initializer = initializer;
             _hostController = hostController;
             _sp = sp;
+            _nav = nav;
 
             _initializer.ProgressChanged += msg =>
             {
@@ -70,6 +75,7 @@ namespace KIOSK.Presentation.Shell.Window.Startup.ViewModels
                 // 3) MainWindow 전환
                 var main = _sp.GetRequiredService<MainWindowView>();
                 main.DataContext = _sp.GetRequiredService<MainWindowViewModel>();
+                _nav.SetRootHost((IWindow)main);
                 System.Windows.Application.Current.MainWindow = main;
                 main.Show();
 

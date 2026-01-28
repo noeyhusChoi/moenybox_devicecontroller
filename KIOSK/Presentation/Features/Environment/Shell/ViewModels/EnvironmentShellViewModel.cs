@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Shared.Abstractions;
-using KIOSK.ViewModels;
+using KIOSK.Presentation.Features.Environment.Pages.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.Environment.Shell.ViewModels
 {
-    public partial class EnvironmentShellViewModel : ObservableObject, IShellHost
+    public partial class EnvironmentShellViewModel : ObservableObject, ILayout
     {
         private readonly INavigationService _nav;
 
@@ -22,17 +22,12 @@ namespace KIOSK.Presentation.Features.Environment.Shell.ViewModels
         [ObservableProperty]
         private object? currentView;
 
-        public void SetInnerView(object view)
-        {
-            CurrentView = view;
-        }
-
         [ObservableProperty]
         private object? popupContent;
 
         public async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
-            await _nav.NavigateTo<EnvironmentViewModel>();
+            await _nav.NavigatePage<EnvironmentViewModel>();
         }
 
         public async Task OnUnloadAsync()

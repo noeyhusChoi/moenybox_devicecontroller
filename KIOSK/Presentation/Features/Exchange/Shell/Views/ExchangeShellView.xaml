@@ -10,7 +10,7 @@
     mc:Ignorable="d">
     <Grid>
         <!--  Default Layer  -->
-        <ContentControl Content="{Binding CurrentView}" />
+        <ContentControl Content="{Binding CurrentPage}" />
 
         <!--  Dim Background + Popup Layer  -->
         <Grid Panel.ZIndex="10">

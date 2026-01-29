@@ -1,27 +1,20 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.Exchange;
-using KIOSK.Presentation.Features.Exchange.Resources;
+using KIOSK.Domain.Entities;
 using KIOSK.Infrastructure.Common.Utils;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Media;
+using KIOSK.Presentation.Features.Exchange.Resources;
 using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeDepositViewModel : ObservableObject, IStepMain, IStepNext, IStepError, INavigable
+    public partial class ExchangeDepositViewModel : StepViewModelBase
     {
-        #region Trigger
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
-        #endregion
-
         #region RightSection
         [ObservableProperty]
         private string videoPath;
@@ -78,7 +71,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             SelectedCurrencyFlag = new Uri($"pack://application:,,,/Assets/FLAG/{Transaction.SourceCurrency}.png", UriKind.Absolute);
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             var assets = await _depositAssetsProvider.LoadAsync(Transaction.SourceCurrency, ct);
             VideoPath = assets.VideoPath;
@@ -87,7 +80,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             await _depositUseCase.StartAsync(ct);
         }
 
-        public async Task OnUnloadAsync()
+        public override async Task OnUnloadAsync()
         {
             await _depositUseCase.StopAsync(CancellationToken.None);
             _depositUseCase.DepositStateChanged -= OnDepositStateChanged;
@@ -100,50 +93,26 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 
         #region Commands
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                await _depositUseCase.StopAsync(CancellationToken.None);
-                if (OnStepMain is not null) 
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
-        }
+        private Task Main(object? parameter) => ExecuteAfterStoppingAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                await _depositUseCase.StopAsync(CancellationToken.None);
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteAfterStoppingAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
-        private async Task Next()
-        {
-            try
-            {
-                await _depositUseCase.StopAsync(CancellationToken.None);
-                if (OnStepNext is not null)
-                    await OnStepNext("");
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
-        }
+        private Task Next(object? parameter) => ExecuteAfterStoppingAsync(OnStepNext, parameter);
         #endregion
 
+        private async Task ExecuteAfterStoppingAsync(Func<object?, Task>? step, object? parameter)
+        {
+            try
+            {
+                await _depositUseCase.StopAsync(CancellationToken.None);
+                await ExecuteStepAsync(step, parameter);
+            }
+            catch (Exception ex)
+            {
+                OnStepError?.Invoke(ex);
+            }
+        }
     }
 }

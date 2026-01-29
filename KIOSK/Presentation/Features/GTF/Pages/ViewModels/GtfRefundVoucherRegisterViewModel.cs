@@ -1,31 +1,29 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Infrastructure.API.Gtf;
+using KIOSK.Application.Services;
+using KIOSK.Application.Services.API;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Drivers;
 using KIOSK.Device.Drivers.E200Z;
-using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Domain.Entities;
-using KIOSK.Application.Services;
-using KIOSK.Application.Services.API;
-using System.Diagnostics;
-using System.Windows;
+using KIOSK.Infrastructure.API.Gtf;
+using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfRefundVoucherRegisterViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError, INavigable
+    public partial class GtfRefundVoucherRegisterViewModel : StepViewModelBase
     {
         private readonly IDeviceManager _deviceManager;
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
 
         public GtfTaxRefundModel Current => _gtfTaxRefundService.Current;
-
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
 
         public GtfRefundVoucherRegisterViewModel(IDeviceManager deviceManager, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
@@ -34,7 +32,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             _gtfTaxRefundService = gtfTaxRefundService;
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             await _deviceManager.SendAsync("QR1", new DeviceCommand("SCAN_ENABLE"));
 
@@ -43,7 +41,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 QR.Decoded += ScanVoucherQrCodeAsync;
         }
 
-        public async Task OnUnloadAsync()
+        public override async Task OnUnloadAsync()
         {
             await _deviceManager.SendAsync("QR1", new DeviceCommand("SCAN_DISABLE"));
 
@@ -124,7 +122,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
         #region Commands
         [RelayCommand]
-        private async Task Main()
+        private async Task Main(object? parameter)
         {
             // 취소 요청
             var res = await _gtfApiService.CustomsCancelAsync(new CustomsCancelRequestDto()
@@ -147,8 +145,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
             try
             {
-                if (OnStepMain is not null)
-                    await OnStepMain();
+                await ExecuteStepAsync(OnStepMain, parameter);
             }
             catch (Exception ex)
             {
@@ -158,19 +155,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
         }
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
 
         [RelayCommand]
@@ -209,8 +194,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 string nextStep = Current.SlipItems.Any(x => x.HotelRefundYn == "Y" || x.MediRefundYn == "Y") ? "Sign" : _gtfTaxRefundService.Current.SelectedRefundWayCode;
 
                 // 5) OnStepNext 실행
-                if (OnStepNext is not null)
-                    await OnStepNext(nextStep);
+                await ExecuteStepAsync(OnStepNext, nextStep);
             }
             catch (Exception ex)
             {

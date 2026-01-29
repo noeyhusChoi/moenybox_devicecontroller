@@ -8,22 +8,22 @@ namespace KIOSK.Presentation.Navigation.Services;
 
 public interface INavigationService
 {
-    void SetRootHost(IWindow host);
+    void SetRootWindow(IWindow window);
 
-    // Shell 전환 (ServiceShell, ExchangeShell, GtfShell)
+    // Layout 전환 (ServiceShell, ExchangeShell, GtfShell 등)
     Task NavigateLayout<TLayout>()
         where TLayout : class, ILayout;
 
-    // Flow 전환
+    // Page 전환
     Task NavigatePage<TPage>(Action<TPage>? init = null, object? parameter = null)
         where TPage : class;
 
     T GetViewModel<T>() where T : class;
-    T GetShellViewModel<T>() where T : class;
+    T GetLayoutViewModel<T>() where T : class;
 
-    ILayout? ActiveShell { get; }
+    ILayout? ActiveLayout { get; }
 
-    object? ActiveFlowView { get; }
+    object? ActivePage { get; }
 }
 
 public sealed class NavigationService : INavigationService
@@ -34,9 +34,9 @@ public sealed class NavigationService : INavigationService
     private readonly IUiDispatcher _uiDispatcher;
     private readonly SemaphoreSlim _navigateLock = new(1, 1);
 
-    private IWindow? _rootShell;
-    private ILayout? _activeShell;
-    private object? _activeFlowView;
+    private IWindow? _rootWindow;
+    private ILayout? _activeLayout;
+    private object? _activePage;
 
     private IServiceScope? _shellScope;
     private IServiceScope? _flowScope;
@@ -51,32 +51,32 @@ public sealed class NavigationService : INavigationService
         _logging = logging;
         _uiDispatcher = uiDispatcher;
     }
-    public ILayout? ActiveShell => _activeShell;
-    public object? ActiveFlowView => _activeFlowView;
+    public ILayout? ActiveLayout => _activeLayout;
+    public object? ActivePage => _activePage;
 
-    public void SetRootHost(IWindow host)
+    public void SetRootWindow(IWindow window)
     {
-        _rootShell = host;
+        _rootWindow = window;
     }
 
-    // Shell 전환
-    public async Task NavigateLayout<TShell>()
-        where TShell : class, ILayout
+    // Layout 전환
+    public async Task NavigateLayout<TLayout>()
+        where TLayout : class, ILayout
     {
         try
         {
-            var rootShell = _rootShell ?? throw new InvalidOperationException("RootShell이 없습니다.");
+            var rootWindow = _rootWindow ?? throw new InvalidOperationException("RootWindow가 없습니다.");
 
-            if (_activeShell is TShell currentShell)
+            if (_activeLayout is TLayout currentLayout)
             {
                 var currentProvider = _shellScope?.ServiceProvider ?? _provider;
-                var candidate = currentProvider.GetRequiredService<TShell>();
-                if (ReferenceEquals(currentShell, candidate))
+                var candidate = currentProvider.GetRequiredService<TLayout>();
+                if (ReferenceEquals(currentLayout, candidate))
                     return;
             }
 
-            await TryUnloadAsync(_activeFlowView);
-            await TryUnloadAsync(_activeShell);
+            await TryUnloadAsync(_activePage);
+            await TryUnloadAsync(_activeLayout);
 
             _flowScope?.Dispose();
             _flowScope = null;
@@ -84,16 +84,16 @@ public sealed class NavigationService : INavigationService
             _shellScope?.Dispose();
             _shellScope = _provider.CreateScope();
 
-            var sub = _shellScope.ServiceProvider.GetRequiredService<TShell>();
+            var layout = _shellScope.ServiceProvider.GetRequiredService<TLayout>();
 
             await _uiDispatcher.InvokeAsync(() =>
             {
-                _activeShell = sub;
-                _activeFlowView = null;
-                rootShell.SetShell(sub);
+                _activeLayout = layout;
+                _activePage = null;
+                rootWindow.CurrentLayout = layout;
             });
 
-            if (sub is INavigable nav)
+            if (layout is INavigable nav)
                 await nav.OnLoadAsync(null, CancellationToken.None);
         }
         catch (Exception ex)
@@ -102,19 +102,19 @@ public sealed class NavigationService : INavigationService
         }
     }
 
-    // FlowView 전환
+    // Page 전환
     public async Task NavigatePage<TView>(Action<TView>? init = null, object? parameter = null)
         where TView : class
     {
         await _navigateLock.WaitAsync();
         try
         {
-            var activeShell = _activeShell ?? throw new InvalidOperationException("Shell이 없습니다.");
+            var activeLayout = _activeLayout ?? throw new InvalidOperationException("Layout이 없습니다.");
 
-            if (_activeFlowView is TView currentFlowView && ReferenceEquals(_activeFlowView, currentFlowView))
+            if (_activePage is TView currentPage && ReferenceEquals(_activePage, currentPage))
                 return;
 
-            await TryUnloadAsync(_activeFlowView);
+            await TryUnloadAsync(_activePage);
 
             _flowCancellation?.Cancel();
             _flowCancellation?.Dispose();
@@ -128,8 +128,8 @@ public sealed class NavigationService : INavigationService
 
             await _uiDispatcher.InvokeAsync(() =>
             {
-                _activeFlowView = vm;
-                activeShell.CurrentView = vm;
+                _activePage = vm;
+                activeLayout.CurrentPage = vm;
             });
 
             _flowCancellation = new CancellationTokenSource();
@@ -146,7 +146,7 @@ public sealed class NavigationService : INavigationService
     public T GetViewModel<T>() where T : class =>
         _provider.GetRequiredService<T>();
 
-    public T GetShellViewModel<T>() where T : class
+    public T GetLayoutViewModel<T>() where T : class
     {
         var provider = _shellScope?.ServiceProvider ?? _provider;
         return provider.GetRequiredService<T>();

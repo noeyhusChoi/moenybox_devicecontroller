@@ -1,66 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Presentation.Shared.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
+namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels;
+
+public partial class GtfWeChatRegisterGuideViewModel : StepViewModelBase
 {
-    public partial class GtfWeChatRegisterGuideViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError
-    {
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
+    public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
 
-        #region Commands
-        [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+    public override Task OnUnloadAsync() => Task.CompletedTask;
 
-        [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+    [RelayCommand]
+    private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
-        [RelayCommand]
-        private async Task Next(object? o)
-        {
-            try
-            {
-                if (OnStepNext is not null)
-                    await OnStepNext("");
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
-        #endregion
-    }
+    [RelayCommand]
+    private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
+
+    [RelayCommand]
+    private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
 }

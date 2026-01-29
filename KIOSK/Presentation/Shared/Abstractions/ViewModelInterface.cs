@@ -1,6 +1,9 @@
-﻿namespace KIOSK.Presentation.Shared.Abstractions
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace KIOSK.Presentation.Shared.Abstractions
 {
-    // TODO: 뷰모델 공통 인터페이스 재정의 필요
     public interface IStepError
     {
         Action<Exception>? OnStepError { get; set; }
@@ -8,26 +11,26 @@
 
     public interface IStepMain
     {
-        Func<Task>? OnStepMain { get; set; }
+        Func<object?, Task>? OnStepMain { get; set; }
     }
 
     public interface IStepNext
     {
-        Func<string?, Task>? OnStepNext { get; set; }
+        Func<object?, Task>? OnStepNext { get; set; }
     }
 
     public interface IStepPrevious
     {
-        Func<Task>? OnStepPrevious { get; set; }
+        Func<object?, Task>? OnStepPrevious { get; set; }
+    }
+
+    public interface IStepLifecycle : IStepMain, IStepNext, IStepPrevious, IStepError
+    {
     }
 
     public interface INavigable
     {
         Task OnLoadAsync(object? parameter, CancellationToken ct);
         Task OnUnloadAsync();
-    }
-
-    public interface IShellHost : ILayout
-    {
     }
 }

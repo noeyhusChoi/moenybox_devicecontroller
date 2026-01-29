@@ -13,9 +13,10 @@ using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
 using KIOSK.Presentation.Features.MenuV2.Pages.ViewModels;
 using KIOSK.Presentation.Shared.Flow.ViewModels;
 using KIOSK.Presentation.Shell.Top.Main.Pages.ViewModels;
-using KIOSK.Presentation.Shell.Window.Startup.ViewModels;
 using KIOSK.ViewModels;
 using KIOSK.Presentation.Features.Exchange.Pages.ViewModels.Popup;
+using KIOSK.Presentation.Features.Startup.Shell.ViewModels;
+using KIOSK.Presentation.Features.Startup.Pages.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.CompositionRoot.Modules
@@ -26,7 +27,6 @@ namespace KIOSK.CompositionRoot.Modules
         {
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<LoadingViewModel>();
-            services.AddSingleton<StartupWindowViewModel>();
 
             services.AddSingleton<FooterViewModel>();
 
@@ -36,6 +36,7 @@ namespace KIOSK.CompositionRoot.Modules
             services.AddScoped<ExchangeShellViewModel>();
             services.AddScoped<ExchangeV2ShellViewModel>();
             services.AddScoped<GtfShellViewModel>();
+            services.AddScoped<StartupShellViewModel>();
 
             services.AddScoped<EnvironmentViewModel>();
             services.AddTransient<EnvironmentCassetteSettingViewModel>();
@@ -44,6 +45,7 @@ namespace KIOSK.CompositionRoot.Modules
 
             services.AddScoped<MenuViewModel>();
             services.AddScoped<MenuV2ViewModel>();
+            services.AddScoped<StartupViewModel>();
             services.AddSingleton<FlowProgressViewModel>();
             services.AddSingleton<IFlowDefinitionProvider, FlowDefinitionProvider>();
             services.AddScoped<ExchangeV2FlowHeaderViewModel>();

@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Exchange;
@@ -7,17 +9,11 @@ using KIOSK.Presentation.Navigation.Services;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeIDScanGuideViewModel
-        : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError, INavigable
+    public partial class ExchangeIDScanGuideViewModel : StepViewModelBase
     {
         private readonly IExchangeIdScanGuideUseCase _scanGuideUseCase;
         private readonly IPopupService _popup;
         private CancellationTokenSource? _scanCts;
-
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
 
         public ExchangeIDScanGuideViewModel(
             IExchangeIdScanGuideUseCase scanGuideUseCase,
@@ -27,7 +23,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             _popup = popup;
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken pageCt)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken pageCt)
         {
             _scanCts = CancellationTokenSource.CreateLinkedTokenSource(pageCt);
             var ct = _scanCts.Token;
@@ -56,7 +52,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
                 if (success)
                 {
                     if (!ct.IsCancellationRequested)
-                        await Next(true);
+                        await Next();
                 }
                 else
                 {
@@ -78,7 +74,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
                 await Previous();
         }
 
-        public async Task OnUnloadAsync()
+        public override async Task OnUnloadAsync()
         {
             _scanCts?.Cancel();
             await _scanGuideUseCase.StopAsync(CancellationToken.None);
@@ -87,15 +83,12 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
         }
 
         [RelayCommand]
-        private async Task Main() =>
-            await (OnStepMain?.Invoke() ?? Task.CompletedTask);
+        private Task Main() => ExecuteStepAsync(OnStepMain);
 
         [RelayCommand]
-        private async Task Previous() =>
-            await (OnStepPrevious?.Invoke() ?? Task.CompletedTask);
+        private Task Previous() => ExecuteStepAsync(OnStepPrevious);
 
         [RelayCommand]
-        private async Task Next(object? _) =>
-            await (OnStepNext?.Invoke("") ?? Task.CompletedTask);
+        private Task Next() => ExecuteStepAsync(OnStepNext);
     }
 }

@@ -1,18 +1,22 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using KIOSK.Infrastructure.API.Gtf;
-using KIOSK.Application.Services.Localization;
-using KIOSK.Application.Services;
-using KIOSK.Application.Services.API;
-using Localization;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Services;
+using KIOSK.Application.Services.API;
+using KIOSK.Application.Services.Localization;
 using KIOSK.Domain.Entities;
+using KIOSK.Infrastructure.API.Gtf;
 using KIOSK.Presentation.Shared.Abstractions;
+using Localization;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfLanguageSelectViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError, INavigable
+    public partial class GtfLanguageSelectViewModel : StepViewModelBase
     {
         [ObservableProperty]
         private ObservableCollection<LocaleInfoModel> localeField;
@@ -21,11 +25,6 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
         private readonly ILocaleInfoProvider _localeInfoProvider;
-
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
 
         public GtfLanguageSelectViewModel(ILocalizationService localizationService, ILocaleInfoProvider localeInfoProvider, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
@@ -50,16 +49,13 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             );
         }
 
-        public Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             _ = Task.Run(() => InitAsync(ct), ct);
             return Task.CompletedTask;
         }
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
         private async Task InitAsync(CancellationToken ct)
         {
@@ -78,34 +74,10 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
         #region Commands
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
         private async Task Next(object? parameter)
@@ -118,8 +90,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
                     _localizationService.SetCulture(culture);
 
-                    if (OnStepNext is not null)
-                        await OnStepNext(selectedLanguage);
+                    await ExecuteStepAsync(OnStepNext, selectedLanguage);
                 }
                 catch (Exception ex)
                 {

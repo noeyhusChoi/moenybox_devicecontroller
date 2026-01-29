@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Exchange;
@@ -6,12 +8,8 @@ using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels;
 
-public partial class ExchangeLanguageViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError, INavigable
+public partial class ExchangeLanguageViewModel : StepViewModelBase
 {
-    public Func<Task>? OnStepMain { get; set; }
-    public Func<Task>? OnStepPrevious { get; set; }
-    public Func<string?, Task>? OnStepNext { get; set; }
-    public Action<Exception>? OnStepError { get; set; }
 
     private readonly IExchangeSelectLanguageUseCase _selectLanguageUseCase;
 
@@ -20,61 +18,33 @@ public partial class ExchangeLanguageViewModel : ObservableObject, IStepMain, IS
         _selectLanguageUseCase = selectLanguageUseCase;
     }
 
-    public async Task OnLoadAsync(object? parameter, CancellationToken ct)
-    {
-        // TODO: 로딩 시 필요한 작업 수행
-    }
+    public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
 
-    public async Task OnUnloadAsync()
-    {
-        // TODO: 언로드 시 필요한 작업 수행
-    }
+    public override Task OnUnloadAsync() => Task.CompletedTask;
 
     #region Commands
     [RelayCommand]
-    private async Task Main()
-    {
-        try
-        {
-            if (OnStepMain is not null)
-                await OnStepMain();
-        }
-        catch (Exception ex)
-        {
-            OnStepError?.Invoke(ex);
-        }
-    }
+    private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
     [RelayCommand]
-    private async Task Previous()
-    {
-        try
-        {
-            if (OnStepPrevious is not null)
-                await OnStepPrevious();
-        }
-        catch (Exception ex)
-        {
-            OnStepError?.Invoke(ex);
-        }
-    }
+    private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
     [RelayCommand]
     private async Task Next(object? parameter)
     {
-        if (parameter is string param)
+        if (parameter is not string param)
         {
-            try
-            {
-                await _selectLanguageUseCase.SelectAsync(param);
+            return;
+        }
 
-                if (OnStepNext is not null)
-                    await OnStepNext("");
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
+        try
+        {
+            await _selectLanguageUseCase.SelectAsync(param);
+            await ExecuteStepAsync(OnStepNext, param);
+        }
+        catch (Exception ex)
+        {
+            OnStepError?.Invoke(ex);
         }
     }
     #endregion

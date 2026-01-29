@@ -29,6 +29,10 @@
     xmlns:popupViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.Views.Popup"
     xmlns:view="clr-namespace:KIOSK.Presentation.Features.Environment.Pages.Views"
     xmlns:viewModel="clr-namespace:KIOSK.Presentation.Features.Environment.Pages.ViewModels"
+    xmlns:startupShellViews="clr-namespace:KIOSK.Presentation.Features.Startup.Shell.Views"
+    xmlns:startupShellVm="clr-namespace:KIOSK.Presentation.Features.Startup.Shell.ViewModels"
+    xmlns:startupViewModels="clr-namespace:KIOSK.Presentation.Features.Startup.Pages.ViewModels"
+    xmlns:startupViews="clr-namespace:KIOSK.Presentation.Features.Startup.Pages.Views"
     xmlns:menuViewModels="clr-namespace:KIOSK.Presentation.Features.Menu.Pages.ViewModels"
     xmlns:menuViews="clr-namespace:KIOSK.Presentation.Features.Menu.Pages.Views"
     xmlns:windowVm="clr-namespace:KIOSK.ViewModels"
@@ -72,6 +76,9 @@
         <DataTemplate DataType="{x:Type menuV2ShellVm:MenuV2ShellViewModel}">
             <menuV2ShellViews:MenuV2ShellView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type startupShellVm:StartupShellViewModel}">
+            <startupShellViews:StartupShellView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type gtfShellVm:GtfShellViewModel}">
             <gtfShellViews:GtfShellView />
         </DataTemplate>
@@ -99,6 +106,9 @@
         <!--  메뉴  -->
         <DataTemplate DataType="{x:Type menuViewModels:MenuViewModel}">
             <menuViews:MenuView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type startupViewModels:StartupViewModel}">
+            <startupViews:StartupView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type menuV2ViewModels:MenuV2ViewModel}">
             <menuV2Views:MenuV2View />
@@ -230,5 +240,5 @@
         <KeyBinding Key="F5" Command="{Binding F5Command}" />
     </Window.InputBindings>
 
-    <ContentControl Content="{Binding RootViewModel}" />
+    <ContentControl Content="{Binding CurrentLayout}" />
 </Window>

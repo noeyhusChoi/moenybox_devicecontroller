@@ -13,6 +13,7 @@ using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
+using KIOSK.Presentation.Features.Startup.Shell.ViewModels;
 
 namespace KIOSK.ViewModels
 {
@@ -23,12 +24,12 @@ namespace KIOSK.ViewModels
         private readonly CemsApiService _cems;
 
         [ObservableProperty]
-        private object rootViewModel; // MainWindow의 Content
+        private object currentLayout; // MainWindow의 Layout Content
 
         public MainWindowViewModel(INavigationService nav, IDeviceCatalogService repo, CemsApiService cems)
         {
             _nav = nav;
-            RootViewModel = null;
+            CurrentLayout = null;
 
             _repo = repo;
             _cems = cems;
@@ -36,7 +37,7 @@ namespace KIOSK.ViewModels
 
         public async Task InitializeAsync()
         {
-            await _nav.NavigateLayout<MenuV2ShellViewModel>();
+            await _nav.NavigateLayout<StartupShellViewModel>();
         }
 
         [RelayCommand] private void F0() { }
@@ -44,15 +45,15 @@ namespace KIOSK.ViewModels
         [RelayCommand]
         private void F1()
         {
-            Trace.WriteLine($"SHELL      [{_nav.ActiveShell}]");
-            Trace.WriteLine($"VIEW          [{_nav.ActiveFlowView}]");
-            Trace.WriteLine($"LOCAL_POPUP   [{_nav.ActiveShell?.PopupContent}] ");
+            Trace.WriteLine($"LAYOUT     [{_nav.ActiveLayout}]");
+            Trace.WriteLine($"PAGE       [{_nav.ActivePage}]");
+            Trace.WriteLine($"LAYOUT_POPUP [{_nav.ActiveLayout?.PopupContent}] ");
         }
 
         [RelayCommand]
         private void F2()
         {
-            if (_nav.ActiveShell is EnvironmentShellViewModel)
+            if (_nav.ActiveLayout is EnvironmentShellViewModel)
                 _nav.NavigateLayout<MenuV2ShellViewModel>();
             else
                 _nav.NavigateLayout<EnvironmentShellViewModel>();

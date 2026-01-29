@@ -38,8 +38,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
             {
                 GtfState.Language => _nav.NavigatePage<GtfLanguageSelectViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -49,8 +49,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.IdScanConsent => _nav.NavigatePage<GtfIdScanConsentViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -60,8 +60,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.IdScanGuide => _nav.NavigatePage<GtfIdScanGuideViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -71,8 +71,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.IdScanProcess => _nav.NavigatePage<GtfIdScanProcessViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -82,9 +82,18 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.RefundMethodSelect => _nav.NavigatePage<GtfRefundMethodSelectViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
-                    vm.OnStepNext = async param => await _state.NextAsync(param);
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
+                    vm.OnStepNext = async param =>
+                    {
+                        if (param is string key)
+                        {
+                            await _state.NextAsync(key);
+                            return;
+                        }
+
+                        await _state.NextAsync();
+                    };
                     vm.OnStepError = async ex =>
                     {
                         _logging.Error(ex, $"OnStepError, {ex.Message}");
@@ -93,8 +102,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.CreditGuide => _nav.NavigatePage<GtfCreditGuideViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -104,8 +113,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.AlipayGuide => _nav.NavigatePage<GtfAlipayGuideViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -115,8 +124,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.WeChatGuide => _nav.NavigatePage<GtfWeChatGuideViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -126,9 +135,18 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.RefundVoucherRegister => _nav.NavigatePage<GtfRefundVoucherRegisterViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
-                    vm.OnStepNext = async param => await _state.NextAsync(param);
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
+                    vm.OnStepNext = async param =>
+                    {
+                        if (param is string key)
+                        {
+                            await _state.NextAsync(key);
+                            return;
+                        }
+
+                        await _state.NextAsync();
+                    };
                     vm.OnStepError = async ex =>
                     {
                         _logging.Error(ex, $"OnStepError, {ex.Message}");
@@ -137,9 +155,18 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.Sign => _nav.NavigatePage<GtfRefundSignatureViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
-                    vm.OnStepNext = async param => await _state.NextAsync(param);
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
+                    vm.OnStepNext = async param =>
+                    {
+                        if (param is string key)
+                        {
+                            await _state.NextAsync(key);
+                            return;
+                        }
+
+                        await _state.NextAsync();
+                    };
                     vm.OnStepError = async ex =>
                     {
                         _logging.Error(ex, $"OnStepError, {ex.Message}");
@@ -148,8 +175,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.CreditRegister => _nav.NavigatePage<GtfCreditRegisterViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -159,8 +186,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.AlipayRegister => _nav.NavigatePage<GtfAlipayRegisterViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -170,8 +197,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.WeChatRegisterGuide => _nav.NavigatePage<GtfWeChatRegisterGuideViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -181,8 +208,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.AlipayAccountSelect => _nav.NavigatePage<GtfAlipayAccountSelectViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -192,8 +219,8 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.WeChatRegister => _nav.NavigatePage<GtfWeChatRegisterViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -203,7 +230,7 @@ namespace KIOSK.Presentation.Features.GTF.Flow
                 }),
                 GtfState.RefundComplete => _nav.NavigatePage<GtfRefundCompleteViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
                     vm.OnStepError = async ex =>
                     {
                         _logging.Error(ex, $"OnStepError, {ex.Message}");

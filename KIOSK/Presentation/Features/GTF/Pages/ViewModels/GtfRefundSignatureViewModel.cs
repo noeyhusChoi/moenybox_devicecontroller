@@ -1,31 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Device.Core;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using KIOSK.Domain.Entities;
 using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfRefundSignatureViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError
+    public partial class GtfRefundSignatureViewModel : StepViewModelBase
     {
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
 
         public GtfTaxRefundModel Current => _gtfTaxRefundService.Current;
-
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
 
         public GtfRefundSignatureViewModel(GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
@@ -34,46 +24,16 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
         }
 
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
-        {
-            // TODO: 로딩 시 필요한 작업 수행
-        }
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
         #region Commands
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
 
         [RelayCommand]
@@ -83,7 +43,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             {
                 string nextStep = _gtfTaxRefundService.Current.SelectedRefundWayCode;
 
-                await OnStepNext?.Invoke(nextStep);
+                await ExecuteStepAsync(OnStepNext, nextStep);
             }
             catch (Exception ex)
             {

@@ -98,7 +98,7 @@ public class AppInitializer : IAppInitializer
         {
             _logging.Error(ex, $"[Init Step Failed] {message}");
             Update($"오류: {message}");
-            throw; // 상위로 전달 → StartupWindowVM에서 처리하도록
+            throw; // 상위로 전달 → StartupViewModel에서 처리하도록
         }
     }
 

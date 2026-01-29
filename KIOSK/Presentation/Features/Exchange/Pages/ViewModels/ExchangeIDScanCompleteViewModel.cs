@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Core;
@@ -7,13 +10,8 @@ using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeIDScanCompleteViewModel : ObservableObject, IStepMain, IStepNext, IStepError, INavigable
+    public partial class ExchangeIDScanCompleteViewModel : StepViewModelBase
     {
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
-
         private readonly IDeviceManager _deviceManager;
 
         [ObservableProperty]
@@ -24,7 +22,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             _deviceManager = deviceManager;
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             var scanTask = Task.Run(async () =>
             {
@@ -79,41 +77,15 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             CanNext = true;
         }
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
 
         #region Commands
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        [RelayCommand]
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Next()
-        {
-            try
-            {
-                if (OnStepNext is not null)
-                    await OnStepNext("");
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
         #endregion
     }
 }

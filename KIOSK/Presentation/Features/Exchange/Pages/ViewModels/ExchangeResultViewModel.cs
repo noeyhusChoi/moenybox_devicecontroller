@@ -1,3 +1,7 @@
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
@@ -5,16 +9,11 @@ using KIOSK.Application.Services.Exchange;
 using KIOSK.Domain.Entities;
 using KIOSK.Presentation.Features.Exchange.Resources;
 using KIOSK.Presentation.Shared.Abstractions;
-using System.Diagnostics;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeResultViewModel : ObservableObject, IStepMain, IStepNext, IStepError, INavigable
+    public partial class ExchangeResultViewModel : StepViewModelBase
     {
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
 
         [ObservableProperty]
         private string testCurrency = "USD";
@@ -62,16 +61,13 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             ApplyViewData(_viewDataProvider.Build(Transaction));
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             await _resultUseCase.RegisterAsync(ct);
             ApplyViewData(_viewDataProvider.Build(Transaction));
         }
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
         #region Commands
         [RelayCommand]
@@ -79,10 +75,8 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
         {
             try
             {
-                await _resultUseCase.PrintReceiptAsync(parameter is bool b && b, CancellationToken.None);
-
-                if (OnStepNext is not null)
-                    await OnStepNext("");
+                await _resultUseCase.PrintReceiptAsync(parameter is bool print && print, CancellationToken.None);
+                await ExecuteStepAsync(OnStepNext, parameter);
             }
             catch (Exception ex)
             {

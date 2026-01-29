@@ -1,34 +1,25 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Presentation.Shared.Abstractions;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeCompleteViewModel : ObservableObject, IStepMain, IStepError, INavigable
+    public partial class ExchangeCompleteViewModel : StepViewModelBase
     {
-        public Func<Task>? OnStepMain { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
-
-        public ExchangeCompleteViewModel()
-        {
-
-        }
-
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             try
             {
-                // 화면 표시 후 5초 대기
                 await Task.Delay(TimeSpan.FromSeconds(3), ct);
-
 
                 await System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(async () =>
                 {
-                    await Main();
+                    await ExecuteStepAsync(OnStepMain, parameter);
                 }), DispatcherPriority.Background);
-                // 다음 단계로 자동 진행
             }
             catch (TaskCanceledException)
             {
@@ -40,26 +31,11 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             }
         }
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
         #region Commands
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
         #endregion
     }
 }

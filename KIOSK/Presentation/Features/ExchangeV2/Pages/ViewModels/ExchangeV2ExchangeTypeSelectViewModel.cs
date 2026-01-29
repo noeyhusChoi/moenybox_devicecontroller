@@ -1,24 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.ExchangeV2;
 using KIOSK.Domain.Entities;
 using KIOSK.Presentation.Shared.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
 {
-    public partial class ExchangeV2ExchangeTypeSelectViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious,
-        IStepError, INavigable
+    public partial class ExchangeV2ExchangeTypeSelectViewModel : StepViewModelBase
     {
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
-
         private readonly IExchangeV2TransactionContext _transactionContext;
 
         public ExchangeV2ExchangeTypeSelectViewModel(IExchangeV2TransactionContext transactionContext)
@@ -26,64 +18,39 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
             _transactionContext = transactionContext;
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
-        {
-            // TODO: 로딩 시 필요한 작업 수행
-        }
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
         #region Commands
 
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
-        }
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
         private async Task Next(object? parameter)
         {
-            if (parameter is string param)
+            if (parameter is not string param)
             {
-                try
-                {
-                    var type = MapTransactionType(param);
-                    if (type is not null)
-                        _transactionContext.SetTransactionType(type.Value);
+                return;
+            }
 
-                    if (OnStepNext is not null)
-                        await OnStepNext(default);
-                }
-                catch (Exception ex)
+            try
+            {
+                var type = MapTransactionType(param);
+                if (type is not null)
                 {
-                    OnStepError?.Invoke(ex);
+                    _transactionContext.SetTransactionType(type.Value);
                 }
+
+                await ExecuteStepAsync(OnStepNext);
+            }
+            catch (Exception ex)
+            {
+                OnStepError?.Invoke(ex);
             }
         }
 

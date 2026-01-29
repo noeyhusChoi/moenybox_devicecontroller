@@ -31,8 +31,8 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
         {
             ExchangeV2State.Language => _nav.NavigatePage<ExchangeV2LanguageSelectViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -42,8 +42,8 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
             }),
             ExchangeV2State.Type => _nav.NavigatePage<ExchangeV2ExchangeTypeSelectViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -53,8 +53,8 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
             }),
             ExchangeV2State.Method => _nav.NavigatePage<ExchangeV2ExchangeMethodSelectViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -65,8 +65,8 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
 
             ExchangeV2State.Currency => _nav.NavigatePage<ExchangeV2ExchangeCurrencySelectViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -76,8 +76,8 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
             }),
             ExchangeV2State.IdScanConsent => _nav.NavigatePage<ExchangeV2IdScanConsentViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {

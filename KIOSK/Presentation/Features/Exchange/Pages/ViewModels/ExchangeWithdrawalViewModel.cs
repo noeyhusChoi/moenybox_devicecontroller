@@ -1,16 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Exchange;
 using KIOSK.Presentation.Features.Exchange.Resources;
 using KIOSK.Presentation.Shared.Abstractions;
+
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeWithdrawalViewModel : ObservableObject, IStepNext, INavigable
+    public partial class ExchangeWithdrawalViewModel : StepViewModelBase
     {
-        //public Func<Task>? OnStepMain { get; set; }
-        //public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
 
         [ObservableProperty]
         private string videoPath;
@@ -29,7 +29,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             VideoPath = _loadingVideoProvider.GetLoadingVideoPath();
         }
 
-        public async Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             try
             {
@@ -42,24 +42,11 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             }
         }
 
-        public async Task OnUnloadAsync()
-        {
-            // TODO: 언로드 시 필요한 작업 수행
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
         #region Commands
         [RelayCommand]
-        private async Task Next(object? o)
-        {
-            try
-            {
-                OnStepNext?.Invoke("");
-            }
-            catch (Exception ex)
-            {
-                OnStepError?.Invoke(ex);
-            }
-        }
+        private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
         #endregion
     }
 }

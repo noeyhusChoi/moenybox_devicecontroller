@@ -42,15 +42,25 @@ public partial class MainWindowView : Window, IWindow
         }
     }
 
-    public void SetShell(object? shell)
+    public object? CurrentLayout
     {
-        if (DataContext is MainWindowViewModel vm)
+        get
         {
-            vm.RootViewModel = shell ?? throw new InvalidOperationException("Shell이 없습니다.");
-            return;
-        }
+            if (DataContext is MainWindowViewModel vm)
+                return vm.CurrentLayout;
 
-        throw new InvalidOperationException("MainWindowViewModel이 없습니다.");
+            throw new InvalidOperationException("MainWindowViewModel이 없습니다.");
+        }
+        set
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.CurrentLayout = value ?? throw new InvalidOperationException("Layout이 없습니다.");
+                return;
+            }
+
+            throw new InvalidOperationException("MainWindowViewModel이 없습니다.");
+        }
     }
 
 }

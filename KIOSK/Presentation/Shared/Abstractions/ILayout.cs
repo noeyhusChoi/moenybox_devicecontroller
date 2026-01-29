@@ -2,6 +2,6 @@
 {
     public interface ILayout : INavigable, IPopup
     {
-        object? CurrentView { get; set; }
+        object? CurrentPage { get; set; }
     }
 }

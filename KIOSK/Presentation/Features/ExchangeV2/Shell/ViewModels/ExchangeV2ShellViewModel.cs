@@ -28,7 +28,7 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels
         }
 
         [ObservableProperty]
-        private object? currentView;
+        private object? currentPage;
 
         [ObservableProperty]
         private object? popupContent;
@@ -44,7 +44,7 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels
             await Task.CompletedTask;
         }
 
-        partial void OnCurrentViewChanged(object? value)
+        partial void OnCurrentPageChanged(object? value)
         {
             FlowHeader.UpdateForView(value);
         }

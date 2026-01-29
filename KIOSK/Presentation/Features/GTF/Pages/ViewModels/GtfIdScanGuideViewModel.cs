@@ -1,40 +1,25 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-using CommunityToolkit.Mvvm.Input;
-
-using KIOSK.Device.Abstractions;
-
-using KIOSK.Device.Core;
-
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Application.Services;
-
-using KIOSK.Infrastructure.OCR;
-
-using System;
-
+﻿using System;
 using System.Diagnostics;
-
 using System.IO;
-
-using System.Windows.Media;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Services;
+using KIOSK.Device.Abstractions;
+using KIOSK.Device.Core;
+using KIOSK.Infrastructure.Management.Devices;
+using KIOSK.Infrastructure.OCR;
 using KIOSK.Presentation.Shared.Abstractions;
-
-
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfIdScanGuideViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError, INavigable
+    public partial class GtfIdScanGuideViewModel : StepViewModelBase
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IOcrService _ocr;
         private Uri videoPath;
         private CancellationTokenSource? _scanCts;
-
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
         
         public GtfIdScanGuideViewModel(IDeviceManager deviceManager, IOcrService ocr)
         {
@@ -59,7 +44,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             }
         }
 
-        public Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             // 혹시 이전 인스턴스가 남아있으면 정리
             _scanCts?.Cancel();
@@ -70,7 +55,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             _ = RunScanFlowAsync(_scanCts.Token);
             return Task.CompletedTask;
         }
-        public Task OnUnloadAsync()
+        public override Task OnUnloadAsync()
         {
             // TODO: 언로드 시 필요한 작업 수행
             if (_scanCts is not null)
@@ -91,9 +76,9 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             {
                 var result = await ScanUntilStableAsync(ct);
 
-                if (result is not null && OnStepNext is not null)
+                if (result is not null)
                 {
-                    await OnStepNext("");
+                    await ExecuteStepAsync(OnStepNext, result);
                 }
             }
             catch (OperationCanceledException) { }
@@ -153,49 +138,13 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
         #region Commands
 
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
-        private async Task Next(object? o)
-        {
-            try
-            {
-                if (OnStepNext is not null)
-                    await OnStepNext("");
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
         #endregion
     }
 }

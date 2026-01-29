@@ -31,8 +31,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
         {
             ExchangeState.Language => _nav.NavigatePage<ExchangeLanguageViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -42,8 +42,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             }),
             ExchangeState.Currency => _nav.NavigatePage<ExchangeCurrencyViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -53,8 +53,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             }),
             ExchangeState.Terms => _nav.NavigatePage<ExchangeIDScanConsentViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -65,8 +65,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             ExchangeState.IDScan => System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
                 await _nav.NavigatePage<ExchangeIDScanGuideViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -77,8 +77,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             ExchangeState.IDScanning => System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
                 await _nav.NavigatePage<ExchangeIDScanProcessViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -89,8 +89,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             ExchangeState.IDScanningComplete => System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
                 await _nav.NavigatePage<ExchangeIDScanCompleteViewModel>(vm =>
                 {
-                    vm.OnStepMain = async () => await _state.ExitAsync();
-                    vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                    vm.OnStepMain = async _ => await _state.ExitAsync();
+                    vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                     vm.OnStepNext = async _ => await _state.NextAsync();
                     vm.OnStepError = async ex =>
                     {
@@ -100,8 +100,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
                 }), DispatcherPriority.ApplicationIdle).Task,
             ExchangeState.Deposit => _nav.NavigatePage<ExchangeDepositViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -120,8 +120,8 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             }),
             ExchangeState.Result => _nav.NavigatePage<ExchangeResultViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
-                vm.OnStepPrevious = async () => await _state.PreviousAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
+                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
                 vm.OnStepNext = async _ => await _state.NextAsync();
                 vm.OnStepError = async ex =>
                 {
@@ -131,7 +131,7 @@ namespace KIOSK.Presentation.Features.Exchange.Flow
             }),
             ExchangeState.Complete => _nav.NavigatePage<ExchangeCompleteViewModel>(vm =>
             {
-                vm.OnStepMain = async () => await _state.ExitAsync();
+                vm.OnStepMain = async _ => await _state.ExitAsync();
                 vm.OnStepError = async ex =>
                 {
                     _logging.Error(ex, $"OnStepError, {ex.Message}");

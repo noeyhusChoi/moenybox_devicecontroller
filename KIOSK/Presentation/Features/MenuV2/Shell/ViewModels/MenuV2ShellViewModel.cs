@@ -17,7 +17,7 @@ namespace KIOSK.Presentation.Features.MenuV2.Shell.ViewModels
         }
 
         [ObservableProperty]
-        private object? currentView;
+        private object? currentPage;
 
         [ObservableProperty]
         private object? popupContent;

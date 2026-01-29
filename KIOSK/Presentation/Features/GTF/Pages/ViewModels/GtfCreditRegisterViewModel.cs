@@ -1,14 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Device.Core;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using static QRCoder.PayloadGenerator;
 using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfCreditRegisterViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError
+    public partial class GtfCreditRegisterViewModel : StepViewModelBase
     {
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
@@ -34,6 +35,18 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             _gtfTaxRefundService = gtfTaxRefundService;
         }
 
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct)
+        {
+            CardNumber = "";
+            return Task.CompletedTask;
+        }
+
+        public override Task OnUnloadAsync()
+        {
+            CardNumber = "";
+            return Task.CompletedTask;
+        }
+
         partial void OnCardNumberChanged(string value)
         {
             var digits = new string(value?.Where(char.IsDigit).ToArray()); // 숫자만 허용
@@ -45,55 +58,14 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
         }
 
         #region Commands
-        public Func<Task>? OnStepMain { get; set; }
-        public Func<Task>? OnStepPrevious { get; set; }
-        public Func<string?, Task>? OnStepNext { get; set; }
-        public Action<Exception>? OnStepError { get; set; }
+        [RelayCommand]
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-        private async Task Main()
-        {
-            try
-            {
-                if (OnStepMain is not null)
-                    await OnStepMain();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
-        private async Task Previous()
-        {
-            try
-            {
-                if (OnStepPrevious is not null)
-                    await OnStepPrevious();
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
-
-        [RelayCommand]
-        private async Task Next(object? o)
-        {
-            try
-            {
-                if (OnStepNext is not null)
-                    await OnStepNext("");
-            }
-            catch (Exception ex)
-            {
-                if (OnStepError is not null)
-                    OnStepError(ex);
-            }
-        }
+        private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
 
         [RelayCommand]
         private void InputNumber(object key)

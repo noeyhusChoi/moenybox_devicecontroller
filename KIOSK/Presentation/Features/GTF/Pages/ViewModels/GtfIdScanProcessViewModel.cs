@@ -1,42 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
-using KIOSK.Device.Abstractions;
-
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Infrastructure.API.Gtf;
-
 using KIOSK.Application.Services;
-
 using KIOSK.Application.Services.API;
-
+using KIOSK.Device.Abstractions;
+using KIOSK.Infrastructure.API.Gtf;
+using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.OCR;
-
 using KIOSK.Infrastructure.OCR.Models;
-
+using KIOSK.Presentation.Shared.Abstractions;
 using Pr22.Processing;
 
-using System.Diagnostics;
-using KIOSK.Presentation.Shared.Abstractions;
-
-
-
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
-
 {
-
-    public partial class GtfIdScanProcessViewModel : ObservableObject, IStepMain, IStepNext, IStepPrevious, IStepError, INavigable
-
+    public partial class GtfIdScanProcessViewModel : StepViewModelBase
     {
-
-        public Func<Task>? OnStepMain { get; set; }
-
-        public Func<Task>? OnStepPrevious { get; set; }
-
-        public Func<string?, Task>? OnStepNext { get; set; }
-
-        public Action<Exception>? OnStepError { get; set; }
 
 
 
@@ -51,40 +32,20 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
 
         public GtfIdScanProcessViewModel(IDeviceManager deviceManager, IOcrService ocrService, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
-
         {
-
             _deviceManager = deviceManager;
-
             _ocrService = ocrService;
-
             _gtfApiService = gtfApiService;
-
             _gtfTaxRefundService = gtfTaxRefundService;
-
         }
 
-
-
-        public Task OnLoadAsync(object? parameter, CancellationToken ct)
-
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
-
             _ = Task.Run(() => InitAsync(ct), ct);
-
             return Task.CompletedTask;
-
         }
 
-
-
-        public async Task OnUnloadAsync()
-
-        {
-
-            // TODO: 언로드 시 필요한 작업 수행
-
-        }
+        public override Task OnUnloadAsync() => Task.CompletedTask;
 
 
 
@@ -188,17 +149,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
 
 
-                    await App.Current.Dispatcher.InvokeAsync(() =>
-
-                    {
-
-                        if (OnStepNext is not null)
-
-                            return OnStepNext("");
-
-                        return Task.CompletedTask;
-
-                    });
+                    await App.Current.Dispatcher.InvokeAsync(() => ExecuteStepAsync(OnStepNext)).Task;
 
                 }
 
@@ -494,21 +445,8 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
 
 
-        private Task GoPreviousAsync()
-
-        {
-
-            return App.Current.Dispatcher.InvokeAsync(async () =>
-
-            {
-
-                if (OnStepPrevious is not null)
-
-                    await OnStepPrevious();
-
-            }).Task;
-
-        }
+        private Task GoPreviousAsync() =>
+            App.Current.Dispatcher.InvokeAsync(() => ExecuteStepAsync(OnStepPrevious)).Task;
 
 
 
@@ -518,91 +456,13 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
         [RelayCommand]
 
-        private async Task Main()
-
-        {
-
-            try
-
-            {
-
-                if (OnStepMain is not null)
-
-                    await OnStepMain();
-
-            }
-
-            catch (Exception ex)
-
-            {
-
-                if (OnStepError is not null)
-
-                    OnStepError(ex);
-
-            }
-
-        }
-
-
+        private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
         [RelayCommand]
-
-        private async Task Previous()
-
-        {
-
-            try
-
-            {
-
-                if (OnStepPrevious is not null)
-
-                    await OnStepPrevious();
-
-            }
-
-            catch (Exception ex)
-
-            {
-
-                if (OnStepError is not null)
-
-                    OnStepError(ex);
-
-            }
-
-        }
-
-
+        private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
-
-        private async Task Next(object? o)
-
-        {
-
-            try
-
-            {
-
-                if (OnStepNext is not null)
-
-                    await OnStepNext("");
-
-            }
-
-            catch (Exception ex)
-
-            {
-
-                if (OnStepError is not null)
-
-                    OnStepError(ex);
-
-            }
-
-        }
+        private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
 
         #endregion
 

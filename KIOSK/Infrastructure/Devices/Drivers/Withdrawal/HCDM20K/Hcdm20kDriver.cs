@@ -6,12 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Drivers;
-using KIOSK.Devices.Drivers.HCDM20K;
+using KIOSK.Device.Drivers.HCDM20K;
 using KIOSK.Device.Transport;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace KIOSK.Devices.Drivers;
+namespace KIOSK.Device.Drivers;
 
 /// <summary>
 /// HCDM-20K 드라이버: 정책/상태/명령 라우팅만 담당하고, 실제 프로토콜은 Hcdm20kClient에 위임한다.

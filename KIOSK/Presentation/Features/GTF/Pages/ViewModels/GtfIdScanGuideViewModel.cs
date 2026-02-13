@@ -6,24 +6,23 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
+using KIOSK.Application.Services.Devices;
 using KIOSK.Device.Abstractions;
-using KIOSK.Device.Core;
-using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.OCR;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfIdScanGuideViewModel : StepViewModelBase
+    public partial class GtfIdScanGuideViewModel : PageViewModelBase
     {
-        private readonly IDeviceManager _deviceManager;
+        private readonly IDeviceCommandService _deviceCommandService;
         private readonly IOcrService _ocr;
         private Uri videoPath;
         private CancellationTokenSource? _scanCts;
         
-        public GtfIdScanGuideViewModel(IDeviceManager deviceManager, IOcrService ocr)
+        public GtfIdScanGuideViewModel(IDeviceCommandService deviceCommandService, IOcrService ocr)
         {
-            _deviceManager = deviceManager;
+            _deviceCommandService = deviceCommandService;
             _ocr = ocr;
             
             try
@@ -65,7 +64,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 _scanCts = null;
             }
 
-            _deviceManager.SendAsync("IDSCANNER1", new DeviceCommand("ScanStop"));
+            _deviceCommandService.SendAsync("IDSCANNER1", new DeviceCommand("ScanStop"));
 
             return Task.CompletedTask;
         }
@@ -84,7 +83,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
         
@@ -97,19 +96,19 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 ct.ThrowIfCancellationRequested();
 
                 // SendAsync가 ct를 받지 못하면 .WaitAsync(ct)로 감싸기
-                var res = await _deviceManager
+                var res = await _deviceCommandService
                     .SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"))
                     .WaitAsync(ct);
 
                 if (res == null || res.Success == false)
                 {
-                    res = await _deviceManager
+                    res = await _deviceCommandService
                     .SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"))
                     .WaitAsync(ct);
                 }
                 else
                 {
-                    var status = await _deviceManager
+                    var status = await _deviceCommandService
                     .SendAsync("IDSCANNER1", new DeviceCommand("GetScanStatus"))
                     .WaitAsync(ct);
 

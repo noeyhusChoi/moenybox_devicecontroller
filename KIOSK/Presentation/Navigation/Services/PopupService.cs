@@ -1,4 +1,4 @@
-﻿using KIOSK.Presentation.Shared.Abstractions;
+﻿using KIOSK.Presentation.Abstractions;
 using System;
 
 namespace KIOSK.Presentation.Navigation.Services

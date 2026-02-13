@@ -1,16 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Domain.Entities;
 using KIOSK.Application.Services.DataBase;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 using KIOSK.Presentation.Navigation.Services;
+using KIOSK.Infrastructure.Database.Models;
 
 namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels
 {
-    public partial class EnvironmentCassetteSettingViewModel : ObservableObject, INavigable
+    public partial class EnvironmentCassetteSettingViewModel : ObservableObject, IViewLifecycle
     {
         // DataGrid에 바인딩되는 카세트 리스트
         public ObservableCollection<WithdrawalCassetteModel> WithdrawalCassette { get; set; }

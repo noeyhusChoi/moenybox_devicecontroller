@@ -2,7 +2,7 @@ using System;
 using System.Buffers;
 using KIOSK.Device.Abstractions;
 
-namespace KIOSK.Devices.Drivers.HCDM;
+namespace KIOSK.Device.Drivers.HCDM;
 
 /// <summary>
 /// HCDM-10K 프레이머: ACK/NAK(1바이트) 또는 STX LENL LENH ... ETX CHK 프레임 추출.

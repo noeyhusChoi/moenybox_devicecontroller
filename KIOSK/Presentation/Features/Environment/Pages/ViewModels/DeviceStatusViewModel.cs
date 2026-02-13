@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Device.Abstractions;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Application.Services.Devices;
-using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.Cache;
 using KIOSK.Application.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
@@ -12,15 +11,15 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using WpfApplication = System.Windows.Application;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels;
 
-public partial class DeviceStatusViewModel : ObservableObject, INavigable
+public partial class DeviceStatusViewModel : ObservableObject, IViewLifecycle
 {
     private readonly IDeviceStatusService _statusService;
     private readonly IDeviceCommandCatalogService _commandCatalog;
-    private readonly IDeviceManager _deviceManager;
+    private readonly IDeviceCommandService _deviceCommandService;
     private readonly IMemoryCache _cache;
     private readonly ILoggingService _logging;
     private readonly INavigationService _nav;
@@ -41,14 +40,14 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
     public DeviceStatusViewModel(
         IDeviceStatusService statusService,
         IDeviceCommandCatalogService commandCatalog,
-        IDeviceManager deviceManager,
+        IDeviceCommandService deviceCommandService,
         IMemoryCache cache,
         ILoggingService logging,
         INavigationService nav)
     {
         _statusService = statusService;
         _commandCatalog = commandCatalog;
-        _deviceManager = deviceManager;
+        _deviceCommandService = deviceCommandService;
         _cache = cache;
         _logging = logging;
         _nav = nav;
@@ -154,7 +153,7 @@ public partial class DeviceStatusViewModel : ObservableObject, INavigable
         try
         {
             var command = new DeviceCommand(SelectedCommand.Name);
-            await _deviceManager.SendAsync(
+            await _deviceCommandService.SendAsync(
                 SelectedDevice.DeviceId,
                 command,
                 CommandContext.Manual(reason: "DeviceStatusView"));

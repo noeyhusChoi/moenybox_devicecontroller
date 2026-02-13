@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:gif="http://wpfanimatedgif.codeplex.com"
     xmlns:local="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.Views"
-    xmlns:lx="clr-namespace:Localization"
+    xmlns:lx="clr-namespace:KIOSK.Application.Services.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.ViewModels"

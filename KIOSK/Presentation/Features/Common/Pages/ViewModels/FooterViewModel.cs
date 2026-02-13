@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using KIOSK.Application.Services;
 using KIOSK.Presentation.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;

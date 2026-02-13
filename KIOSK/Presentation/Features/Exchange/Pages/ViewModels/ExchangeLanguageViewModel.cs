@@ -3,12 +3,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Exchange;
-using KIOSK.FSM;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels;
 
-public partial class ExchangeLanguageViewModel : StepViewModelBase
+public partial class ExchangeLanguageViewModel : PageViewModelBase
 {
 
     private readonly IExchangeSelectLanguageUseCase _selectLanguageUseCase;
@@ -44,7 +43,7 @@ public partial class ExchangeLanguageViewModel : StepViewModelBase
         }
         catch (Exception ex)
         {
-            OnStepError?.Invoke(ex);
+            await RaiseStepErrorAsync(ex);
         }
     }
     #endregion

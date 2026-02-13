@@ -1,0 +1,50 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:exchangeV2LayoutViews="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Layout.Views"
+    xmlns:exchangeV2LayoutVm="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Layout.ViewModels"
+    xmlns:exchangeV2PopupViewModels="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Popup.ViewModels"
+    xmlns:exchangeV2PopupViews="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Popup.Views"
+    xmlns:exchangeV2ViewModels="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels"
+    xmlns:exchangeV2Views="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Pages.Views">
+
+    <DataTemplate DataType="{x:Type exchangeV2LayoutVm:ExchangeV2LayoutViewModel}">
+        <exchangeV2LayoutViews:ExchangeV2LayoutView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2LanguageSelectViewModel}">
+        <exchangeV2Views:ExchangeV2LanguageSelectView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2ExchangeTypeSelectViewModel}">
+        <exchangeV2Views:ExchangeV2ExchangeTypeSelectView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2ExchangeMethodSelectViewModel}">
+        <exchangeV2Views:ExchangeV2ExchangeMethodSelectView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2ExchangeCurrencySelectViewModel}">
+        <exchangeV2Views:ExchangeV2ExchangeCurrencySelectView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2IdScanConsentViewModel}">
+        <exchangeV2Views:ExchangeV2IdScanConsentView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2IdScanProcessViewModel}">
+        <exchangeV2Views:ExchangeV2IdScanProcessView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2IdScanCompleteViewModel}">
+        <exchangeV2Views:ExchangeV2IdScanCompleteView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2PopupViewModels:ExchangeV2TermsPopupViewModel}">
+        <exchangeV2PopupViews:ExchangeV2TermsPopupView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type exchangeV2PopupViewModels:ExchangeV2IdScanFailedPopupViewModel}">
+        <exchangeV2PopupViews:ExchangeV2IdScanFailedPopupView />
+    </DataTemplate>
+</ResourceDictionary>

@@ -2,42 +2,38 @@
     x:Class="KIOSK.MainWindowView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:GtfPopupViewModels="clr-namespace:KIOSK.Presentation.Features.GTF.Popup.ViewModels"
+    xmlns:GtfPopupViews="clr-namespace:KIOSK.Presentation.Features.GTF.Popup.Views"
     xmlns:GtfViewModels="clr-namespace:KIOSK.Presentation.Features.GTF.Pages.ViewModels"
-    xmlns:GtfPopupViewModels="clr-namespace:KIOSK.Presentation.Features.GTF.Pages.ViewModels.Popup"
     xmlns:Gtfviews="clr-namespace:KIOSK.Presentation.Features.GTF.Pages.Views"
-    xmlns:GtfPopupViews="clr-namespace:KIOSK.Presentation.Features.GTF.Pages.Views.Popup"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:envShellViews="clr-namespace:KIOSK.Presentation.Features.Environment.Shell.Views"
-    xmlns:envShellVm="clr-namespace:KIOSK.Presentation.Features.Environment.Shell.ViewModels"
-    xmlns:exchangeShellViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Shell.Views"
-    xmlns:exchangeShellVm="clr-namespace:KIOSK.Presentation.Features.Exchange.Shell.ViewModels"
-    xmlns:exchangeV2ShellViews="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Shell.Views"
-    xmlns:exchangeV2ShellVm="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels"
-    xmlns:exchangeV2ViewModels="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels"
-    xmlns:exchangeV2Views="clr-namespace:KIOSK.Presentation.Features.ExchangeV2.Pages.Views"
-    xmlns:gtfShellViews="clr-namespace:KIOSK.Presentation.Features.GTF.Shell.Views"
-    xmlns:gtfShellVm="clr-namespace:KIOSK.Presentation.Features.GTF.Shell.ViewModels"
-    xmlns:local="clr-namespace:KIOSK"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:menuShellViews="clr-namespace:KIOSK.Presentation.Features.Menu.Shell.Views"
-    xmlns:menuShellVm="clr-namespace:KIOSK.Presentation.Features.Menu.Shell.ViewModels"
-    xmlns:menuV2ShellViews="clr-namespace:KIOSK.Presentation.Features.MenuV2.Shell.Views"
-    xmlns:menuV2ShellVm="clr-namespace:KIOSK.Presentation.Features.MenuV2.Shell.ViewModels"
-    xmlns:menuV2ViewModels="clr-namespace:KIOSK.Presentation.Features.MenuV2.Pages.ViewModels"
-    xmlns:menuV2Views="clr-namespace:KIOSK.Presentation.Features.MenuV2.Pages.Views"
-    xmlns:popupViewModels="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.ViewModels.Popup"
-    xmlns:popupViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.Views.Popup"
-    xmlns:view="clr-namespace:KIOSK.Presentation.Features.Environment.Pages.Views"
-    xmlns:viewModel="clr-namespace:KIOSK.Presentation.Features.Environment.Pages.ViewModels"
-    xmlns:startupShellViews="clr-namespace:KIOSK.Presentation.Features.Startup.Shell.Views"
-    xmlns:startupShellVm="clr-namespace:KIOSK.Presentation.Features.Startup.Shell.ViewModels"
-    xmlns:startupViewModels="clr-namespace:KIOSK.Presentation.Features.Startup.Pages.ViewModels"
-    xmlns:startupViews="clr-namespace:KIOSK.Presentation.Features.Startup.Pages.Views"
-    xmlns:menuViewModels="clr-namespace:KIOSK.Presentation.Features.Menu.Pages.ViewModels"
-    xmlns:menuViews="clr-namespace:KIOSK.Presentation.Features.Menu.Pages.Views"
-    xmlns:windowVm="clr-namespace:KIOSK.ViewModels"
+    xmlns:envLayoutViews="clr-namespace:KIOSK.Presentation.Features.Environment.Layout.Views"
+    xmlns:envLayoutVm="clr-namespace:KIOSK.Presentation.Features.Environment.Layout.ViewModels"
+    xmlns:exchangeLayoutViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Layout.Views"
+    xmlns:exchangeLayoutVm="clr-namespace:KIOSK.Presentation.Features.Exchange.Layout.ViewModels"
     xmlns:exchangeViewModels="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.ViewModels"
     xmlns:exchangeViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.Views"
+    xmlns:gtfLayoutViews="clr-namespace:KIOSK.Presentation.Features.GTF.Layout.Views"
+    xmlns:gtfLayoutVm="clr-namespace:KIOSK.Presentation.Features.GTF.Layout.ViewModels"
+    xmlns:local="clr-namespace:KIOSK"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:menuLayoutViews="clr-namespace:KIOSK.Presentation.Features.Menu.Layout.Views"
+    xmlns:menuLayoutVm="clr-namespace:KIOSK.Presentation.Features.Menu.Layout.ViewModels"
+    xmlns:menuV2LayoutViews="clr-namespace:KIOSK.Presentation.Features.MenuV2.Layout.Views"
+    xmlns:menuV2LayoutVm="clr-namespace:KIOSK.Presentation.Features.MenuV2.Layout.ViewModels"
+    xmlns:menuV2ViewModels="clr-namespace:KIOSK.Presentation.Features.MenuV2.Pages.ViewModels"
+    xmlns:menuV2Views="clr-namespace:KIOSK.Presentation.Features.MenuV2.Pages.Views"
+    xmlns:menuViewModels="clr-namespace:KIOSK.Presentation.Features.Menu.Pages.ViewModels"
+    xmlns:menuViews="clr-namespace:KIOSK.Presentation.Features.Menu.Pages.Views"
+    xmlns:popupViewModels="clr-namespace:KIOSK.Presentation.Features.Exchange.Popup.ViewModels"
+    xmlns:popupViews="clr-namespace:KIOSK.Presentation.Features.Exchange.Popup.Views"
+    xmlns:startupLayoutViews="clr-namespace:KIOSK.Presentation.Features.Startup.Layout.Views"
+    xmlns:startupLayoutVm="clr-namespace:KIOSK.Presentation.Features.Startup.Layout.ViewModels"
+    xmlns:startupViewModels="clr-namespace:KIOSK.Presentation.Features.Startup.Pages.ViewModels"
+    xmlns:startupViews="clr-namespace:KIOSK.Presentation.Features.Startup.Pages.Views"
+    xmlns:view="clr-namespace:KIOSK.Presentation.Features.Environment.Pages.Views"
+    xmlns:viewModel="clr-namespace:KIOSK.Presentation.Features.Environment.Pages.ViewModels"
+    xmlns:windowVm="clr-namespace:KIOSK.ViewModels"
     Title="MainWindow"
     Width="1920"
     Height="1080"
@@ -64,31 +60,32 @@
         </EventTrigger>
     </Window.Triggers>-->
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/KIOSK;component/Presentation/Features/ExchangeV2/Templates/ExchangeV2Templates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
         <!--  APP  -->
 
         <!--  Shell  -->
-        <DataTemplate DataType="{x:Type envShellVm:EnvironmentShellViewModel}">
-            <envShellViews:EnvironmentShellView />
+        <DataTemplate DataType="{x:Type envLayoutVm:EnvironmentLayoutViewModel}">
+            <envLayoutViews:EnvironmentLayoutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type menuShellVm:MenuShellViewModel}">
-            <menuShellViews:MenuShellView />
+        <DataTemplate DataType="{x:Type menuLayoutVm:MenuLayoutViewModel}">
+            <menuLayoutViews:MenuLayoutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type menuV2ShellVm:MenuV2ShellViewModel}">
-            <menuV2ShellViews:MenuV2ShellView />
+        <DataTemplate DataType="{x:Type menuV2LayoutVm:MenuV2LayoutViewModel}">
+            <menuV2LayoutViews:MenuV2LayoutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type startupShellVm:StartupShellViewModel}">
-            <startupShellViews:StartupShellView />
+        <DataTemplate DataType="{x:Type startupLayoutVm:StartupLayoutViewModel}">
+            <startupLayoutViews:StartupLayoutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type gtfShellVm:GtfShellViewModel}">
-            <gtfShellViews:GtfShellView />
+        <DataTemplate DataType="{x:Type gtfLayoutVm:GtfLayoutViewModel}">
+            <gtfLayoutViews:GtfLayoutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeShellVm:ExchangeShellViewModel}">
-            <exchangeShellViews:ExchangeShellView />
+        <DataTemplate DataType="{x:Type exchangeLayoutVm:ExchangeLayoutViewModel}">
+            <exchangeLayoutViews:ExchangeLayoutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeV2ShellVm:ExchangeV2ShellViewModel}">
-            <exchangeV2ShellViews:ExchangeV2ShellView />
-        </DataTemplate>
-
         <!--  관리자  -->
         <DataTemplate DataType="{x:Type viewModel:EnvironmentViewModel}">
             <view:EnvironmentView />
@@ -144,22 +141,6 @@
         <DataTemplate DataType="{x:Type exchangeViewModels:ExchangeCompleteViewModel}">
             <exchangeViews:ExchangeCompleteView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2LanguageSelectViewModel}">
-            <exchangeV2Views:ExchangeV2LanguageSelectView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2ExchangeTypeSelectViewModel}">
-            <exchangeV2Views:ExchangeV2ExchangeTypeSelectView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2ExchangeMethodSelectViewModel}">
-            <exchangeV2Views:ExchangeV2ExchangeMethodSelectView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2ExchangeCurrencySelectViewModel}">
-            <exchangeV2Views:ExchangeV2ExchangeCurrencySelectView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type exchangeV2ViewModels:ExchangeV2IdScanConsentViewModel}">
-            <exchangeV2Views:ExchangeV2IdScanConsentView />
-        </DataTemplate>
-
         <DataTemplate DataType="{x:Type popupViewModels:ExchangePopupIDScanInfoViewModel}">
             <popupViews:ExchangePopupIDScanInfoView />
         </DataTemplate>
@@ -222,7 +203,7 @@
         <DataTemplate DataType="{x:Type GtfPopupViewModels:GtfTestPopupViewModel}">
             <GtfPopupViews:GtfTestPopupView />
         </DataTemplate>
-
+        </ResourceDictionary>
     </Window.Resources>
 
     <Window.InputBindings>

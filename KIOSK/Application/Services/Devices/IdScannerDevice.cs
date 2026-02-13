@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
@@ -13,6 +14,12 @@ namespace KIOSK.Application.Services.Devices
         public IdScannerDevice(IIdScannerDeviceService service)
         {
             _service = service;
+        }
+
+        public event EventHandler? Detected
+        {
+            add => _service.Detected += value;
+            remove => _service.Detected -= value;
         }
 
         public Task<Page?> SaveImageAsync(CancellationToken ct) =>

@@ -6,22 +6,22 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
+using KIOSK.Application.Services.Devices;
 using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.API.Gtf;
-using KIOSK.Infrastructure.Management.Devices;
 using KIOSK.Infrastructure.OCR;
 using KIOSK.Infrastructure.OCR.Models;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 using Pr22.Processing;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfIdScanProcessViewModel : StepViewModelBase
+    public partial class GtfIdScanProcessViewModel : PageViewModelBase
     {
 
 
 
-        private readonly IDeviceManager _deviceManager;
+        private readonly IDeviceCommandService _deviceCommandService;
 
         private readonly IOcrService _ocrService;
 
@@ -31,9 +31,9 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
 
 
-        public GtfIdScanProcessViewModel(IDeviceManager deviceManager, IOcrService ocrService, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
+        public GtfIdScanProcessViewModel(IDeviceCommandService deviceCommandService, IOcrService ocrService, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
-            _deviceManager = deviceManager;
+            _deviceCommandService = deviceCommandService;
             _ocrService = ocrService;
             _gtfApiService = gtfApiService;
             _gtfTaxRefundService = gtfTaxRefundService;
@@ -211,7 +211,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
             {
 
-                var result = await _deviceManager
+                var result = await _deviceCommandService
 
                     .SendAsync("IDSCANNER1", new DeviceCommand("SaveImage"), ct)
 

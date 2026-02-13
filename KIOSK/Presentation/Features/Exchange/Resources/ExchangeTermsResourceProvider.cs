@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-using Localization;
+using KIOSK.Application.Services.Localization;
 
 namespace KIOSK.Presentation.Features.Exchange.Resources
 {

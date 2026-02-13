@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.Views"
-    xmlns:lx="clr-namespace:Localization"
+    xmlns:lx="clr-namespace:KIOSK.Application.Services.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="980"
     d:DesignWidth="1920"

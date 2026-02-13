@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Transport;
 
-namespace KIOSK.Devices.Drivers.HCDM20K;
+namespace KIOSK.Device.Drivers.HCDM20K;
 
 internal sealed class Hcdm20kClient : IAsyncDisposable
 {

@@ -1,18 +1,22 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Application.Features.ExchangeV2.Orchestration;
+using KIOSK.Presentation.Abstractions;
+using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels;
 
-public partial class ExchangeV2ExchangeCurrencySelectViewModel : StepViewModelBase
+public partial class ExchangeV2ExchangeCurrencySelectViewModel : PageViewModelBase
 {
+    private readonly IExchangeV2Orchestrator _orchestrator;
     public ObservableCollection<ExchangeCurrencyItem> Currencies { get; } = new();
 
-    public ExchangeV2ExchangeCurrencySelectViewModel()
+    public ExchangeV2ExchangeCurrencySelectViewModel(IExchangeV2Orchestrator orchestrator)
     {
+        _orchestrator = orchestrator;
         SeedCurrencies();
     }
 
@@ -61,7 +65,29 @@ public partial class ExchangeV2ExchangeCurrencySelectViewModel : StepViewModelBa
     private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
     [RelayCommand]
-    private Task Next(object? parameter) => ExecuteStepAsync(OnStepNext, parameter);
+    private async Task Next(object? parameter)
+    {
+        if (parameter is not ExchangeCurrencyItem selected)
+        {
+            return;
+        }
+
+        try
+        {
+            if (!decimal.TryParse(selected.Rate, NumberStyles.Any, CultureInfo.InvariantCulture, out var rate))
+            {
+                await RaiseStepErrorAsync(new InvalidOperationException($"Invalid rate for {selected.Code}."));
+                return;
+            }
+
+            await _orchestrator.ApplyCurrencyAsync(selected.Code, rate);
+            await ExecuteStepAsync(OnStepNext, selected.Code);
+        }
+        catch (System.Exception ex)
+        {
+            await RaiseStepErrorAsync(ex);
+        }
+    }
 
     #endregion
 }

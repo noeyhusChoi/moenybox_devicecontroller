@@ -1,5 +1,5 @@
 ﻿using KIOSK.Device.Abstractions;
-using KIOSK.Infrastructure.Management.Devices;
+using KIOSK.Infrastructure.Devices.Runtime;
 using KIOSK.Infrastructure.Cache;
 using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Repositories;
@@ -7,14 +7,14 @@ using KIOSK.Infrastructure.Initialization;
 using KIOSK.Application.Abstractions;
 using KIOSK.Infrastructure.Media;
 using KIOSK.Application.Services;
-using KIOSK.Domain.Entities;
-using Localization;
 using Localization.Resx;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.IO;
+using KIOSK.Application.Services.Localization;
+using KIOSK.Infrastructure.Database.Models;
 
 public class AppInitializer : IAppInitializer
 {
@@ -147,8 +147,7 @@ public class AppInitializer : IAppInitializer
 
     private async Task InitializeDevicesAsync()
     {
-        var devices = _cache.Get<IReadOnlyList<DeviceModel>>(DatabaseCacheKeys.DeviceList)
-            ?? Array.Empty<DeviceModel>();
+        var devices = await _deviceRepo.LoadAllAsync().ConfigureAwait(false);
         foreach (var device in devices)
         {
             await _deviceManager.AddAsync(

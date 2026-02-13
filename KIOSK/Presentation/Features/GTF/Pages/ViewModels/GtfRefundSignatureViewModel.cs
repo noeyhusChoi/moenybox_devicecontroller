@@ -6,11 +6,11 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
 using KIOSK.Domain.Entities;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfRefundSignatureViewModel : StepViewModelBase
+    public partial class GtfRefundSignatureViewModel : PageViewModelBase
     {
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
@@ -47,7 +47,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
         #endregion

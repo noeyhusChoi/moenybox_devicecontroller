@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <FontFamily x:Key="Pretendard">/Resources/Fonts/#Pretendard Variable</FontFamily>
+    <FontFamily x:Key="Pretendard">/KIOSK;component/Resources/Fonts/#Pretendard Variable</FontFamily>
 
     <!--  ========== 폰트 사이즈 토큰 ==========  -->
     <sys:Double x:Key="FontSize_2XS">22</sys:Double>

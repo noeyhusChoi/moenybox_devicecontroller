@@ -1,16 +1,14 @@
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Exchange;
-using KIOSK.Domain.Entities;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Infrastructure.Database.Models;
+using KIOSK.Presentation.Abstractions;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels;
 
-public partial class ExchangeCurrencyViewModel : StepViewModelBase
+public partial class ExchangeCurrencyViewModel : PageViewModelBase
 {
 
     private readonly IExchangeSelectCurrencyUseCase _selectCurrencyUseCase;
@@ -56,15 +54,18 @@ public partial class ExchangeCurrencyViewModel : StepViewModelBase
         }
 
         Trace.WriteLine($"target_currency: {selected.Currency} = {selected.SpSell}");
+      
         try
         {
             await _selectCurrencyUseCase.SelectAsync(selected);
-            await ExecuteStepAsync(OnStepNext, selected.Currency);
         }
         catch (Exception ex)
         {
-            OnStepError?.Invoke(ex);
+            await RaiseStepErrorAsync(ex);
+            return;
         }
+
+        await ExecuteStepAsync(OnStepNext, selected.Currency);
     }
     #endregion
 }

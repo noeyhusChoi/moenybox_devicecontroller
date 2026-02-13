@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Shell.Top.Main.Pages.ViewModels;
 
-public partial class LoadingViewModel : ObservableObject, INavigable
+public partial class LoadingViewModel : ObservableObject, IViewLifecycle
 {
     private readonly ILoggingService _logging;
     private Uri videoPath;

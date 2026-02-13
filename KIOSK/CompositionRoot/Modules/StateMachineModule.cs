@@ -1,3 +1,4 @@
+using KIOSK.Application.Features.ExchangeV2.StateMachine;
 using KIOSK.Application.StateMachines;
 using KIOSK.Presentation.Features.Exchange.Flow;
 using KIOSK.Presentation.Features.ExchangeV2.Flow;
@@ -15,7 +16,7 @@ namespace KIOSK.CompositionRoot.Modules
             services.AddScoped<GtfStateMachine>();
             services.AddScoped<ExchangeFlowCoordinator>();
             services.AddScoped<ExchangeV2FlowCoordinator>();
-            services.AddScoped<GtfFlowCoordinator>();
+            services.AddScoped<Gtf>();
             return services;
         }
     }

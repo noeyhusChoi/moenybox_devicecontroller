@@ -1,5 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Update="Presentation\Features\ExchangeV2\Pages\Views\ExchangeV2DepositView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\Features\ExchangeV2\Pages\Views\ExchangeV2IdScanCompleteView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\Features\ExchangeV2\Pages\Views\ExchangeV2IdScanProcessView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Presentation\Features\ExchangeV2\Popup\Views\ExchangeV2TermsPopupView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -93,7 +93,7 @@
                     <DataTemplate>
                         <Button
                             Command="{Binding DataContext.NextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            CommandParameter="{Binding Code}"
+                            CommandParameter="{Binding}"
                             Style="{DynamicResource CurrencyButtonStyle}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

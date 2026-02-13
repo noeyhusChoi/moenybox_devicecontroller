@@ -7,14 +7,12 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
 using KIOSK.Domain.Entities;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfAlipayAccountSelectViewModel : StepViewModelBase
+    public partial class GtfAlipayAccountSelectViewModel : PageViewModelBase
     {
-        private readonly IDeviceManager _deviceManager;
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
 
@@ -23,9 +21,8 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
         [ObservableProperty]
         public string inputNumber = "";
 
-        public GtfAlipayAccountSelectViewModel(IDeviceManager deviceManager, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
+        public GtfAlipayAccountSelectViewModel(GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
-            _deviceManager = deviceManager;
             _gtfApiService = gtfApiService;
             _gtfTaxRefundService = gtfTaxRefundService;
         }
@@ -80,7 +77,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             catch (Exception ex)
             {
                 if (OnStepError is not null)
-                    OnStepError(ex);
+                    await RaiseStepErrorAsync(ex);
             }
         }
         #endregion

@@ -3,7 +3,7 @@ using System.Buffers;
 using System.Text;
 using KIOSK.Device.Abstractions;
 
-namespace KIOSK.Devices.Drivers.HCDM20K;
+namespace KIOSK.Device.Drivers.HCDM20K;
 
 /// <summary>
 /// HCDM-20K 프레이머: ACK/NAK/ENQ(1바이트) 또는 STX ... ETX CRC 프레임 추출.

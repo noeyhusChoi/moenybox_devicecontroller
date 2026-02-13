@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using KIOSK.Domain.Entities;
+using KIOSK.Infrastructure.Database.Models;
 
 namespace KIOSK.Application.Services.Exchange
 {

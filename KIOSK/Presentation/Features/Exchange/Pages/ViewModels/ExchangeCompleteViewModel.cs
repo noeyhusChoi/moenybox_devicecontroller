@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeCompleteViewModel : StepViewModelBase
+    public partial class ExchangeCompleteViewModel : PageViewModelBase
     {
         public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
@@ -27,7 +27,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
 

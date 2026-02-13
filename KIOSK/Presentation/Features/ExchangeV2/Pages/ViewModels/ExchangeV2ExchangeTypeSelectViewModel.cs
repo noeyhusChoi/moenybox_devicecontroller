@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Application.Services.ExchangeV2;
-using KIOSK.Domain.Entities;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Application.Features.ExchangeV2.Orchestration;
+using KIOSK.Domain.Transactions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
 {
-    public partial class ExchangeV2ExchangeTypeSelectViewModel : StepViewModelBase
+    public partial class ExchangeV2ExchangeTypeSelectViewModel : PageViewModelBase
     {
-        private readonly IExchangeV2TransactionContext _transactionContext;
+        private readonly IExchangeV2Orchestrator _orchestrator;
 
-        public ExchangeV2ExchangeTypeSelectViewModel(IExchangeV2TransactionContext transactionContext)
+        public ExchangeV2ExchangeTypeSelectViewModel(IExchangeV2Orchestrator orchestrator)
         {
-            _transactionContext = transactionContext;
+            _orchestrator = orchestrator;
         }
 
         public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
@@ -33,37 +32,23 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
         [RelayCommand]
         private async Task Next(object? parameter)
         {
-            if (parameter is not string param)
+            if (parameter is not ExchangeTransactionType type || type == ExchangeTransactionType.Ready)
             {
                 return;
             }
 
             try
             {
-                var type = MapTransactionType(param);
-                if (type is not null)
-                {
-                    _transactionContext.SetTransactionType(type.Value);
-                }
+                _orchestrator.SelectTransactionType(type);
 
                 await ExecuteStepAsync(OnStepNext);
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
 
         #endregion
-
-        private static ExchangeTransactionType? MapTransactionType(string param)
-        {
-            if (param.Equals("SELL", StringComparison.OrdinalIgnoreCase))
-                return ExchangeTransactionType.SellFX;
-            if (param.Equals("BUY", StringComparison.OrdinalIgnoreCase))
-                return ExchangeTransactionType.BuyFX;
-
-            return null;
-        }
     }
 }

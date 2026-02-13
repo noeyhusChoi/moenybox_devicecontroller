@@ -1,5 +1,5 @@
 ﻿using KIOSK.ViewModels;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;

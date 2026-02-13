@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
-using KIOSK.Devices.Drivers.HCDM;
+using KIOSK.Device.Drivers.HCDM;
 using KIOSK.Device.Transport;
 using KIOSK.Device.Drivers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace KIOSK.Devices.Drivers;
+namespace KIOSK.Device.Drivers;
 
 /// <summary>
 /// HCDM-10K 드라이버: 정책/상태/명령 라우팅만 담당. 실제 프로토콜은 Hcdm10kClient에 위임.

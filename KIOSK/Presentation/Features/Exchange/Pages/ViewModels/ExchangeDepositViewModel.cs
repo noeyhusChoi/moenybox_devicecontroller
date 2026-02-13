@@ -9,11 +9,11 @@ using KIOSK.Application.Services.Exchange;
 using KIOSK.Domain.Entities;
 using KIOSK.Infrastructure.Common.Utils;
 using KIOSK.Presentation.Features.Exchange.Resources;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeDepositViewModel : StepViewModelBase
+    public partial class ExchangeDepositViewModel : PageViewModelBase
     {
         #region RightSection
         [ObservableProperty]
@@ -111,7 +111,7 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
     }

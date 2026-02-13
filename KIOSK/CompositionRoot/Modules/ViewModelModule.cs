@@ -1,21 +1,22 @@
-using KIOSK.Presentation.Features.Environment.Shell.ViewModels;
+using KIOSK.Presentation.Features.Environment.Layout.ViewModels;
 using KIOSK.Presentation.Features.Environment.Pages.ViewModels;
-using KIOSK.Presentation.Features.Exchange.Shell.ViewModels;
+using KIOSK.Presentation.Features.Exchange.Layout.ViewModels;
 using KIOSK.Presentation.Features.Exchange.Pages.ViewModels;
-using KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Layout.ViewModels;
 using KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels;
-using KIOSK.Presentation.Features.GTF.Shell.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Popup.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Popup.Views;
+using KIOSK.Presentation.Features.GTF.Layout.ViewModels;
 using KIOSK.Presentation.Features.GTF.Pages.ViewModels;
-using KIOSK.Presentation.Features.GTF.Pages.ViewModels.Popup;
-using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
+using KIOSK.Presentation.Features.GTF.Popup.ViewModels;
+using KIOSK.Presentation.Features.Menu.Layout.ViewModels;
 using KIOSK.Presentation.Features.Menu.Pages.ViewModels;
-using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
+using KIOSK.Presentation.Features.MenuV2.Layout.ViewModels;
 using KIOSK.Presentation.Features.MenuV2.Pages.ViewModels;
-using KIOSK.Presentation.Shared.Flow.ViewModels;
 using KIOSK.Presentation.Shell.Top.Main.Pages.ViewModels;
 using KIOSK.ViewModels;
-using KIOSK.Presentation.Features.Exchange.Pages.ViewModels.Popup;
-using KIOSK.Presentation.Features.Startup.Shell.ViewModels;
+using KIOSK.Presentation.Features.Exchange.Popup.ViewModels;
+using KIOSK.Presentation.Features.Startup.Layout.ViewModels;
 using KIOSK.Presentation.Features.Startup.Pages.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,13 +31,13 @@ namespace KIOSK.CompositionRoot.Modules
 
             services.AddSingleton<FooterViewModel>();
 
-            services.AddScoped<EnvironmentShellViewModel>();
-            services.AddScoped<MenuShellViewModel>();
-            services.AddScoped<MenuV2ShellViewModel>();
-            services.AddScoped<ExchangeShellViewModel>();
-            services.AddScoped<ExchangeV2ShellViewModel>();
-            services.AddScoped<GtfShellViewModel>();
-            services.AddScoped<StartupShellViewModel>();
+            services.AddScoped<EnvironmentLayoutViewModel>();
+            services.AddScoped<MenuLayoutViewModel>();
+            services.AddScoped<MenuV2LayoutViewModel>();
+            services.AddScoped<ExchangeLayoutViewModel>();
+            services.AddScoped<ExchangeV2LayoutViewModel>();
+            services.AddScoped<GtfLayoutViewModel>();
+            services.AddScoped<StartupLayoutViewModel>();
 
             services.AddScoped<EnvironmentViewModel>();
             services.AddTransient<EnvironmentCassetteSettingViewModel>();
@@ -46,8 +47,6 @@ namespace KIOSK.CompositionRoot.Modules
             services.AddScoped<MenuViewModel>();
             services.AddScoped<MenuV2ViewModel>();
             services.AddScoped<StartupViewModel>();
-            services.AddSingleton<FlowProgressViewModel>();
-            services.AddSingleton<IFlowDefinitionProvider, FlowDefinitionProvider>();
             services.AddScoped<ExchangeV2FlowHeaderViewModel>();
 
             services.AddTransient<ExchangeLanguageViewModel>();
@@ -68,6 +67,11 @@ namespace KIOSK.CompositionRoot.Modules
             services.AddTransient<ExchangeV2ExchangeMethodSelectViewModel>();
             services.AddTransient<ExchangeV2ExchangeCurrencySelectViewModel>();
             services.AddTransient<ExchangeV2IdScanConsentViewModel>();
+            services.AddTransient<ExchangeV2IdScanProcessViewModel>();
+            services.AddTransient<ExchangeV2IdScanCompleteViewModel>();
+            services.AddTransient<ExchangeV2TermsPopupViewModel>();
+            services.AddTransient<ExchangeV2IdScanFailedPopupViewModel>();
+            // services.AddTransient<ExchangeV2TermsPopupView>();
 
             services.AddTransient<GtfLanguageSelectViewModel>();
             services.AddTransient<GtfIdScanConsentViewModel>();

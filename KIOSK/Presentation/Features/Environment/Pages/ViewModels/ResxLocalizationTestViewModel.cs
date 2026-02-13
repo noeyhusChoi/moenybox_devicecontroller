@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Presentation.Navigation.Services;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 using Localization.Resx;
 using System;
 using System.Globalization;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels;
 
-public sealed partial class ResxLocalizationTestViewModel : ObservableObject, INavigable
+public sealed partial class ResxLocalizationTestViewModel : ObservableObject, IViewLifecycle
 {
     private readonly IResxLocalizationService _localization;
     private readonly INavigationService _nav;

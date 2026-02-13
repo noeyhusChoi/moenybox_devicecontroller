@@ -1,20 +1,16 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using KIOSK.Application.Services.Exchange;
-using KIOSK.Presentation.Shared.Abstractions;
+﻿using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Features.ExchangeV2.Orchestration;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
 {
-    public partial class ExchangeV2LanguageSelectViewModel : StepViewModelBase
+    public partial class ExchangeV2LanguageSelectViewModel : PageViewModelBase
     {
-        private readonly IExchangeSelectLanguageUseCase _selectLanguageUseCase;
+        private readonly IExchangeV2Orchestrator _orchestrator;
 
-        public ExchangeV2LanguageSelectViewModel(IExchangeSelectLanguageUseCase selectLanguageUseCase)
+        public ExchangeV2LanguageSelectViewModel(IExchangeV2Orchestrator orchestrator)
         {
-            _selectLanguageUseCase = selectLanguageUseCase;
+            _orchestrator = orchestrator;
         }
 
         public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
@@ -22,7 +18,6 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
         public override Task OnUnloadAsync() => Task.CompletedTask;
 
         #region Commands
-
         [RelayCommand]
         private Task Main(object? parameter) => ExecuteStepAsync(OnStepMain, parameter);
 
@@ -39,13 +34,14 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
 
             try
             {
-                await _selectLanguageUseCase.SelectAsync(param);
-                await ExecuteStepAsync(OnStepNext, param);
+                await _orchestrator.SelectLanguageAsync(param);
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
+
+            await ExecuteStepAsync(OnStepNext, param);
         }
 
         #endregion

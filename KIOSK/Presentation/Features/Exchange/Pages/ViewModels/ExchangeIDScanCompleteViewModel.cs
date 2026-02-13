@@ -3,23 +3,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Services.Devices;
 using KIOSK.Device.Abstractions;
-using KIOSK.Device.Core;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeIDScanCompleteViewModel : StepViewModelBase
+    public partial class ExchangeIDScanCompleteViewModel : PageViewModelBase
     {
-        private readonly IDeviceManager _deviceManager;
+        private readonly IDeviceCommandService _deviceCommandService;
 
         [ObservableProperty]
         private bool canNext = false; // true면 활성, false면 비활성
 
-        public ExchangeIDScanCompleteViewModel(IDeviceManager deviceManager)
+        public ExchangeIDScanCompleteViewModel(IDeviceCommandService deviceCommandService)
         {
-            _deviceManager = deviceManager;
+            _deviceCommandService = deviceCommandService;
         }
 
         public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
@@ -32,11 +31,11 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 
                     while (true)
                     {
-                        var res = await _deviceManager.SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"));
+                        var res = await _deviceCommandService.SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"));
 
                         if (res != null && res.Success == true)
                         {
-                            res = await _deviceManager.SendAsync("IDSCANNER1", new DeviceCommand("GetScanStatus"));
+                            res = await _deviceCommandService.SendAsync("IDSCANNER1", new DeviceCommand("GetScanStatus"));
 
                             if (res.Data is Pr22.Util.PresenceState state)
                             {

@@ -1,4 +1,4 @@
-namespace KIOSK.Devices.Drivers.HCDM20K;
+namespace KIOSK.Device.Drivers.HCDM20K;
 
 public enum Hcdm20kCommand : byte
 {

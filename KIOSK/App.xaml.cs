@@ -25,7 +25,7 @@ public partial class App : System.Windows.Application
         mainWindow.DataContext = mainWindowViewModel;
 
         var navigation = _bootstrapper._serviceProvider.GetRequiredService<INavigationService>();
-        navigation.SetRootWindow(mainWindow);
+        navigation.SetWindow(mainWindow);
 
         Current.MainWindow = mainWindow;
         mainWindow.Show();

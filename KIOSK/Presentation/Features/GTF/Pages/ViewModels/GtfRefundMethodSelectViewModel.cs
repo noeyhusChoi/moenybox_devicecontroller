@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfRefundMethodSelectViewModel : StepViewModelBase
+    public partial class GtfRefundMethodSelectViewModel : PageViewModelBase
     {
 
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
@@ -47,7 +47,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
         #endregion

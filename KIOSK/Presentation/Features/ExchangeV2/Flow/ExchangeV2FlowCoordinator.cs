@@ -1,10 +1,10 @@
-using KIOSK.Application.StateMachines;
 using KIOSK.Application.Abstractions;
 using KIOSK.Presentation.Navigation.Services;
-using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
-using System.Windows.Threading;
 using KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels;
-using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
+using KIOSK.Presentation.Features.MenuV2.Layout.ViewModels;
+using KIOSK.Presentation.Abstractions;
+using KIOSK.Application.Features.ExchangeV2.StateMachine;
+using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Flow
 {
@@ -30,61 +30,19 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
         private Task OnStateEnteredAsync(ExchangeV2State state) => state switch
         {
             ExchangeV2State.Language => _nav.NavigatePage<ExchangeV2LanguageSelectViewModel>(vm =>
-            {
-                vm.OnStepMain = async _ => await _state.ExitAsync();
-                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
-                vm.OnStepNext = async _ => await _state.NextAsync();
-                vm.OnStepError = async ex =>
-                {
-                    _logging.Error(ex, $"OnStepError, {ex.Message}");
-                    await _state.ErrorAsync();
-                };
-            }),
+                BindHandlers(vm)),
             ExchangeV2State.Type => _nav.NavigatePage<ExchangeV2ExchangeTypeSelectViewModel>(vm =>
-            {
-                vm.OnStepMain = async _ => await _state.ExitAsync();
-                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
-                vm.OnStepNext = async _ => await _state.NextAsync();
-                vm.OnStepError = async ex =>
-                {
-                    _logging.Error(ex, $"OnStepError, {ex.Message}");
-                    await _state.ErrorAsync();
-                };
-            }),
+                BindHandlers(vm)),
             ExchangeV2State.Method => _nav.NavigatePage<ExchangeV2ExchangeMethodSelectViewModel>(vm =>
-            {
-                vm.OnStepMain = async _ => await _state.ExitAsync();
-                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
-                vm.OnStepNext = async _ => await _state.NextAsync();
-                vm.OnStepError = async ex =>
-                {
-                    _logging.Error(ex, $"OnStepError, {ex.Message}");
-                    await _state.ErrorAsync();
-                };
-            }),
-
+                BindHandlers(vm)),
             ExchangeV2State.Currency => _nav.NavigatePage<ExchangeV2ExchangeCurrencySelectViewModel>(vm =>
-            {
-                vm.OnStepMain = async _ => await _state.ExitAsync();
-                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
-                vm.OnStepNext = async _ => await _state.NextAsync();
-                vm.OnStepError = async ex =>
-                {
-                    _logging.Error(ex, $"OnStepError, {ex.Message}");
-                    await _state.ErrorAsync();
-                };
-            }),
+                BindHandlers(vm)),
             ExchangeV2State.IdScanConsent => _nav.NavigatePage<ExchangeV2IdScanConsentViewModel>(vm =>
-            {
-                vm.OnStepMain = async _ => await _state.ExitAsync();
-                vm.OnStepPrevious = async _ => await _state.PreviousAsync();
-                vm.OnStepNext = async _ => await _state.NextAsync();
-                vm.OnStepError = async ex =>
-                {
-                    _logging.Error(ex, $"OnStepError, {ex.Message}");
-                    await _state.ErrorAsync();
-                };
-            }),
+                BindHandlers(vm)),
+            ExchangeV2State.IdScanProcess => _nav.NavigatePage<ExchangeV2IdScanProcessViewModel>(vm =>
+                BindHandlers(vm)),
+            ExchangeV2State.IdScanComplete => _nav.NavigatePage<ExchangeV2IdScanCompleteViewModel>(vm =>
+                BindHandlers(vm)),
 
             ExchangeV2State.Exit => ExitAsync(),
             _ => Task.CompletedTask
@@ -92,8 +50,27 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Flow
 
         private Task ExitAsync()
         {
-            _nav.NavigateLayout<MenuV2ShellViewModel>();
+            _nav.NavigateLayout<MenuV2LayoutViewModel>();
             return Task.CompletedTask;
+        }
+
+        private void BindHandlers(
+            PageViewModelBase viewModel,
+            bool enableMain = true,
+            bool enablePrevious = true,
+            bool enableNext = true,
+            Func<object?, Task>? nextOverride = null)
+        {
+            viewModel.OnStepMain = enableMain ? async _ => await _state.ExitAsync() : null;
+            viewModel.OnStepPrevious = enablePrevious ? async _ => await _state.PreviousAsync() : null;
+            viewModel.OnStepNext = enableNext
+                ? nextOverride ?? (async _ => await _state.NextAsync())
+                : null;
+            viewModel.OnStepError = async ex =>
+            {
+                _logging.Error(ex, $"OnStepError, {ex.Message}");
+                await _state.ErrorAsync();
+            };
         }
     }
 }

@@ -207,6 +207,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Resource Include="Resources\Fonts\PretendardVariable.ttf" />
       <Resource Include="Assets\Flag\TMP.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -522,8 +523,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Application\Features\ExchangeV2\UseCases\" />
       <Folder Include="Assets\Language\" />
-      <Folder Include="Domain\Services\" />
+      <Folder Include="Domain\" />
       <Folder Include="Resources\" />
     </ItemGroup>
 

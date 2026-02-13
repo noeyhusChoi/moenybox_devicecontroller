@@ -1,7 +1,7 @@
 using System.Globalization;
-using Localization;
 using System.Threading;
 using System.Threading.Tasks;
+using KIOSK.Application.Services.Localization;
 
 namespace KIOSK.Application.Services.Exchange
 {
@@ -21,11 +21,11 @@ namespace KIOSK.Application.Services.Exchange
 
             var culture = selection switch
             {
-                "1" => new CultureInfo("en-US"),
-                "2" => new CultureInfo("zh-CN"),
-                "3" => new CultureInfo("zh-TW"),
-                "4" => new CultureInfo("ja-JP"),
-                "5" => new CultureInfo("ko-KR"),
+                "en-US" => new CultureInfo("en-US"),
+                "zh-CN" => new CultureInfo("zh-CN"),
+                "zh-TW" => new CultureInfo("zh-TW"),
+                "ja-JP" => new CultureInfo("ja-JP"),
+                "ko-KR" => new CultureInfo("ko-KR"),
                 _ => new CultureInfo("ko-KR")
             };
 

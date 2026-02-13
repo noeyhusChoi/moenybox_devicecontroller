@@ -115,7 +115,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Header -->
+            <!--  Header  -->
             <Border
                 Grid.Row="0"
                 Padding="0,0,0,12"
@@ -162,7 +162,7 @@
                 </Grid>
             </Border>
 
-            <!-- Content -->
+            <!--  Content  -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="640" />
@@ -170,7 +170,7 @@
                     <ColumnDefinition Width="560" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Left: Device List -->
+                <!--  Left: Device List  -->
                 <Border Grid.Column="0" Style="{StaticResource CardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -259,6 +259,7 @@
                                                     Background="#F3F4F6"
                                                     CornerRadius="10">
                                                     <TextBlock
+                                                        VerticalAlignment="Center"
                                                         FontSize="11"
                                                         Foreground="#6B7280"
                                                         Text="{Binding Health}" />
@@ -268,6 +269,7 @@
                                                     Background="#F3F4F6"
                                                     CornerRadius="10">
                                                     <TextBlock
+                                                        VerticalAlignment="Center"
                                                         FontSize="11"
                                                         Foreground="#6B7280"
                                                         Text="{Binding AlertCount, StringFormat=알림 {0}}" />
@@ -281,7 +283,7 @@
                     </Grid>
                 </Border>
 
-                <!-- Right: Details -->
+                <!--  Right: Details  -->
                 <StackPanel Grid.Column="2">
                     <Border Style="{StaticResource CardStyle}">
                         <Grid>
@@ -323,10 +325,23 @@
                                     <ColumnDefinition Width="70" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Style="{StaticResource LabelTextStyle}" Text="이름" />
-                                <TextBlock Grid.Column="1" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.Name}" />
-                                <TextBlock Grid.Column="2" Margin="12,0,0,0" Style="{StaticResource LabelTextStyle}" Text="벤더" />
-                                <TextBlock Grid.Column="3" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.Vendor}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="이름" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.Name}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Margin="12,0,0,0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="벤더" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.Vendor}" />
                             </Grid>
                             <Grid Grid.Row="2" Margin="0,4,0,0">
                                 <Grid.ColumnDefinitions>
@@ -335,10 +350,23 @@
                                     <ColumnDefinition Width="70" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Style="{StaticResource LabelTextStyle}" Text="모델" />
-                                <TextBlock Grid.Column="1" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.Model}" />
-                                <TextBlock Grid.Column="2" Margin="12,0,0,0" Style="{StaticResource LabelTextStyle}" Text="프로토콜" />
-                                <TextBlock Grid.Column="3" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.ProtocolName}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="모델" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.Model}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Margin="12,0,0,0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="프로토콜" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.ProtocolName}" />
                             </Grid>
                             <Grid Grid.Row="3" Margin="0,4,0,0">
                                 <Grid.ColumnDefinitions>
@@ -347,10 +375,23 @@
                                     <ColumnDefinition Width="70" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Style="{StaticResource LabelTextStyle}" Text="통신" />
-                                <TextBlock Grid.Column="1" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.TransportType}" />
-                                <TextBlock Grid.Column="2" Margin="12,0,0,0" Style="{StaticResource LabelTextStyle}" Text="포트" />
-                                <TextBlock Grid.Column="3" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.TransportPort}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="통신" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.TransportType}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Margin="12,0,0,0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="포트" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.TransportPort}" />
                             </Grid>
                             <Grid Grid.Row="4" Margin="0,4,0,0">
                                 <Grid.ColumnDefinitions>
@@ -359,10 +400,23 @@
                                     <ColumnDefinition Width="70" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Style="{StaticResource LabelTextStyle}" Text="파라미터" />
-                                <TextBlock Grid.Column="1" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.TransportParam}" />
-                                <TextBlock Grid.Column="2" Margin="12,0,0,0" Style="{StaticResource LabelTextStyle}" Text="폴링" />
-                                <TextBlock Grid.Column="3" Style="{StaticResource ValueTextStyle}" Text="{Binding SelectedDevice.PollingMs, StringFormat={}{0} ms}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="파라미터" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.TransportParam}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Margin="12,0,0,0"
+                                    Style="{StaticResource LabelTextStyle}"
+                                    Text="폴링" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Style="{StaticResource ValueTextStyle}"
+                                    Text="{Binding SelectedDevice.PollingMs, StringFormat={}{0} ms}" />
                             </Grid>
                         </Grid>
                     </Border>
@@ -383,11 +437,11 @@
 
                             <Border
                                 Grid.Row="1"
+                                Padding="8"
                                 Background="White"
                                 BorderBrush="#E5E7EB"
                                 BorderThickness="1"
-                                CornerRadius="10"
-                                Padding="8">
+                                CornerRadius="10">
                                 <Grid>
                                     <TextBlock
                                         HorizontalAlignment="Center"

@@ -1,4 +1,5 @@
 using KIOSK.Application.Abstractions;
+using KIOSK.Application.Services;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Services;
 using Microsoft.Extensions.DependencyInjection;

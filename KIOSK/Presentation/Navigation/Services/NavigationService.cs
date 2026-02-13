@@ -1,16 +1,16 @@
 using System.Diagnostics;
 using KIOSK.Application.Abstractions;
 using KIOSK.Infrastructure.Logging;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KIOSK.Presentation.Navigation.Services;
 
 public interface INavigationService
 {
-    void SetRootWindow(IWindow window);
+    void SetWindow(IWindow window);
 
-    // Layout 전환 (ServiceShell, ExchangeShell, GtfShell 등)
+    // Layout 전환 (ServiceLayout, ExchangeLayout, GtfLayout 등)
     Task NavigateLayout<TLayout>()
         where TLayout : class, ILayout;
 
@@ -38,9 +38,9 @@ public sealed class NavigationService : INavigationService
     private ILayout? _activeLayout;
     private object? _activePage;
 
-    private IServiceScope? _shellScope;
-    private IServiceScope? _flowScope;
-    private CancellationTokenSource? _flowCancellation;
+    private IServiceScope? _layoutScope;
+    private IServiceScope? _pageScope;
+    private CancellationTokenSource? _pageCancellation;
 
     public NavigationService(
         IServiceProvider provider,
@@ -54,7 +54,7 @@ public sealed class NavigationService : INavigationService
     public ILayout? ActiveLayout => _activeLayout;
     public object? ActivePage => _activePage;
 
-    public void SetRootWindow(IWindow window)
+    public void SetWindow(IWindow window)
     {
         _rootWindow = window;
     }
@@ -69,7 +69,7 @@ public sealed class NavigationService : INavigationService
 
             if (_activeLayout is TLayout currentLayout)
             {
-                var currentProvider = _shellScope?.ServiceProvider ?? _provider;
+                var currentProvider = _layoutScope?.ServiceProvider ?? _provider;
                 var candidate = currentProvider.GetRequiredService<TLayout>();
                 if (ReferenceEquals(currentLayout, candidate))
                     return;
@@ -78,13 +78,13 @@ public sealed class NavigationService : INavigationService
             await TryUnloadAsync(_activePage);
             await TryUnloadAsync(_activeLayout);
 
-            _flowScope?.Dispose();
-            _flowScope = null;
+            _pageScope?.Dispose();
+            _pageScope = null;
 
-            _shellScope?.Dispose();
-            _shellScope = _provider.CreateScope();
+            _layoutScope?.Dispose();
+            _layoutScope = _provider.CreateScope();
 
-            var layout = _shellScope.ServiceProvider.GetRequiredService<TLayout>();
+            var layout = _layoutScope.ServiceProvider.GetRequiredService<TLayout>();
 
             await _uiDispatcher.InvokeAsync(() =>
             {
@@ -93,7 +93,7 @@ public sealed class NavigationService : INavigationService
                 rootWindow.CurrentLayout = layout;
             });
 
-            if (layout is INavigable nav)
+            if (layout is IViewLifecycle nav)
                 await nav.OnLoadAsync(null, CancellationToken.None);
         }
         catch (Exception ex)
@@ -116,14 +116,14 @@ public sealed class NavigationService : INavigationService
 
             await TryUnloadAsync(_activePage);
 
-            _flowCancellation?.Cancel();
-            _flowCancellation?.Dispose();
+            _pageCancellation?.Cancel();
+            _pageCancellation?.Dispose();
 
-            _flowScope?.Dispose();
-            var flowRoot = _shellScope?.ServiceProvider ?? _provider;
-            _flowScope = flowRoot.CreateScope();
+            _pageScope?.Dispose();
+            var flowRoot = _layoutScope?.ServiceProvider ?? _provider;
+            _pageScope = flowRoot.CreateScope();
 
-            var vm = _flowScope.ServiceProvider.GetRequiredService<TView>();
+            var vm = _pageScope.ServiceProvider.GetRequiredService<TView>();
             init?.Invoke(vm);
 
             await _uiDispatcher.InvokeAsync(() =>
@@ -132,10 +132,10 @@ public sealed class NavigationService : INavigationService
                 activeLayout.CurrentPage = vm;
             });
 
-            _flowCancellation = new CancellationTokenSource();
+            _pageCancellation = new CancellationTokenSource();
 
-            if (vm is INavigable nav)
-                await nav.OnLoadAsync(parameter, _flowCancellation.Token);
+            if (vm is IViewLifecycle nav)
+                await nav.OnLoadAsync(parameter, _pageCancellation.Token);
         }
         finally
         {
@@ -143,18 +143,20 @@ public sealed class NavigationService : INavigationService
         }
     }
 
-    public T GetViewModel<T>() where T : class =>
-        _provider.GetRequiredService<T>();
+    public T GetViewModel<T>() where T : class
+    {
+        return _provider.GetRequiredService<T>();
+    }
 
     public T GetLayoutViewModel<T>() where T : class
     {
-        var provider = _shellScope?.ServiceProvider ?? _provider;
+        var provider = _layoutScope?.ServiceProvider ?? _provider;
         return provider.GetRequiredService<T>();
     }
 
     private async Task TryUnloadAsync(object? target)
     {
-        if (target is INavigable nav)
+        if (target is IViewLifecycle nav)
         {
             try
             {
@@ -166,6 +168,5 @@ public sealed class NavigationService : INavigationService
             }
         }
     }
-
 }
 

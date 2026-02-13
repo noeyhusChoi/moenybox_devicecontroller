@@ -1,48 +1,47 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Device.Abstractions;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Infrastructure.Management.Status;
-using KIOSK.Infrastructure.Storage;
 using KIOSK.Application.Services;
+using KIOSK.Application.Services.Devices;
+using KIOSK.Device.Abstractions;
+using KIOSK.Infrastructure.Storage;
 using System.Collections.ObjectModel;
-using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Features.Environment.Pages.ViewModels;
+using KIOSK.Presentation.Navigation.Services;
 
 namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels
 {
     public partial class EnvironmentViewModel : ObservableObject
     {
-        private readonly IDeviceManager _deviceManagerV2;
+        private readonly IDeviceCommandService _deviceCommandService;
+        private readonly IDeviceStatusService _deviceStatusService;
         private readonly IPopupService _popup;
         private readonly INavigationService _nav;
-        
+
         public ObservableCollection<StatusSnapshot> DeviceStatuses { get; } = new();
         public ObservableCollection<WithdrawalCassette> WithdrawalCassettes { get; } = new();
         public ObservableCollection<StorageInfo> StorageList { get; } = new();
 
         private readonly WithdrawalCassetteService _withdrawalCassetteService;
-        private readonly IStatusStore _statusStore;
 
         public EnvironmentViewModel(
-            IDeviceManager deviceManagerV2,
+            IDeviceCommandService deviceCommandService,
+            IDeviceStatusService deviceStatusService,
             WithdrawalCassetteService withdrawalCassetteService,
             IStorageService storageService,
             IPopupService popup,
-            INavigationService nav,
-            IStatusStore statusStore)
+            INavigationService nav)
         {
-            _deviceManagerV2 = deviceManagerV2; // 장비
+            _deviceCommandService = deviceCommandService;
+            _deviceStatusService = deviceStatusService;
             _withdrawalCassetteService = withdrawalCassetteService; // 시재
             _popup = popup;
             _nav = nav;
-            _statusStore = statusStore;
 
             // 초기 스냅샷 로드
-            DeviceStatuses = new ObservableCollection<StatusSnapshot>(_statusStore.GetAll());
+            DeviceStatuses = new ObservableCollection<StatusSnapshot>(_deviceStatusService.GetAllSnapshots());
 
             // 스냅샷 구독
-            _statusStore.StatusUpdated += OnStatusUpdated;
+            _deviceStatusService.StatusUpdated += OnStatusUpdated;
 
             // 시재 정보 로드
             _ = RefreshCassetteInfoAsync();
@@ -89,7 +88,7 @@ namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels
             if (name is string device)
             {
                 // TODO: 공통 명령어 정리 (INIT, START, STOP ...) 아마도 INIT만 필요할 듯
-                await _deviceManagerV2.SendAsync(device, new DeviceCommand("Init"));
+                await _deviceCommandService.SendAsync(device, new DeviceCommand("Init"));
             }
         }
 

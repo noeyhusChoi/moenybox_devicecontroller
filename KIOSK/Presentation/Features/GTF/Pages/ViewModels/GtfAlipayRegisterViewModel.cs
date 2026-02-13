@@ -8,19 +8,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.Device.Abstractions;
-using KIOSK.Device.Drivers;
-using KIOSK.Device.Drivers.E200Z;
+using KIOSK.Application.Services.Devices;
 using KIOSK.Domain.Entities;
 using KIOSK.Infrastructure.API.Gtf;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfAlipayRegisterViewModel : StepViewModelBase
+    public partial class GtfAlipayRegisterViewModel : PageViewModelBase
     {
-        private readonly IDeviceManager _deviceManager;
+        private readonly IQrScannerDeviceService _qrScannerDeviceService;
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
 
@@ -38,36 +35,30 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             else PhoneNumber = $"{digits[..3]}-{digits[3..7]}-{digits[7..]}";
         }
 
-        public GtfAlipayRegisterViewModel(IDeviceManager deviceManager, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
+        public GtfAlipayRegisterViewModel(IQrScannerDeviceService qrScannerDeviceService, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
-            _deviceManager = deviceManager;
+            _qrScannerDeviceService = qrScannerDeviceService;
             _gtfApiService = gtfApiService;
             _gtfTaxRefundService = gtfTaxRefundService;
         }
 
         public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
-            await _deviceManager.SendAsync("QR1", new DeviceCommand("SCAN_ENABLE"));
-
-            var QR = _deviceManager.GetDevice<QrE200ZDriver>("QR1");
-            if (QR is not null)
-                QR.Decoded += ScanVoucherQrCodeAsync;
+            _qrScannerDeviceService.Decoded += ScanVoucherQrCodeAsync;
+            await _qrScannerDeviceService.EnableAsync("QR1", ct);
         }
 
         public override async Task OnUnloadAsync()
         {
-            await _deviceManager.SendAsync("QR1", new DeviceCommand("SCAN_DISABLE"));
-
-            var QR = _deviceManager.GetDevice<QrE200ZDriver>("QR1");
-            if (QR is not null)
-                QR.Decoded -= ScanVoucherQrCodeAsync;
+            await _qrScannerDeviceService.DisableAsync("QR1");
+            _qrScannerDeviceService.Decoded -= ScanVoucherQrCodeAsync;
         }
 
         // QR 코드 스캔 처리 메서드
-        private async void ScanVoucherQrCodeAsync(object? sender, DecodeMessage msg)
+        private async void ScanVoucherQrCodeAsync(object? sender, QrDecodedEventArgs msg)
         {
             // 스캔 중지
-            await _deviceManager.SendAsync("QR1", new DeviceCommand("SCAN_DISABLE"));
+            await _qrScannerDeviceService.DisableAsync("QR1");
             Trace.WriteLine($"Scanned QR Code :TYPE[{msg.BarcodeType:X2}] TEXT[{msg.Text}]");
 
             // QR 데이터
@@ -98,7 +89,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             }
 
             // 스캔 활성화
-            await _deviceManager.SendAsync("QR1", new DeviceCommand("SCAN_ENABLE"));
+            await _qrScannerDeviceService.EnableAsync("QR1");
         }
 
         [RelayCommand]
@@ -180,7 +171,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             catch (Exception ex)
             {
                 if (OnStepError is not null)
-                    OnStepError(ex);
+                    await RaiseStepErrorAsync(ex);
             }
         }
         #endregion

@@ -1,5 +1,5 @@
-﻿using KIOSK.Domain.Entities;
-using KIOSK.Infrastructure.Cache;
+﻿using KIOSK.Infrastructure.Cache;
+using KIOSK.Infrastructure.Database.Models;
 using KIOSK.Infrastructure.Database.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;

@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Exchange;
-using KIOSK.Presentation.Shared.Abstractions;
-using KIOSK.Presentation.Features.Exchange.Pages.ViewModels.Popup;
+using KIOSK.Presentation.Abstractions;
+using KIOSK.Presentation.Features.Exchange.Popup.ViewModels;
 using KIOSK.Presentation.Navigation.Services;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
-    public partial class ExchangeIDScanGuideViewModel : StepViewModelBase
+    public partial class ExchangeIDScanGuideViewModel : PageViewModelBase
     {
         private readonly IExchangeIdScanGuideUseCase _scanGuideUseCase;
         private readonly IPopupService _popup;

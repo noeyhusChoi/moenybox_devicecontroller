@@ -3,11 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfAlipayGuideViewModel : StepViewModelBase
+    public partial class GtfAlipayGuideViewModel : PageViewModelBase
     {
         public override Task OnLoadAsync(object? parameter, CancellationToken ct) => Task.CompletedTask;
 

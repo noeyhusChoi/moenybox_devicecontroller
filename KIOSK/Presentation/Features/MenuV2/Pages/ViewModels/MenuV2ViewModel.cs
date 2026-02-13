@@ -1,18 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KIOSK.Infrastructure.Media;
 using KIOSK.Application.Services.Devices;
-using KIOSK.Application.Services.Health;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Device.Abstractions;
-using KIOSK.Device.Core;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.FSM;
 using KIOSK.Domain.Entities;
 using KIOSK.Application.Services;
 using KIOSK.Presentation.Navigation.Services;
 using Microsoft.Extensions.Logging;
-using KIOSK.Presentation.Features.Exchange.Shell.ViewModels;
-using KIOSK.Presentation.Features.GTF.Shell.ViewModels;
+using KIOSK.Presentation.Features.Exchange.Layout.ViewModels;
+using KIOSK.Presentation.Features.GTF.Layout.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 using System.Diagnostics;
@@ -20,13 +16,14 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Transactions;
-using KIOSK.Presentation.Features.ExchangeV2.Shell.ViewModels;
-using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Features.ExchangeV2.Layout.ViewModels;
+using KIOSK.Presentation.Features.MenuV2.Layout.ViewModels;
+using KIOSK.Presentation.Abstractions;
+using KIOSK.Infrastructure.Health;
 
 namespace KIOSK.Presentation.Features.MenuV2.Pages.ViewModels
 {
-    public partial class MenuV2ViewModel : ObservableObject, INavigable
+    public partial class MenuV2ViewModel : ObservableObject, IViewLifecycle
     {
         private readonly IServiceProvider _provider;
         private readonly ILogger<MenuV2ViewModel> _logger;
@@ -56,7 +53,7 @@ namespace KIOSK.Presentation.Features.MenuV2.Pages.ViewModels
         /// <summary>
         /// 주기적으로 호출해서 장치/네트워크/DB 상태를 갱신
         /// </summary>
-        private async Task RefreshStatusAsync()
+        private Task RefreshStatusAsync()
         {
             try
             {
@@ -71,40 +68,22 @@ namespace KIOSK.Presentation.Features.MenuV2.Pages.ViewModels
                         x.Name.StartsWith("WITHDRAWAL"))
                     .Any(x => (x.Alerts?.Count ?? 0) > 0 || x.Health == DeviceHealth.Offline);
 
-                // 2) 네트워크 체크 (예시: CEMS API 핑)
-                var networkOk = true;
-                //try
-                //{
-                //    var apiPing = _provider.GetService<IApiHealthCheckService>();
-                //    if (apiPing != null)
-                //    {
-                //        networkOk = await apiPing.PingAsync();
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    networkOk = false;
-                //    _logging.Error(ex, "Network health check failed.");
-                //}
+                // 2) 네트워크 체크 (Status 파이프라인 기반)
+                var networkSnapshot = snapshots.FirstOrDefault(x =>
+                    string.Equals(x.Name, SystemHealthSourceIds.Network, StringComparison.OrdinalIgnoreCase));
+                var networkOk = networkSnapshot is not null
+                                && networkSnapshot.Health != DeviceHealth.Offline
+                                && (networkSnapshot.Alerts?.Count ?? 0) == 0;
 
-                // 3) DB 체크 (예시: 단순 쿼리 한 번)
-                var dbOk = true;
-                try
-                {
-                    var dbHealth = _provider.GetService<IDatabaseHealthService>();
-                    if (dbHealth != null)
-                    {
-                        dbOk = await dbHealth.CanConnectAsync();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    dbOk = false;
-                    _logger.LogError(ex, "DB health check failed.");
-                }
+                // 3) 디스크 체크 (Status 파이프라인 기반)
+                var diskSnapshot = snapshots.FirstOrDefault(x =>
+                    string.Equals(x.Name, SystemHealthSourceIds.Disk, StringComparison.OrdinalIgnoreCase));
+                var diskOk = diskSnapshot is not null
+                             && diskSnapshot.Health != DeviceHealth.Offline
+                             && (diskSnapshot.Alerts?.Count ?? 0) == 0;
 
-                // 4) 최종 서비스 사용 가능 여부 결정
-                IsActiveExchangeSell = !deviceHasError && networkOk && dbOk;
+                // 4) 최종 서비스 사용 가능 여부 결정 (DB 체크 제외)
+                IsActiveExchangeSell = !deviceHasError && networkOk && diskOk;
 
                 // 디버깅용 로그
                 foreach (var snap in snapshots)
@@ -120,6 +99,8 @@ namespace KIOSK.Presentation.Features.MenuV2.Pages.ViewModels
                 // 오류나면 보수적으로 버튼 잠그기
                 IsActiveExchangeSell = false;
             }
+
+            return Task.CompletedTask;
         }
 
         [RelayCommand]
@@ -136,13 +117,13 @@ namespace KIOSK.Presentation.Features.MenuV2.Pages.ViewModels
                 switch (param)
                 {
                     case "CARD":
-                        await nav.NavigateLayout<ExchangeShellViewModel>();
+                        await nav.NavigateLayout<ExchangeLayoutViewModel>();
                         break;
                     case "EXCHANGE":
-                        await nav.NavigateLayout<ExchangeV2ShellViewModel>();
+                        await nav.NavigateLayout<ExchangeV2LayoutViewModel>();
                         break;
                     case "TAXFREE":
-                        await nav.NavigateLayout<GtfShellViewModel>();
+                        await nav.NavigateLayout<GtfLayoutViewModel>();
                         break;
                     default:
                         break;

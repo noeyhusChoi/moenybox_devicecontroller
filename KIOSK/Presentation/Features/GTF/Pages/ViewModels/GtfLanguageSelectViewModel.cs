@@ -9,14 +9,13 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
 using KIOSK.Application.Services.Localization;
-using KIOSK.Domain.Entities;
 using KIOSK.Infrastructure.API.Gtf;
-using KIOSK.Presentation.Shared.Abstractions;
-using Localization;
+using KIOSK.Infrastructure.Database.Models;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfLanguageSelectViewModel : StepViewModelBase
+    public partial class GtfLanguageSelectViewModel : PageViewModelBase
     {
         [ObservableProperty]
         private ObservableCollection<LocaleInfoModel> localeField;
@@ -94,7 +93,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    OnStepError?.Invoke(ex);
+                    await RaiseStepErrorAsync(ex);
                 }
             }
         }

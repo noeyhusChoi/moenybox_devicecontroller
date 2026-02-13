@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Transport;
 
-namespace KIOSK.Devices.Drivers.HCDM;
+namespace KIOSK.Device.Drivers.HCDM;
 
 /// <summary>
 /// HCDM-10K 프로토콜 클라이언트 (ACK/ENQ 핸드셰이크 + 프레임 송수신).

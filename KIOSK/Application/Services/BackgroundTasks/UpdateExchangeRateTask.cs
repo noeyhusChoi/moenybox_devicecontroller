@@ -1,9 +1,9 @@
 ﻿using KIOSK.Application.Abstractions;
-using KIOSK.Domain.Entities;
 using KIOSK.Application.Services.API;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using KIOSK.Infrastructure.Database.Models;
 
 namespace KIOSK.Application.Services.BackgroundTasks
 {

@@ -1,15 +1,11 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Transport;
 using Pr22;
 using Pr22.Events;
 using Pr22.Imaging;
-using Pr22.Processing;
 using Pr22.Task;
+using System.Diagnostics;
+using System.IO;
 using Path = System.IO.Path;
 
 namespace KIOSK.Device.Drivers.IdScanner;
@@ -161,7 +157,7 @@ internal sealed class IdScannerClient : IAsyncDisposable
             _presenceState = e.State;
             if (e.State == Pr22.Util.PresenceState.NoMove)
             {
-                    StartNoMoveHold();
+                StartNoMoveHold();
             }
             else
             {

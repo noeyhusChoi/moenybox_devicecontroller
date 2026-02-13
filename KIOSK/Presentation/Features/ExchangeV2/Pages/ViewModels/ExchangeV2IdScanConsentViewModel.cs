@@ -1,15 +1,16 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using KIOSK.Presentation.Abstractions;
+using KIOSK.Presentation.Features.Exchange.Popup.ViewModels;
+using KIOSK.Presentation.Features.ExchangeV2.Popup.ViewModels;
+using KIOSK.Presentation.Navigation.Services;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using KIOSK.Presentation.Features.Exchange.Pages.ViewModels.Popup;
-using KIOSK.Presentation.Navigation.Services;
-using KIOSK.Presentation.Shared.Abstractions;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
 {
-    public partial class ExchangeV2IdScanConsentViewModel : StepViewModelBase
+    public partial class ExchangeV2IdScanConsentViewModel : PageViewModelBase
     {
         [ObservableProperty]
         private bool isTermsChecked;
@@ -30,14 +31,13 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
         {
             try
             {
-                _popup.ShowPopup<ExchangePopupTermsViewModel>();
+                _popup.ShowPopup<ExchangeV2TermsPopupViewModel>();
             }
             catch (Exception ex)
             {
-                OnStepError?.Invoke(ex);
+                await RaiseStepErrorAsync(ex);
             }
         }
-
 
         #region Commands
 

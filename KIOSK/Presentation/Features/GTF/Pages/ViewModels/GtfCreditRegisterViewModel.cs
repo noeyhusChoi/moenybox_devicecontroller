@@ -5,11 +5,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
-    public partial class GtfCreditRegisterViewModel : StepViewModelBase
+    public partial class GtfCreditRegisterViewModel : PageViewModelBase
     {
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;

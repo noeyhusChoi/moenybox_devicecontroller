@@ -1,11 +1,12 @@
 using KIOSK.Application.Services;
 using KIOSK.Device.Abstractions;
-using KIOSK.Device.Core;
-using KIOSK.Infrastructure.Management.Devices;
-using KIOSK.Infrastructure.Management.Status;
+using KIOSK.Infrastructure.Devices.Runtime.Factories;
+using KIOSK.Infrastructure.Devices.Runtime;
+using KIOSK.Infrastructure.Devices.Status;
 using KIOSK.Infrastructure.Database.Repositories;
-using KIOSK.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using KIOSK.Infrastructure.Database.Models;
+using KIOSK.Infrastructure.Health;
 
 namespace KIOSK.Infrastructure.Hosting.Modules
 {
@@ -22,10 +23,13 @@ namespace KIOSK.Infrastructure.Hosting.Modules
             services.AddSingleton<IStatusLogService, StatusLogService>();
             services.AddSingleton<IErrorPolicy, StandardErrorPolicy>();
             services.AddSingleton<IErrorMessageProvider, StandardErrorMessageProvider>();
+            services.AddSingleton<IHealthPipeline, HealthPipeline>();
+            services.AddHostedService<NetworkHealthSupervisorHostedService>();
+            services.AddHostedService<DiskHealthSupervisorHostedService>();
             services.AddSingleton<IDeviceHost, DeviceHost>();
             services.AddSingleton<IDeviceCommandCatalog, DeviceCommandCatalog>();
             services.AddSingleton<IStatusPipeline, StatusPipeline>();
-            services.AddSingleton<IDeviceManager, DeviceService>();
+            services.AddSingleton<IDeviceManager, DeviceManager>();
             services.AddSingleton<DeviceErrorEventService>();
             services.AddSingleton<ExchangeRateModel>();
 

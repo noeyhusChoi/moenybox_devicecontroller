@@ -4,40 +4,38 @@ using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.Storage;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
-using KIOSK.Application.Services.Devices;
 using System.Collections.ObjectModel;
 using KIOSK.Presentation.Navigation.Services;
 using KIOSK.Presentation.Features.Environment.Pages.ViewModels;
-using KIOSK.Presentation.Features.Environment.Shell.ViewModels;
-using KIOSK.Presentation.Features.Menu.Shell.ViewModels;
+using KIOSK.Presentation.Features.Environment.Layout.ViewModels;
+using KIOSK.Presentation.Features.Menu.Layout.ViewModels;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
-using KIOSK.Presentation.Features.Startup.Shell.ViewModels;
+using KIOSK.Presentation.Features.MenuV2.Layout.ViewModels;
+using KIOSK.Presentation.Features.Startup.Layout.ViewModels;
+using KIOSK.Presentation.Window.Services;
 
 namespace KIOSK.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
         private readonly INavigationService _nav;
-        private readonly IDeviceCatalogService _repo;
         private readonly CemsApiService _cems;
 
         [ObservableProperty]
         private object currentLayout; // MainWindow의 Layout Content
 
-        public MainWindowViewModel(INavigationService nav, IDeviceCatalogService repo, CemsApiService cems)
+        public MainWindowViewModel(INavigationService nav, CemsApiService cems)
         {
             _nav = nav;
             CurrentLayout = null;
 
-            _repo = repo;
             _cems = cems;
         }
 
         public async Task InitializeAsync()
         {
-            await _nav.NavigateLayout<StartupShellViewModel>();
+            await _nav.NavigateLayout<StartupLayoutViewModel>();
         }
 
         [RelayCommand] private void F0() { }
@@ -53,10 +51,10 @@ namespace KIOSK.ViewModels
         [RelayCommand]
         private void F2()
         {
-            if (_nav.ActiveLayout is EnvironmentShellViewModel)
-                _nav.NavigateLayout<MenuV2ShellViewModel>();
+            if (_nav.ActiveLayout is EnvironmentLayoutViewModel)
+                _nav.NavigateLayout<MenuV2LayoutViewModel>();
             else
-                _nav.NavigateLayout<EnvironmentShellViewModel>();
+                _nav.NavigateLayout<EnvironmentLayoutViewModel>();
         }
 
         [RelayCommand] private void F3() { MonitorMover.MoveActiveWindowToNextScreen(); }
@@ -80,10 +78,6 @@ namespace KIOSK.ViewModels
             var xx = await _cems.SmsAsync(DateTime.Now, "ADM", ms, CancellationToken.None);
         }
 
-        [RelayCommand]
-        private void F5()
-        {
-            var x = _repo.LoadAllAsync();
-        }
+        [RelayCommand] private void F5() { }
     }
 }

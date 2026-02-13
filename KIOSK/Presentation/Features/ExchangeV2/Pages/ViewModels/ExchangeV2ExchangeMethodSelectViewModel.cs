@@ -1,19 +1,20 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using KIOSK.Presentation.Shared.Abstractions;
+﻿using CommunityToolkit.Mvvm.Input;
+using KIOSK.Application.Features.ExchangeV2.Orchestration;
+using KIOSK.Domain.Transactions;
+using KIOSK.Presentation.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
 {
-    public partial class ExchangeV2ExchangeMethodSelectViewModel : StepViewModelBase
+    public partial class ExchangeV2ExchangeMethodSelectViewModel : PageViewModelBase
     {
-        public ExchangeV2ExchangeMethodSelectViewModel()
+        private readonly IExchangeV2Orchestrator _orchestrator;
+
+        public ExchangeV2ExchangeMethodSelectViewModel(IExchangeV2Orchestrator orchestrator)
         {
+            _orchestrator = orchestrator;
         }
 
         public override Task OnLoadAsync(object? parameter, CancellationToken ct)
@@ -37,8 +38,24 @@ namespace KIOSK.Presentation.Features.ExchangeV2.Pages.ViewModels
         private Task Previous(object? parameter) => ExecuteStepAsync(OnStepPrevious, parameter);
 
         [RelayCommand]
-        private Task Next(object? parameter)
-            => ExecuteStepAsync(OnStepNext, parameter);
+        private async Task Next(object? parameter)
+        {
+            if (parameter is not PayoutMethodType method)
+            {
+                return;
+            }
+
+            try
+            {
+                _orchestrator.SelectPayoutMethod(method);
+
+                await ExecuteStepAsync(OnStepNext, parameter);
+            }
+            catch (Exception ex)
+            {
+                await RaiseStepErrorAsync(ex);
+            }
+        }
 
         #endregion
     }

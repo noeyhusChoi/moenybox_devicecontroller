@@ -4,15 +4,15 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using KIOSK.Infrastructure.Hosting;
 using KIOSK.Infrastructure.Initialization;
-using KIOSK.Presentation.Features.MenuV2.Shell.ViewModels;
+using KIOSK.Presentation.Features.MenuV2.Layout.ViewModels;
 using KIOSK.Presentation.Navigation.Services;
-using KIOSK.Presentation.Shared.Abstractions;
+using KIOSK.Presentation.Abstractions;
 using System.Windows;
 using System.Windows.Threading;
 
 namespace KIOSK.Presentation.Features.Startup.Pages.ViewModels
 {
-    public partial class StartupViewModel : ObservableObject, INavigable
+    public partial class StartupViewModel : PageViewModelBase
     {
         private readonly IAppInitializer _initializer;
         private readonly IHostController _hostController;
@@ -39,7 +39,7 @@ namespace KIOSK.Presentation.Features.Startup.Pages.ViewModels
             LottieSourcePath = @"C:\Users\niaci\Downloads\Shape Animation.json";
         }
 
-        public Task OnLoadAsync(object? parameter, CancellationToken ct)
+        public override Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
             if (_initialized)
                 return Task.CompletedTask;
@@ -49,7 +49,7 @@ namespace KIOSK.Presentation.Features.Startup.Pages.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task OnUnloadAsync()
+        public override Task OnUnloadAsync()
         {
             _initializer.ProgressChanged -= OnProgressChanged;
             return Task.CompletedTask;
@@ -86,7 +86,7 @@ namespace KIOSK.Presentation.Features.Startup.Pages.ViewModels
 
                 if (!ct.IsCancellationRequested)
                 {
-                    await _navigation.NavigateLayout<MenuV2ShellViewModel>();
+                    await _navigation.NavigateLayout<MenuV2LayoutViewModel>();
                 }
             }
             catch (OperationCanceledException)

@@ -260,7 +260,6 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-
         </UniformGrid>
     </Grid>
 </UserControl>

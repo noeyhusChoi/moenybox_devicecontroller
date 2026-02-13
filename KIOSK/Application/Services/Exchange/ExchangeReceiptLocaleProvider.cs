@@ -1,4 +1,4 @@
-using Localization;
+using KIOSK.Application.Services.Localization;
 
 namespace KIOSK.Application.Services.Exchange
 {

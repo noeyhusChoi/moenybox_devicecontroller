@@ -1,6 +1,6 @@
 using System;
 
-namespace KIOSK.Devices.Drivers.HCDM;
+namespace KIOSK.Device.Drivers.HCDM;
 
 internal static class Hcdm10kProtocol
 {

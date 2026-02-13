@@ -1,8 +1,7 @@
-﻿using KIOSK.Device.Abstractions;
-using KIOSK.Device.Core;
+﻿using KIOSK.Application.Services.Devices;
 using KIOSK.Domain.Entities;
 using KIOSK.Infrastructure.Cache;
-using KIOSK.Infrastructure.Management.Devices;
+using KIOSK.Infrastructure.Database.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Text;
@@ -11,13 +10,14 @@ namespace KIOSK.Application.Services
 {
     public partial class ReceiptPrintService
     {
+        private const string PrinterDeviceId = "PRINTER1";
         private readonly RecieptFormater _formater = new RecieptFormater();
-        private readonly IDeviceManager _deviceManager;
+        private readonly IPrinterDeviceService _printerDeviceService;
         private readonly IMemoryCache _cache;
 
-        public ReceiptPrintService(IDeviceManager deviceManager, IMemoryCache cache)
+        public ReceiptPrintService(IPrinterDeviceService printerDeviceService, IMemoryCache cache)
         {
-            _deviceManager = deviceManager;
+            _printerDeviceService = printerDeviceService;
             _cache = cache;
         }
 
@@ -33,7 +33,7 @@ namespace KIOSK.Application.Services
             // title
             var title = GetValue(locale, "title") + "\r\n";
             title += string.Concat(Enumerable.Repeat("\r\n", 2));
-            await _deviceManager.SendAsync("PRINTER1", new DeviceCommand("PrintTitle", title));
+            await _printerDeviceService.PrintTitleAsync(PrinterDeviceId, title);
 
             // company info
             string company = string.Empty;
@@ -42,13 +42,13 @@ namespace KIOSK.Application.Services
             company += _formater.MakePadLeftString1(GetValue(locale, "address"));
             company += string.Concat(Enumerable.Repeat("\r\n", 2));
 
-            await _deviceManager.SendAsync("PRINTER1", new DeviceCommand("PrintContent", company));
+            await _printerDeviceService.PrintContentAsync(PrinterDeviceId, company);
 
             // date info
             string dateInfo = string.Empty;
             dateInfo += _formater.MakePadLeftString2(GetValue(locale, "transaction_time"), result.TransactionDate.ToString("yyyy-MM-dd HH:mm:ss"));
             dateInfo += _formater.MakePadLeftString2(GetValue(locale, "transaction_number"), "A123456");
-            await _deviceManager.SendAsync("PRINTER1", new DeviceCommand("PrintContent", dateInfo));
+            await _printerDeviceService.PrintContentAsync(PrinterDeviceId, dateInfo);
 
             // transaction info
             string transaction = string.Empty;
@@ -59,7 +59,7 @@ namespace KIOSK.Application.Services
             transaction += _formater.MakePadLeftString2(GetValue(locale, "transaction_withdrawal"), $"{result.TargetComputedAmount.ToString()} {result.TargetCurrency}");
             transaction += _formater.MakePadLeftString1(string.Concat(Enumerable.Repeat("=", 48)));
             transaction += string.Concat(Enumerable.Repeat("\r\n", 1));
-            await _deviceManager.SendAsync("PRINTER1", new DeviceCommand("PrintContent", transaction));
+            await _printerDeviceService.PrintContentAsync(PrinterDeviceId, transaction);
 
             // kiosk info
             string shop = string.Empty;
@@ -67,9 +67,9 @@ namespace KIOSK.Application.Services
             shop += _formater.MakePadLeftString3(GetValue(locale, "kiosk_address"));
             shop += _formater.MakePadLeftString3(GetValue(locale, "kiosk_tel"));
             shop += string.Concat(Enumerable.Repeat("\r\n", 2));
-            await _deviceManager.SendAsync("PRINTER1", new DeviceCommand("PrintContent", shop));
+            await _printerDeviceService.PrintContentAsync(PrinterDeviceId, shop);
 
-            await _deviceManager.SendAsync("PRINTER1", new DeviceCommand("Cut"));
+            await _printerDeviceService.CutAsync(PrinterDeviceId);
         }
         //shop += new string('=', 48);
     }

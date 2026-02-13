@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
-using KIOSK.Devices.Drivers.HCDM;
+using KIOSK.Device.Drivers.HCDM;
 
-namespace KIOSK.Devices.Drivers.HCDM
+namespace KIOSK.Device.Drivers.HCDM
 {
     internal static class Hcdm10kCommandHandlers
     {

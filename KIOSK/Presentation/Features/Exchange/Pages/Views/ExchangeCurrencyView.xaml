@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.Views"
-    xmlns:lx="clr-namespace:Localization"
+    xmlns:localization="clr-namespace:KIOSK.Application.Services.Localization"
+    xmlns:lx="clr-namespace:KIOSK.Application.Services.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:KIOSK.Presentation.Features.Exchange.Pages.ViewModels"
     d:DesignHeight="980"
@@ -239,7 +240,7 @@
                         FontSize="32"
                         FontWeight="Bold"
                         Foreground="White"
-                        Text="{lx:Loc ExchangeSellProcess.SelectCurrency}" />
+                        Text="{localization:Loc ExchangeSellProcess.SelectCurrency}" />
                 </StackPanel>
                 <StackPanel Margin="0,0,60,0" Orientation="Horizontal">
                     <Grid Margin="0,0,10,0">
@@ -264,7 +265,7 @@
                         FontSize="32"
                         FontWeight="Bold"
                         Foreground="White"
-                        Text="{lx:Loc ExchangeSellProcess.IDScan}" />
+                        Text="{localization:Loc ExchangeSellProcess.IDScan}" />
                 </StackPanel>
                 <StackPanel Margin="0,0,60,0" Orientation="Horizontal">
                     <Grid Margin="0,0,10,0">

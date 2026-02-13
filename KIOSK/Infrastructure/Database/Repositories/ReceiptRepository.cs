@@ -1,7 +1,7 @@
-﻿using KIOSK.Domain.Entities;
-using KIOSK.Infrastructure.Database.Ef;
+﻿using KIOSK.Infrastructure.Database.Ef;
 using KIOSK.Infrastructure.Database.Ef.Entities;
 using KIOSK.Infrastructure.Database.Interface;
+using KIOSK.Infrastructure.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

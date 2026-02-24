@@ -9,7 +9,7 @@ namespace KIOSK.Device.Transport;
 /// <summary>
 /// PR22 DLL 기반 트랜스포트: DocumentReaderDevice를 열고 닫기를 담당한다.
 /// </summary>
-internal class TransportPr22 : ITransport
+public class TransportPr22 : ITransport
 {
     private DocumentReaderDevice? _device;
     private bool _isOpen;

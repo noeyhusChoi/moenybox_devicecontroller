@@ -11,7 +11,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
     /// 장치 생명 주기 관리: 연결/해제, 상태 폴링, 명령 직렬화
     /// - 상태 저장/가공은 하지 않고, 이벤트만 발생시킨다.
     /// </summary>
-    public sealed class DeviceSupervisor : IAsyncDisposable
+    internal sealed class DeviceSupervisor : IAsyncDisposable
     {
         private readonly DeviceDescriptor _desc;
         private readonly ITransportFactory _transportFactory;
@@ -22,6 +22,9 @@ namespace KIOSK.Infrastructure.Devices.Runtime
         private bool _connectFailEmitted;
         private bool _connectedThisAttempt;
         private bool _isOnline;
+        private readonly object _connectSync = new();
+        private bool _enabled = true;
+        private TaskCompletionSource<bool> _resumeSignal = CreateCompletedSignal();
 
         private ITransport? _transport;
         private IDevice? _device;
@@ -63,6 +66,15 @@ namespace KIOSK.Infrastructure.Devices.Runtime
         {
             while (!ct.IsCancellationRequested)
             {
+                try
+                {
+                    await WaitUntilEnabledAsync(ct).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 var reconnectDelayMs = Math.Max(100, _desc.PollingMs);
                 _connectedThisAttempt = false;
 
@@ -82,6 +94,9 @@ namespace KIOSK.Infrastructure.Devices.Runtime
                 }
                 catch (OperationCanceledException)
                 {
+                    if (!IsEnabled())
+                        continue;
+
                     try
                     {
                         await Task.Delay(reconnectDelayMs, ct).ConfigureAwait(false);
@@ -158,10 +173,69 @@ namespace KIOSK.Infrastructure.Devices.Runtime
             }
         }
 
+        public Task<bool> ConnectAsync(CancellationToken ct = default)
+        {
+            lock (_connectSync)
+            {
+                if (_enabled)
+                    return Task.FromResult(false);
+
+                _enabled = true;
+                _resumeSignal.TrySetResult(true);
+            }
+
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> DisconnectAsync(CancellationToken ct = default)
+        {
+            var changed = false;
+            lock (_connectSync)
+            {
+                if (_enabled)
+                {
+                    _enabled = false;
+                    changed = true;
+                }
+
+                if (_resumeSignal.Task.IsCompleted)
+                    _resumeSignal = CreatePendingSignal();
+            }
+
+            if (!changed)
+                return Task.FromResult(false);
+
+            _isOnline = false;
+            SafeInvokeStatusUpdated(CreateDisconnectedSnapshot());
+            SafeInvokeDisconnected();
+            RequestReconnect();
+            return Task.FromResult(true);
+        }
+
         private void RequestReconnect()
         {
             try { _attemptCts?.Cancel(); }
             catch { }
+        }
+
+        private async Task WaitUntilEnabledAsync(CancellationToken ct)
+        {
+            Task waitTask;
+            lock (_connectSync)
+            {
+                if (_enabled)
+                    return;
+
+                waitTask = _resumeSignal.Task;
+            }
+
+            await waitTask.WaitAsync(ct).ConfigureAwait(false);
+        }
+
+        private bool IsEnabled()
+        {
+            lock (_connectSync)
+                return _enabled;
         }
 
         private void HandleRunException(bool connected)
@@ -394,6 +468,16 @@ namespace KIOSK.Infrastructure.Devices.Runtime
                 Timestamp = DateTimeOffset.UtcNow,
                 AlertScope = AlertSource.Connection
             };
+
+        private static TaskCompletionSource<bool> CreateCompletedSignal()
+        {
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            tcs.TrySetResult(true);
+            return tcs;
+        }
+
+        private static TaskCompletionSource<bool> CreatePendingSignal()
+            => new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     }
 }

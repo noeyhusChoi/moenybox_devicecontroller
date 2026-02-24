@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
@@ -15,15 +14,13 @@ namespace KIOSK.Device.Drivers;
 /// - 실제 SSI 통신/파싱은 E200ZClient에 위임한다.
 /// - 동기 요청-응답 + 비동기 수신(Decoded)을 동시에 처리한다.
 /// </summary>
-public sealed class QrE200ZDriver : DeviceBase
+public sealed class QrE200ZDriver : DeviceBase, IQrDriver
 {
     private E200ZClient? _client;
-    private string? _lastRevision;
-    private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<QrE200ZDriver> _logger;
 
     public event Action<string>? Log;
-    public event EventHandler<DecodeMessage>? Decoded;
+    public event EventHandler<QrDecodedData>? Decoded;
 
     public QrE200ZDriver(DeviceDescriptor descriptor, ITransport transport, ILogger<QrE200ZDriver>? logger = null)
         : base(descriptor, transport)
@@ -42,9 +39,7 @@ public sealed class QrE200ZDriver : DeviceBase
             var client = new E200ZClient(channel);
             client.Log += OnClientLog;
             client.Decoded += OnClientDecoded;
-            client.RevisionReceived += OnRevisionReceived;
             _client = client;
-            _handlers = CreateHandlers(client);
 
             await client.StartAsync(ct).ConfigureAwait(false);
 
@@ -98,48 +93,26 @@ public sealed class QrE200ZDriver : DeviceBase
 
     public override async Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default)
     {
-        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
+        if (command.Name.Equals("RESTART", StringComparison.OrdinalIgnoreCase))
+            return new CommandResult(true);
 
-        try
-        {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-                ? Descriptor.Model
-                : Descriptor.DeviceType;
+        return CreateUnknownCommandResult();
+    }
 
-            if (_client is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    public Task<CommandResult> EnableScanAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
 
-            if (_handlers is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+        return _client.ScanEnableAsync(ct);
+    }
 
-            if (string.IsNullOrWhiteSpace(command.Name))
-                return CreateUnknownCommandResult();
+    public Task<CommandResult> DisableScanAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
 
-            if (!_handlers.TryGetValue(command.Name, out var handler))
-                return CreateUnknownCommandResult();
-
-            return await handler.HandleAsync(command, ct).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (TimeoutException)
-        {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-                ? Descriptor.Model
-                : Descriptor.DeviceType;
-            _logger.LogWarning("E200Z command timeout. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
-        }
-        catch (Exception ex)
-        {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-                ? Descriptor.Model
-                : Descriptor.DeviceType;
-            _logger.LogError(ex, "E200Z command failed. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
-        }
+        return _client.ScanDisableAsync(ct);
     }
 
     public override async ValueTask DisposeAsync()
@@ -155,11 +128,9 @@ public sealed class QrE200ZDriver : DeviceBase
 
         _client.Log -= OnClientLog;
         _client.Decoded -= OnClientDecoded;
-        _client.RevisionReceived -= OnRevisionReceived;
 
         try { await _client.DisposeAsync().ConfigureAwait(false); } catch { }
         _client = null;
-        _handlers = null;
     }
 
     private void OnClientLog(string message) => Log?.Invoke(message);
@@ -177,19 +148,15 @@ public sealed class QrE200ZDriver : DeviceBase
             Log?.Invoke($"[E200Z] Init settings failed: {ex.Message}");
         }
     }
-    private void OnClientDecoded(object? sender, DecodeMessage msg) => Decoded?.Invoke(this, msg);
+    private void OnClientDecoded(object? sender, DecodeMessage msg)
+        => Decoded?.Invoke(this, new QrDecodedData(msg.BarcodeType, msg.Text));
 
-    private void OnRevisionReceived(string rev) => _lastRevision = rev;
-
-    private async Task<CommandResult> HandleRequestRevisionAsync(CancellationToken ct)
+    private CommandResult CreateNotConnectedCommandResult()
     {
-        var client = _client ?? throw new InvalidOperationException("E200Z client not initialized.");
-        var res = await client.RequestRevisionAsync(ct).ConfigureAwait(false);
-        return res.Success ? new CommandResult(true, Data: _lastRevision) : res;
-    }
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
 
-    private IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(E200ZClient client)
-        => E200ZCommandHandlers
-            .Create(client, HandleRequestRevisionAsync)
-            .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
 }

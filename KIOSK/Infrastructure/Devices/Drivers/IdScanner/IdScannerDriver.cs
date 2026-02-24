@@ -16,7 +16,7 @@ namespace KIOSK.Device.Drivers;
 /// <summary>
 /// 신분증 스캐너 드라이버: 정책/상태/명령 라우팅만 담당하고, 실제 SDK 호출은 IdScannerClient(PR22)에 위임한다.
 /// </summary>
-public sealed class IdScannerDriver : DeviceBase
+public sealed class IdScannerDriver : DeviceBase, IIdScannerDriver
 {
     private IdScannerClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -151,6 +151,38 @@ public sealed class IdScannerDriver : DeviceBase
         }
     }
 
+    public Task<CommandResult> StartScanAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.StartScanAsync(ct);
+    }
+
+    public Task<CommandResult> StopScanAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.StopScanAsync(ct);
+    }
+
+    public Task<CommandResult> GetScanStatusAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.GetPresenceAsync(ct);
+    }
+
+    public Task<CommandResult> SaveImageAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.SaveImageAsync(ct);
+    }
+
     public override async ValueTask DisposeAsync()
     {
         await DisposeClientAsync().ConfigureAwait(false);
@@ -174,4 +206,13 @@ public sealed class IdScannerDriver : DeviceBase
         => IdScannerCommandHandlers
             .Create(client)
             .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+
+    private CommandResult CreateNotConnectedCommandResult()
+    {
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
+
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
 }

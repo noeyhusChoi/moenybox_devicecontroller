@@ -14,14 +14,14 @@ namespace KIOSK.Device.Drivers;
 /// <summary>
 /// 지폐 투입기 드라이버: 정책/상태/명령 라우팅만 담당하고, 실제 SDK 호출은 DepositClient에 위임한다.
 /// </summary>
-public sealed class DepositDriver : DeviceBase
+public sealed class DepositDriver : DeviceBase, IDepositDriver
 {
     private DepositClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<DepositDriver> _logger;
 
     // MPSOT 전용
-    public event EventHandler<string>? OnEscrowed;
+    public event EventHandler<string>? Escrowed;
     public event Action<string>? Log;
 
     public DepositDriver(DeviceDescriptor desc, ITransport transport, ILogger<DepositDriver>? logger = null)
@@ -135,6 +135,38 @@ public sealed class DepositDriver : DeviceBase
             return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
         }
     }
+
+    public Task<CommandResult> StartAcceptanceAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.StartAcceptanceAsync();
+    }
+
+    public Task<CommandResult> StopAcceptanceAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.StopAcceptanceAsync();
+    }
+
+    public Task<CommandResult> StackAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.StackAsync(ct);
+    }
+
+    public Task<CommandResult> ReturnAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.ReturnAsync(ct);
+    }
     public override async ValueTask DisposeAsync()
     {
         await DisposeClientAsync().ConfigureAwait(false);
@@ -154,10 +186,19 @@ public sealed class DepositDriver : DeviceBase
     }
 
     private void OnClientLog(string msg) => Log?.Invoke(msg);
-    private void OnEscrowedForward(object? sender, string value) => OnEscrowed?.Invoke(this, value);
+    private void OnEscrowedForward(object? sender, string value) => Escrowed?.Invoke(this, value);
 
     private static IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(DepositClient client)
         => DepositCommandHandlers
             .Create(client)
             .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+
+    private CommandResult CreateNotConnectedCommandResult()
+    {
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
+
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
 }

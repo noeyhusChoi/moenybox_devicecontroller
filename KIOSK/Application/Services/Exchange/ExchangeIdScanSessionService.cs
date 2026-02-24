@@ -11,12 +11,13 @@ namespace KIOSK.Application.Services.Exchange
 {
     public sealed class ExchangeIdScanSessionService : IExchangeIdScanSessionService
     {
-        private readonly IIdScannerDevice _scanner;
+        private const string IdScannerDeviceId = "IDSCANNER1";
+        private readonly IIdScannerPort _scanner;
         private readonly IOcrService _ocr;
         private readonly ITransactionServiceV2 _transaction;
 
         public ExchangeIdScanSessionService(
-            IIdScannerDevice scanner,
+            IIdScannerPort scanner,
             IOcrService ocr,
             ITransactionServiceV2 transaction)
         {
@@ -27,7 +28,7 @@ namespace KIOSK.Application.Services.Exchange
 
         public async Task<bool> ScanAsync(CancellationToken ct)
         {
-            var page = await _scanner.SaveImageAsync(ct);
+            var page = await _scanner.SaveImageAsync(IdScannerDeviceId, ct);
             if (page == null)
                 return false;
 

@@ -16,7 +16,7 @@ namespace KIOSK.Device.Drivers;
 /// <summary>
 /// HCDM-20K 드라이버: 정책/상태/명령 라우팅만 담당하고, 실제 프로토콜은 Hcdm20kClient에 위임한다.
 /// </summary>
-public sealed class Hcdm20kDriver : DeviceBase
+public sealed class Hcdm20kDriver : DeviceBase, IWithdrawalDriver
 {
     private Hcdm20kClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -149,6 +149,23 @@ public sealed class Hcdm20kDriver : DeviceBase
         }
     }
 
+    public async Task<CommandResult> DispenseAsync(byte[] payload, CancellationToken ct = default)
+    {
+        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
+
+        if (_client is null)
+            return CreateNotConnectedCommandResult();
+
+        int estimatedCount = EstimateTotalRequestedFromPayload(payload);
+        int timeoutMs = (int)((estimatedCount / 3.0 + 5) * 1000);
+        return await _client.SendCommandAsync(
+            Hcdm20kCommand.Dispense,
+            payload,
+            processTimeoutMs: Math.Max(timeoutMs, 15000),
+            ct: ct,
+            isLongOpWithEnq: true).ConfigureAwait(false);
+    }
+
     public override async ValueTask DisposeAsync()
     {
         await DisposeClientAsync().ConfigureAwait(false);
@@ -219,4 +236,47 @@ public sealed class Hcdm20kDriver : DeviceBase
             .Create(client, Descriptor.DeviceType)
             .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
 
+    private CommandResult CreateNotConnectedCommandResult()
+    {
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
+
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
+
+    private static int EstimateTotalRequestedFromPayload(byte[] payload)
+    {
+        if (payload.Length == 0) return 0;
+        try
+        {
+            string s = Encoding.ASCII.GetString(payload);
+            if (s.Length == 0) return 0;
+
+            int i = 0;
+            int total = 0;
+
+            if (i < s.Length && char.IsDigit(s[i]))
+            {
+                int n = s[i] - '0';
+                i++;
+                for (int k = 0; k < n; k++)
+                {
+                    if (i + 4 <= s.Length)
+                    {
+                        i += 1;
+                        if (int.TryParse(s.AsSpan(i, Math.Min(3, s.Length - i)), out int c))
+                            total += c;
+                        i += 3;
+                    }
+                }
+            }
+
+            return total;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
 }

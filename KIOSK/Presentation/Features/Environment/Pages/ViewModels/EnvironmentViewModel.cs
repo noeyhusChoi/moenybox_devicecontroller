@@ -12,8 +12,8 @@ namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels
 {
     public partial class EnvironmentViewModel : ObservableObject
     {
-        private readonly IDeviceCommandService _deviceCommandService;
-        private readonly IDeviceStatusService _deviceStatusService;
+        private readonly IDeviceAdminPort _deviceAdminCommandService;
+        private readonly IDeviceStatusPort _deviceStatusService;
         private readonly IPopupService _popup;
         private readonly INavigationService _nav;
 
@@ -24,14 +24,14 @@ namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels
         private readonly WithdrawalCassetteService _withdrawalCassetteService;
 
         public EnvironmentViewModel(
-            IDeviceCommandService deviceCommandService,
-            IDeviceStatusService deviceStatusService,
+            IDeviceAdminPort deviceAdminCommandService,
+            IDeviceStatusPort deviceStatusService,
             WithdrawalCassetteService withdrawalCassetteService,
             IStorageService storageService,
             IPopupService popup,
             INavigationService nav)
         {
-            _deviceCommandService = deviceCommandService;
+            _deviceAdminCommandService = deviceAdminCommandService;
             _deviceStatusService = deviceStatusService;
             _withdrawalCassetteService = withdrawalCassetteService; // 시재
             _popup = popup;
@@ -88,7 +88,7 @@ namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels
             if (name is string device)
             {
                 // TODO: 공통 명령어 정리 (INIT, START, STOP ...) 아마도 INIT만 필요할 듯
-                await _deviceCommandService.SendAsync(device, new DeviceCommand("Init"));
+                await _deviceAdminCommandService.SendAsync(device, new DeviceCommand("Init"));
             }
         }
 

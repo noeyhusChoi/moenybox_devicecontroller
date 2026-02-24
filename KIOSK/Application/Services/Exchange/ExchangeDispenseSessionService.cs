@@ -11,12 +11,12 @@ namespace KIOSK.Application.Services.Exchange
     {
         private readonly ITransactionServiceV2 _transactionService;
         private readonly WithdrawalCassetteService _withdrawalCassetteService;
-        private readonly IWithdrawalDeviceService _withdrawalDeviceService;
+        private readonly IWithdrawalPort _withdrawalDeviceService;
 
         public ExchangeDispenseSessionService(
             ITransactionServiceV2 transactionService,
             WithdrawalCassetteService withdrawalCassetteService,
-            IWithdrawalDeviceService withdrawalDeviceService)
+            IWithdrawalPort withdrawalDeviceService)
         {
             _transactionService = transactionService;
             _withdrawalCassetteService = withdrawalCassetteService;

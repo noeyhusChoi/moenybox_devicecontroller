@@ -16,36 +16,36 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
     public partial class GtfRefundVoucherRegisterViewModel : PageViewModelBase
     {
-        private readonly IQrScannerDeviceService _qrScannerDeviceService;
+        private readonly IQrScannerPort _qrScannerPort;
         private readonly GtfApiService _gtfApiService;
         private readonly IGtfTaxRefundService _gtfTaxRefundService;
 
         public GtfTaxRefundModel Current => _gtfTaxRefundService.Current;
 
-        public GtfRefundVoucherRegisterViewModel(IQrScannerDeviceService qrScannerDeviceService, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
+        public GtfRefundVoucherRegisterViewModel(IQrScannerPort qrScannerPort, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
         {
-            _qrScannerDeviceService = qrScannerDeviceService;
+            _qrScannerPort = qrScannerPort;
             _gtfApiService = gtfApiService;
             _gtfTaxRefundService = gtfTaxRefundService;
         }
 
         public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
         {
-            _qrScannerDeviceService.Decoded += ScanVoucherQrCodeAsync;
-            await _qrScannerDeviceService.EnableAsync("QR1", ct);
+            _qrScannerPort.Decoded += ScanVoucherQrCodeAsync;
+            await _qrScannerPort.EnableAsync("QR1", ct);
         }
 
         public override async Task OnUnloadAsync()
         {
-            await _qrScannerDeviceService.DisableAsync("QR1");
-            _qrScannerDeviceService.Decoded -= ScanVoucherQrCodeAsync;
+            await _qrScannerPort.DisableAsync("QR1");
+            _qrScannerPort.Decoded -= ScanVoucherQrCodeAsync;
         }
 
         // QR 코드 스캔 처리 메서드
         private async void ScanVoucherQrCodeAsync(object? sender, QrDecodedEventArgs msg)
         {
             // 스캔 중지
-            await _qrScannerDeviceService.DisableAsync("QR1");
+            await _qrScannerPort.DisableAsync("QR1");
             Trace.WriteLine($"Scanned QR Code :TYPE[{msg.BarcodeType:X2}] TEXT[{msg.Text}]");
 
             // QR 데이터
@@ -80,7 +80,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
             }
 
             // 스캔 활성화
-            await _qrScannerDeviceService.EnableAsync("QR1");
+            await _qrScannerPort.EnableAsync("QR1");
         }
 
         private async Task<CustomsResultResponseDto> CustomsResult()

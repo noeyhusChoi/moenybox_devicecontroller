@@ -15,7 +15,7 @@ namespace KIOSK.Device.Drivers;
 /// <summary>
 /// HCDM-10K 드라이버: 정책/상태/명령 라우팅만 담당. 실제 프로토콜은 Hcdm10kClient에 위임.
 /// </summary>
-public sealed class Hcdm10kDriver : DeviceBase
+public sealed class Hcdm10kDriver : DeviceBase, IWithdrawalDriver
 {
     private Hcdm10kClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -145,6 +145,20 @@ public sealed class Hcdm10kDriver : DeviceBase
         }
     }
 
+    public async Task<CommandResult> DispenseAsync(byte[] payload, CancellationToken ct = default)
+    {
+        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
+
+        if (_client is null)
+            return CreateNotConnectedCommandResult();
+
+        return await _client.SendCommandAsync(
+            Hcdm10kCommand.Dispense,
+            payload,
+            processTimeoutMs: 120000,
+            ct: ct).ConfigureAwait(false);
+    }
+
     public override async ValueTask DisposeAsync()
     {
         await DisposeClientAsync().ConfigureAwait(false);
@@ -231,4 +245,13 @@ public sealed class Hcdm10kDriver : DeviceBase
         => Hcdm10kCommandHandlers
             .Create(client, Descriptor.DeviceType)
             .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+
+    private CommandResult CreateNotConnectedCommandResult()
+    {
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
+
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
 }

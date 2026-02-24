@@ -30,16 +30,13 @@ namespace KIOSK.CompositionRoot.Modules
             services.AddSingleton<WithdrawalCassetteService>();
             services.AddSingleton<WithdrawalCassetteServiceV2>();
 
-            services.AddSingleton<IDeviceStatusService, DeviceStatusService>();
-            services.AddSingleton<IDeviceCommandCatalogService, DeviceCommandCatalogService>();
-            services.AddSingleton<IDeviceCommandService, DeviceCommandService>();
-            services.AddSingleton<IDepositDeviceService, DepositDeviceService>();
-            services.AddSingleton<IIdScannerDeviceService, IdScannerDeviceService>();
-            services.AddSingleton<IWithdrawalDeviceService, WithdrawalDeviceService>();
-            services.AddSingleton<IPrinterDeviceService, PrinterDeviceService>();
-            services.AddSingleton<IQrScannerDeviceService, QrScannerDeviceService>();
-            services.AddSingleton<IDepositDevice, DepositDevice>();
-            services.AddSingleton<IIdScannerDevice, IdScannerDevice>();
+            services.AddSingleton<IDeviceStatusPort, DeviceStatusAdapter>();
+            services.AddSingleton<IDeviceAdminPort, DeviceAdminAdapter>();
+            services.AddSingleton<IDepositPort, DepositAdapter>();
+            services.AddSingleton<IIdScannerPort, IdScannerAdapter>();
+            services.AddSingleton<IWithdrawalPort, WithdrawalAdapter>();
+            services.AddSingleton<IPrinterPort, PrinterAdapter>();
+            services.AddSingleton<IQrScannerPort, QrScannerAdapter>();
             services.AddSingleton<IDatabaseHealthService, DatabaseHealthService>();
             services.AddSingleton<ILocaleInfoProvider, LocaleInfoProvider>();
             services.AddSingleton<ITransactionOutboxService, TransactionOutboxService>();

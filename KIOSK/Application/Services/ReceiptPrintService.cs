@@ -12,10 +12,10 @@ namespace KIOSK.Application.Services
     {
         private const string PrinterDeviceId = "PRINTER1";
         private readonly RecieptFormater _formater = new RecieptFormater();
-        private readonly IPrinterDeviceService _printerDeviceService;
+        private readonly IPrinterPort _printerDeviceService;
         private readonly IMemoryCache _cache;
 
-        public ReceiptPrintService(IPrinterDeviceService printerDeviceService, IMemoryCache cache)
+        public ReceiptPrintService(IPrinterPort printerDeviceService, IMemoryCache cache)
         {
             _printerDeviceService = printerDeviceService;
             _cache = cache;

@@ -13,7 +13,7 @@ servers:
   description: Production
 tags:
 - name: 거래
-  description: 환전율/거래 조회/조회
+  description: 환전율/거래 등록/거래 조회/시재조회
 - name: 환전 예약
   description: 환전 예약 거래/조회
 - name: 온라인 예약
@@ -166,6 +166,405 @@ paths:
                     remain: "3000000"
         '400':
           $ref: '#/components/responses/ErrorResponse'
+  /api/cmdV2.php/C030:
+    post:
+      tags:
+      - 거래
+      summary: 환전 거래 등록
+      description: '실제 호출: /api/cmdV2.php (POST) query에 cmd=C030 포함'
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonAck'
+              examples:
+                success:
+                  summary: 성공 예시
+                  value:
+                    result: true
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+      parameters:
+      - name: cmd
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: 
+          - C030
+          description: 요청
+          example: C030
+        example: C030
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 키오스크에 설정된 키
+          example: Y7D8O7V3X8M4A1R6P3F2
+        example: C4E7I4W5C4B6L3K4T2C4
+      - name: identity
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명구분
+          example: 1:여권, 2:주민등록증, 3:운전면허증, 4:기타
+        example: '1'
+      - name: number
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명번호(여권번호or주민번호)
+        example: M12345678
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 실명
+        example: HONG GILDONG
+      - name: nation
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 국적
+        example: KOR
+      - name: dt
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 환전일시 (YYYYMMDDHHMISS 또는 YYYYMMDDHHMM)
+          pattern: ^\d{12,14}$
+          example: '형식 : YYYYMMDDHHMISS'
+        example: '20260102103045'
+      - name: gubun
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 매입매출구분
+          example: "매입(고객이 외환을 원화로 교환):B, \n매출(고객이 원화를 외환으로 교환):S"
+        example: S
+      - name: currency_code
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 통화코드
+        example: USD
+      - name: unique_key
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 거래번호
+        example: TX-20260102-0001
+      - name: KIOSK_PID
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 키오스크번호
+        example: KIOSK-001
+      - name: rate
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 적용환율
+        example: 1330.0
+      - name: input_money
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 입금액
+          example: 원화, 외화
+        example: 200000
+      - name: output_money
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 출금액
+          example: 원화, 외화
+        example: 150.0
+      - name: give_change
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 거스름돈
+        example: 5000
+      - name: c1
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+        example: '100'
+      - name: qty1
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+        example: '1'
+      - name: c2
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+        example: '50'
+      - name: qty2
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+        example: '1'
+      - name: c3
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty3
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c4
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty4
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c5
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty5
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c6
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty6
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c7
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty7
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c8
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty8
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c9
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty9
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c10
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty10
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c11
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty11
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: c12
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 권종
+      - name: qty12
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 수량
+      - name: krw1
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '50000'
+        example: '3'
+      - name: krw2
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '10000'
+        example: '0'
+      - name: krw3
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '5000'
+        example: '0'
+      - name: krw4
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '1000'
+        example: '0'
+      - name: krw5
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '500'
+        example: '0'
+      - name: krw6
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '100'
+        example: '0'
+      - name: krw7
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '50'
+        example: '0'
+      - name: krw8
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '10'
+        example: '0'
+      - name: withdrawal_error
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 출금에러
+          example: 에러 발생시에만 적용 (true)
+        example: 'false'
+      - name: error_amount
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 출금 에러금액(외화/원화)
+          example: 에러 발생시에만 적용
+        example: 0
+      - name: error_change_amount
+        in: query
+        required: false
+        schema:
+          type: number
+          description: 거스름돈 출금 에러금액(원화)
+          example: 에러 발생시에만 적용
+        example: 0
+      - name: reject_krw_1
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 50000 리젝
+        example: 0
+      - name: reject_krw_2
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 10000 리젝
+        example: 0
+      - name: reject_krw_3
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 5000 리젝
+        example: 0
+      - name: reject_krw_4
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: 1000 리젝
+        example: 0
+      - name: reject_for
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 외화 리젝
+        example: '0'
   /api/cmdV2.php/C033:
     get:
       tags:
@@ -719,7 +1118,7 @@ paths:
     get:
       tags:
       - 거래
-      summary: ' 조회'
+      summary: 시재조회
       description: '실제 호출: /api/cmdV2.php?cmd=C080'
       parameters:
       - name: cmd

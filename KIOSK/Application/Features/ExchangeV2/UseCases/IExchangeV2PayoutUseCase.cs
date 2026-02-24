@@ -23,14 +23,14 @@ namespace KIOSK.Application.Features.ExchangeV2.UseCases
         private readonly IExchangeV2FlowPolicyResolver _resolver;
         private readonly IExchangeV2FlowPolicyValidator _validator;
         private readonly WithdrawalCassetteService _cassetteService;
-        private readonly IWithdrawalDeviceService _withdrawalDeviceService;
+        private readonly IWithdrawalPort _withdrawalDeviceService;
 
         public ExchangeV2PayoutUseCase(
             IExchangeV2TransactionContext tx,
             IExchangeV2FlowPolicyResolver resolver,
             IExchangeV2FlowPolicyValidator validator,
             WithdrawalCassetteService cassetteService,
-            IWithdrawalDeviceService withdrawalDeviceService)
+            IWithdrawalPort withdrawalDeviceService)
         {
             _tx = tx;
             _resolver = resolver;

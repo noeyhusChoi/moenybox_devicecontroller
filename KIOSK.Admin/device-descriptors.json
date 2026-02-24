@@ -1,0 +1,72 @@
+[
+  {
+    "name": "PRINTER1",
+    "vendor": "DEFAULT",
+    "model": "HMK-072",
+    "transportType": "SERIAL",
+    "transportPort": "COM1",
+    "transportParam": "9600,8,One,None",
+    "protocolName": "",
+    "pollingMs": 10000,
+    "validate": true,
+    "deviceType": "PRINTER",
+    "driver": "HMK-072",
+    "deviceId": "PRINTER1"
+  },
+  {
+    "name": "IDSCANNER1",
+    "vendor": "DEFAULT",
+    "model": "COMBOSCAN2208",
+    "transportType": "IDSCANNER",
+    "transportPort": "",
+    "transportParam": "",
+    "protocolName": "",
+    "pollingMs": 10000,
+    "validate": true,
+    "deviceType": "IDSCANNER",
+    "driver": "COMBOSCAN2208",
+    "deviceId": "IDSCANNER1"
+  },
+  {
+    "name": "QR1",
+    "vendor": "DEFAULT",
+    "model": "EM20-80",
+    "transportType": "SERIAL",
+    "transportPort": "COM2",
+    "transportParam": "9600,8,One,None",
+    "protocolName": "",
+    "pollingMs": 10000,
+    "validate": true,
+    "deviceType": "QR",
+    "driver": "EM20-80",
+    "deviceId": "QR1"
+  },
+  {
+    "name": "DEPOSIT1",
+    "vendor": "DEFAULT",
+    "model": "SC8307",
+    "transportType": "DEPOSIT",
+    "transportPort": "COM3",
+    "transportParam": "",
+    "protocolName": "",
+    "pollingMs": 10000,
+    "validate": true,
+    "deviceType": "DEPOSIT",
+    "driver": "SC8307",
+    "deviceId": "DEPOSIT1"
+  },
+  {
+    "name": "WITHDRAWAL1",
+    "vendor": "DEFAULT",
+    "model": "HCDM20K",
+    "transportType": "SERIAL",
+    "transportPort": "COM4",
+    "transportParam": "9600,8,One,None",
+    "protocolName": "",
+    "pollingMs": 10000,
+    "validate": true,
+    "deviceType": "WITHDRAWAL",
+    "driver": "HCDM20K",
+    "deviceId": "WITHDRAWAL1"
+  }
+]

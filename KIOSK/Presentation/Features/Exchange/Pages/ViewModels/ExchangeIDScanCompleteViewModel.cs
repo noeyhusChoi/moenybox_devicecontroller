@@ -4,21 +4,21 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services.Devices;
-using KIOSK.Device.Abstractions;
 using KIOSK.Presentation.Abstractions;
 
 namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 {
     public partial class ExchangeIDScanCompleteViewModel : PageViewModelBase
     {
-        private readonly IDeviceCommandService _deviceCommandService;
+        private const string IdScannerDeviceId = "IDSCANNER1";
+        private readonly IIdScannerPort _idScannerPort;
 
         [ObservableProperty]
         private bool canNext = false; // true면 활성, false면 비활성
 
-        public ExchangeIDScanCompleteViewModel(IDeviceCommandService deviceCommandService)
+        public ExchangeIDScanCompleteViewModel(IIdScannerPort idScannerPort)
         {
-            _deviceCommandService = deviceCommandService;
+            _idScannerPort = idScannerPort;
         }
 
         public override async Task OnLoadAsync(object? parameter, CancellationToken ct)
@@ -31,11 +31,11 @@ namespace KIOSK.Presentation.Features.Exchange.Pages.ViewModels
 
                     while (true)
                     {
-                        var res = await _deviceCommandService.SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"));
+                        var res = await _idScannerPort.ScanStartAsync(IdScannerDeviceId, ct);
 
                         if (res != null && res.Success == true)
                         {
-                            res = await _deviceCommandService.SendAsync("IDSCANNER1", new DeviceCommand("GetScanStatus"));
+                            res = await _idScannerPort.GetScanStatusAsync(IdScannerDeviceId, ct);
 
                             if (res.Data is Pr22.Util.PresenceState state)
                             {

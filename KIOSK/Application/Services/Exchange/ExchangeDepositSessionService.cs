@@ -9,20 +9,21 @@ namespace KIOSK.Application.Services.Exchange
 {
     public sealed class ExchangeDepositSessionService : IExchangeDepositSessionService
     {
-        private readonly IDepositDevice _depositDevice;
+        private const string DepositDeviceId = "DEPOSIT1";
+        private readonly IDepositPort _depositPort;
         private readonly ITransactionServiceV2 _transactionService;
         private readonly WithdrawalCassetteService _withdrawalCassetteService;
         private readonly ILoggingService _logging;
         private readonly IUiDispatcher _uiDispatcher;
 
         public ExchangeDepositSessionService(
-            IDepositDevice depositDevice,
+            IDepositPort depositPort,
             ITransactionServiceV2 transactionService,
             WithdrawalCassetteService withdrawalCassetteService,
             ILoggingService logging,
             IUiDispatcher uiDispatcher)
         {
-            _depositDevice = depositDevice;
+            _depositPort = depositPort;
             _transactionService = transactionService;
             _withdrawalCassetteService = withdrawalCassetteService;
             _logging = logging;
@@ -33,20 +34,23 @@ namespace KIOSK.Application.Services.Exchange
 
         public async Task StartAsync(CancellationToken ct)
         {
-            _depositDevice.Escrowed += OnEscrowed;
+            _depositPort.Escrowed += OnEscrowed;
             await _withdrawalCassetteService.InitializeAsync();
-            await _depositDevice.StartAsync(ct);
+            await _depositPort.StartAsync(DepositDeviceId, ct);
         }
 
         public async Task StopAsync(CancellationToken ct)
         {
-            _depositDevice.Escrowed -= OnEscrowed;
-            await _depositDevice.StopAsync(ct);
+            _depositPort.Escrowed -= OnEscrowed;
+            await _depositPort.StopAsync(DepositDeviceId, ct);
         }
 
-        private void OnEscrowed(object? sender, string s)
+        private void OnEscrowed(object? sender, DepositEscrowedEventArgs e)
         {
-            _ = HandleEscrowedAsync(s);
+            if (!string.Equals(e.DeviceId, DepositDeviceId, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            _ = HandleEscrowedAsync(e.Payload);
         }
 
         private async Task HandleEscrowedAsync(string s)
@@ -63,7 +67,7 @@ namespace KIOSK.Application.Services.Exchange
                 {
                     if (!currency.Equals(transaction.SourceCurrency, StringComparison.OrdinalIgnoreCase))
                     {
-                        await _depositDevice.ReturnAsync(CancellationToken.None);
+                        await _depositPort.ReturnAsync(DepositDeviceId, CancellationToken.None);
                         return;
                     }
 
@@ -72,18 +76,18 @@ namespace KIOSK.Application.Services.Exchange
                         transaction.AddOrIncrement(currency, denom, +1);
                     });
 
-                    await _depositDevice.StackAsync(CancellationToken.None);
+                    await _depositPort.StackAsync(DepositDeviceId, CancellationToken.None);
 
                     if (transaction.TargetRequestedAmount <= transaction.TargetComputedAmount)
                     {
-                        await _depositDevice.StopAsync(CancellationToken.None);
+                        await _depositPort.StopAsync(DepositDeviceId, CancellationToken.None);
                     }
                 }
                 else
                 {
                     if (!currency.Equals(transaction.SourceCurrency, StringComparison.OrdinalIgnoreCase))
                     {
-                        await _depositDevice.ReturnAsync(CancellationToken.None);
+                        await _depositPort.ReturnAsync(DepositDeviceId, CancellationToken.None);
                         return;
                     }
 
@@ -92,7 +96,7 @@ namespace KIOSK.Application.Services.Exchange
 
                     if (cassetteAmount < requiredAmount)
                     {
-                        await _depositDevice.ReturnAsync(CancellationToken.None);
+                        await _depositPort.ReturnAsync(DepositDeviceId, CancellationToken.None);
                         return;
                     }
 
@@ -101,7 +105,7 @@ namespace KIOSK.Application.Services.Exchange
                         transaction.AddOrIncrement(currency, denom, +1);
                     });
 
-                    await _depositDevice.StackAsync(CancellationToken.None);
+                    await _depositPort.StackAsync(DepositDeviceId, CancellationToken.None);
                 }
 
                 DepositStateChanged?.Invoke(transaction.Deposits.Count > 0);

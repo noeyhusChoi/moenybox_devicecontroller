@@ -1,4 +1,3 @@
-using System.Linq;
 using KIOSK.Device.Abstractions;
 using KIOSK.Device.Drivers.EM20;
 using Microsoft.Extensions.Logging;
@@ -6,11 +5,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace KIOSK.Device.Drivers;
 
-public sealed class QrEM20Driver : DeviceBase
+public sealed class QrEM20Driver : DeviceBase, IQrDriver
 {
     private Em20Client? _client;
-    private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<QrEM20Driver> _logger;
+    public event EventHandler<QrDecodedData>? Decoded;
 
     public QrEM20Driver(DeviceDescriptor desc, ITransport transport, ILogger<QrEM20Driver>? logger = null)
         : base(desc, transport)
@@ -27,7 +26,6 @@ public sealed class QrEM20Driver : DeviceBase
 
             var client = new Em20Client(RequireTransport());
             _client = client;
-            _handlers = CreateHandlers(client);
             await client.StartAsync(ct).ConfigureAwait(false);
 
             return CreateSnapshot();
@@ -75,49 +73,26 @@ public sealed class QrEM20Driver : DeviceBase
 
     public override async Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default)
     {
-        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
+        if (command.Name.Equals("RESTART", StringComparison.OrdinalIgnoreCase))
+            return new CommandResult(true);
 
-        try
-        {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-                ? Descriptor.Model
-                : Descriptor.DeviceType;
+        return CreateUnknownCommandResult();
+    }
 
-            if (_client is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    public Task<CommandResult> EnableScanAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
 
-            if (_handlers is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+        return _client.TriggerAsync(true, ct);
+    }
 
-            if (string.IsNullOrWhiteSpace(command.Name))
-                return CreateUnknownCommandResult();
+    public Task<CommandResult> DisableScanAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
 
-            if (!_handlers.TryGetValue(command.Name, out var handler))
-                return CreateUnknownCommandResult();
-
-            return await handler.HandleAsync(command, ct).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (TimeoutException)
-        {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-                ? Descriptor.Model
-                : Descriptor.DeviceType;
-            _logger.LogWarning("EM20 command timeout. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
-        }
-        catch (Exception ex)
-        {
-            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-                ? Descriptor.Model
-                : Descriptor.DeviceType;
-            _logger.LogError(ex, "EM20 command failed. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
-        }
-
+        return _client.TriggerAsync(false, ct);
     }
 
     public override async ValueTask DisposeAsync()
@@ -129,12 +104,15 @@ public sealed class QrEM20Driver : DeviceBase
     private Task DisposeClientAsync()
     {
         _client = null;
-        _handlers = null;
         return Task.CompletedTask;
     }
 
-    private static IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(Em20Client client)
-        => Em20CommandHandlers
-            .Create(client)
-            .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+    private CommandResult CreateNotConnectedCommandResult()
+    {
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
+
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
 }

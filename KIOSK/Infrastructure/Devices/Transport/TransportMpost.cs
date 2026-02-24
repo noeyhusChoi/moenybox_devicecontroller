@@ -9,7 +9,7 @@ namespace KIOSK.Device.Transport;
 /// <summary>
 /// MPOST DLL 기반 트랜스포트: Acceptor 생성/오픈/클로즈만 담당한다.
 /// </summary>
-internal sealed class TransportMpost : ITransport
+public sealed class TransportMpost : ITransport
 {
     private readonly string _port;
     private Acceptor? _acceptor;

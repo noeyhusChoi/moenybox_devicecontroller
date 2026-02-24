@@ -22,18 +22,38 @@
 	</PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\Devices\Abstractions\**" />
+    <Compile Remove="Infrastructure\Devices\Drivers\**" />
+    <Compile Remove="Infrastructure\Devices\Transport\**" />
+    <Compile Remove="Infrastructure\Devices\Runtime\Factories\**" />
+    <Compile Remove="Infrastructure\Common\Utils\MpostPatcher.cs" />
     <Compile Remove="Infrastructure\Devices_legacy\**" />
     <Compile Remove="Infrastructure\Database_legacy\**" />
     <Compile Remove="Domain\Entities_legacy\**" />
     <Compile Remove="Modules\**" />
+    <EmbeddedResource Remove="Infrastructure\Devices\Abstractions\**" />
+    <EmbeddedResource Remove="Infrastructure\Devices\Drivers\**" />
+    <EmbeddedResource Remove="Infrastructure\Devices\Transport\**" />
+    <EmbeddedResource Remove="Infrastructure\Devices\Runtime\Factories\**" />
+    <EmbeddedResource Remove="Infrastructure\Common\Utils\MpostPatcher.cs" />
     <EmbeddedResource Remove="Infrastructure\Devices_legacy\**" />
     <EmbeddedResource Remove="Infrastructure\Database_legacy\**" />
     <EmbeddedResource Remove="Domain\Entities_legacy\**" />
     <EmbeddedResource Remove="Modules\**" />
+    <None Remove="Infrastructure\Devices\Abstractions\**" />
+    <None Remove="Infrastructure\Devices\Drivers\**" />
+    <None Remove="Infrastructure\Devices\Transport\**" />
+    <None Remove="Infrastructure\Devices\Runtime\Factories\**" />
+    <None Remove="Infrastructure\Common\Utils\MpostPatcher.cs" />
     <None Remove="Infrastructure\Devices_legacy\**" />
     <None Remove="Infrastructure\Database_legacy\**" />
     <None Remove="Domain\Entities_legacy\**" />
     <None Remove="Modules\**" />
+    <Page Remove="Infrastructure\Devices\Abstractions\**" />
+    <Page Remove="Infrastructure\Devices\Drivers\**" />
+    <Page Remove="Infrastructure\Devices\Transport\**" />
+    <Page Remove="Infrastructure\Devices\Runtime\Factories\**" />
+    <Page Remove="Infrastructure\Common\Utils\MpostPatcher.cs" />
     <Page Remove="Infrastructure\Devices_legacy\**" />
     <Page Remove="Infrastructure\Database_legacy\**" />
     <Page Remove="Domain\Entities_legacy\**" />
@@ -566,6 +586,9 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>%(Filename)%(Extension)</Link>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\KIOSK.DeviceRuntime\KIOSK.DeviceRuntime.csproj" />
 	</ItemGroup>
 	
 	<!-- dll 루트로 복사했으니 libs 폴더 삭제 -->

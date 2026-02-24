@@ -18,12 +18,13 @@ namespace KIOSK.Application.Features.ExchangeV2.UseCases
     public sealed class ExchangeV2IdScanUseCase : IExchangeV2IdScanUseCase
     {
         private static readonly TimeSpan DetectTimeout = TimeSpan.FromSeconds(20);
-        private readonly IIdScannerDevice _scanner;
+        private const string IdScannerDeviceId = "IDSCANNER1";
+        private readonly IIdScannerPort _scanner;
         private readonly IOcrService _ocr;
         private readonly IExchangeV2TransactionContext _tx;
 
         public ExchangeV2IdScanUseCase(
-            IIdScannerDevice scanner,
+            IIdScannerPort scanner,
             IOcrService ocr,
             IExchangeV2TransactionContext tx)
         {
@@ -35,7 +36,7 @@ namespace KIOSK.Application.Features.ExchangeV2.UseCases
         public async Task<bool> ProcessAsync(CancellationToken ct)
         {
             Page? page = null;
-            var start = await _scanner.ScanStartAsync(ct);
+            var start = await _scanner.ScanStartAsync(IdScannerDeviceId, ct);
             if (!start.Success)
                 return false;
 
@@ -48,7 +49,7 @@ namespace KIOSK.Application.Features.ExchangeV2.UseCases
                 if (!detected)
                     return false;
 
-                page = await _scanner.SaveImageAsync(ct);
+                page = await _scanner.SaveImageAsync(IdScannerDeviceId, ct);
                 if (page is null)
                     return false;
 
@@ -82,7 +83,7 @@ namespace KIOSK.Application.Features.ExchangeV2.UseCases
             {
                 try
                 {
-                    await _scanner.ScanStopAsync(CancellationToken.None);
+                    await _scanner.ScanStopAsync(IdScannerDeviceId, CancellationToken.None);
                 }
                 catch { }
 

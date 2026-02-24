@@ -56,7 +56,7 @@ namespace KIOSK.Presentation.Features.Menu.Pages.ViewModels
         {
             try
             {
-                var statusService = _provider.GetRequiredService<IDeviceStatusService>();
+                var statusService = _provider.GetRequiredService<IDeviceStatusPort>();
                 var snapshots = statusService.GetAllSnapshots();
 
                 // 1) 장치 상태 체크 (IDSCANNER / DEPOSIT / HCDM)

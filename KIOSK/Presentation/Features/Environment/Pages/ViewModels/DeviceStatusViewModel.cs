@@ -17,9 +17,8 @@ namespace KIOSK.Presentation.Features.Environment.Pages.ViewModels;
 
 public partial class DeviceStatusViewModel : ObservableObject, IViewLifecycle
 {
-    private readonly IDeviceStatusService _statusService;
-    private readonly IDeviceCommandCatalogService _commandCatalog;
-    private readonly IDeviceCommandService _deviceCommandService;
+    private readonly IDeviceStatusPort _statusService;
+    private readonly IDeviceAdminPort _deviceAdminCommandService;
     private readonly IMemoryCache _cache;
     private readonly ILoggingService _logging;
     private readonly INavigationService _nav;
@@ -38,16 +37,14 @@ public partial class DeviceStatusViewModel : ObservableObject, IViewLifecycle
     private bool isSending;
 
     public DeviceStatusViewModel(
-        IDeviceStatusService statusService,
-        IDeviceCommandCatalogService commandCatalog,
-        IDeviceCommandService deviceCommandService,
+        IDeviceStatusPort statusService,
+        IDeviceAdminPort deviceAdminCommandService,
         IMemoryCache cache,
         ILoggingService logging,
         INavigationService nav)
     {
         _statusService = statusService;
-        _commandCatalog = commandCatalog;
-        _deviceCommandService = deviceCommandService;
+        _deviceAdminCommandService = deviceAdminCommandService;
         _cache = cache;
         _logging = logging;
         _nav = nav;
@@ -153,7 +150,7 @@ public partial class DeviceStatusViewModel : ObservableObject, IViewLifecycle
         try
         {
             var command = new DeviceCommand(SelectedCommand.Name);
-            await _deviceCommandService.SendAsync(
+            await _deviceAdminCommandService.SendAsync(
                 SelectedDevice.DeviceId,
                 command,
                 CommandContext.Manual(reason: "DeviceStatusView"));
@@ -209,7 +206,7 @@ public partial class DeviceStatusViewModel : ObservableObject, IViewLifecycle
         if (value is null)
             return;
 
-        foreach (var cmd in _commandCatalog.GetFor(value.DeviceId))
+        foreach (var cmd in _deviceAdminCommandService.GetFor(value.DeviceId))
             Commands.Add(cmd);
 
         NotifySendCanExecuteChanged();

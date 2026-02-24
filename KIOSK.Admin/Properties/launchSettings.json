@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "KIOSK.Admin": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}

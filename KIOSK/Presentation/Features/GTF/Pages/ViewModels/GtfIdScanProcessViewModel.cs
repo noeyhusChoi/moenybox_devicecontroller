@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 using KIOSK.Application.Services;
 using KIOSK.Application.Services.API;
 using KIOSK.Application.Services.Devices;
-using KIOSK.Device.Abstractions;
 using KIOSK.Infrastructure.API.Gtf;
 using KIOSK.Infrastructure.OCR;
 using KIOSK.Infrastructure.OCR.Models;
@@ -18,10 +17,10 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
     public partial class GtfIdScanProcessViewModel : PageViewModelBase
     {
+        private const string IdScannerDeviceId = "IDSCANNER1";
 
 
-
-        private readonly IDeviceCommandService _deviceCommandService;
+        private readonly IIdScannerPort _idScannerPort;
 
         private readonly IOcrService _ocrService;
 
@@ -31,9 +30,13 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
 
 
-        public GtfIdScanProcessViewModel(IDeviceCommandService deviceCommandService, IOcrService ocrService, GtfApiService gtfApiService, IGtfTaxRefundService gtfTaxRefundService)
+        public GtfIdScanProcessViewModel(
+            IIdScannerPort idScannerPort,
+            IOcrService ocrService,
+            GtfApiService gtfApiService,
+            IGtfTaxRefundService gtfTaxRefundService)
         {
-            _deviceCommandService = deviceCommandService;
+            _idScannerPort = idScannerPort;
             _ocrService = ocrService;
             _gtfApiService = gtfApiService;
             _gtfTaxRefundService = gtfTaxRefundService;
@@ -211,16 +214,11 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 
             {
 
-                var result = await _deviceCommandService
-
-                    .SendAsync("IDSCANNER1", new DeviceCommand("SaveImage"), ct)
-
+                var page = await _idScannerPort
+                    .SaveImageAsync(IdScannerDeviceId, ct)
                     .ConfigureAwait(false);
 
-
-
-                if (result?.Data is Page page)
-
+                if (page is not null)
                     return page;
 
 

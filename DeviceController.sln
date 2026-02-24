@@ -1,26 +1,63 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11304.174 d18.0
+VisualStudioVersion = 18.1.11304.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIOSK", "KIOSK\KIOSK.csproj", "{86EA713C-0A1D-4006-E950-5691E95AFEFC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{71D922A9-130C-412C-8381-B6951CF62425} = {71D922A9-130C-412C-8381-B6951CF62425}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIOSK.Admin", "KIOSK.Admin\KIOSK.Admin.csproj", "{71D922A9-130C-412C-8381-B6951CF62425}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIOSK.DeviceRuntime", "KIOSK.DeviceRuntime\KIOSK.DeviceRuntime.csproj", "{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|x64.Build.0 = Debug|Any CPU
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|x86.ActiveCfg = Debug|x86
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Debug|x86.Build.0 = Debug|x86
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Release|x64.ActiveCfg = Release|Any CPU
+		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Release|x64.Build.0 = Release|Any CPU
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Release|x86.ActiveCfg = Release|x86
 		{86EA713C-0A1D-4006-E950-5691E95AFEFC}.Release|x86.Build.0 = Release|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Debug|Any CPU.Build.0 = Debug|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Debug|x64.ActiveCfg = Debug|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Debug|x64.Build.0 = Debug|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Debug|x86.ActiveCfg = Debug|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Debug|x86.Build.0 = Debug|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Release|Any CPU.ActiveCfg = Release|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Release|Any CPU.Build.0 = Release|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Release|x64.ActiveCfg = Release|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Release|x64.Build.0 = Release|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Release|x86.ActiveCfg = Release|x86
+		{71D922A9-130C-412C-8381-B6951CF62425}.Release|x86.Build.0 = Release|x86
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Release|x64.Build.0 = Release|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C6237B1-D9C5-4FB5-B326-6A0BE4BB12E9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

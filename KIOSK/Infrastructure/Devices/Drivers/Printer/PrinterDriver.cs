@@ -15,7 +15,7 @@ namespace KIOSK.Device.Drivers;
 /// 프린터 드라이버: 장치 정책/상태/명령 라우팅 담당.
 /// 실제 ESC/POS 송수신은 PrinterClient(TransportChannel 기반)에 위임한다.
 /// </summary>
-public sealed class PrinterDriver : DeviceBase
+public sealed class PrinterDriver : DeviceBase, IPrinterDriver
 {
     private PrinterClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -139,6 +139,30 @@ public sealed class PrinterDriver : DeviceBase
         }
     }
 
+    public Task<CommandResult> PrintTitleAsync(string content, CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.PrintTitleAsync(content, ct);
+    }
+
+    public Task<CommandResult> PrintContentAsync(string content, CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.PrintContentAsync(content, ct);
+    }
+
+    public Task<CommandResult> CutAsync(CancellationToken ct = default)
+    {
+        if (_client is null)
+            return Task.FromResult(CreateNotConnectedCommandResult());
+
+        return _client.CutAsync(ct);
+    }
+
     public override async ValueTask DisposeAsync()
     {
         await DisposeClientAsync().ConfigureAwait(false);
@@ -188,5 +212,14 @@ public sealed class PrinterDriver : DeviceBase
         => PrinterCommandHandlers
             .Create(client, Descriptor.DeviceType)
             .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+
+    private CommandResult CreateNotConnectedCommandResult()
+    {
+        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+            ? Descriptor.Model
+            : Descriptor.DeviceType;
+
+        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+    }
 
 }

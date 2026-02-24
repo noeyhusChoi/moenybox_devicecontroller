@@ -15,14 +15,15 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
 {
     public partial class GtfIdScanGuideViewModel : PageViewModelBase
     {
-        private readonly IDeviceCommandService _deviceCommandService;
+        private const string IdScannerDeviceId = "IDSCANNER1";
+        private readonly IIdScannerPort _idScannerPort;
         private readonly IOcrService _ocr;
         private Uri videoPath;
         private CancellationTokenSource? _scanCts;
         
-        public GtfIdScanGuideViewModel(IDeviceCommandService deviceCommandService, IOcrService ocr)
+        public GtfIdScanGuideViewModel(IIdScannerPort idScannerPort, IOcrService ocr)
         {
-            _deviceCommandService = deviceCommandService;
+            _idScannerPort = idScannerPort;
             _ocr = ocr;
             
             try
@@ -64,7 +65,7 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 _scanCts = null;
             }
 
-            _deviceCommandService.SendAsync("IDSCANNER1", new DeviceCommand("ScanStop"));
+            _ = _idScannerPort.ScanStopAsync(IdScannerDeviceId, CancellationToken.None);
 
             return Task.CompletedTask;
         }
@@ -96,21 +97,18 @@ namespace KIOSK.Presentation.Features.GTF.Pages.ViewModels
                 ct.ThrowIfCancellationRequested();
 
                 // SendAsync가 ct를 받지 못하면 .WaitAsync(ct)로 감싸기
-                var res = await _deviceCommandService
-                    .SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"))
-                    .WaitAsync(ct);
+                var res = await _idScannerPort
+                    .ScanStartAsync(IdScannerDeviceId, ct);
 
                 if (res == null || res.Success == false)
                 {
-                    res = await _deviceCommandService
-                    .SendAsync("IDSCANNER1", new DeviceCommand("ScanStart"))
-                    .WaitAsync(ct);
+                    res = await _idScannerPort
+                    .ScanStartAsync(IdScannerDeviceId, ct);
                 }
                 else
                 {
-                    var status = await _deviceCommandService
-                    .SendAsync("IDSCANNER1", new DeviceCommand("GetScanStatus"))
-                    .WaitAsync(ct);
+                    var status = await _idScannerPort
+                    .GetScanStatusAsync(IdScannerDeviceId, ct);
 
                     if (status?.Data is Pr22.Util.PresenceState state)
                     {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KIOSK.Device.Abstractions;
@@ -14,9 +15,13 @@ namespace KIOSK.Device.Drivers;
 /// - 실제 SSI 통신/파싱은 E200ZClient에 위임한다.
 /// - 동기 요청-응답 + 비동기 수신(Decoded)을 동시에 처리한다.
 /// </summary>
-public sealed class QrE200ZDriver : DeviceBase, IQrDriver
+public sealed class QrE200ZDriver : DeviceDriverBase, IQrDriver
 {
+    public static IReadOnlyCollection<DeviceCommandDescriptor> SupportedCommands { get; } =
+        QrE200ZCommandHandlers.SupportedCommands;
+
     private E200ZClient? _client;
+    private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
     private readonly ILogger<QrE200ZDriver> _logger;
 
     public event Action<string>? Log;
@@ -40,6 +45,7 @@ public sealed class QrE200ZDriver : DeviceBase, IQrDriver
             client.Log += OnClientLog;
             client.Decoded += OnClientDecoded;
             _client = client;
+            _handlers = CreateHandlers(client);
 
             await client.StartAsync(ct).ConfigureAwait(false);
 
@@ -93,10 +99,48 @@ public sealed class QrE200ZDriver : DeviceBase, IQrDriver
 
     public override async Task<CommandResult> ExecuteAsync(DeviceCommand command, CancellationToken ct = default)
     {
-        if (command.Name.Equals("RESTART", StringComparison.OrdinalIgnoreCase))
-            return new CommandResult(true);
+        using var _ = await AcquireIoAsync(ct).ConfigureAwait(false);
 
-        return CreateUnknownCommandResult();
+        try
+        {
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+                ? Descriptor.Model
+                : Descriptor.DeviceType;
+
+            if (_client is null)
+                return CommandResults.NotConnected(deviceKey);
+
+            if (_handlers is null)
+                return CommandResults.NotConnected(deviceKey);
+
+            if (string.IsNullOrWhiteSpace(command.Name))
+                return CommandResults.Unknown(deviceKey);
+
+            if (!_handlers.TryGetValue(command.Name, out var handler))
+                return CommandResults.Unknown(deviceKey);
+
+            return await handler.HandleAsync(command, ct).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (TimeoutException ex)
+        {
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+                ? Descriptor.Model
+                : Descriptor.DeviceType;
+            _logger.LogWarning(ex, "E200Z command timeout. device={Device} command={Command}", Name, command.Name);
+            return CommandResults.Timeout(deviceKey);
+        }
+        catch (Exception ex)
+        {
+            var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
+                ? Descriptor.Model
+                : Descriptor.DeviceType;
+            _logger.LogError(ex, "E200Z command failed. device={Device} command={Command}", Name, command.Name);
+            return CommandResults.Error(deviceKey);
+        }
     }
 
     public Task<CommandResult> EnableScanAsync(CancellationToken ct = default)
@@ -131,6 +175,7 @@ public sealed class QrE200ZDriver : DeviceBase, IQrDriver
 
         try { await _client.DisposeAsync().ConfigureAwait(false); } catch { }
         _client = null;
+        _handlers = null;
     }
 
     private void OnClientLog(string message) => Log?.Invoke(message);
@@ -151,12 +196,17 @@ public sealed class QrE200ZDriver : DeviceBase, IQrDriver
     private void OnClientDecoded(object? sender, DecodeMessage msg)
         => Decoded?.Invoke(this, new QrDecodedData(msg.BarcodeType, msg.Text));
 
+    private static IReadOnlyDictionary<string, IDeviceCommandHandler> CreateHandlers(E200ZClient client)
+        => QrE200ZCommandHandlers
+            .Create(client)
+            .ToDictionary(h => h.Name, StringComparer.OrdinalIgnoreCase);
+
     private CommandResult CreateNotConnectedCommandResult()
     {
         var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
             ? Descriptor.Model
             : Descriptor.DeviceType;
 
-        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+        return CommandResults.NotConnected(deviceKey);
     }
 }

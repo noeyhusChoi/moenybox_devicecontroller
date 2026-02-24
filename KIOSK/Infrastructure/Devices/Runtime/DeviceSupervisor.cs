@@ -15,7 +15,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
     {
         private readonly DeviceDescriptor _desc;
         private readonly ITransportFactory _transportFactory;
-        private readonly IDeviceFactory _deviceFactory;
+        private readonly IDeviceDriverFactory _deviceFactory;
         private readonly ILogger<DeviceSupervisor> _logger;
         private readonly SemaphoreSlim _gate = new(1, 1);
         private CancellationTokenSource? _attemptCts;
@@ -27,7 +27,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
         private TaskCompletionSource<bool> _resumeSignal = CreateCompletedSignal();
 
         private ITransport? _transport;
-        private IDevice? _device;
+        private IDeviceDriver? _device;
 
         public string DeviceId => _desc.EffectiveId;
         public string Name => _desc.Name;
@@ -45,15 +45,15 @@ namespace KIOSK.Infrastructure.Devices.Runtime
         public event Action<string>? Disconnected;
         public event Action<string, StatusSnapshot>? StatusUpdated;
 
-        public IDevice? Device => _device;
+        public IDeviceDriver? Device => _device;
 
-        internal T? GetInnerDevice<T>() where T : class, IDevice
+        internal T? GetInnerDevice<T>() where T : class, IDeviceDriver
             => _device as T;
 
         public DeviceSupervisor(
             DeviceDescriptor desc,
             ITransportFactory transportFactory,
-            IDeviceFactory deviceFactory,
+            IDeviceDriverFactory deviceFactory,
             ILogger<DeviceSupervisor>? logger = null)
         {
             _desc = desc ?? throw new ArgumentNullException(nameof(desc));

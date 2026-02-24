@@ -16,7 +16,7 @@ namespace KIOSK.Device.Drivers;
 /// <summary>
 /// 신분증 스캐너 드라이버: 정책/상태/명령 라우팅만 담당하고, 실제 SDK 호출은 IdScannerClient(PR22)에 위임한다.
 /// </summary>
-public sealed class IdScannerDriver : DeviceBase, IIdScannerDriver
+public sealed class IdScannerDriver : DeviceDriverBase, IIdScannerDriver
 {
     private IdScannerClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -116,16 +116,16 @@ public sealed class IdScannerDriver : DeviceBase, IIdScannerDriver
                 : Descriptor.DeviceType;
 
             if (_client is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+                return CommandResults.NotConnected(deviceKey);
 
             if (_handlers is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+                return CommandResults.NotConnected(deviceKey);
 
             if (string.IsNullOrWhiteSpace(command.Name))
-                return CreateUnknownCommandResult();
+                return CommandResults.Unknown(deviceKey);
 
             if (!_handlers.TryGetValue(command.Name, out var handler))
-                return CreateUnknownCommandResult();
+                return CommandResults.Unknown(deviceKey);
 
             return await handler.HandleAsync(command, ct).ConfigureAwait(false);
         }
@@ -139,7 +139,7 @@ public sealed class IdScannerDriver : DeviceBase, IIdScannerDriver
                 ? Descriptor.Model
                 : Descriptor.DeviceType;
             _logger.LogWarning(ex, "IdScanner command timeout. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
+            return CommandResults.Timeout(deviceKey);
         }
         catch (Exception ex)
         {
@@ -147,7 +147,7 @@ public sealed class IdScannerDriver : DeviceBase, IIdScannerDriver
                 ? Descriptor.Model
                 : Descriptor.DeviceType;
             _logger.LogError(ex, "IdScanner command failed. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
+            return CommandResults.Error(deviceKey);
         }
     }
 
@@ -213,6 +213,6 @@ public sealed class IdScannerDriver : DeviceBase, IIdScannerDriver
             ? Descriptor.Model
             : Descriptor.DeviceType;
 
-        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+        return CommandResults.NotConnected(deviceKey);
     }
 }

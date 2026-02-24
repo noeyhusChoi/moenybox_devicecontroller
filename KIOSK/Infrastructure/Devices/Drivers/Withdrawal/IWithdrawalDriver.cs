@@ -4,7 +4,7 @@ using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers;
 
-public interface IWithdrawalDriver : IDevice
+public interface IWithdrawalDriver : IDeviceDriver
 {
     Task<CommandResult> DispenseAsync(byte[] payload, CancellationToken ct = default);
 }

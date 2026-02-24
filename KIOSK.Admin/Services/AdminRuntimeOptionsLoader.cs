@@ -6,9 +6,9 @@ namespace KIOSK.Admin.Services;
 
 public static class AdminRuntimeOptionsLoader
 {
-    public static ScheduledDeviceRuntimeOptions LoadOrDefault(string filePath)
+    public static DeviceRuntimeOptions LoadOrDefault(string filePath)
     {
-        var options = ScheduledDeviceRuntimeOptions.Default;
+        var options = DeviceRuntimeOptions.Default;
 
         try
         {

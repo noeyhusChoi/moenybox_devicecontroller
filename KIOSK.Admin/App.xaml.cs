@@ -10,7 +10,7 @@ namespace KIOSK.Admin;
 
 public partial class App : System.Windows.Application
 {
-    private ScheduledDeviceRuntimePort? _runtimePort;
+    private DeviceRuntimePort? _runtimePort;
     private DeviceRuntimeStatusMessengerBridge? _statusBridge;
 
     protected override void OnStartup(StartupEventArgs e)
@@ -30,10 +30,11 @@ public partial class App : System.Windows.Application
         var runtimeOptionsPath = Path.Combine(AppContext.BaseDirectory, "runtime-options.json");
         var runtimeOptions = AdminRuntimeOptionsLoader.LoadOrDefault(runtimeOptionsPath);
         var messenger = new WeakReferenceMessenger();
+        var commandCatalog = new AdminDeviceCommandCatalog(descriptors);
 
-        _runtimePort = new ScheduledDeviceRuntimePort(descriptors, runtimeOptions);
+        _runtimePort = new DeviceRuntimePort(descriptors, runtimeOptions);
         _statusBridge = new DeviceRuntimeStatusMessengerBridge(_runtimePort, messenger);
-        var vm = new MainWindowViewModel(_runtimePort, messenger);
+        var vm = new MainWindowViewModel(_runtimePort, commandCatalog, messenger);
         var window = new MainWindow
         {
             Title = "KIOSK Admin - Device Monitor",

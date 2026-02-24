@@ -5,7 +5,7 @@ using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers;
 
-public interface IDepositDriver : IDevice
+public interface IDepositDriver : IDeviceDriver
 {
     event EventHandler<string>? Escrowed;
 

@@ -1,8 +1,8 @@
 ﻿// Abstractions/IDevice.cs
 namespace KIOSK.Device.Abstractions
 {
-    /// <summary>도메인 레벨 장치 인터페이스(명령/상태)</summary>
-    public interface IDevice
+    /// <summary>인프라 레벨 드라이버 인터페이스(명령/상태)</summary>
+    public interface IDeviceDriver
     {
         string Name { get; }
         string Model { get; }

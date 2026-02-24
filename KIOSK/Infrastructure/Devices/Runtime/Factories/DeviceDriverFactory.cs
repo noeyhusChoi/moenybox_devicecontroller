@@ -6,21 +6,21 @@ using KIOSK.Device.Transport;
 
 namespace KIOSK.Infrastructure.Devices.Runtime.Factories;
 
-public interface IDeviceFactory
+public interface IDeviceDriverFactory
 {
-    IDevice Create(DeviceDescriptor descriptor, ITransport transport);
+    IDeviceDriver Create(DeviceDescriptor descriptor, ITransport transport);
 }
 
 /// <summary>
 /// 장치 정의(Descriptor) -> 실제 인스턴스 생성 팩토리
 /// </summary>
-public sealed class DeviceFactory : IDeviceFactory
+public sealed class DeviceDriverFactory : IDeviceDriverFactory
 {
-    public DeviceFactory()
+    public DeviceDriverFactory()
     {
     }
 
-    public IDevice Create(DeviceDescriptor descriptor, ITransport transport)
+    public IDeviceDriver Create(DeviceDescriptor descriptor, ITransport transport)
     {
         if (string.IsNullOrWhiteSpace(descriptor.Driver))
             throw new NotSupportedException(
@@ -33,7 +33,7 @@ public sealed class DeviceFactory : IDeviceFactory
             $"Ready driver_type: {descriptor.Driver}. name={descriptor.Name} deviceType={descriptor.DeviceType} vendor={descriptor.Vendor} model={descriptor.Model}");
     }
 
-    private static bool TryCreateByDriverType(DeviceDescriptor descriptor, ITransport transport, out IDevice device)
+    private static bool TryCreateByDriverType(DeviceDescriptor descriptor, ITransport transport, out IDeviceDriver device)
     {
         device = null!;
         var driverType = NormalizeDriverType(descriptor.Driver);

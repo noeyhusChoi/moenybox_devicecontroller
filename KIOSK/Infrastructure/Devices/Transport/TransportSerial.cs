@@ -96,6 +96,11 @@ namespace KIOSK.Device.Transport
                         //throw;
                         return 0;
                     }
+                    catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                    {
+                        // 호출자가 의도적으로 취소한 경우(종료/해제)는 정상 종료로 본다.
+                        return 0;
+                    }
                     catch (OperationCanceledException oce)
                     {
                         SafeRaiseDisconnected();
@@ -163,6 +168,10 @@ namespace KIOSK.Device.Transport
                     catch (TimeoutException)
                     {
                         // 시간 초과
+                    }
+                    catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                    {
+                        // 호출자가 의도적으로 취소한 경우(종료/해제)는 정상 종료로 본다.
                     }
                     catch (OperationCanceledException oce)
                     {

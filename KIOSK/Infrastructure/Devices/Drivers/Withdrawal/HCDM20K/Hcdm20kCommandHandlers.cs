@@ -9,17 +9,28 @@ namespace KIOSK.Device.Drivers.HCDM20K
 {
     internal static class Hcdm20kCommandHandlers
     {
+        public static IReadOnlyCollection<DeviceCommandDescriptor> SupportedCommands { get; } =
+            new[]
+            {
+                new DeviceCommandDescriptor("RESTART", "재시작"),
+                new DeviceCommandDescriptor("SENSOR", "센서 조회"),
+                new DeviceCommandDescriptor("INIT", "초기화"),
+                new DeviceCommandDescriptor("VERSION", "버전 조회"),
+                new DeviceCommandDescriptor("DISPENSE", "지폐 방출"),
+                new DeviceCommandDescriptor("EJECT", "방출/회수"),
+            };
+
         public static IReadOnlyCollection<IDeviceCommandHandler> Create(Hcdm20kClient client, string deviceKey)
         {
-            var unknown = CommandResultFactory.UnknownCommand(deviceKey);
+            var invalidPayload = CommandResults.InvalidPayload(deviceKey);
             return new IDeviceCommandHandler[]
             {
                 new RestartHandler(),
                 new SensorHandler(client),
-                new InitHandler(client, unknown),
+                new InitHandler(client, invalidPayload),
                 new VersionHandler(client),
-                new EjectHandler(client, unknown),
-                new DispenseHandler(client, unknown)
+                new EjectHandler(client, invalidPayload),
+                new DispenseHandler(client, invalidPayload)
             };
         }
 
@@ -42,17 +53,17 @@ namespace KIOSK.Device.Drivers.HCDM20K
         private sealed class InitHandler : IDeviceCommandHandler
         {
             private readonly Hcdm20kClient _client;
-            private readonly CommandResult _unknown;
-            public InitHandler(Hcdm20kClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public InitHandler(Hcdm20kClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "INIT";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
                 => command.Payload is byte[] data
                     ? _client.SendCommandAsync(Hcdm20kCommand.Initialize, data, processTimeoutMs: 8000, ct: ct)
-                    : Task.FromResult(_unknown);
+                    : Task.FromResult(_invalidPayload);
         }
 
         private sealed class VersionHandler : IDeviceCommandHandler
@@ -67,17 +78,17 @@ namespace KIOSK.Device.Drivers.HCDM20K
         private sealed class EjectHandler : IDeviceCommandHandler
         {
             private readonly Hcdm20kClient _client;
-            private readonly CommandResult _unknown;
-            public EjectHandler(Hcdm20kClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public EjectHandler(Hcdm20kClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "EJECT";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
             {
                 if (command.Payload is not byte[] data)
-                    return Task.FromResult(_unknown);
+                    return Task.FromResult(_invalidPayload);
 
                 var args = new[] { (data.Length > 0) ? Encoding.ASCII.GetString(data) : "0" };
                 var payload = Encoding.ASCII.GetBytes(string.Concat(args));
@@ -88,17 +99,17 @@ namespace KIOSK.Device.Drivers.HCDM20K
         private sealed class DispenseHandler : IDeviceCommandHandler
         {
             private readonly Hcdm20kClient _client;
-            private readonly CommandResult _unknown;
-            public DispenseHandler(Hcdm20kClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public DispenseHandler(Hcdm20kClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "DISPENSE";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
             {
                 if (command.Payload is not byte[] data)
-                    return Task.FromResult(_unknown);
+                    return Task.FromResult(_invalidPayload);
 
                 int estimatedCount = EstimateTotalRequestedFromPayload(data);
                 int timeoutMs = (int)((estimatedCount / 3.0 + 5) * 1000);

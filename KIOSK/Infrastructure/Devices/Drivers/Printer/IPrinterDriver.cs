@@ -4,7 +4,7 @@ using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers;
 
-public interface IPrinterDriver : IDevice
+public interface IPrinterDriver : IDeviceDriver
 {
     Task<CommandResult> PrintTitleAsync(string content, CancellationToken ct = default);
     Task<CommandResult> PrintContentAsync(string content, CancellationToken ct = default);

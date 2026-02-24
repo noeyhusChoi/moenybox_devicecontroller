@@ -5,7 +5,7 @@ using KIOSK.Device.Abstractions;
 
 namespace KIOSK.Device.Drivers;
 
-public interface IIdScannerDriver : IDevice
+public interface IIdScannerDriver : IDeviceDriver
 {
     event EventHandler? Detected;
 

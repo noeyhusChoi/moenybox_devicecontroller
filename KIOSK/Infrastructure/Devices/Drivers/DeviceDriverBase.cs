@@ -12,11 +12,11 @@ namespace KIOSK.Device.Drivers;
 /// 공통 장치 동작 패턴(스냅샷 생성, I/O 직렬화, 트랜스포트 보조)을 제공하는 기본 클래스.
 /// 개별 장치는 필요한 부분만 오버라이드하여 구현하면 됩니다.
 /// </summary>
-public abstract class DeviceBase : IDevice, IAsyncDisposable
+public abstract class DeviceDriverBase : IDeviceDriver, IAsyncDisposable
 {
     private readonly SemaphoreSlim? _ioGate;
 
-    protected DeviceBase(DeviceDescriptor descriptor, ITransport? transport, bool enableIoSerialization = true)
+    protected DeviceDriverBase(DeviceDescriptor descriptor, ITransport? transport, bool enableIoSerialization = true)
     {
         Descriptor = descriptor ?? throw new ArgumentNullException(nameof(descriptor));
         Transport = transport;
@@ -48,14 +48,6 @@ public abstract class DeviceBase : IDevice, IAsyncDisposable
     protected StatusEvent CreateAlert(ErrorCode code, string message, Severity severity = Severity.Error, AlertSource source = AlertSource.Status)
         => new(code.ToString(), string.Empty, severity, DateTimeOffset.UtcNow, ErrorCode: code, Source: source);
 
-    protected CommandResult CreateUnknownCommandResult()
-    {
-        var deviceKey = string.IsNullOrWhiteSpace(Descriptor.DeviceType)
-            ? Model
-            : Descriptor.DeviceType;
-        return CommandResultFactory.UnknownCommand(deviceKey);
-    }
-
     protected async Task<IDisposable> AcquireIoAsync(CancellationToken ct)
     {
         if (_ioGate is null)
@@ -70,9 +62,7 @@ public abstract class DeviceBase : IDevice, IAsyncDisposable
         if (Transport is null)
             return Task.CompletedTask;
 
-        return Transport.IsOpen
-            ? Task.CompletedTask
-            : Transport.OpenAsync(ct);
+        return Transport.IsOpen ? Task.CompletedTask : Transport.OpenAsync(ct);
     }
 
     protected ITransport RequireTransport()

@@ -15,7 +15,7 @@ namespace KIOSK.Device.Drivers;
 /// 프린터 드라이버: 장치 정책/상태/명령 라우팅 담당.
 /// 실제 ESC/POS 송수신은 PrinterClient(TransportChannel 기반)에 위임한다.
 /// </summary>
-public sealed class PrinterDriver : DeviceBase, IPrinterDriver
+public sealed class PrinterDriver : DeviceDriverBase, IPrinterDriver
 {
     private PrinterClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -104,16 +104,16 @@ public sealed class PrinterDriver : DeviceBase, IPrinterDriver
                 : Descriptor.DeviceType;
 
             if (_client is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+                return CommandResults.NotConnected(deviceKey);
 
             if (_handlers is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+                return CommandResults.NotConnected(deviceKey);
 
             if (string.IsNullOrWhiteSpace(command.Name))
-                return CreateUnknownCommandResult();
+                return CommandResults.Unknown(deviceKey);
 
             if (!_handlers.TryGetValue(command.Name, out var handler))
-                return CreateUnknownCommandResult();
+                return CommandResults.Unknown(deviceKey);
 
             return await handler.HandleAsync(command, ct).ConfigureAwait(false);
         }
@@ -127,7 +127,7 @@ public sealed class PrinterDriver : DeviceBase, IPrinterDriver
                 ? Descriptor.Model
                 : Descriptor.DeviceType;
             _logger.LogWarning("Printer command timeout. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
+            return CommandResults.Timeout(deviceKey);
         }
         catch (Exception ex)
         {
@@ -135,7 +135,7 @@ public sealed class PrinterDriver : DeviceBase, IPrinterDriver
                 ? Descriptor.Model
                 : Descriptor.DeviceType;
             _logger.LogError(ex, "Printer command failed. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
+            return CommandResults.Error(deviceKey);
         }
     }
 
@@ -219,7 +219,7 @@ public sealed class PrinterDriver : DeviceBase, IPrinterDriver
             ? Descriptor.Model
             : Descriptor.DeviceType;
 
-        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+        return CommandResults.NotConnected(deviceKey);
     }
 
 }

@@ -13,16 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\KIOSK\Infrastructure\Devices\Abstractions\**\*.cs"
-             Link="Abstractions\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="..\KIOSK\Infrastructure\Devices\Drivers\**\*.cs"
-             Link="Drivers\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="..\KIOSK\Infrastructure\Devices\Transport\**\*.cs"
-             Link="Transport\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="..\KIOSK\Infrastructure\Devices\Runtime\Factories\**\*.cs"
-             Link="Factories\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="..\KIOSK\Infrastructure\Common\Utils\MpostPatcher.cs"
-             Link="Utils\MpostPatcher.cs" />
+    <Compile Include="..\KIOSK\Infrastructure\Devices\Abstractions\**\*.cs" Link="Abstractions\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\KIOSK\Infrastructure\Devices\Drivers\**\*.cs" Link="Drivers\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\KIOSK\Infrastructure\Devices\Transport\**\*.cs" Link="Transport\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\KIOSK\Infrastructure\Devices\Runtime\Factories\**\*.cs" Link="Factories\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\KIOSK\Infrastructure\Common\Utils\MpostPatcher.cs" Link="Utils\MpostPatcher.cs" />
   </ItemGroup>
 
   <ItemGroup>

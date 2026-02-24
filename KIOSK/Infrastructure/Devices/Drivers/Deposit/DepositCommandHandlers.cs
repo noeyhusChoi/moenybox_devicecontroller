@@ -6,6 +6,16 @@ namespace KIOSK.Device.Drivers.Deposit
 {
     internal static class DepositCommandHandlers
     {
+        public static IReadOnlyCollection<DeviceCommandDescriptor> SupportedCommands { get; } =
+            new[]
+            {
+                new DeviceCommandDescriptor("RESTART", "재시작"),
+                new DeviceCommandDescriptor("START", "입금 시작"),
+                new DeviceCommandDescriptor("STOP", "입금 중지"),
+                new DeviceCommandDescriptor("STACK", "스택 처리"),
+                new DeviceCommandDescriptor("RETURN", "리턴 처리"),
+            };
+
         public static IReadOnlyCollection<IDeviceCommandHandler> Create(DepositClient client)
             => new IDeviceCommandHandler[]
             {

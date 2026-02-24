@@ -54,14 +54,6 @@ namespace KIOSK.Device.Abstractions
         ErrorCode? Code = null,
         bool Retryable = false); // 정책 적용 전까지는 힌트로만 사용됨
 
-    //public record DeviceDescriptor(
-    //    string kiosk_Id,
-    //    string Model,
-    //    string TransportName,   // ex) "COM3@115200"
-    //    string ProtocolName,    // ex) "SimpleCRC"
-    //    int PollingMs = 1000
-    //);
-
     // 공통 열거형
     public enum DeviceHealth { Online, Offline }
     public enum Severity { Info, Warning, Error, Critical }

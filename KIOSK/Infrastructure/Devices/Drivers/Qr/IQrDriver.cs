@@ -7,7 +7,7 @@ namespace KIOSK.Device.Drivers;
 
 public sealed record QrDecodedData(byte BarcodeType, string Text);
 
-public interface IQrDriver : IDevice
+public interface IQrDriver : IDeviceDriver
 {
     event EventHandler<QrDecodedData>? Decoded;
 

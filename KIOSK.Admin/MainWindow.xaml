@@ -68,7 +68,14 @@
                 <Button Grid.Row="0" Grid.Column="1" Width="96" Height="34" Margin="8,0,0,0" Content="Disconnect" Command="{Binding DisconnectCommand}" />
 
                 <TextBlock Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Text="Command" />
-                <TextBox Grid.Row="0" Grid.Column="5" Height="32" Margin="8,0,0,0" VerticalContentAlignment="Center" Text="{Binding CommandName, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Row="0"
+                          Grid.Column="5"
+                          Height="32"
+                          Margin="8,0,0,0"
+                          ItemsSource="{Binding AvailableCommands}"
+                          DisplayMemberPath="Display"
+                          SelectedValuePath="Name"
+                          SelectedValue="{Binding SelectedCommandName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBlock Grid.Row="0" Grid.Column="6" Margin="12,0,0,0" VerticalAlignment="Center" Text="Payload" />
                 <TextBox Grid.Row="0" Grid.Column="7" Height="32" Margin="8,0,0,0" VerticalContentAlignment="Center" Text="{Binding CommandPayload, UpdateSourceTrigger=PropertyChanged}" />

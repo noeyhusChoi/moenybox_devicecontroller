@@ -15,7 +15,7 @@ namespace KIOSK.Device.Drivers;
 /// <summary>
 /// HCDM-10K 드라이버: 정책/상태/명령 라우팅만 담당. 실제 프로토콜은 Hcdm10kClient에 위임.
 /// </summary>
-public sealed class Hcdm10kDriver : DeviceBase, IWithdrawalDriver
+public sealed class Hcdm10kDriver : DeviceDriverBase, IWithdrawalDriver
 {
     private Hcdm10kClient? _client;
     private IReadOnlyDictionary<string, IDeviceCommandHandler>? _handlers;
@@ -110,16 +110,16 @@ public sealed class Hcdm10kDriver : DeviceBase, IWithdrawalDriver
                 : Descriptor.DeviceType;
 
             if (_client is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+                return CommandResults.NotConnected(deviceKey);
 
             if (_handlers is null)
-                return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+                return CommandResults.NotConnected(deviceKey);
 
             if (string.IsNullOrWhiteSpace(command.Name))
-                return CreateUnknownCommandResult();
+                return CommandResults.Unknown(deviceKey);
 
             if (!_handlers.TryGetValue(command.Name, out var handler))
-                return CreateUnknownCommandResult();
+                return CommandResults.Unknown(deviceKey);
 
             return await handler.HandleAsync(command, ct).ConfigureAwait(false);
         }
@@ -133,7 +133,7 @@ public sealed class Hcdm10kDriver : DeviceBase, IWithdrawalDriver
                 ? Descriptor.Model
                 : Descriptor.DeviceType;
             _logger.LogWarning(ex, "HCDM10K command timeout. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "TIMEOUT"), Retryable: true);
+            return CommandResults.Timeout(deviceKey);
         }
         catch (Exception ex)
         {
@@ -141,7 +141,7 @@ public sealed class Hcdm10kDriver : DeviceBase, IWithdrawalDriver
                 ? Descriptor.Model
                 : Descriptor.DeviceType;
             _logger.LogError(ex, "HCDM10K command failed. device={Device} command={Command}", Name, command.Name);
-            return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "ERROR"));
+            return CommandResults.Error(deviceKey);
         }
     }
 
@@ -252,6 +252,6 @@ public sealed class Hcdm10kDriver : DeviceBase, IWithdrawalDriver
             ? Descriptor.Model
             : Descriptor.DeviceType;
 
-        return new CommandResult(false, string.Empty, Code: new ErrorCode("DEV", deviceKey, "COMMAND", "NOT_CONNECTED"));
+        return CommandResults.NotConnected(deviceKey);
     }
 }

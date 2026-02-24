@@ -6,50 +6,61 @@ namespace KIOSK.Device.Drivers.Printer
 {
     internal static class PrinterCommandHandlers
     {
+        public static IReadOnlyCollection<DeviceCommandDescriptor> SupportedCommands { get; } =
+            new[]
+            {
+                new DeviceCommandDescriptor("RESTART", "재시작"),
+                new DeviceCommandDescriptor("PRINTCONTENT", "본문 인쇄"),
+                new DeviceCommandDescriptor("PRINTTITLE", "제목 인쇄"),
+                new DeviceCommandDescriptor("CUT", "용지 컷"),
+                new DeviceCommandDescriptor("QR", "QR 코드 인쇄"),
+                new DeviceCommandDescriptor("ALIGN", "정렬 설정"),
+            };
+
         public static IReadOnlyCollection<IDeviceCommandHandler> Create(PrinterClient client, string deviceKey)
         {
-            var unknown = CommandResultFactory.UnknownCommand(deviceKey);
+            var invalidPayload = CommandResults.InvalidPayload(deviceKey);
             return new IDeviceCommandHandler[]
             {
-                new PrintContentHandler(client, unknown),
-                new PrintTitleHandler(client, unknown),
+                new PrintContentHandler(client, invalidPayload),
+                new PrintTitleHandler(client, invalidPayload),
                 new CutHandler(client),
                 new RestartHandler(),
-                new QrHandler(client, unknown),
-                new AlignHandler(client, unknown)
+                new QrHandler(client, invalidPayload),
+                new AlignHandler(client, invalidPayload)
             };
         }
 
         private sealed class PrintContentHandler : IDeviceCommandHandler
         {
             private readonly PrinterClient _client;
-            private readonly CommandResult _unknown;
-            public PrintContentHandler(PrinterClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public PrintContentHandler(PrinterClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "PRINTCONTENT";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
                 => command.Payload is string data
                     ? _client.PrintContentAsync(data, ct)
-                    : Task.FromResult(_unknown);
+                    : Task.FromResult(_invalidPayload);
         }
 
         private sealed class PrintTitleHandler : IDeviceCommandHandler
         {
             private readonly PrinterClient _client;
-            private readonly CommandResult _unknown;
-            public PrintTitleHandler(PrinterClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public PrintTitleHandler(PrinterClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "PRINTTITLE";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
                 => command.Payload is string data
                     ? _client.PrintTitleAsync(data, ct)
-                    : Task.FromResult(_unknown);
+                    : Task.FromResult(_invalidPayload);
         }
 
         private sealed class CutHandler : IDeviceCommandHandler
@@ -71,33 +82,33 @@ namespace KIOSK.Device.Drivers.Printer
         private sealed class QrHandler : IDeviceCommandHandler
         {
             private readonly PrinterClient _client;
-            private readonly CommandResult _unknown;
-            public QrHandler(PrinterClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public QrHandler(PrinterClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "QR";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
                 => command.Payload is string data
                     ? _client.PrintQrAutoSizeAsync(data, ct)
-                    : Task.FromResult(_unknown);
+                    : Task.FromResult(_invalidPayload);
         }
 
         private sealed class AlignHandler : IDeviceCommandHandler
         {
             private readonly PrinterClient _client;
-            private readonly CommandResult _unknown;
-            public AlignHandler(PrinterClient client, CommandResult unknown)
+            private readonly CommandResult _invalidPayload;
+            public AlignHandler(PrinterClient client, CommandResult invalidPayload)
             {
                 _client = client;
-                _unknown = unknown;
+                _invalidPayload = invalidPayload;
             }
             public string Name => "ALIGN";
             public Task<CommandResult> HandleAsync(DeviceCommand command, CancellationToken ct)
                 => command.Payload is int data
                     ? _client.AlignAsync(data, ct)
-                    : Task.FromResult(_unknown);
+                    : Task.FromResult(_invalidPayload);
         }
     }
 }

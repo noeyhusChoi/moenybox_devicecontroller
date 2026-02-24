@@ -17,7 +17,7 @@ namespace KIOSK.Infrastructure.Hosting.Modules
         public static IServiceCollection AddDeviceModule(this IServiceCollection services)
         {
             services.AddSingleton<ITransportFactory, TransportFactory>();
-            services.AddSingleton<IDeviceFactory, DeviceFactory>();
+            services.AddSingleton<IDeviceDriverFactory, DeviceDriverFactory>();
 
             services.AddSingleton<IStatusStore, StatusStore>();
             services.AddSingleton<IStatusNotifyService, StatusNotifyService>();

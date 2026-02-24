@@ -26,7 +26,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
         Task<CommandResult> SendAsync(string name, DeviceCommand cmd, CancellationToken ct = default);
         Task<CommandResult> SendAsync(string name, DeviceCommand cmd, CommandContext context, CancellationToken ct = default);
 
-        bool TryGetInnerDevice<TDevice>(string deviceId, out TDevice device) where TDevice : class, IDevice;
+        bool TryGetInnerDevice<TDevice>(string deviceId, out TDevice device) where TDevice : class, IDeviceDriver;
         bool TryGetDevice(string deviceId, out DeviceRuntimeInfo info);
         IReadOnlyList<DeviceRuntimeInfo> GetAllDevices();
     }
@@ -34,7 +34,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
     public sealed class DeviceManager : IDeviceManager
     {
         private readonly ITransportFactory _transportFactory;
-        private readonly IDeviceFactory _deviceFactory;
+        private readonly IDeviceDriverFactory _deviceFactory;
         private readonly ILogger<DeviceSupervisor> _supervisorLogger;
         private readonly IStatusPipeline _statusPipeline;
         private readonly IErrorMessageProvider _messages;
@@ -48,7 +48,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
 
         public DeviceManager(
             ITransportFactory transportFactory,
-            IDeviceFactory deviceFactory,
+            IDeviceDriverFactory deviceFactory,
             ILoggerFactory loggerFactory,
             IStatusPipeline statusPipeline,
             IErrorMessageProvider messages,
@@ -156,7 +156,7 @@ namespace KIOSK.Infrastructure.Devices.Runtime
             return result;
         }
 
-        public bool TryGetInnerDevice<TDevice>(string deviceId, out TDevice device) where TDevice : class, IDevice
+        public bool TryGetInnerDevice<TDevice>(string deviceId, out TDevice device) where TDevice : class, IDeviceDriver
         {
             device = default!;
             if (!_supers.TryGetValue(deviceId, out var sup))

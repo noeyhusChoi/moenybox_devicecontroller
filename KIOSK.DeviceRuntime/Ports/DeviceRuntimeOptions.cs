@@ -1,15 +1,15 @@
 namespace KIOSK.DeviceRuntime.Ports;
 
-public sealed record ScheduledDeviceRuntimeOptions
+public sealed record DeviceRuntimeOptions
 {
-    public static ScheduledDeviceRuntimeOptions Default { get; } = new();
+    public static DeviceRuntimeOptions Default { get; } = new();
 
     public int DefaultPollingMs { get; init; } = 10000;
     public int MinPollingMs { get; init; } = 1000;
     public int MaxBackoffMs { get; init; } = 60000;
     public int? SchedulerTickMs { get; init; }
 
-    public ScheduledDeviceRuntimeOptions Normalize()
+    public DeviceRuntimeOptions Normalize()
     {
         var minPolling = Math.Max(100, MinPollingMs);
         var defaultPolling = Math.Max(minPolling, DefaultPollingMs);

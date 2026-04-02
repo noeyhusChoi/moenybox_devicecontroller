@@ -32,4 +32,14 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Config.ini" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>

@@ -8,22 +8,19 @@ public partial class SerialRegistrationViewModel : ObservableObject
     private readonly Func<Task<(bool Success, string? Serial, string Message)>> _extractFunc;
     private readonly Func<string, Task<(bool Success, string Message)>> _registerFunc;
     private readonly Func<Task> _retryFunc;
-    private readonly Func<Task<string>> _debugBypassFunc;
 
     public SerialRegistrationViewModel(
         Func<Task<(bool Success, string? Serial, string Message)>> extractFunc,
         Func<string, Task<(bool Success, string Message)>> registerFunc,
-        Func<Task> retryFunc,
-        Func<Task<string>> debugBypassFunc)
+        Func<Task> retryFunc)
     {
         _extractFunc = extractFunc;
         _registerFunc = registerFunc;
         _retryFunc = retryFunc;
-        _debugBypassFunc = debugBypassFunc;
     }
 
     [ObservableProperty]
-    private string registrationStatusMessage = "장치 시리얼을 등록하세요.";
+    private string registrationStatusMessage = "장치를 활성화하고 API 키를 저장하세요.";
 
     [ObservableProperty]
     private string registeredSerialKey = "-";
@@ -89,20 +86,12 @@ public partial class SerialRegistrationViewModel : ObservableObject
                 return;
             }
 
-            RegisteredSerialKey = ExtractedSerialKey;
             await _retryFunc();
         });
 
     [RelayCommand]
     private Task RetryStartupFlowAsync()
         => RunSafeAsync(_retryFunc);
-
-    [RelayCommand]
-    private Task SkipSerialCheckForDebugAsync()
-        => RunSafeAsync(async () =>
-        {
-            RegistrationStatusMessage = await _debugBypassFunc();
-        });
 
     private async Task RunSafeAsync(Func<Task> action)
     {

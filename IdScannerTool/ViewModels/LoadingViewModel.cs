@@ -43,8 +43,9 @@ public partial class LoadingViewModel : ObservableObject
     {
         _stageMap.Clear();
         _stageMap[StartupVerificationStage.ConnectDevice] = new StartupStageItemViewModel(StartupVerificationStage.ConnectDevice, "장치 연결");
-        _stageMap[StartupVerificationStage.ExtractSerial] = new StartupStageItemViewModel(StartupVerificationStage.ExtractSerial, "시리얼 추출");
-        _stageMap[StartupVerificationStage.CompareSerial] = new StartupStageItemViewModel(StartupVerificationStage.CompareSerial, "시리얼 비교");
+        _stageMap[StartupVerificationStage.CheckApiKey] = new StartupStageItemViewModel(StartupVerificationStage.CheckApiKey, "장치 활성화 확인");
+        _stageMap[StartupVerificationStage.ExtractSerial] = new StartupStageItemViewModel(StartupVerificationStage.ExtractSerial, "장치 시리얼 확인");
+        _stageMap[StartupVerificationStage.VerifyDevice] = new StartupStageItemViewModel(StartupVerificationStage.VerifyDevice, "장치 인증");
 
         CurrentStage = _stageMap[StartupVerificationStage.ConnectDevice];
         SetRetryEnabled(false);

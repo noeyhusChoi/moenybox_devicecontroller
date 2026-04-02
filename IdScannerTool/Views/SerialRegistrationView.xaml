@@ -46,7 +46,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="로컬 시리얼키" />
+                    Text="로컬 API 키" />
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="1"
@@ -80,12 +80,12 @@
                         Command="{Binding ExtractAndPrepareCommand}"
                         Content="장치 연결 + 시리얼 추출" />
                     <ui:Button
-                        Width="140"
+                        Width="190"
                         Height="38"
                         Margin="0,0,8,8"
                         Appearance="Primary"
                         Command="{Binding RegisterSerialKeyCommand}"
-                        Content="로컬 시리얼 등록" />
+                        Content="기기 활성화 + API 키 저장" />
                     <ui:Button
                         Width="120"
                         Height="38"
@@ -93,13 +93,6 @@
                         Appearance="Secondary"
                         Command="{Binding RetryStartupFlowCommand}"
                         Content="다시 확인" />
-                    <ui:Button
-                        Width="220"
-                        Height="38"
-                        Margin="0,0,8,8"
-                        Appearance="Secondary"
-                        Command="{Binding SkipSerialCheckForDebugCommand}"
-                        Content="디버그: 시리얼 체크 건너뛰기" />
                 </WrapPanel>
             </Grid>
         </ui:Card>

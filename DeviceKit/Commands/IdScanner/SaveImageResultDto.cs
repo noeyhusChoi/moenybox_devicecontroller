@@ -6,4 +6,5 @@
 /// </summary>
 public sealed record SaveImageResultDto(
     string ImagePath,
-    byte[] ImageByte);
+    byte[] ImageByte,
+    string? WhiteImagePath = null);

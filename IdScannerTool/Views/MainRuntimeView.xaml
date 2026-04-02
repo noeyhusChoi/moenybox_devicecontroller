@@ -9,13 +9,13 @@
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Loaded="OnLoaded"
     mc:Ignorable="d">
     <Grid Margin="12,0,12,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
 
@@ -154,10 +154,12 @@
                             FontTypography="Caption"
                             Text="시작일" />
                         <DatePicker
+                            x:Name="StartDatePicker"
                             Height="36"
-                            Language="en-CA"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             SelectedDate="{Binding SearchStartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            SelectedDateFormat="Short" />
+                            SelectedDateFormat="Short"
+                            Text="{Binding SearchStartDate, Mode=OneWay, StringFormat={}{0:yyyy-MM-dd}}" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" Margin="0,0,10,0">
@@ -166,10 +168,12 @@
                             FontTypography="Caption"
                             Text="종료일" />
                         <DatePicker
+                            x:Name="EndDatePicker"
                             Height="36"
-                            Language="en-CA"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             SelectedDate="{Binding SearchEndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            SelectedDateFormat="Short" />
+                            SelectedDateFormat="Short"
+                            Text="{Binding SearchEndDate, Mode=OneWay, StringFormat={}{0:yyyy-MM-dd}}" />
                     </StackPanel>
 
                     <ui:Button
@@ -251,12 +255,6 @@
                             Header="국적부호"
                             IsReadOnly="True" />
                         <DataGridTextColumn
-                            Width="80"
-                            MinWidth="80"
-                            Binding="{Binding Sex}"
-                            Header="성별"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
                             Width="160"
                             MinWidth="100"
                             Binding="{Binding BirthDate}"
@@ -309,221 +307,5 @@
                 </StackPanel>
             </Grid>
         </ui:Card>
-
-        <Expander
-            Grid.Row="3"
-            Margin="0"
-            Header="Debug"
-            IsExpanded="False">
-            <Grid Margin="0,8,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Grid Grid.Row="0" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="0"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Text="Status" />
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="0,0,8,4"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Text="Device" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                FontSize="12"
-                                Text="{Binding DeviceType}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="0,0,8,4"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Text="Connection" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                FontSize="12"
-                                Text="{Binding ConnectionState}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Margin="0,0,0,4"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Text="Message" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                FontSize="12"
-                                Text="{Binding StatusMessage}"
-                                TextTrimming="CharacterEllipsis" />
-                        </StackPanel>
-
-                        <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="0,0,8,0"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Text="Presence" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                FontSize="12"
-                                Text="{Binding ScanPresence}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="0,0,8,0"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Text="Detected" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                FontSize="12"
-                                Text="{Binding IsDetected}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Text="Polling" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                FontSize="12"
-                                Text="{Binding IsScanPolling}" />
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-
-                <Grid Grid.Row="1" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="0"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Text="Command" />
-                    <WrapPanel Grid.Column="1" VerticalAlignment="Center">
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding RefreshCommand}"
-                            Content="Refresh" />
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding ConnectCommand}"
-                            Content="Connect" />
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding DisconnectCommand}"
-                            Content="Disconnect" />
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding ScanStartCommand}"
-                            Content="ScanStart" />
-                        <ui:Button
-                            Width="104"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding GetScanStatusCommand}"
-                            Content="GetStatus" />
-                        <ui:Button
-                            Width="104"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding SaveImageCommand}"
-                            Content="SaveImage" />
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding RunOcrCommand}"
-                            Content="RunOcr" />
-                        <ui:Button
-                            Width="104"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding ReloadHistoryCommand}"
-                            Content="ReloadDB" />
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding ScanStopCommand}"
-                            Content="ScanStop" />
-                        <ui:Button
-                            Width="92"
-                            Height="32"
-                            Margin="0,0,8,6"
-                            Command="{Binding RestartCommand}"
-                            Content="Restart" />
-                    </WrapPanel>
-                </Grid>
-
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="0"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Text="Log" />
-                    <ui:TextBox
-                        Grid.Column="1"
-                        AcceptsReturn="True"
-                        IsReadOnly="True"
-                        Text="{Binding LastResult}"
-                        TextWrapping="Wrap"
-                        VerticalScrollBarVisibility="Auto" />
-                </Grid>
-            </Grid>
-        </Expander>
     </Grid>
 </UserControl>

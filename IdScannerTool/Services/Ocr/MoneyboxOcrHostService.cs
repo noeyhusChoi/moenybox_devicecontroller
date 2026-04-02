@@ -50,9 +50,9 @@ public sealed class MoneyboxOcrHostService : IHostedService, IDisposable
             if (existing is not null)
             {
                 _process = existing;
-                _ownsProcess = false;
+                _ownsProcess = true;
                 _logger.LogInformation(
-                    "External OCR process already running. Reusing existing process. Path={Path}, PID={Pid}",
+                    "External OCR process already running. Reusing and adopting existing process. Path={Path}, PID={Pid}",
                     executableFullPath,
                     existing.Id);
                 return Task.CompletedTask;
@@ -128,12 +128,6 @@ public sealed class MoneyboxOcrHostService : IHostedService, IDisposable
         try
         {
             process.Exited -= OnProcessExited;
-
-            if (!ownsProcess)
-            {
-                _logger.LogInformation("External OCR process was not owned by this app. Skip stopping. PID={Pid}", process.Id);
-                return;
-            }
 
             if (!process.HasExited)
             {

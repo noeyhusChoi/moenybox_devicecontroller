@@ -1,8 +1,7 @@
-﻿
 namespace IdScannerTool.Services;
 
 /// <summary>
-/// 앱 시작 게이트(장치 연결/시리얼 추출/비교)를 단일 서비스로 제공한다.
+/// 앱 시작 게이트(장치 연결/시리얼 추출)를 단일 서비스로 제공한다.
 /// </summary>
 public sealed class StartupVerificationService : IStartupVerificationService
 {
@@ -20,72 +19,37 @@ public sealed class StartupVerificationService : IStartupVerificationService
         _deviceId = deviceId;
     }
 
-    public async Task<StartupVerificationResult> EvaluateStartupAsync(
-        string registeredSerial,
+    public Task<bool> ConnectDeviceAsync(
         Action<StartupVerificationProgress>? onStageChanged = null,
         CancellationToken cancellationToken = default)
     {
-        var localSerial = Normalize(registeredSerial);
-        if (string.IsNullOrWhiteSpace(localSerial))
-        {
-            return new StartupVerificationResult(
-                NextStep: StartupNextStep.ShowRegistration,
-                StartupStatusMessage: "로컬 시리얼키 미등록",
-                StartupDetailMessage: "등록 화면으로 전환합니다.",
-                RegisteredSerial: "-",
-                ExtractedSerial: "-",
-                RegistrationMessage: "로컬 시리얼키 미등록 상태입니다. 등록을 진행하세요.",
-                CanRegister: false);
-        }
-
-        var extracted = await ExtractForRegistrationAsync(onStageChanged, cancellationToken);
-        var deviceSerial = Normalize(extracted.ExtractedSerial);
-        if (!extracted.Success || string.IsNullOrWhiteSpace(deviceSerial))
-        {
-            return new StartupVerificationResult(
-                NextStep: StartupNextStep.ShowRegistration,
-                StartupStatusMessage: extracted.StartupStatusMessage,
-                StartupDetailMessage: extracted.StartupDetailMessage,
-                RegisteredSerial: localSerial,
-                ExtractedSerial: "-",
-                RegistrationMessage: extracted.RegistrationMessage,
-                CanRegister: false);
-        }
-
-        var matched = await CompareSerialAsync(localSerial, deviceSerial, onStageChanged, cancellationToken);
-        if (!matched)
-        {
-            return new StartupVerificationResult(
-                NextStep: StartupNextStep.ShowRegistration,
-                StartupStatusMessage: "시리얼 불일치",
-                StartupDetailMessage: $"local={localSerial}, device={deviceSerial}",
-                RegisteredSerial: localSerial,
-                ExtractedSerial: deviceSerial,
-                RegistrationMessage: $"시리얼 불일치. local={localSerial}, device={deviceSerial}. 재등록이 필요합니다.",
-                CanRegister: true);
-        }
-
-        return new StartupVerificationResult(
-            NextStep: StartupNextStep.ShowMain,
-            StartupStatusMessage: "시리얼 검증 완료",
-            StartupDetailMessage: $"local={localSerial}, device={deviceSerial}",
-            RegisteredSerial: localSerial,
-            ExtractedSerial: deviceSerial,
-            RegistrationMessage: "검증 완료",
-                CanRegister: false);
-    }
-
-    public async Task<StartupRegistrationExtractionResult> ExtractForRegistrationAsync(
-        Action<StartupVerificationProgress>? onStageChanged = null,
-        CancellationToken cancellationToken = default)
-    {
-        var connected = await RunStageAsync(
+        return RunStageAsync(
             StartupVerificationStage.ConnectDevice,
             "장치 연결 중...",
             "장치 연결 실패",
             ConnectInternalAsync,
             onStageChanged,
             cancellationToken);
+    }
+
+    public Task<string?> ExtractSerialAsync(
+        Action<StartupVerificationProgress>? onStageChanged = null,
+        CancellationToken cancellationToken = default)
+    {
+        return RunStageAsync(
+            StartupVerificationStage.ExtractSerial,
+            "시리얼 추출 중...",
+            "시리얼 추출 실패",
+            ExtractInternalAsync,
+            onStageChanged,
+            cancellationToken);
+    }
+
+    public async Task<StartupRegistrationExtractionResult> ExtractForRegistrationAsync(
+        Action<StartupVerificationProgress>? onStageChanged = null,
+        CancellationToken cancellationToken = default)
+    {
+        var connected = await ConnectDeviceAsync(onStageChanged, cancellationToken);
         if (!connected)
         {
             return new StartupRegistrationExtractionResult(
@@ -97,13 +61,7 @@ public sealed class StartupVerificationService : IStartupVerificationService
                 CanRegister: false);
         }
 
-        var extractedRaw = await RunStageAsync(
-            StartupVerificationStage.ExtractSerial,
-            "시리얼 추출 중...",
-            "시리얼 추출 실패",
-            ExtractInternalAsync,
-            onStageChanged,
-            cancellationToken);
+        var extractedRaw = await ExtractSerialAsync(onStageChanged, cancellationToken);
         var deviceSerial = Normalize(extractedRaw);
         if (string.IsNullOrWhiteSpace(deviceSerial))
         {
@@ -120,26 +78,9 @@ public sealed class StartupVerificationService : IStartupVerificationService
             Success: true,
             StartupStatusMessage: "수동 등록: 시리얼 추출 완료",
             StartupDetailMessage: $"device={deviceSerial}",
-            RegistrationMessage: "시리얼 추출 완료. 등록 버튼으로 로컬 저장을 진행하세요.",
+            RegistrationMessage: "시리얼 추출 완료. 활성화 버튼으로 API 키 발급을 진행하세요.",
             ExtractedSerial: deviceSerial,
             CanRegister: true);
-    }
-
-    public Task<bool> CompareSerialAsync(
-        string registeredSerial,
-        string extractedSerial,
-        Action<StartupVerificationProgress>? onStageChanged = null,
-        CancellationToken cancellationToken = default)
-    {
-        var localSerial = Normalize(registeredSerial);
-        var deviceSerial = Normalize(extractedSerial);
-        return RunStageAsync(
-            StartupVerificationStage.CompareSerial,
-            "시리얼 비교 중...",
-            "시리얼 비교 불일치",
-            () => Task.FromResult(SerialEquals(localSerial, deviceSerial)),
-            onStageChanged,
-            cancellationToken);
     }
 
     private async Task<bool> ConnectInternalAsync()
@@ -157,15 +98,36 @@ public sealed class StartupVerificationService : IStartupVerificationService
             return null;
         }
 
-        var serial = Normalize(result.Data?.ToString());
-        return string.IsNullOrWhiteSpace(serial) ? null : serial;
+        return ToRegistrationSerial(result.Data?.ToString());
     }
 
     private static string Normalize(string? serial)
         => (serial ?? string.Empty).Trim().ToUpperInvariant();
 
-    private static bool SerialEquals(string left, string right)
-        => string.Equals(Normalize(left), Normalize(right), StringComparison.OrdinalIgnoreCase);
+    private static string? ToRegistrationSerial(string? rawSerial)
+    {
+        var normalized = Normalize(rawSerial);
+        if (string.IsNullOrWhiteSpace(normalized))
+        {
+            return null;
+        }
+
+        var digitsOnly = new string(normalized.Where(char.IsDigit).ToArray());
+        var baseSerial = digitsOnly.Length >= 7
+            ? digitsOnly[^7..]
+            : normalized.Length >= 7
+                ? normalized[^7..]
+                : normalized;
+
+        if (string.IsNullOrWhiteSpace(baseSerial))
+        {
+            return null;
+        }
+
+        var chars = baseSerial.ToCharArray();
+        chars[0] = '1';
+        return new string(chars);
+    }
 
     private static async Task<T> RunStageAsync<T>(
         StartupVerificationStage stage,

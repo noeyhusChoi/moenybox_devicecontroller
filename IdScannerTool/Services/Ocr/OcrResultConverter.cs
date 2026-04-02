@@ -7,10 +7,10 @@ namespace IdScannerTool.Services;
 /// </summary>
 public sealed class OcrResultConverter : IOcrResultConverter
 {
-    // 주민/외국인 등록증 계열 문서 타입.
+    // 앱 내부 문서 타입 기준: 01=주민등록증/운전면허증, 02=여권, 03=외국인등록증
     private static readonly HashSet<string> ResidentDocumentTypes = new(StringComparer.Ordinal)
     {
-        "02",
+        "01",
         "03"
     };
 
@@ -40,7 +40,7 @@ public sealed class OcrResultConverter : IOcrResultConverter
         }
 
         // 문서타입 정규화
-        var documentType = ResolveDocumentType(source.DocumentType, fields);
+        var documentType = ResolveDocumentType(source.Source, source.DocumentType, fields);
         if (!string.IsNullOrWhiteSpace(documentType))
         {
             fields["DOCUMENTTYPE"] = documentType;
@@ -119,21 +119,49 @@ public sealed class OcrResultConverter : IOcrResultConverter
         fields["NATIONALITY"] = ConvertToTwoLetterCountryCode(nationality);
     }
 
-    private static string? ResolveDocumentType(string? documentType, IReadOnlyDictionary<string, string> fields)
+    private static string? ResolveDocumentType(string? sourceName, string? documentType, IReadOnlyDictionary<string, string> fields)
     {
         // 우선순위: DTO DocumentType > Fields["DOCUMENTTYPE"].
+        var rawDocumentType = string.Empty;
         if (!string.IsNullOrWhiteSpace(documentType))
         {
-            return documentType.Trim();
+            rawDocumentType = documentType.Trim();
         }
-
-        if (fields.TryGetValue("DOCUMENTTYPE", out var fromFields) && !string.IsNullOrWhiteSpace(fromFields))
+        else if (fields.TryGetValue("DOCUMENTTYPE", out var fromFields) && !string.IsNullOrWhiteSpace(fromFields))
         {
-            return fromFields.Trim();
+            rawDocumentType = fromFields.Trim();
         }
 
-        return null;
+        if (string.IsNullOrWhiteSpace(rawDocumentType))
+        {
+            return null;
+        }
+
+        return IsExternalSource(sourceName)
+            ? MapExternalDocumentType(rawDocumentType)
+            : MapInternalDocumentType(rawDocumentType);
     }
+
+    private static bool IsExternalSource(string? sourceName)
+        => string.Equals(sourceName?.Trim(), "External", StringComparison.OrdinalIgnoreCase);
+
+    private static string MapInternalDocumentType(string rawDocumentType)
+        => rawDocumentType.Trim() switch
+        {
+            "01" => "02",
+            "02" => "01",
+            "03" => "03",
+            "04" => "04",
+            _ => "04"
+        };
+
+    private static string MapExternalDocumentType(string rawDocumentType)
+        => rawDocumentType.Trim() switch
+        {
+            "01" or "02" => "03",
+            "03" or "04" => "01",
+            _ => "04"
+        };
 
     // 특수문자 제거
     private static string RemoveSpecialCharacters(string value)

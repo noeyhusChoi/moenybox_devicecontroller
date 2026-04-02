@@ -10,6 +10,7 @@ public interface IHistoryExcelExportService
 
 public sealed record HistoryExcelRow(
     DateTimeOffset TimestampUtc,
+    string DocumentType,
     string DocumentNo,
     string Name,
     string Nationality);

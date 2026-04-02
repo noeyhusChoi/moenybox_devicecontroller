@@ -125,19 +125,6 @@ public partial class ShellViewModel : ObservableObject
         return (result.Success, result.RegistrationMessage);
     }
 
-    private async Task<string> BypassSerialCheckForDebugAsync()
-    {
-        if (_startupBusy)
-        {
-            return "초기화 작업이 진행 중입니다.";
-        }
-
-        await _main.RefreshCoreAsync();
-        _main.LastResult = "Debug mode: startup serial verification bypassed.";
-        ShowMain();
-        return "디버그 모드: 시리얼 체크를 건너뛰고 메인 화면으로 이동했습니다.";
-    }
-
     private async Task ApplyStartupSequenceResultAsync(StartupSequenceResult result)
     {
         _loading.StartupStatusMessage = result.StartupStatusMessage;
@@ -152,7 +139,7 @@ public partial class ShellViewModel : ObservableObject
         {
             HideOverlay();
             await _main.RefreshCoreAsync();
-            _main.LastResult = $"Serial verified. local={result.RegisteredSerial}, device={result.ExtractedSerial}";
+            _main.LastResult = result.StartupDetailMessage;
             ShowMain();
             return;
         }
@@ -203,8 +190,7 @@ public partial class ShellViewModel : ObservableObject
         SerialRegistrationViewModel registration = new(
             extractFunc: () => shell!.ExtractForRegistrationAsync(),
             registerFunc: serial => shell!.SaveRegistrationAsync(serial),
-            retryFunc: () => shell!.InitializeStartupSequenceAsync(),
-            debugBypassFunc: () => shell!.BypassSerialCheckForDebugAsync());
+            retryFunc: () => shell!.InitializeStartupSequenceAsync());
 
         shell = new ShellViewModel(loading, registration, main, appOverlayService, startupSequenceService, connectionMonitor);
         loading.ConfigureActions(

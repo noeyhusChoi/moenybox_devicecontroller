@@ -6,7 +6,6 @@ using Pr22.Events;
 using Pr22.Imaging;
 using Pr22.Processing;
 using Pr22.Task;
-using System.Diagnostics;
 using System.IO.Compression;
 using System.Text.Json;
 using Path = System.IO.Path;
@@ -211,7 +210,7 @@ internal sealed class IdScannerClient : IAsyncDisposable
     {
         try
         {
-            Trace.WriteLine($"{e.State}");
+            _logger.LogDebug("IdScanner presence state changed. state={State}", e.State);
             _presenceState = e.State;
 
             var status = MapPresenceState(e.State);
@@ -281,7 +280,6 @@ internal sealed class IdScannerClient : IAsyncDisposable
         AddField(result, "GIVENNAME", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.Givenname));
         AddField(result, "SURNAME", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.Surname));
         AddField(result, "NO", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.DocumentNumber));
-        AddField(result, "SEX", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.Sex));
         AddField(result, "NATIONALITY", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.Nationality));
         AddField(result, "BIRTHDATE", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.BirthDate));
         AddField(result, "EXPIRYDATE", GetFieldValueSafe(analyze, FieldSource.Mrz, FieldId.ExpiryDate));
@@ -324,7 +322,8 @@ internal sealed class IdScannerClient : IAsyncDisposable
 
         return new SaveImageResultDto(
             ImagePath: infraPath,
-            ImageByte: docBytes
+            ImageByte: docBytes,
+            WhiteImagePath: whitePath
         );
     }
 

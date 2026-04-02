@@ -38,6 +38,11 @@ public sealed class ExternalOcrService : IExternalOcrService
         {
             await DeleteResultsAsync(job, TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
             File.Copy(capture.ImagePath, job.InfraImagePath, overwrite: true);
+            if (!string.IsNullOrWhiteSpace(capture.WhiteImagePath) && File.Exists(capture.WhiteImagePath))
+            {
+                File.Copy(capture.WhiteImagePath, job.WhiteImagePath, overwrite: true);
+            }
+
             using (File.Create(job.TriggerPath))
             {
             }
@@ -132,6 +137,7 @@ public sealed class ExternalOcrService : IExternalOcrService
     private ExternalOcrJob BuildJob(string sessionId)
         => new(
             SessionId: sessionId,
+            WhiteImagePath: Path.Combine(_options.InputDir, $"{sessionId}_White.jpg"),
             InfraImagePath: Path.Combine(_options.InputDir, $"{sessionId}_Infra.jpg"),
             TriggerPath: Path.Combine(_options.InputDir, $"{sessionId}_Infra.ocr"),
             TypeJsonPath: Path.Combine(_options.ResultTypeDir, $"{sessionId}_Infra.json"),
@@ -278,6 +284,7 @@ public sealed class ExternalOcrService : IExternalOcrService
 
     private sealed record ExternalOcrJob(
         string SessionId,
+        string WhiteImagePath,
         string InfraImagePath,
         string TriggerPath,
         string TypeJsonPath,

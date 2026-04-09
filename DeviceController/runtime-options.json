@@ -1,0 +1,5 @@
+{
+  "defaultPollingMs": 10000,
+  "minPollingMs": 1000,
+  "maxBackoffMs": 60000
+}

@@ -25,7 +25,7 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
         Func<Task> showModalAsync)
         => step switch
         {
-            ExchangeStep.Idle => new MessageStepViewModel("환전", "초기화가 완료되었습니다."),
+            ExchangeStep.Idle => new MessageStepViewModel("환전", "초기 화면을 준비하고 있습니다."),
             ExchangeStep.Start => new ExchangeStartStepViewModel(() => _coordinator.ConfirmStartAsync()),
             ExchangeStep.MethodSelection => new MethodSelectionStepViewModel(
                 new AsyncRelayCommand(() => _coordinator.SelectMethodAsync(ExchangeMethod.PrepaidCard)),
@@ -148,9 +148,9 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
 
         return
         [
-            CreateProgressStep("1", "통화선택", progressStage == 1, progressStage > 1),
+            CreateProgressStep("1", "통화 선택", progressStage == 1, progressStage > 1),
             CreateProgressStep("2", "신분증 스캔", progressStage == 2, progressStage > 2),
-            CreateProgressStep("3", "외화 입금", progressStage == 3, progressStage > 3),
+            CreateProgressStep("3", "외화 투입", progressStage == 3, progressStage > 3),
             CreateProgressStep("4", "원화 수령", progressStage == 4, false)
         ];
     }

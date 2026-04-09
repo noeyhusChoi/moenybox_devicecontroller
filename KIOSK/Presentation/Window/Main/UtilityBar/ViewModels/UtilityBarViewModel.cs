@@ -5,9 +5,9 @@ namespace Kiosk.ViewModels;
 
 public partial class UtilityBarViewModel : ObservableObject
 {
-    public UtilityBarViewModel(Action toggleZoom, Action toggleKeyboardNavigation, Action openThemeSelector)
+    public UtilityBarViewModel(Action goHome, Action toggleZoom, Action toggleKeyboardNavigation, Action openThemeSelector)
     {
-        HomeCommand = new RelayCommand(() => { });
+        HomeCommand = new RelayCommand(goHome);
         ZoomCommand = new RelayCommand(toggleZoom);
         VoiceGuideCommand = new RelayCommand(() => { });
         AccessibilityCommand = new RelayCommand(toggleKeyboardNavigation);

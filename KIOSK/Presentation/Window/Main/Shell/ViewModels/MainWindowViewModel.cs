@@ -79,12 +79,12 @@ namespace Kiosk.ViewModels
             _appTheme = appTheme;
             HomeShell = homeShell;
             ExchangeShell = exchangeShell;
-            HomeShell.ExchangeRequested += OnHomeExchangeRequested;
+            HomeShell.ServiceEntryRequested += OnHomeServiceEntryRequested;
             ExchangeShell.HomeRequested += OnExchangeHomeRequested;
             _initializer.ProgressChanged += OnProgressChanged;
             _appCulture.CultureChanged += OnCultureChanged;
             _appTheme.ThemeChanged += OnThemeChanged;
-            UtilityBarViewModel = new UtilityBarViewModel(ToggleAccessibilityZoom, ToggleKeyboardNavigation, OpenThemeSelector);
+            UtilityBarViewModel = new UtilityBarViewModel(ShowHome, ToggleAccessibilityZoom, ToggleKeyboardNavigation, OpenThemeSelector);
             CurrentAppFontFamily = ResolveFontFamily();
             UtilityBarViewModel.SetZoomState(false);
             UtilityBarViewModel.SetAccessibilityState(KeyboardNavigationState.Instance.IsEnabled);
@@ -121,8 +121,11 @@ namespace Kiosk.ViewModels
             HeaderViewModel.LogoAssetPath = _headerViewModelFactory.GetLogoAssetPath();
         }
 
-        private async void OnHomeExchangeRequested(object? sender, EventArgs e)
+        private async void OnHomeServiceEntryRequested(object? sender, HomeServiceEntryRequestedEventArgs e)
         {
+            if (e.ServiceType != HomeServiceType.Exchange)
+                return;
+
             await ShowExchangeAsync();
         }
 
@@ -160,6 +163,7 @@ namespace Kiosk.ViewModels
 
         private void ShowHome()
         {
+            HomeShell.ResetToServiceSelection();
             CurrentScreenViewModel = HomeShell;
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateHomeHeader());

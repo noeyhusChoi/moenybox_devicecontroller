@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="Kiosk.Views.HomeScreenView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:Kiosk.Application.Services.Resx"
-    behavior:FocusBoundary.EntryTarget="{Binding ElementName=HomeEntryContainer}"
+    behavior:FocusBoundary.EntryTarget="{Binding ElementName=ServiceCardContainer}"
     d:DesignHeight="1705"
     d:DesignWidth="1080"
     d:Language="ko-KR"
@@ -57,114 +57,42 @@
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
         </Style>
-
-        <Style x:Key="LanguageChipStyle" TargetType="Button">
-            <Setter Property="Width" Value="174.4" />
-            <Setter Property="Height" Value="204" />
-            <Setter Property="Margin" Value="8,0" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="3" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="24">
-                            <Grid>
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <Path
-                                    x:Name="SelectedCorner"
-                                    Width="25"
-                                    Height="25"
-                                    Margin="0,10,10,0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    Data="M0.295,1.707 C-0.335,1.077 0.111,0 1.002,0 H13.588 C19.111,0 23.588,4.477 23.588,10 V22.586 C23.588,23.477 22.511,23.923 21.881,23.293 L0.295,1.707 Z"
-                                    Fill="{DynamicResource TextOnAccentBrush}"
-                                    SnapsToDevicePixels="True"
-                                    Stretch="Fill"
-                                    Visibility="Collapsed" />
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="Tag" Value="Selected">
-                                <Setter TargetName="SelectedCorner" Property="Visibility" Value="Visible" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style
-            x:Key="SelectedLanguageChipStyle"
-            BasedOn="{StaticResource LanguageChipStyle}"
-            TargetType="Button">
-            <Setter Property="Tag" Value="{x:Null}" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource AccentBackgroundBrush}" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Tag" Value="Selected" />
-                </DataTrigger>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                    <Setter Property="BorderThickness" Value="5" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="LanguageChipLabelTextStyle" TargetType="TextBlock">
-            <Setter Property="Margin" Value="0,16,0,0" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="34" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                    <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
 
     <Grid
-        x:Name="HomeEntryContainer"
         Width="1080"
         Height="1705"
         Background="{DynamicResource AppBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="205" />
             <RowDefinition Height="224" />
-            <RowDefinition Height="902" />
-            <RowDefinition Height="374" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock
+        <StackPanel
             Grid.Row="1"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="60"
-            FontWeight="SemiBold"
-            Foreground="{DynamicResource TextPrimaryBrush}"
-            Text="{resx:ResxLoc Menu.Title}"
-            TextAlignment="Center" />
+            VerticalAlignment="Center">
+            <TextBlock
+                FontSize="60"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource TextPrimaryBrush}"
+                Text="{resx:ResxLoc Menu.Title}"
+                TextAlignment="Center" />
+            <TextBlock
+                Margin="0,21,0,0"
+                FontSize="40"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource TextPrimaryBrush}"
+                Text="Please select the service"
+                TextAlignment="Center" />
+        </StackPanel>
 
         <Grid
             x:Name="ServiceCardContainer"
             Grid.Row="2"
             Margin="72,0"
             VerticalAlignment="Center"
-            behavior:FocusBoundary.DownTarget="{Binding ElementName=LanguageContainer}"
             behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="VerticalStack">
             <Grid.RowDefinitions>
@@ -246,123 +174,5 @@
                 </DockPanel>
             </Button>
         </Grid>
-
-        <UniformGrid
-            x:Name="LanguageContainer"
-            Grid.Row="3"
-            Margin="64,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            behavior:FocusBoundary.UpTarget="{Binding ElementName=ServiceCardContainer}"
-            behavior:FocusContainer.Mode="HorizontalStack"
-            Columns="5">
-            <Button
-                x:Name="KoreanLanguageButton"
-                behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                Command="{Binding SelectCommand}"
-                DataContext="{Binding KoreanLanguage}"
-                Style="{StaticResource SelectedLanguageChipStyle}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Ellipse Width="60" Height="60">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding AssetPath}" Stretch="Fill" />
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock
-                        FontFamily="{StaticResource Noto Sans KR}"
-                        Style="{StaticResource LanguageChipLabelTextStyle}"
-                        Text="{Binding Label}" />
-                </StackPanel>
-            </Button>
-
-            <Button
-                x:Name="EnglishLanguageButton"
-                behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                Command="{Binding SelectCommand}"
-                DataContext="{Binding EnglishLanguage}"
-                Style="{StaticResource SelectedLanguageChipStyle}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border
-                        Width="60"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        ClipToBounds="True"
-                        CornerRadius="30">
-                        <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                    </Border>
-                    <TextBlock
-                        FontFamily="{StaticResource Noto Sans}"
-                        Style="{StaticResource LanguageChipLabelTextStyle}"
-                        Text="{Binding Label}" />
-                </StackPanel>
-            </Button>
-
-            <Button
-                x:Name="JapaneseLanguageButton"
-                behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                Command="{Binding SelectCommand}"
-                DataContext="{Binding JapaneseLanguage}"
-                Style="{StaticResource SelectedLanguageChipStyle}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border
-                        Width="60"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        ClipToBounds="True"
-                        CornerRadius="30">
-                        <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                    </Border>
-                    <TextBlock
-                        FontFamily="{StaticResource Noto Sans JP}"
-                        Style="{StaticResource LanguageChipLabelTextStyle}"
-                        Text="{Binding Label}" />
-                </StackPanel>
-            </Button>
-
-            <Button
-                x:Name="TraditionalChineseLanguageButton"
-                behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                Command="{Binding SelectCommand}"
-                DataContext="{Binding TraditionalChineseLanguage}"
-                Style="{StaticResource SelectedLanguageChipStyle}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border
-                        Width="60"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        ClipToBounds="True"
-                        CornerRadius="30">
-                        <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                    </Border>
-                    <TextBlock
-                        FontFamily="{StaticResource Noto Sans TC}"
-                        FontWeight="SemiBold"
-                        Style="{StaticResource LanguageChipLabelTextStyle}"
-                        Text="{Binding Label}" />
-                </StackPanel>
-            </Button>
-
-            <Button
-                x:Name="SimplifiedChineseLanguageButton"
-                behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                Command="{Binding SelectCommand}"
-                DataContext="{Binding SimplifiedChineseLanguage}"
-                Style="{StaticResource SelectedLanguageChipStyle}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border
-                        Width="60"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        ClipToBounds="True"
-                        CornerRadius="30">
-                        <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                    </Border>
-                    <TextBlock
-                        FontFamily="{StaticResource Noto Sans SC}"
-                        Style="{StaticResource LanguageChipLabelTextStyle}"
-                        Text="{Binding Label}" />
-                </StackPanel>
-            </Button>
-        </UniformGrid>
     </Grid>
 </UserControl>

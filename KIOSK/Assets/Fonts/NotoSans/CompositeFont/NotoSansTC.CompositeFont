@@ -1,0 +1,37 @@
+<FontFamily
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/composite-font"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    Baseline="0.9"
+    LineSpacing="1.2">
+
+    <FontFamily.FamilyNames>
+        <System:String x:Key="en-US">Noto Sans TC</System:String>
+    </FontFamily.FamilyNames>
+
+    <FontFamily.FamilyTypefaces>
+        <FamilyTypeface Weight="Normal" Stretch="Normal" Style="Normal" />
+        <FamilyTypeface Weight="Medium" Stretch="Normal" Style="Normal" />
+        <FamilyTypeface Weight="SemiBold" Stretch="Normal" Style="Normal" />
+        <FamilyTypeface Weight="Bold" Stretch="Normal" Style="Normal" />
+    </FontFamily.FamilyTypefaces>
+
+    <FontFamily.FamilyMaps>
+        <FontFamilyMap
+            Unicode="0000-02AF,1E00-1EFF,2000-206F"
+            Target="../Static/#Noto Sans, ./Assets/Fonts/NotoSans/Static/#Noto Sans, Global User Interface"
+            Scale="1.0" />
+        <FontFamilyMap
+            Unicode="1100-11FF,3130-318F,AC00-D7AF"
+            Target="../Static/#Noto Sans KR, ./Assets/Fonts/NotoSans/Static/#Noto Sans KR, Global User Interface"
+            Scale="1.0" />
+        <FontFamilyMap
+            Unicode="2E80-2EFF,2F00-2FDF,3000-303F,31C0-31EF,3400-4DBF,4E00-9FFF,F900-FAFF"
+            Target="../Static/#Noto Sans TC, ./Assets/Fonts/NotoSans/Static/#Noto Sans TC, Global User Interface"
+            Scale="1.0" />
+        <FontFamilyMap
+            Unicode="0000-10FFFF"
+            Target="../Static/#Noto Sans TC, ./Assets/Fonts/NotoSans/Static/#Noto Sans TC, Global User Interface"
+            Scale="1.0" />
+    </FontFamily.FamilyMaps>
+</FontFamily>

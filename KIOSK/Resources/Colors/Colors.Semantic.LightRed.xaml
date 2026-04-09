@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="AppBackgroundBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="FeatureBackgroundBrush" Color="#FFF4F4" />
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#F1CACA" />
+    <SolidColorBrush x:Key="SurfaceMutedBackgroundBrush" Color="#F8DEDE" />
+    <SolidColorBrush x:Key="AccentSurfaceBackgroundBrush" Color="#FFEDED" />
+    <SolidColorBrush x:Key="AccentBackgroundBrush" Color="#D94B4B" />
+    <SolidColorBrush x:Key="AccentStrongBackgroundBrush" Color="#8E2F2F" />
+
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource Gray600}" />
+    <SolidColorBrush x:Key="TextTertiaryBrush" Color="{StaticResource Gray400}" />
+    <SolidColorBrush x:Key="TextOnAccentBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="AccentForegroundBrush" Color="#D94B4B" />
+    <SolidColorBrush x:Key="AccentEmphasisForegroundBrush" Color="#8E2F2F" />
+
+    <SolidColorBrush x:Key="BorderDefaultBrush" Color="#E1B4B4" />
+    <SolidColorBrush x:Key="BorderStrongBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="BorderAccentBrush" Color="#D94B4B" />
+    <SolidColorBrush x:Key="SelectionMarkerBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="FeatureDividerBrush" Color="#FADCDC" />
+
+    <SolidColorBrush x:Key="OverlayDimBrush" Color="{StaticResource Black}" Opacity="0.4" />
+</ResourceDictionary>

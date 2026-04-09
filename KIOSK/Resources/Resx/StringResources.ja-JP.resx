@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.Next" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="Common.Ok" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="Error.Network.Timeout" xml:space="preserve">
+    <value>ネットワーク遅延（{seconds}秒）</value>
+  </data>
+  <data name="ExchangeBuyProcess.Deposit" xml:space="preserve">
+    <value>韓国ウォン入金</value>
+  </data>
+  <data name="ExchangeBuyProcess.IDScan" xml:space="preserve">
+    <value>身分証スキャン</value>
+  </data>
+  <data name="ExchangeBuyProcess.SelectCurrency" xml:space="preserve">
+    <value>通貨選択</value>
+  </data>
+  <data name="ExchangeBuyProcess.SetAmount" xml:space="preserve">
+    <value>金額設定</value>
+  </data>
+  <data name="ExchangeBuyProcess.Withdraw" xml:space="preserve">
+    <value>外貨受領</value>
+  </data>
+  <data name="ExchangeDeposit.DailyLimit" xml:space="preserve">
+    <value>1日の最大両替限度額 :</value>
+  </data>
+  <data name="ExchangeDeposit.Denomination" xml:space="preserve">
+    <value>入金可能な券種</value>
+  </data>
+  <data name="ExchangeDeposit.Deposited" xml:space="preserve">
+    <value>投入された外貨金額</value>
+  </data>
+  <data name="ExchangeDeposit.End" xml:space="preserve">
+    <value>取引終了</value>
+  </data>
+  <data name="ExchangeDeposit.PerTransactionLimit" xml:space="preserve">
+    <value>1回の最大両替可能金額 :</value>
+  </data>
+  <data name="ExchangeDeposit.Receive" xml:space="preserve">
+    <value>受け取るウォン金額</value>
+  </data>
+  <data name="ExchangeDeposit.RemainDailyLimit" xml:space="preserve">
+    <value>残りの1日両替限度額 :</value>
+  </data>
+  <data name="ExchangeDeposit.Title" xml:space="preserve">
+    <value>外貨を1枚ずつ入金口に入れてください。</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Info" xml:space="preserve">
+    <value>顔写真がある面を下にして、スキャナーに置いてください。</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Title" xml:space="preserve">
+    <value>以下のようにスキャンを進めてください。</value>
+  </data>
+  <data name="ExchangeSell.Title" xml:space="preserve">
+    <value>両替したい外貨を選択してください。</value>
+  </data>
+  <data name="ExchangeSellProcess.Deposit" xml:space="preserve">
+    <value>外貨入金</value>
+  </data>
+  <data name="ExchangeSellProcess.IDScan" xml:space="preserve">
+    <value>身分証スキャン</value>
+  </data>
+  <data name="ExchangeSellProcess.SelectCurrency" xml:space="preserve">
+    <value>通貨選択</value>
+  </data>
+  <data name="ExchangeSellProcess.Withdraw" xml:space="preserve">
+    <value>KRW出金</value>
+  </data>
+  <data name="ExchangeTerms.Agreement" xml:space="preserve">
+    <value>個人情報収集利用および第三者提供同意</value>
+  </data>
+  <data name="ExchangeTerms.Detail" xml:space="preserve">
+    <value>利用規約を見る</value>
+  </data>
+  <data name="ExchangeTerms.Info" xml:space="preserve">
+    <value>利用規約に同意していただくと次に進めます。</value>
+  </data>
+  <data name="ExchangeTerms.Title" xml:space="preserve">
+    <value>パスポート、または大韓民国で発行された身分証明書をご用意ください。</value>
+  </data>
+  <data name="ExchangeTermsPopup.Title" xml:space="preserve">
+    <value>利用規約をご確認ください。</value>
+  </data>
+  <data name="Menu.BuySub" xml:space="preserve">
+    <value>外貨をウォンに両替</value>
+  </data>
+  <data name="Menu.BuyTitle" xml:space="preserve">
+    <value>韓国ウォン購入</value>
+  </data>
+  <data name="Menu.SellSub" xml:space="preserve">
+    <value>ウォンを外貨に両替</value>
+  </data>
+  <data name="Menu.SellTitle" xml:space="preserve">
+    <value>外貨購入</value>
+  </data>
+  <data name="Menu.Title" xml:space="preserve">
+    <value>ご希望のサービスをお選びください。</value>
+  </data>
+  <data name="Receipt.Printing" xml:space="preserve">
+    <value>レシート印刷中です</value>
+  </data>
+  <data name="Scan.ID" xml:space="preserve">
+    <value>韓国で発行された身分証明書の顔写真がある面を下にして、スキャナーに置いてください。</value>
+  </data>
+  <data name="Scan.Passport" xml:space="preserve">
+    <value>パスポートの顔写真がある面を下にして、スキャナーに置いてください。</value>
+  </data>
+  <data name="Scan.Title" xml:space="preserve">
+    <value>パスポート、または韓国で発行されたIDを以下のようにスキャンしてください。</value>
+  </data>
+  <data name="ScanComplete.Info" xml:space="preserve">
+    <value>紛失の責任は当社では負いかねます。</value>
+  </data>
+  <data name="ScanComplete.SubTitle" xml:space="preserve">
+    <value>紛失防止のため、身分証明書またはパスポートを必ず回収してから両替を進めてください。</value>
+  </data>
+  <data name="ScanComplete.Title" xml:space="preserve">
+    <value>身分証明書のスキャンが正常に完了しました。</value>
+  </data>
+  <data name="Scanning.Info" xml:space="preserve">
+    <value>最大20〜30秒かかります。少々お待ちください。</value>
+  </data>
+  <data name="Terms.Agreement" xml:space="preserve">
+    <value>個人情報収集利用および第三者提供同意</value>
+  </data>
+  <data name="Terms.Info" xml:space="preserve">
+    <value>利用規約に同意していただくと次に進めます。</value>
+  </data>
+  <data name="Terms.More" xml:space="preserve">
+    <value>利用規約を見る</value>
+  </data>
+  <data name="Terms.Title" xml:space="preserve">
+    <value>パスポート、または大韓民国で発行された身分証明書をご用意ください。</value>
+  </data>
+</root>

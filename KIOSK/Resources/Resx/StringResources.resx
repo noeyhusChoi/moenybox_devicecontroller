@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Common.Ok" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Error.Network.Timeout" xml:space="preserve">
+    <value>Network timeout ({seconds}s)</value>
+  </data>
+  <data name="ExchangeBuyProcess.Deposit" xml:space="preserve">
+    <value>Deposit KRW</value>
+  </data>
+  <data name="ExchangeBuyProcess.IDScan" xml:space="preserve">
+    <value>ID Scan</value>
+  </data>
+  <data name="ExchangeBuyProcess.SelectCurrency" xml:space="preserve">
+    <value>Select Currency</value>
+  </data>
+  <data name="ExchangeBuyProcess.SetAmount" xml:space="preserve">
+    <value>Set Amount</value>
+  </data>
+  <data name="ExchangeBuyProcess.Withdraw" xml:space="preserve">
+    <value>Withdraw</value>
+  </data>
+  <data name="ExchangeDeposit.DailyLimit" xml:space="preserve">
+    <value>Daily Limit :</value>
+  </data>
+  <data name="ExchangeDeposit.Denomination" xml:space="preserve">
+    <value>Acceptable denominations</value>
+  </data>
+  <data name="ExchangeDeposit.Deposited" xml:space="preserve">
+    <value>Foreign currency deposited</value>
+  </data>
+  <data name="ExchangeDeposit.End" xml:space="preserve">
+    <value>End Transaction</value>
+  </data>
+  <data name="ExchangeDeposit.PerTransactionLimit" xml:space="preserve">
+    <value>Per Transaction Limit:</value>
+  </data>
+  <data name="ExchangeDeposit.Receive" xml:space="preserve">
+    <value>KRW to receive</value>
+  </data>
+  <data name="ExchangeDeposit.RemainDailyLimit" xml:space="preserve">
+    <value>Remaining Daily Limit :</value>
+  </data>
+  <data name="ExchangeDeposit.Title" xml:space="preserve">
+    <value>Please insert banknotes one by one into the deposit slot.</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Info" xml:space="preserve">
+    <value>Place the photo side face down on the scanner.</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Title" xml:space="preserve">
+    <value>Please proceed with the scan as shown below.</value>
+  </data>
+  <data name="ExchangeSell.Title" xml:space="preserve">
+    <value>Please select the foreign currency you wish to sell.</value>
+  </data>
+  <data name="ExchangeSellProcess.Deposit" xml:space="preserve">
+    <value>Deposit</value>
+  </data>
+  <data name="ExchangeSellProcess.IDScan" xml:space="preserve">
+    <value>ID Scan</value>
+  </data>
+  <data name="ExchangeSellProcess.SelectCurrency" xml:space="preserve">
+    <value>Select Currency</value>
+  </data>
+  <data name="ExchangeSellProcess.Withdraw" xml:space="preserve">
+    <value>Withdraw KRW</value>
+  </data>
+  <data name="ExchangeTerms.Agreement" xml:space="preserve">
+    <value>Consent to Collection, Use, and Third-Party Provision of Personal Information</value>
+  </data>
+  <data name="ExchangeTerms.Detail" xml:space="preserve">
+    <value>View Terms and Conditions</value>
+  </data>
+  <data name="ExchangeTerms.Info" xml:space="preserve">
+    <value>Please agree to the terms and conditions to continue.</value>
+  </data>
+  <data name="ExchangeTerms.Title" xml:space="preserve">
+    <value>Please prepare your passport or an ID issued in Korea.</value>
+  </data>
+  <data name="ExchangeTermsPopup.Title" xml:space="preserve">
+    <value>Please check the Terms and Conditions.</value>
+  </data>
+  <data name="Menu.BuySub" xml:space="preserve">
+    <value>Exchange Foreign Currency to KRW</value>
+  </data>
+  <data name="Menu.BuyTitle" xml:space="preserve">
+    <value>Buy KRW</value>
+  </data>
+  <data name="Menu.SellSub" xml:space="preserve">
+    <value>Exchange KRW to Foreign Currency</value>
+  </data>
+  <data name="Menu.SellTitle" xml:space="preserve">
+    <value>Buy Foreign Currency</value>
+  </data>
+  <data name="Menu.Title" xml:space="preserve">
+    <value>Please select the service you want.</value>
+  </data>
+  <data name="Receipt.Printing" xml:space="preserve">
+    <value>Printing receipt...</value>
+  </data>
+  <data name="Scan.ID" xml:space="preserve">
+    <value>Place the photo side of your ID issued in Korea face down on the scanner.</value>
+  </data>
+  <data name="Scan.Passport" xml:space="preserve">
+    <value>Place the photo page of your passport face down on the scanner.</value>
+  </data>
+  <data name="Scan.Title" xml:space="preserve">
+    <value>Please scan your passport or an ID issued in Korea as shown below.</value>
+  </data>
+  <data name="ScanComplete.Info" xml:space="preserve">
+    <value>We are not responsible for any loss.</value>
+  </data>
+  <data name="ScanComplete.SubTitle" xml:space="preserve">
+    <value>Please retrieve your ID or passport before proceeding with the exchange to prevent loss.</value>
+  </data>
+  <data name="ScanComplete.Title" xml:space="preserve">
+    <value>ID scan completed successfully.</value>
+  </data>
+  <data name="Scanning.Info" xml:space="preserve">
+    <value>This may take up to 20-30 seconds. Please wait a moment.</value>
+  </data>
+  <data name="Terms.Agreement" xml:space="preserve">
+    <value>Consent to Collection, Use, and Third-Party Provision of Personal Information</value>
+  </data>
+  <data name="Terms.Info" xml:space="preserve">
+    <value>Please agree to the terms and conditions to continue.</value>
+  </data>
+  <data name="Terms.More" xml:space="preserve">
+    <value>View Terms and Conditions</value>
+  </data>
+  <data name="Terms.Title" xml:space="preserve">
+    <value>Please prepare your passport or an ID issued in Korea.</value>
+  </data>
+</root>

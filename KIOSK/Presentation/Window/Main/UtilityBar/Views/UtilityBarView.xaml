@@ -1,0 +1,134 @@
+﻿<UserControl
+    x:Class="Kiosk.Views.UtilityBarView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Kiosk"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    behavior:FocusBoundary.EntryTarget="{Binding ElementName=UtilityButtonContainer}"
+    d:Width="1080"
+    Background="{DynamicResource AppBackgroundBrush}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="BottomUtilityButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Height" Value="75" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="Tag" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="16">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <Path
+                                    x:Name="SelectedCorner"
+                                    Width="16"
+                                    Height="16"
+                                    Margin="0,5,5,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Data="M0.295,1.707 C-0.335,1.077 0.111,0 1.002,0 H13.588 C19.111,0 23.588,4.477 23.588,10 V22.586 C23.588,23.477 22.511,23.923 21.881,23.293 L0.295,1.707 Z"
+                                    Fill="{DynamicResource SelectionMarkerBrush}"
+                                    Stretch="Fill"
+                                    Visibility="Collapsed" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag" Value="Selected">
+                                <Setter TargetName="SelectedCorner" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                    <Setter Property="BorderThickness" Value="5" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style
+            x:Key="BottomUtilitySelectedButtonStyle"
+            BasedOn="{StaticResource BottomUtilityButtonStyle}"
+            TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsZoomSelected}" Value="True">
+                    <Setter Property="Tag" Value="Selected" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style
+            x:Key="BottomThemeSelectedButtonStyle"
+            BasedOn="{StaticResource BottomUtilityButtonStyle}"
+            TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsThemeSelected}" Value="True">
+                    <Setter Property="Tag" Value="Selected" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style
+            x:Key="BottomAccessibilitySelectedButtonStyle"
+            BasedOn="{StaticResource BottomUtilityButtonStyle}"
+            TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsAccessibilitySelected}" Value="True">
+                    <Setter Property="Tag" Value="Selected" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <UniformGrid
+        x:Name="UtilityButtonContainer"
+        Margin="12"
+        behavior:FocusContainer.Mode="HorizontalStack"
+        Columns="5">
+        <Button
+            Command="{Binding HomeCommand}"
+            Content="첫화면"
+            IsEnabled="True"
+            Style="{DynamicResource BottomUtilityButtonStyle}" />
+        <Button
+            Command="{Binding ZoomCommand}"
+            Content="확대"
+            Style="{StaticResource BottomUtilitySelectedButtonStyle}" />
+        <Button
+            Command="{Binding VoiceGuideCommand}"
+            Content="음성안내"
+            IsEnabled="True"
+            Style="{DynamicResource BottomUtilityButtonStyle}" />
+        <Button
+            Command="{Binding AccessibilityCommand}"
+            Content="접근성"
+            IsEnabled="True"
+            Style="{StaticResource BottomAccessibilitySelectedButtonStyle}" />
+        <Button
+            Command="{Binding ThemeCommand}"
+            Content="테마"
+            Style="{StaticResource BottomThemeSelectedButtonStyle}" />
+    </UniformGrid>
+</UserControl>

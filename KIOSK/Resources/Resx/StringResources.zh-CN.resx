@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.Next" xml:space="preserve">
+    <value>下一页</value>
+  </data>
+  <data name="Common.Ok" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Error.Network.Timeout" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="ExchangeBuyProcess.Deposit" xml:space="preserve">
+    <value>存入韩元</value>
+  </data>
+  <data name="ExchangeBuyProcess.IDScan" xml:space="preserve">
+    <value>身份证扫描</value>
+  </data>
+  <data name="ExchangeBuyProcess.SelectCurrency" xml:space="preserve">
+    <value>选择货币</value>
+  </data>
+  <data name="ExchangeBuyProcess.SetAmount" xml:space="preserve">
+    <value>设置金额</value>
+  </data>
+  <data name="ExchangeBuyProcess.Withdraw" xml:space="preserve">
+    <value>领取外币</value>
+  </data>
+  <data name="ExchangeDeposit.DailyLimit" xml:space="preserve">
+    <value>每日最大兑换限额 :</value>
+  </data>
+  <data name="ExchangeDeposit.Denomination" xml:space="preserve">
+    <value>可存入的券种</value>
+  </data>
+  <data name="ExchangeDeposit.Deposited" xml:space="preserve">
+    <value>已存入外币金额</value>
+  </data>
+  <data name="ExchangeDeposit.End" xml:space="preserve">
+    <value>结束交易</value>
+  </data>
+  <data name="ExchangeDeposit.PerTransactionLimit" xml:space="preserve">
+    <value>单笔最大兑换金额 :</value>
+  </data>
+  <data name="ExchangeDeposit.Receive" xml:space="preserve">
+    <value>将收到的韩元金额</value>
+  </data>
+  <data name="ExchangeDeposit.RemainDailyLimit" xml:space="preserve">
+    <value>剩余的每日兑换限额 :</value>
+  </data>
+  <data name="ExchangeDeposit.Title" xml:space="preserve">
+    <value>请将外币纸钞一张张放入存款机。</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Info" xml:space="preserve">
+    <value>请将有照片的一面朝下放置在扫描仪上。</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Title" xml:space="preserve">
+    <value>请按以下说明进行扫描。</value>
+  </data>
+  <data name="ExchangeSell.Title" xml:space="preserve">
+    <value>请选择您要出售的外币。</value>
+  </data>
+  <data name="ExchangeSellProcess.Deposit" xml:space="preserve">
+    <value>外币存款</value>
+  </data>
+  <data name="ExchangeSellProcess.IDScan" xml:space="preserve">
+    <value>身份证扫描</value>
+  </data>
+  <data name="ExchangeSellProcess.SelectCurrency" xml:space="preserve">
+    <value>选择货币</value>
+  </data>
+  <data name="ExchangeSellProcess.Withdraw" xml:space="preserve">
+    <value>韩元提款</value>
+  </data>
+  <data name="ExchangeTerms.Agreement" xml:space="preserve">
+    <value>同意个人信息收集、使用及向第三方提供</value>
+  </data>
+  <data name="ExchangeTerms.Detail" xml:space="preserve">
+    <value>查看使用条款</value>
+  </data>
+  <data name="ExchangeTerms.Info" xml:space="preserve">
+    <value>您必须同意使用条款才能继续。</value>
+  </data>
+  <data name="ExchangeTerms.Title" xml:space="preserve">
+    <value>请准备好您的护照或在韩国签发的身份证件。</value>
+  </data>
+  <data name="ExchangeTermsPopup.Title" xml:space="preserve">
+    <value>请查看使用条款。</value>
+  </data>
+  <data name="Menu.BuySub" xml:space="preserve">
+    <value>将外币兑换成韩元</value>
+  </data>
+  <data name="Menu.BuyTitle" xml:space="preserve">
+    <value>购买韩元</value>
+  </data>
+  <data name="Menu.SellSub" xml:space="preserve">
+    <value>将韩元兑换成外币</value>
+  </data>
+  <data name="Menu.SellTitle" xml:space="preserve">
+    <value>外币购买</value>
+  </data>
+  <data name="Menu.Title" xml:space="preserve">
+    <value>请选择您想要的服务。</value>
+  </data>
+  <data name="Receipt.Printing" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="Scan.ID" xml:space="preserve">
+    <value>请将韩国签发的身份证件中有照片的一面朝下放置在扫描仪上。</value>
+  </data>
+  <data name="Scan.Passport" xml:space="preserve">
+    <value>请将护照中有照片的一面朝下放置在扫描仪上。</value>
+  </data>
+  <data name="Scan.Title" xml:space="preserve">
+    <value>请按以下说明扫描您的护照或在韩国签发的身份证件。</value>
+  </data>
+  <data name="ScanComplete.Info" xml:space="preserve">
+    <value>本公司不承担任何遗失责任。</value>
+  </data>
+  <data name="ScanComplete.SubTitle" xml:space="preserve">
+    <value>为避免遗失，请务必取回您的身份证或护照后再进行换汇。</value>
+  </data>
+  <data name="ScanComplete.Title" xml:space="preserve">
+    <value>身份证扫描成功。</value>
+  </data>
+  <data name="Scanning.Info" xml:space="preserve">
+    <value>最长可能需要20-30秒。请稍候。</value>
+  </data>
+  <data name="Terms.Agreement" xml:space="preserve">
+    <value>同意个人信息收集、使用及向第三方提供</value>
+  </data>
+  <data name="Terms.Info" xml:space="preserve">
+    <value>您必须同意使用条款才能继续。</value>
+  </data>
+  <data name="Terms.More" xml:space="preserve">
+    <value>查看使用条款</value>
+  </data>
+  <data name="Terms.Title" xml:space="preserve">
+    <value>请准备好您的护照或在韩国签发的身份证件。</value>
+  </data>
+</root>

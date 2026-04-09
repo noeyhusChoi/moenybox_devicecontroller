@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.Next" xml:space="preserve">
+    <value>下一頁</value>
+  </data>
+  <data name="Common.Ok" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="Error.Network.Timeout" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="ExchangeBuyProcess.Deposit" xml:space="preserve">
+    <value>存入韓元</value>
+  </data>
+  <data name="ExchangeBuyProcess.IDScan" xml:space="preserve">
+    <value>身份證掃描</value>
+  </data>
+  <data name="ExchangeBuyProcess.SelectCurrency" xml:space="preserve">
+    <value>貨幣選擇</value>
+  </data>
+  <data name="ExchangeBuyProcess.SetAmount" xml:space="preserve">
+    <value>設定金額</value>
+  </data>
+  <data name="ExchangeBuyProcess.Withdraw" xml:space="preserve">
+    <value>領取外幣</value>
+  </data>
+  <data name="ExchangeDeposit.DailyLimit" xml:space="preserve">
+    <value>每日最大兌換限額 :</value>
+  </data>
+  <data name="ExchangeDeposit.Denomination" xml:space="preserve">
+    <value>可存入的券種</value>
+  </data>
+  <data name="ExchangeDeposit.Deposited" xml:space="preserve">
+    <value>已存入外幣金額</value>
+  </data>
+  <data name="ExchangeDeposit.End" xml:space="preserve">
+    <value>結束交易</value>
+  </data>
+  <data name="ExchangeDeposit.PerTransactionLimit" xml:space="preserve">
+    <value>單筆最大兌換金額 :</value>
+  </data>
+  <data name="ExchangeDeposit.Receive" xml:space="preserve">
+    <value>將收到的韓元金額</value>
+  </data>
+  <data name="ExchangeDeposit.RemainDailyLimit" xml:space="preserve">
+    <value>剩餘的每日兌換限額 :</value>
+  </data>
+  <data name="ExchangeDeposit.Title" xml:space="preserve">
+    <value>請將外幣紙鈔一張張放入存款機。</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Info" xml:space="preserve">
+    <value>請將有照片的一面朝下放置在掃描儀上。</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Title" xml:space="preserve">
+    <value>請按以下說明進行掃描。</value>
+  </data>
+  <data name="ExchangeSell.Title" xml:space="preserve">
+    <value>請選擇您要出售的外幣。</value>
+  </data>
+  <data name="ExchangeSellProcess.Deposit" xml:space="preserve">
+    <value>外幣存款</value>
+  </data>
+  <data name="ExchangeSellProcess.IDScan" xml:space="preserve">
+    <value>身份證掃描</value>
+  </data>
+  <data name="ExchangeSellProcess.SelectCurrency" xml:space="preserve">
+    <value>貨幣選擇</value>
+  </data>
+  <data name="ExchangeSellProcess.Withdraw" xml:space="preserve">
+    <value>韓元提款</value>
+  </data>
+  <data name="ExchangeTerms.Agreement" xml:space="preserve">
+    <value>同意個人資訊收集、使用及向第三方提供</value>
+  </data>
+  <data name="ExchangeTerms.Detail" xml:space="preserve">
+    <value>查看使用條款</value>
+  </data>
+  <data name="ExchangeTerms.Info" xml:space="preserve">
+    <value>您必須同意使用條款才能繼續。</value>
+  </data>
+  <data name="ExchangeTerms.Title" xml:space="preserve">
+    <value>請準備好您的護照或在韓國簽發的身份證件。</value>
+  </data>
+  <data name="ExchangeTermsPopup.Title" xml:space="preserve">
+    <value>請查看使用條款。</value>
+  </data>
+  <data name="Menu.BuySub" xml:space="preserve">
+    <value>將外幣兌換成韓元</value>
+  </data>
+  <data name="Menu.BuyTitle" xml:space="preserve">
+    <value>購買韓元</value>
+  </data>
+  <data name="Menu.SellSub" xml:space="preserve">
+    <value>將韓元兌換成外幣</value>
+  </data>
+  <data name="Menu.SellTitle" xml:space="preserve">
+    <value>外幣購買</value>
+  </data>
+  <data name="Menu.Title" xml:space="preserve">
+    <value>請選擇您想要的服務。</value>
+  </data>
+  <data name="Receipt.Printing" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="Scan.ID" xml:space="preserve">
+    <value>請將韓國簽發的身份證件中有照片的一面朝下放置在掃描儀上。</value>
+  </data>
+  <data name="Scan.Passport" xml:space="preserve">
+    <value>請將護照中有照片的一面朝下放置在掃描儀上。</value>
+  </data>
+  <data name="Scan.Title" xml:space="preserve">
+    <value>請按以下說明掃描您的護照或在韓國簽發的身份證件。</value>
+  </data>
+  <data name="ScanComplete.Info" xml:space="preserve">
+    <value>本公司不承擔任何遺失責任。</value>
+  </data>
+  <data name="ScanComplete.SubTitle" xml:space="preserve">
+    <value>為避免遺失，請務必取回您的身份證或護照後再進行換匯。</value>
+  </data>
+  <data name="ScanComplete.Title" xml:space="preserve">
+    <value>身份證掃描成功。</value>
+  </data>
+  <data name="Scanning.Info" xml:space="preserve">
+    <value>最長可能需要20-30秒。請稍候。</value>
+  </data>
+  <data name="Terms.Agreement" xml:space="preserve">
+    <value>同意個人資訊收集、使用及向第三方提供</value>
+  </data>
+  <data name="Terms.Info" xml:space="preserve">
+    <value>您必須同意使用條款才能繼續。</value>
+  </data>
+  <data name="Terms.More" xml:space="preserve">
+    <value>查看使用條款</value>
+  </data>
+  <data name="Terms.Title" xml:space="preserve">
+    <value>請準備好您的護照或在韓國簽發的身份證件。</value>
+  </data>
+</root>

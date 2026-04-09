@@ -1,0 +1,286 @@
+<UserControl
+    x:Class="Kiosk.Views.Overlays.ThemeSelectionOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Kiosk"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="ThemeOptionButtonStyle" TargetType="Button">
+            <Setter Property="Focusable" Value="True" />
+            <Setter Property="IsTabStop" Value="True" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="24">
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                    <Setter Property="BorderThickness" Value="5" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid
+        Background="{DynamicResource OverlayDimBrush}"
+        Focusable="False"
+        KeyboardNavigation.IsTabStop="False"
+        KeyboardNavigation.DirectionalNavigation="Continue">
+        <Border
+            Width="840"
+            Padding="48"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource CardBackgroundBrush}"
+            CornerRadius="32">
+            <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="36" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="127" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    FontSize="52"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="{Binding Title}" />
+
+                <UniformGrid
+                    Grid.Row="2"
+                    Columns="5"
+                    FocusManager.FocusedElement="{Binding ElementName=BlueThemeButton}"
+                    FocusManager.IsFocusScope="True"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False"
+                    KeyboardNavigation.DirectionalNavigation="Continue">
+                    <Button
+                        x:Name="BlueThemeButton"
+                        Width="132"
+                        Height="188"
+                        Margin="6"
+                        Command="{Binding SelectBlueCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ThemeOptionButtonStyle}" TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsBlueSelected}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                                        <Setter Property="BorderThickness" Value="4" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border
+                                Width="36"
+                                Height="36"
+                                Background="#0073FF"
+                                CornerRadius="6" />
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="블루" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Width="132"
+                        Height="188"
+                        Margin="6"
+                        Command="{Binding SelectRedCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ThemeOptionButtonStyle}" TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRedSelected}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                                        <Setter Property="BorderThickness" Value="4" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border
+                                Width="36"
+                                Height="36"
+                                Background="#D94B4B"
+                                CornerRadius="6" />
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="레드" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Width="132"
+                        Height="188"
+                        Margin="6"
+                        Command="{Binding SelectOrangeCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ThemeOptionButtonStyle}" TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsOrangeSelected}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                                        <Setter Property="BorderThickness" Value="4" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border
+                                Width="36"
+                                Height="36"
+                                Background="#F47D31"
+                                CornerRadius="6" />
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="오렌지" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Width="132"
+                        Height="188"
+                        Margin="6"
+                        Command="{Binding SelectGreenCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ThemeOptionButtonStyle}" TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsGreenSelected}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                                        <Setter Property="BorderThickness" Value="4" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border
+                                Width="36"
+                                Height="36"
+                                Background="#2E9F62"
+                                CornerRadius="6" />
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="그린" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Width="132"
+                        Height="188"
+                        Margin="6"
+                        Command="{Binding SelectDarkCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ThemeOptionButtonStyle}" TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDarkSelected}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                                        <Setter Property="BorderThickness" Value="4" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border
+                                Width="36"
+                                Height="36"
+                                Background="#1A1A1A"
+                                CornerRadius="6" />
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="다크" />
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+
+                <Button
+                    Grid.Row="4"
+                    Width="744"
+                    Height="127"
+                    HorizontalAlignment="Center"
+                    Command="{Binding CloseCommand}"
+                    Content="닫기">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Focusable" Value="True" />
+                            <Setter Property="IsTabStop" Value="True" />
+                            <Setter Property="Background" Value="{DynamicResource AccentBackgroundBrush}" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="FontSize" Value="46" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="24">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                                    <Setter Property="BorderThickness" Value="6" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

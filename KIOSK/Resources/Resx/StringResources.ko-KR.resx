@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.Next" xml:space="preserve">
+    <value>다음</value>
+  </data>
+  <data name="Common.Ok" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="Error.Network.Timeout" xml:space="preserve">
+    <value>네트워크 지연({seconds}초)</value>
+  </data>
+  <data name="ExchangeBuyProcess.Deposit" xml:space="preserve">
+    <value>원화입금</value>
+  </data>
+  <data name="ExchangeBuyProcess.IDScan" xml:space="preserve">
+    <value>신분증스캔</value>
+  </data>
+  <data name="ExchangeBuyProcess.SelectCurrency" xml:space="preserve">
+    <value>통화선택</value>
+  </data>
+  <data name="ExchangeBuyProcess.SetAmount" xml:space="preserve">
+    <value>금액설정</value>
+  </data>
+  <data name="ExchangeBuyProcess.Withdraw" xml:space="preserve">
+    <value>외화수령</value>
+  </data>
+  <data name="ExchangeDeposit.DailyLimit" xml:space="preserve">
+    <value>1일 최대 환전 한도 :</value>
+  </data>
+  <data name="ExchangeDeposit.Denomination" xml:space="preserve">
+    <value>입금 가능한 권종</value>
+  </data>
+  <data name="ExchangeDeposit.Deposited" xml:space="preserve">
+    <value>입금하신 외화금액</value>
+  </data>
+  <data name="ExchangeDeposit.End" xml:space="preserve">
+    <value>거래 종료</value>
+  </data>
+  <data name="ExchangeDeposit.PerTransactionLimit" xml:space="preserve">
+    <value>1회 최대 환전 가능 금액 :</value>
+  </data>
+  <data name="ExchangeDeposit.Receive" xml:space="preserve">
+    <value>받으실 원화금액</value>
+  </data>
+  <data name="ExchangeDeposit.RemainDailyLimit" xml:space="preserve">
+    <value>잔여 1일 환전 한도 :</value>
+  </data>
+  <data name="ExchangeDeposit.Title" xml:space="preserve">
+    <value>외화를 입금기에 1장씩 넣어주세요.</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Info" xml:space="preserve">
+    <value>얼굴 사진이 있는 정보면을 아래로하여 스캐너에 올려 주세요.</value>
+  </data>
+  <data name="ExchangeIDScanPopup.Title" xml:space="preserve">
+    <value>아래와같이 스캔을 진행해주세요.</value>
+  </data>
+  <data name="ExchangeSell.Title" xml:space="preserve">
+    <value>판매하실 외화를 선택하세요.</value>
+  </data>
+  <data name="ExchangeSellProcess.Deposit" xml:space="preserve">
+    <value>외화입금</value>
+  </data>
+  <data name="ExchangeSellProcess.IDScan" xml:space="preserve">
+    <value>신분증스캔</value>
+  </data>
+  <data name="ExchangeSellProcess.SelectCurrency" xml:space="preserve">
+    <value>통화선택</value>
+  </data>
+  <data name="ExchangeSellProcess.Withdraw" xml:space="preserve">
+    <value>원화수령</value>
+  </data>
+  <data name="ExchangeTerms.Agreement" xml:space="preserve">
+    <value>개인정보 수집 이용 및 제3자 제공 동의</value>
+  </data>
+  <data name="ExchangeTerms.Detail" xml:space="preserve">
+    <value>이용약관 보기</value>
+  </data>
+  <data name="ExchangeTerms.Info" xml:space="preserve">
+    <value>이용약관에 동의하셔야 다음으로 넘어갈 수 있습니다.</value>
+  </data>
+  <data name="ExchangeTerms.Title" xml:space="preserve">
+    <value>신분증(여권,주민등록증,운전면허증, 외국인등록증 등)을 준비하세요.</value>
+  </data>
+  <data name="ExchangeTermsPopup.Title" xml:space="preserve">
+    <value>이용약관을 확인하세요.</value>
+  </data>
+  <data name="Menu.BuySub" xml:space="preserve">
+    <value>외화를 원화로 바꾸기</value>
+  </data>
+  <data name="Menu.BuyTitle" xml:space="preserve">
+    <value>외화판매</value>
+  </data>
+  <data name="Menu.SellSub" xml:space="preserve">
+    <value>원화를 외화로 바꾸기</value>
+  </data>
+  <data name="Menu.SellTitle" xml:space="preserve">
+    <value>외화구입</value>
+  </data>
+  <data name="Menu.Title" xml:space="preserve">
+    <value>원하시는 서비스를 선택해 주세요.</value>
+  </data>
+  <data name="Receipt.Printing" xml:space="preserve">
+    <value>영수증을 인쇄 중입니다</value>
+  </data>
+  <data name="Scan.ID" xml:space="preserve">
+    <value>한국에서 발급된 신분증의 얼굴 사진이 있는면을 아래로하여 스캐너에 올려 주세요.</value>
+  </data>
+  <data name="Scan.Passport" xml:space="preserve">
+    <value>여권의 얼굴 사진이 있는면을 아래로하여 스캐너에 올려 주세요.</value>
+  </data>
+  <data name="Scan.Title" xml:space="preserve">
+    <value>여권 또는 한국에서 발급된 ID를 아래처럼 스캔을 진행해주세요.</value>
+  </data>
+  <data name="ScanComplete.Info" xml:space="preserve">
+    <value>분실에 대한 책임은 당사가 지지 않습니다.</value>
+  </data>
+  <data name="ScanComplete.SubTitle" xml:space="preserve">
+    <value>신분증 또는 여권의 분실 방지를 위해 반드시 회수하신 후 환전을 진행해 주세요.</value>
+  </data>
+  <data name="ScanComplete.Title" xml:space="preserve">
+    <value>신분증 스캔을 성공적으로 마쳤습니다.</value>
+  </data>
+  <data name="Scanning.Info" xml:space="preserve">
+    <value>최장 20 ~ 30초 소요됩니다. 잠시만 기다려 주세요.</value>
+  </data>
+  <data name="Terms.Agreement" xml:space="preserve">
+    <value>개인정보 수집 이용 및 제3자 제공 동의</value>
+  </data>
+  <data name="Terms.Info" xml:space="preserve">
+    <value>이용약관에 동의하셔야 다음으로 넘어갈 수 있습니다.</value>
+  </data>
+  <data name="Terms.More" xml:space="preserve">
+    <value>이용약관 보기</value>
+  </data>
+  <data name="Terms.Title" xml:space="preserve">
+    <value>신분증(여권,주민등록증,운전면허증, 외국인등록증 등)을 준비하세요.</value>
+  </data>
+</root>

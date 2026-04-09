@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ID Scanner Preview</title>
+  <style>
+    :root {
+      --bg-0: #0a1220;
+      --bg-1: #0f1a2e;
+      --panel: #0f1b2f;
+      --line: #2a3d5b;
+      --text: #e2e8f0;
+      --sub: #94a3b8;
+      --ok: #22c55e;
+      --run: #38bdf8;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --accent: #0ea5e9;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      color: var(--text);
+      font-family: "Segoe UI", "Noto Sans KR", sans-serif;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(14, 165, 233, 0.2), transparent 44%),
+        radial-gradient(circle at 84% 12%, rgba(245, 158, 11, 0.14), transparent 36%),
+        linear-gradient(155deg, var(--bg-0), var(--bg-1) 48%, #090f1b);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .scenario-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 40;
+      border: 1px solid #365073;
+      background: rgba(8, 15, 28, 0.84);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 13px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .scenario-panel {
+      position: fixed;
+      top: 56px;
+      right: 14px;
+      width: 340px;
+      max-width: calc(100vw - 28px);
+      background: rgba(10, 20, 34, 0.95);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 16px 36px rgba(2, 6, 23, 0.55);
+      z-index: 40;
+      overflow: hidden;
+      transform-origin: top right;
+      transition: transform 180ms ease, opacity 180ms ease;
+    }
+
+    .scenario-panel.hidden {
+      transform: scale(0.95);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scenario-head {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      color: #cbd5e1;
+      background: linear-gradient(120deg, rgba(56, 189, 248, 0.14), transparent 62%);
+    }
+
+    .scenario-body { padding: 12px 13px; }
+
+    .scenario-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    .field {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid #395173;
+      background: #0b1424;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 9px 10px;
+      outline: none;
+    }
+
+    .scenario-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      cursor: pointer;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      padding: 9px 10px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #052033;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: #395173;
+      color: #dbeafe;
+    }
+
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 35;
+      display: none;
+      place-items: center;
+      background: rgba(2, 8, 23, 0.55);
+      backdrop-filter: blur(2px);
+      padding: 20px;
+    }
+
+    .loader-overlay.show { display: grid; }
+
+    .manual-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 34;
+      display: none;
+      place-items: center;
+      background: rgba(2, 8, 23, 0.5);
+      backdrop-filter: blur(2px);
+      padding: 20px;
+    }
+
+    .manual-overlay.show { display: grid; }
+
+    .loader-card {
+      width: min(440px, 92vw);
+      display: grid;
+      gap: 10px;
+    }
+
+    .current-phase {
+      border: 1px solid #324863;
+      border-radius: 10px;
+      padding: 12px;
+      background: #0a1424;
+      display: grid;
+      gap: 10px;
+      align-content: center;
+      min-height: 186px;
+      --ring-color: #475569;
+      box-shadow: 0 20px 44px rgba(2, 6, 23, 0.5);
+    }
+
+    .current-phase-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .current-phase-name {
+      color: #dbeafe;
+      font-weight: 700;
+    }
+
+    .current-phase-state {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--sub);
+      min-height: 15px;
+    }
+
+    .current-phase-body {
+      display: grid;
+      place-items: center;
+      padding: 2px 0;
+    }
+
+    .phase-ring {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      border: 1px solid #334b67;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--ring-color) var(--phase-degree, 0deg), #162337 0deg);
+      transition: background 140ms linear, border-color 140ms linear;
+    }
+
+    .phase-ring-inner {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #0a1424;
+      border: 1px solid #2c3f5d;
+    }
+
+    .current-phase-pct {
+      color: #dbeafe;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+
+    .current-phase-info {
+      border-top: 1px solid #29415d;
+      padding-top: 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .current-phase-info h3 {
+      margin: 0;
+      font-size: 15px;
+      color: #dbeafe;
+      font-weight: 700;
+    }
+
+    .current-phase-info p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .current-phase.pending { --ring-color: #475569; }
+    .current-phase.run { border-color: #0ea5e9; --ring-color: #38bdf8; }
+    .current-phase.run .current-phase-pct,
+    .current-phase.run .current-phase-state { color: #7dd3fc; }
+    .current-phase.run .phase-ring { border-color: #0ea5e9; }
+    .current-phase.ok { border-color: #166534; --ring-color: #22c55e; }
+    .current-phase.ok .current-phase-pct,
+    .current-phase.ok .current-phase-state { color: #86efac; }
+    .current-phase.ok .phase-ring { border-color: #166534; }
+    .current-phase.fail { border-color: #991b1b; --ring-color: #ef4444; }
+    .current-phase.fail .current-phase-pct,
+    .current-phase.fail .current-phase-state { color: #fca5a5; }
+    .current-phase.fail .phase-ring { border-color: #991b1b; }
+
+    .result-box {
+      border: 1px solid #34506f;
+      border-radius: 10px;
+      padding: 11px;
+      background: #0c1526;
+      font-size: 13px;
+      white-space: pre-line;
+      display: none;
+    }
+
+    .result-box.show { display: block; }
+    .result-box.ok {
+      border-color: #166534;
+      background: rgba(22, 101, 52, 0.22);
+    }
+    .result-box.bad {
+      border-color: #991b1b;
+      background: rgba(127, 29, 29, 0.24);
+    }
+
+    .main-pane {
+      width: min(1220px, 96vw);
+      min-height: min(820px, 92vh);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(10, 20, 34, 0.93);
+      box-shadow: 0 28px 60px rgba(2, 6, 23, 0.55);
+      padding: 16px;
+      display: none;
+      grid-template-rows: auto auto auto 1fr;
+      gap: 12px;
+    }
+
+    .main-pane.show {
+      display: grid;
+      animation: fadeIn 220ms ease;
+    }
+
+    .main-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .main-head h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .main-head p {
+      margin: 4px 0 0;
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid;
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 700;
+      padding: 5px 9px;
+    }
+
+    .chip.ok {
+      color: #bbf7d0;
+      border-color: #166534;
+      background: rgba(22, 101, 52, 0.28);
+    }
+
+    .chip.warn {
+      color: #fde68a;
+      border-color: #92400e;
+      background: rgba(146, 64, 14, 0.28);
+    }
+
+    .chip.bad {
+      color: #fecaca;
+      border-color: #991b1b;
+      background: rgba(127, 29, 29, 0.3);
+    }
+
+    .chip.info {
+      color: #bfdbfe;
+      border-color: #1d4ed8;
+      background: rgba(29, 78, 216, 0.25);
+    }
+
+    .main-info {
+      border: 1px solid #334b67;
+      border-radius: 10px;
+      background: #0b1526;
+      padding: 11px;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+
+    .manual-panel {
+      width: min(560px, 92vw);
+      border: 1px solid #355174;
+      border-radius: 12px;
+      padding: 12px;
+      background: #0b1527;
+      display: grid;
+      gap: 10px;
+    }
+
+    .manual-panel h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .manual-panel p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    .manual-result {
+      border: 1px solid #314b69;
+      border-radius: 8px;
+      padding: 9px;
+      background: #0a1322;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+
+    .manual-status {
+      border: 1px solid #355174;
+      border-radius: 8px;
+      padding: 10px;
+      background: #0a1322;
+      color: var(--sub);
+      font-size: 12px;
+      min-height: 42px;
+      white-space: pre-line;
+    }
+
+    .manual-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .main-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      align-content: start;
+    }
+
+    .main-actions button {
+      background: #1f293b;
+      border-color: #334155;
+      color: #dbeafe;
+      font-weight: 600;
+      min-height: 42px;
+    }
+
+    .main-actions .primary {
+      background: #0ea5e9;
+      border-color: #0284c7;
+      color: #072235;
+      font-weight: 700;
+    }
+
+    .cmd-result {
+      border: 1px solid #3a526f;
+      border-radius: 10px;
+      padding: 10px;
+      background: #0b1526;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+
+    @media (max-width: 980px) {
+      .main-actions { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <button id="btnScenarioToggle" class="scenario-toggle">시나리오 설정</button>
+
+  <aside id="scenarioPanel" class="scenario-panel hidden">
+    <div class="scenario-head">Demo Config (숨김 전환 가능)</div>
+    <div class="scenario-body">
+      <label class="scenario-row"><input id="cfgLocalRegistered" type="checkbox">초기 로컬 등록 상태</label>
+      <label class="scenario-row"><input id="cfgDeviceSearchOk" type="checkbox" checked>장치 검색 성공</label>
+      <label class="scenario-row"><input id="cfgDeviceConnectOk" type="checkbox" checked>장치 연결 성공</label>
+      <label class="scenario-row"><input id="cfgSerialExtractOk" type="checkbox" checked>시리얼 추출 성공</label>
+      <label class="scenario-row"><input id="cfgServerAuthOk" type="checkbox" checked>서버 인증 성공</label>
+      <label class="scenario-row"><input id="cfgSerialMatchOk" type="checkbox" checked>등록 시리얼 일치</label>
+
+      <div class="field">
+        <label for="cfgExtractedSerial">추출 시리얼(데모값)</label>
+        <input id="cfgExtractedSerial" type="text" value="L243579">
+      </div>
+      <div class="field">
+        <label for="cfgLocalSerial">로컬 저장 시리얼(데모값)</label>
+        <input id="cfgLocalSerial" type="text" value="L243579">
+      </div>
+
+      <div class="scenario-buttons">
+        <button id="btnStart" class="btn-primary">데모 시작</button>
+        <button id="btnReset" class="btn-outline">초기화</button>
+      </div>
+    </div>
+  </aside>
+
+  <section id="loaderOverlay" class="loader-overlay">
+    <div class="loader-card">
+      <section id="currentPhase" class="current-phase pending">
+        <div class="current-phase-head">
+          <span id="phaseName" class="current-phase-name">대기</span>
+          <span id="phaseState" class="current-phase-state">대기 중</span>
+        </div>
+        <div class="current-phase-body">
+          <div id="phaseRing" class="phase-ring">
+            <div class="phase-ring-inner">
+              <span id="phasePct" class="current-phase-pct">0%</span>
+            </div>
+          </div>
+        </div>
+        <div class="current-phase-info">
+          <h3 id="stageTitle">부팅 준비</h3>
+          <p id="stageDetail">시작 버튼을 누르면 단계별 로딩이 진행됩니다.</p>
+        </div>
+      </section>
+      <div id="resultBox" class="result-box"></div>
+    </div>
+  </section>
+
+  <section id="manualOverlay" class="manual-overlay">
+    <section id="manualPanel" class="manual-panel">
+      <div>
+        <h2>수동 인증 절차</h2>
+        <p>로컬 미등록 상태입니다. 장치 연결/시리얼 추출 후 인증을 진행하세요.</p>
+      </div>
+      <div id="manualSerial" class="manual-result">추출 시리얼: -</div>
+      <div id="manualStatus" class="manual-status">대기 중</div>
+      <div class="manual-buttons">
+        <button id="btnManualConnectExtract" class="btn-outline">연결 + 시리얼 추출</button>
+        <button id="btnManualAuth" class="btn-primary" disabled>인증</button>
+      </div>
+    </section>
+  </section>
+
+  <main class="page">
+    <section class="main-pane">
+      <div class="main-head">
+        <div>
+          <h1>실제 작동 프로그램 영역 (Demo)</h1>
+          <p>currentPhase 오버레이 완료 후 메인 프로그램이 활성화됩니다.</p>
+        </div>
+        <div class="chips">
+          <span id="chipScenario" class="chip info" style="display:none;">SCENARIO RUNNING</span>
+          <span id="chipConn" class="chip warn">DISCONNECTED</span>
+          <span id="chipAuth" class="chip warn">UNVERIFIED</span>
+          <span id="chipRun" class="chip warn">IDLE</span>
+        </div>
+      </div>
+
+      <div id="mainInfo" class="main-info">-</div>
+
+      <div>
+        <div class="main-actions">
+          <button class="primary" data-cmd="SCANSTART">SCANSTART</button>
+          <button data-cmd="GETSCANSTATUS">GETSCANSTATUS</button>
+          <button data-cmd="SAVEIMAGE">SAVEIMAGE</button>
+          <button data-cmd="SCANSTOP">SCANSTOP</button>
+          <button data-cmd="RESTART">RESTART</button>
+          <button data-cmd="FAULT">런타임 장애</button>
+        </div>
+        <div id="cmdResult" class="cmd-result">명령 대기</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const ui = {
+      scenarioToggle: document.getElementById("btnScenarioToggle"),
+      scenarioPanel: document.getElementById("scenarioPanel"),
+
+      cfgLocalRegistered: document.getElementById("cfgLocalRegistered"),
+      cfgDeviceSearchOk: document.getElementById("cfgDeviceSearchOk"),
+      cfgDeviceConnectOk: document.getElementById("cfgDeviceConnectOk"),
+      cfgSerialExtractOk: document.getElementById("cfgSerialExtractOk"),
+      cfgServerAuthOk: document.getElementById("cfgServerAuthOk"),
+      cfgSerialMatchOk: document.getElementById("cfgSerialMatchOk"),
+      cfgExtractedSerial: document.getElementById("cfgExtractedSerial"),
+      cfgLocalSerial: document.getElementById("cfgLocalSerial"),
+      btnStart: document.getElementById("btnStart"),
+      btnReset: document.getElementById("btnReset"),
+
+      loaderOverlay: document.getElementById("loaderOverlay"),
+      manualOverlay: document.getElementById("manualOverlay"),
+      chipScenario: document.getElementById("chipScenario"),
+      chipConn: document.getElementById("chipConn"),
+      chipAuth: document.getElementById("chipAuth"),
+      chipRun: document.getElementById("chipRun"),
+
+      stageTitle: document.getElementById("stageTitle"),
+      stageDetail: document.getElementById("stageDetail"),
+      currentPhase: document.getElementById("currentPhase"),
+      phaseName: document.getElementById("phaseName"),
+      phasePct: document.getElementById("phasePct"),
+      phaseRing: document.getElementById("phaseRing"),
+      phaseState: document.getElementById("phaseState"),
+      resultBox: document.getElementById("resultBox"),
+
+      manualPanel: document.getElementById("manualPanel"),
+      manualSerial: document.getElementById("manualSerial"),
+      manualStatus: document.getElementById("manualStatus"),
+      btnManualConnectExtract: document.getElementById("btnManualConnectExtract"),
+      btnManualAuth: document.getElementById("btnManualAuth"),
+
+      mainInfo: document.getElementById("mainInfo"),
+      cmdResult: document.getElementById("cmdResult")
+    };
+
+    const state = {
+      running: false,
+      runtimeReady: false,
+      localRegistered: false,
+      searchOk: true,
+      connectOk: true,
+      extractOk: true,
+      authOk: true,
+      matchOk: true,
+      extractedSerial: "L243579",
+      localSerial: "L243579",
+      manualExtracted: "",
+      awaitingManual: false
+    };
+
+    const phaseLabels = {
+      search: "장치 검색",
+      connect: "장치 연결",
+      extract: "시리얼 추출",
+      auth: "수동 인증",
+      ready: "프로그램 시작"
+    };
+
+    function normalize(value) {
+      return (value || "").trim().toUpperCase();
+    }
+
+    function setChip(el, text, style) {
+      el.textContent = text;
+      el.className = "chip " + style;
+    }
+
+    function readConfig() {
+      state.localRegistered = ui.cfgLocalRegistered.checked;
+      state.searchOk = ui.cfgDeviceSearchOk.checked;
+      state.connectOk = ui.cfgDeviceConnectOk.checked;
+      state.extractOk = ui.cfgSerialExtractOk.checked;
+      state.authOk = ui.cfgServerAuthOk.checked;
+      state.matchOk = ui.cfgSerialMatchOk.checked;
+      state.extractedSerial = normalize(ui.cfgExtractedSerial.value);
+      state.localSerial = normalize(ui.cfgLocalSerial.value);
+    }
+
+    function writeConfig() {
+      ui.cfgLocalRegistered.checked = state.localRegistered;
+      ui.cfgDeviceSearchOk.checked = state.searchOk;
+      ui.cfgDeviceConnectOk.checked = state.connectOk;
+      ui.cfgSerialExtractOk.checked = state.extractOk;
+      ui.cfgServerAuthOk.checked = state.authOk;
+      ui.cfgSerialMatchOk.checked = state.matchOk;
+      ui.cfgExtractedSerial.value = state.extractedSerial;
+      ui.cfgLocalSerial.value = state.localSerial;
+    }
+
+    function lockScenarioControls(locked) {
+      state.running = locked;
+      [
+        ui.cfgLocalRegistered, ui.cfgDeviceSearchOk, ui.cfgDeviceConnectOk,
+        ui.cfgSerialExtractOk, ui.cfgServerAuthOk, ui.cfgSerialMatchOk,
+        ui.cfgExtractedSerial, ui.cfgLocalSerial, ui.btnStart, ui.btnReset
+      ].forEach((el) => el.disabled = locked);
+    }
+
+    function setScenarioRunning(isRunning) {
+      ui.chipScenario.style.display = isRunning ? "inline-flex" : "none";
+    }
+
+    function showLoader(show) {
+      if (show) ui.loaderOverlay.classList.add("show");
+      else ui.loaderOverlay.classList.remove("show");
+    }
+
+    function setBootStage(title, detail) {
+      ui.stageTitle.textContent = title;
+      ui.stageDetail.textContent = detail;
+    }
+
+    function setPhase(phaseId, pct, status, stateText) {
+      ui.currentPhase.classList.remove("pending", "run", "ok", "fail");
+      ui.currentPhase.classList.add(status || "pending");
+      ui.phaseName.textContent = phaseLabels[phaseId] || phaseId;
+      const safePct = Math.max(0, Math.min(100, pct));
+      ui.phaseRing.style.setProperty("--phase-degree", (safePct * 3.6) + "deg");
+      ui.phasePct.textContent = safePct + "%";
+      if (stateText) ui.phaseState.textContent = stateText;
+    }
+
+    async function animatePhase(phaseId, durationMs) {
+      setPhase(phaseId, 0, "run", "진행 중");
+      const tick = 50;
+      const loop = Math.max(1, Math.floor(durationMs / tick));
+      for (let i = 1; i <= loop; i += 1) {
+        await sleep(tick);
+        const pct = Math.min(95, Math.round(i / loop * 95));
+        setPhase(phaseId, pct, "run", "진행 중");
+      }
+    }
+
+    function completePhase(phaseId, text) {
+      setPhase(phaseId, 100, "ok", text || "완료");
+    }
+
+    function failPhase(phaseId, text) {
+      setPhase(phaseId, 100, "fail", text || "실패");
+    }
+
+    function showResult(kind, text) {
+      ui.resultBox.className = "result-box show " + (kind === "ok" ? "ok" : "bad");
+      ui.resultBox.textContent = text;
+    }
+
+    function hideResult() {
+      ui.resultBox.className = "result-box";
+      ui.resultBox.textContent = "";
+    }
+
+    function showManualPanel(show) {
+      if (show) ui.manualOverlay.classList.add("show");
+      else ui.manualOverlay.classList.remove("show");
+    }
+
+    function setMainPaneVisible(show) {
+      const pane = document.querySelector(".main-pane");
+      if (!pane) return;
+      if (show) pane.classList.add("show");
+      else pane.classList.remove("show");
+    }
+
+    function resetPhaseBoard() {
+      ui.currentPhase.classList.remove("run", "ok", "fail");
+      ui.currentPhase.classList.add("pending");
+      ui.phaseName.textContent = "준비 중";
+      ui.phaseRing.style.setProperty("--phase-degree", "0deg");
+      ui.phasePct.textContent = "0%";
+      ui.phaseState.textContent = "대기 중";
+    }
+
+    function resetRuntimeUi() {
+      setScenarioRunning(false);
+      showLoader(false);
+      hideResult();
+      showManualPanel(false);
+      setMainPaneVisible(false);
+      resetPhaseBoard();
+      setBootStage("부팅 준비", "시작 버튼을 누르면 단계별 로딩이 시작됩니다.");
+
+      ui.manualSerial.textContent = "추출 시리얼: -";
+      ui.manualStatus.textContent = "대기 중";
+      ui.btnManualAuth.disabled = true;
+      ui.mainInfo.textContent = "-";
+      ui.cmdResult.textContent = "명령 대기";
+
+      setChip(ui.chipConn, "DISCONNECTED", "warn");
+      setChip(ui.chipAuth, "UNVERIFIED", "warn");
+      setChip(ui.chipRun, "IDLE", "warn");
+
+      state.runtimeReady = false;
+      state.awaitingManual = false;
+      state.manualExtracted = "";
+    }
+
+    async function runInitAndLocalCheck() {
+      await sleep(450);
+      await sleep(320);
+    }
+
+    async function runDeviceSearch() {
+      setBootStage("장치 검색", "PR22 장치를 검색하고 있습니다.");
+      await animatePhase("search", 650);
+      if (!state.searchOk) {
+        failPhase("search", "검색 실패");
+        setBootStage("장치 검색 실패", "장치를 찾지 못했습니다.");
+        throw new Error("장치 검색 실패");
+      }
+      completePhase("search", "검색 성공");
+    }
+
+    async function runConnectAndExtract() {
+      setBootStage("장치 연결", "검색된 장치와 연결을 시도합니다.");
+      await animatePhase("connect", 650);
+      if (!state.connectOk) {
+        failPhase("connect", "연결 실패");
+        setBootStage("장치 연결 실패", "장치 연결에 실패했습니다.");
+        throw new Error("장치 연결 실패");
+      }
+      setChip(ui.chipConn, "CONNECTED", "ok");
+      completePhase("connect", "연결 성공");
+
+      setBootStage("시리얼 추출", "장치 식별값을 읽는 중입니다.");
+      await animatePhase("extract", 700);
+      if (!state.extractOk) {
+        failPhase("extract", "추출 실패");
+        setBootStage("시리얼 추출 실패", "시리얼 읽기에 실패했습니다.");
+        throw new Error("시리얼 추출 실패");
+      }
+
+      completePhase("extract", state.extractedSerial);
+      setBootStage("시리얼 추출 완료", "추출 시리얼: " + state.extractedSerial);
+      return state.extractedSerial;
+    }
+
+    async function runRegisteredFlow() {
+      await runDeviceSearch();
+      const serial = await runConnectAndExtract();
+      await sleep(750);
+
+      const matched = state.matchOk && normalize(serial) === normalize(state.localSerial);
+      if (!matched) {
+        setBootStage("시리얼 불일치", "등록값과 현재 장치값이 다릅니다.");
+        setChip(ui.chipAuth, "MISMATCH", "bad");
+        throw new Error("시리얼 불일치\n등록값: " + state.localSerial + "\n현재값: " + serial);
+      }
+
+      setChip(ui.chipAuth, "MATCHED", "ok");
+      return serial;
+    }
+
+    async function completeReadyStep(serial) {
+      setBootStage("프로그램 시작 준비", "메인 프로그램 화면으로 전환 중입니다.");
+      setPhase("ready", 0, "run", "시작 중");
+      await sleep(430);
+      completePhase("ready", "완료");
+      setChip(ui.chipRun, "RUNNING", "ok");
+      setBootStage("프로그램 시작 완료", "부팅 절차가 완료되었습니다.");
+      await sleep(180);
+      showLoader(false);
+      setScenarioRunning(false);
+      state.runtimeReady = true;
+      setMainPaneVisible(true);
+      ui.mainInfo.textContent =
+        "부팅 절차 완료\n실행 시리얼: " + serial + "\n장치 상태: 정상";
+    }
+
+    async function runLocalRegisteredRoutine() {
+      const serial = await runRegisteredFlow();
+      await completeReadyStep(serial);
+    }
+
+    async function runUnregisteredFlow() {
+      state.awaitingManual = true;
+      showLoader(false);
+      setMainPaneVisible(false);
+      showManualPanel(true);
+      setBootStage("수동 인증 대기", "수동 인증 절차를 진행하세요.");
+      ui.manualStatus.textContent = "장치 연결 + 시리얼 추출 버튼을 눌러주세요.";
+    }
+
+    async function startDemo() {
+      if (state.running) return;
+      readConfig();
+      resetRuntimeUi();
+      lockScenarioControls(true);
+      setScenarioRunning(true);
+      showLoader(true);
+
+      try {
+        await runInitAndLocalCheck();
+        if (!state.localRegistered) {
+          await runUnregisteredFlow();
+          lockScenarioControls(false);
+          return;
+        }
+        await runLocalRegisteredRoutine();
+      } catch (err) {
+        setChip(ui.chipRun, "BLOCKED", "bad");
+        showLoader(true);
+        showResult("bad", String(err.message || err));
+        setScenarioRunning(false);
+        lockScenarioControls(false);
+      }
+    }
+
+    async function manualConnectExtract() {
+      if (!state.awaitingManual || state.running) return;
+
+      ui.btnManualConnectExtract.disabled = true;
+      ui.btnManualAuth.disabled = true;
+      ui.manualStatus.textContent = "장치 연결/시리얼 추출 진행 중...";
+      showLoader(true);
+      hideResult();
+
+      try {
+        const serial = await runConnectAndExtract();
+        state.manualExtracted = serial;
+        ui.manualSerial.textContent = "추출 시리얼: " + serial;
+        ui.manualStatus.textContent = "추출 완료. 인증 버튼을 눌러주세요.";
+        ui.btnManualAuth.disabled = false;
+      } catch (err) {
+        ui.manualStatus.textContent = "실패: " + String(err.message || err);
+        showResult("bad", String(err.message || err));
+      } finally {
+        showLoader(false);
+        ui.btnManualConnectExtract.disabled = false;
+      }
+    }
+
+    async function manualAuth() {
+      if (!state.awaitingManual || !state.manualExtracted) return;
+      ui.btnManualAuth.disabled = true;
+      ui.btnManualConnectExtract.disabled = true;
+      lockScenarioControls(true);
+      setScenarioRunning(true);
+      showLoader(true);
+      hideResult();
+
+      ui.manualStatus.textContent = "서버 인증 진행 중...";
+      await animatePhase("auth", 750);
+
+      if (!state.authOk) {
+        failPhase("auth", "서버 인증 실패");
+        ui.manualStatus.textContent = "인증 실패: 서버에서 시리얼을 승인하지 않았습니다.";
+        setChip(ui.chipAuth, "AUTH FAIL", "bad");
+        setChip(ui.chipRun, "BLOCKED", "bad");
+        showResult("bad", "서버 인증 실패\n시리얼: " + state.manualExtracted);
+        showLoader(false);
+        lockScenarioControls(false);
+        ui.btnManualConnectExtract.disabled = false;
+        ui.btnManualAuth.disabled = false;
+        return;
+      }
+
+      ui.manualStatus.textContent = "인증 성공. 로컬 등록 후 등록 상태 루틴 진행.";
+      setChip(ui.chipAuth, "AUTH OK", "ok");
+      completePhase("auth", "서버 인증 통과");
+
+      state.localRegistered = true;
+      state.localSerial = state.manualExtracted;
+      writeConfig();
+      state.awaitingManual = false;
+      showManualPanel(false);
+
+      try {
+        await runLocalRegisteredRoutine();
+      } catch (err) {
+        setChip(ui.chipRun, "BLOCKED", "bad");
+        showLoader(true);
+        showResult("bad", String(err.message || err));
+        setScenarioRunning(false);
+      } finally {
+        lockScenarioControls(false);
+        ui.btnManualConnectExtract.disabled = false;
+      }
+    }
+
+    function resetDemo() {
+      if (state.running) return;
+      state.localRegistered = false;
+      state.searchOk = true;
+      state.connectOk = true;
+      state.extractOk = true;
+      state.authOk = true;
+      state.matchOk = true;
+      state.extractedSerial = "L243579";
+      state.localSerial = "L243579";
+      writeConfig();
+      resetRuntimeUi();
+    }
+
+    function runMainCommand(command) {
+      if (!state.runtimeReady) {
+        ui.cmdResult.textContent = "런타임이 준비되지 않았습니다.";
+        return;
+      }
+
+      if (command === "FAULT") {
+        setChip(ui.chipConn, "DISCONNECTED", "bad");
+        setChip(ui.chipRun, "BLOCKED", "bad");
+        state.runtimeReady = false;
+        ui.cmdResult.textContent = "[FAULT] 장치 연결 끊김";
+        return;
+      }
+
+      ui.cmdResult.textContent = "[" + command + "] success=true\nmessage=DEMO_OK";
+    }
+
+    ui.scenarioToggle.addEventListener("click", () => {
+      ui.scenarioPanel.classList.toggle("hidden");
+    });
+
+    ui.btnStart.addEventListener("click", startDemo);
+    ui.btnReset.addEventListener("click", resetDemo);
+    ui.btnManualConnectExtract.addEventListener("click", manualConnectExtract);
+    ui.btnManualAuth.addEventListener("click", manualAuth);
+
+    document.querySelectorAll("[data-cmd]").forEach((btn) => {
+      btn.addEventListener("click", () => runMainCommand(btn.dataset.cmd));
+    });
+
+    writeConfig();
+    resetRuntimeUi();
+  </script>
+</body>
+</html>

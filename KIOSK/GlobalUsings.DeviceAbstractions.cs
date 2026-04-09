@@ -1,0 +1,10 @@
+﻿global using DeviceKit.Commands;
+global using DeviceKit.Events;
+global using DeviceKit.Status;
+global using DeviceKit.Configuration;
+global using DeviceKit.Engine;
+global using DeviceKit.Drivers.Deposit;
+global using DeviceKit.Drivers.IdScanner;
+global using DeviceKit.Drivers.Printer;
+global using DeviceKit.Drivers.Qr;
+global using DeviceKit.Drivers.Withdrawal;

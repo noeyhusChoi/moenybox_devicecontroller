@@ -4,6 +4,7 @@ using IdScannerTool.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Windows;
 
@@ -61,6 +62,7 @@ public partial class App : Application
     private static IHost BuildHost()
     {
         var serialKeyPath = Path.Combine(AppContext.BaseDirectory, "serial-key.json");
+        var apiKeyPath = Path.Combine(AppContext.BaseDirectory, "api-key.json");
         var ocrDbPath = Path.Combine(AppContext.BaseDirectory, "ocr-history.db");
         var externalOcrRoot = Path.Combine(AppContext.BaseDirectory, "OCR");
         var externalOcrExecutablePath = Path.Combine(externalOcrRoot, "moneybox_ocr.exe");
@@ -82,10 +84,17 @@ public partial class App : Application
                 services.AddSingleton(runtimeOptions);
                 services.AddSingleton(externalOcrOptions);
                 services.AddSingleton(externalOcrProcessOptions);
+                services.AddSingleton(_ => new HttpClient
+                {
+                    BaseAddress = new Uri("https://uabo68j622.execute-api.ap-northeast-2.amazonaws.com/stage/"),
+                    Timeout = TimeSpan.FromSeconds(15)
+                });
 
                 services.AddSingleton<ILocalSerialKeyStore>(_ => new LocalSerialKeyStore(serialKeyPath));
+                services.AddSingleton<IApiKeyStore>(_ => new LocalApiKeyStore(apiKeyPath));
                 services.AddSingleton<ISerialRegistrationStateService, SerialRegistrationStateService>();
                 services.AddSingleton<IStartupSequenceService, StartupSequenceService>();
+                services.AddSingleton<IDeviceApiClient, DeviceApiClient>();
                 services.AddSingleton<IOcrHistoryStore>(_ => new OcrSqliteStore(ocrDbPath));
                 services.AddSingleton<IHistoryExcelExportService, HistoryExcelExportService>();
                 services.AddSingleton<IAppOverlayService, AppOverlayService>();
@@ -127,6 +136,8 @@ public partial class App : Application
                         sp.GetRequiredService<IOcrProcessingService>(),
                         sp.GetRequiredService<IOcrResultConverter>(),
                         sp.GetRequiredService<IScanSessionService>(),
+                        sp.GetRequiredService<IDeviceApiClient>(),
+                        sp.GetRequiredService<IApiKeyStore>(),
                         sp.GetRequiredService<DeviceDescriptor>().EffectiveId));
                 services.AddSingleton<ShellViewModel>(sp =>
                     ShellViewModel.Create(

@@ -9,8 +9,9 @@ public enum StartupNextStep
 public enum StartupVerificationStage
 {
     ConnectDevice = 0,
-    ExtractSerial = 1,
-    CompareSerial = 2
+    CheckApiKey = 1,
+    ExtractSerial = 2,
+    VerifyDevice = 3
 }
 
 public enum StartupVerificationStageStatus

@@ -20,6 +20,9 @@ public partial class MainRuntimeViewModel : ObservableObject
     private readonly IOcrProcessingService _ocrProcessingService;
     private readonly IOcrResultConverter _ocrResultConverter;
     private readonly IScanSessionService _scanSessionService;
+    private readonly IDeviceApiClient _deviceApiClient;
+    private readonly IApiKeyStore _apiKeyStore;
+    private readonly SemaphoreSlim _usageSyncLock = new(1, 1);
     private readonly object _operationSync = new();
     private readonly object _autoSync = new();
     private CancellationTokenSource? _activeOperationCts;
@@ -41,6 +44,8 @@ public partial class MainRuntimeViewModel : ObservableObject
         IOcrProcessingService ocrProcessingService,
         IOcrResultConverter ocrResultConverter,
         IScanSessionService scanSessionService,
+        IDeviceApiClient deviceApiClient,
+        IApiKeyStore apiKeyStore,
         string deviceId)
     {
         _runtimePort = runtimePort;
@@ -50,9 +55,12 @@ public partial class MainRuntimeViewModel : ObservableObject
         _ocrProcessingService = ocrProcessingService;
         _ocrResultConverter = ocrResultConverter;
         _scanSessionService = scanSessionService;
+        _deviceApiClient = deviceApiClient;
+        _apiKeyStore = apiKeyStore;
         _scanSessionService.ProgressChanged += OnScanSessionProgressChanged;
         DeviceId = deviceId;
-        _ = LoadOcrHistoryAsync(CancellationToken.None);
+        EnsureDefaultHistoryDateRange();
+        _ = InitializeAsync();
     }
 
     public string DeviceId { get; }
@@ -124,6 +132,13 @@ public partial class MainRuntimeViewModel : ObservableObject
     public ObservableCollection<OcrFieldItem> OcrFields { get; } = new();
     public ObservableCollection<OcrHistoryItem> OcrHistory { get; } = new();
 
+    public void EnsureDefaultHistoryDateRange()
+    {
+        var today = DateTime.Today;
+        SearchStartDate ??= today;
+        SearchEndDate ??= today;
+    }
+
     public void SetAutoStandbyEnabled(bool enabled)
     {
         lock (_autoSync)
@@ -161,58 +176,6 @@ public partial class MainRuntimeViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private Task RefreshAsync()
-        => RunSafeAsync(ct => RefreshCoreAsync(ct));
-
-    [RelayCommand]
-    private Task ConnectAsync()
-        => RunSafeAsync(async ct =>
-        {
-            var changed = await _runtimePort.ConnectAsync(DeviceId, ct);
-            LastResult = changed ? "Connected." : "No change on connect.";
-            await RefreshCoreAsync(ct);
-        });
-
-    [RelayCommand]
-    private Task DisconnectAsync()
-        => RunSafeAsync(async ct =>
-        {
-            var changed = await _runtimePort.DisconnectAsync(DeviceId, ct);
-            LastResult = changed ? "Disconnected." : "No change on disconnect.";
-            await RefreshCoreAsync(ct);
-        });
-
-    [RelayCommand]
-    private Task ScanStartAsync()
-        => RunSafeAsync(async ct =>
-        {
-            _awaitingEmptyAfterScan = false;
-            ResetDetectionState();
-            var result = await _scanSessionService.StartAsync(ct);
-            await RefreshCoreAsync(ct);
-
-            if (!result.Success)
-            {
-                LastResult = $"SCANSTART failed: {result.Code} {result.Message}";
-                return;
-            }
-
-            LastResult = "SCANSTART success. polling started.";
-        });
-
-    [RelayCommand]
-    private Task GetScanStatusAsync()
-        => RunSafeAsync(ct => GetScanStatusCoreAsync(ct));
-
-    [RelayCommand]
-    private Task SaveImageAsync()
-        => RunSafeAsync(ct => SaveImageCoreAsync(ct));
-
-    [RelayCommand]
-    private Task RunOcrAsync()
-        => RunSafeAsync(ct => RunOcrCoreAsync(ct));
-
-    [RelayCommand]
     private Task ReloadHistoryAsync()
         => RunSafeAsync(ct => LoadOcrHistoryAsync(ct));
 
@@ -245,6 +208,7 @@ public partial class MainRuntimeViewModel : ObservableObject
             var rows = OcrHistory
                 .Select(x => new HistoryExcelRow(
                     x.TimestampUtc,
+                    x.DocumentType,
                     x.DocumentNo,
                     x.Name,
                     x.Nationality))
@@ -313,39 +277,6 @@ public partial class MainRuntimeViewModel : ObservableObject
             LastResult = "검색 조건을 초기화했습니다.";
             return Task.CompletedTask;
         });
-
-    [RelayCommand]
-    private Task ScanStopAsync()
-        => RunSafeAsync(async ct =>
-        {
-            var result = await _scanSessionService.StopAsync(ct);
-            await RefreshCoreAsync(ct);
-            ResetDetectionState();
-
-            if (!result.Success)
-            {
-                LastResult = $"SCANSTOP failed: {result.Code} {result.Message}";
-                return;
-            }
-
-            LastResult = "SCANSTOP success.";
-        });
-
-    [RelayCommand]
-    private Task RestartAsync() => ExecuteCommandCoreAsync("RESTART");
-
-    private Task ExecuteCommandCoreAsync(string commandName, string? payload = null)
-        => RunSafeAsync(ct => ExecuteCommandUnsafeAsync(commandName, payload, ct));
-
-    private async Task ExecuteCommandUnsafeAsync(string commandName, string? payload = null, CancellationToken cancellationToken = default)
-    {
-        var result = await _runtimePort.ExecuteAsync(DeviceId, new DeviceCommandRequest(commandName, payload), cancellationToken);
-        LastResult =
-            $"[{FormatCode(result)}] success={result.Success}{Environment.NewLine}" +
-            $"message={result.Message}{Environment.NewLine}" +
-            $"raw={result.Data}";
-        await RefreshCoreAsync(cancellationToken);
-    }
 
     public async Task RefreshCoreAsync(CancellationToken cancellationToken = default)
     {
@@ -543,8 +474,17 @@ public partial class MainRuntimeViewModel : ObservableObject
         if (ApplyOcrResult(ocrResult, out var fields))
         {
             var rawJson = JsonSerializer.Serialize(ocrResult);
-            await AppendOcrHistoryAsync(fields, ocrResult.DocumentType, rawJson, cancellationToken);
+            var deviceSerial = await ExtractCurrentSerialAsync(cancellationToken);
+            var historySaved = await AppendOcrHistoryAsync(fields, ocrResult.DocumentType, deviceSerial, rawJson, cancellationToken);
             LastResult = $"OCR success.{Environment.NewLine}source={ocrResult.Source}, documentType={ocrResult.DocumentType ?? "-"}";
+            if (historySaved)
+            {
+                await SyncPendingUsageAsync(cancellationToken);
+            }
+            else
+            {
+                LastResult = $"{LastResult}{Environment.NewLine}Usage API skipped: OCR DB 저장 실패.";
+            }
             return true;
         }
 
@@ -588,24 +528,147 @@ public partial class MainRuntimeViewModel : ObservableObject
         OcrStatus = "-";
     }
 
-    private async Task AppendOcrHistoryAsync(
+    private async Task<bool> AppendOcrHistoryAsync(
         IReadOnlyDictionary<string, string> fields,
         string? documentType,
+        string? deviceSerial,
         string? rawJson,
         CancellationToken cancellationToken)
     {
         try
         {
-            await _ocrHistoryStore.AddAsync(fields, documentType, rawJson ?? string.Empty, cancellationToken);
+            await _ocrHistoryStore.AddAsync(fields, documentType, deviceSerial, rawJson ?? string.Empty, cancellationToken);
             var rows = await _ocrHistoryStore.GetAllAsync(cancellationToken);
             _allHistoryRows = rows;
             ApplyHistoryFilter();
             OcrStatus = $"OCR success ({OcrFields.Count}), saved ({OcrHistory.Count})";
+            return true;
         }
         catch (Exception ex)
         {
             LastResult = $"{LastResult}{Environment.NewLine}History save failed: {ex.Message}";
+            return false;
         }
+    }
+
+    private async Task SyncPendingUsageAsync(CancellationToken cancellationToken)
+    {
+        if (!await _usageSyncLock.WaitAsync(0, cancellationToken))
+        {
+            return;
+        }
+
+        try
+        {
+            var apiKey = (await _apiKeyStore.LoadAsync(cancellationToken))?.Trim();
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                LastResult = $"{LastResult}{Environment.NewLine}Usage sync pending: API 키가 없습니다.";
+                return;
+            }
+
+            var pendingRows = await _ocrHistoryStore.GetPendingUsageSyncRowsAsync(cancellationToken: cancellationToken);
+            if (pendingRows.Count == 0)
+            {
+                return;
+            }
+
+            string? fallbackSerial = null;
+            var successCount = 0;
+            var failedCount = 0;
+
+            foreach (var row in pendingRows)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var serial = row.DeviceSerial;
+                if (string.IsNullOrWhiteSpace(serial))
+                {
+                    fallbackSerial ??= await ExtractCurrentSerialAsync(cancellationToken);
+                    serial = fallbackSerial;
+                }
+
+                if (string.IsNullOrWhiteSpace(serial))
+                {
+                    await _ocrHistoryStore.MarkUsageSyncFailedAsync(
+                        row.Id,
+                        "장치 시리얼 추출 실패.",
+                        row.UsageSyncLastResponse,
+                        cancellationToken);
+                    failedCount++;
+                    continue;
+                }
+
+                var response = await _deviceApiClient.IncrementUsageAsync(serial, apiKey, cancellationToken);
+                if (response.Success)
+                {
+                    await _ocrHistoryStore.MarkUsageSyncSucceededAsync(
+                        row.Id,
+                        response.DateKey,
+                        response.TotalUsage,
+                        response.RawBody,
+                        cancellationToken);
+                    successCount++;
+                    continue;
+                }
+
+                await _ocrHistoryStore.MarkUsageSyncFailedAsync(
+                    row.Id,
+                    response.Message,
+                    response.RawBody,
+                    cancellationToken);
+                failedCount++;
+            }
+
+            if (successCount > 0 || failedCount > 0)
+            {
+                LastResult = $"{LastResult}{Environment.NewLine}Usage sync summary: success={successCount}, failed={failedCount}";
+            }
+        }
+        catch (Exception ex)
+        {
+            LastResult = $"{LastResult}{Environment.NewLine}Usage sync error: {ex.Message}";
+        }
+        finally
+        {
+            _usageSyncLock.Release();
+        }
+    }
+
+    private async Task<string?> ExtractCurrentSerialAsync(CancellationToken cancellationToken)
+    {
+        var result = await _runtimePort.ExecuteAsync(DeviceId, new DeviceCommandRequest("GETDEVICEID"), cancellationToken);
+        if (!result.Success)
+        {
+            return null;
+        }
+
+        return ToRegistrationSerial(result.Data?.ToString());
+    }
+
+    private static string? ToRegistrationSerial(string? rawSerial)
+    {
+        var normalized = (rawSerial ?? string.Empty).Trim().ToUpperInvariant();
+        if (string.IsNullOrWhiteSpace(normalized))
+        {
+            return null;
+        }
+
+        var digitsOnly = new string(normalized.Where(char.IsDigit).ToArray());
+        var baseSerial = digitsOnly.Length >= 7
+            ? digitsOnly[^7..]
+            : normalized.Length >= 7
+                ? normalized[^7..]
+                : normalized;
+
+        if (string.IsNullOrWhiteSpace(baseSerial))
+        {
+            return null;
+        }
+
+        var chars = baseSerial.ToCharArray();
+        chars[0] = '1';
+        return new string(chars);
     }
 
     private async Task LoadOcrHistoryAsync(CancellationToken cancellationToken)
@@ -615,6 +678,19 @@ public partial class MainRuntimeViewModel : ObservableObject
             var rows = await _ocrHistoryStore.GetAllAsync(cancellationToken);
             _allHistoryRows = rows;
             ApplyHistoryFilter();
+        }
+        catch
+        {
+        }
+    }
+
+    private async Task InitializeAsync()
+    {
+        await LoadOcrHistoryAsync(CancellationToken.None);
+
+        try
+        {
+            await SyncPendingUsageAsync(CancellationToken.None);
         }
         catch
         {
@@ -667,7 +743,6 @@ public partial class MainRuntimeViewModel : ObservableObject
                 row.DocumentNo,
                 row.Name,
                 row.Nationality,
-                row.Sex,
                 row.BirthDate,
                 row.ExpiryDate,
                 row.RawJson);
@@ -987,7 +1062,6 @@ public partial class MainRuntimeViewModel : ObservableObject
             fields["NO"] = item.DocumentNo;
             fields["NAME"] = item.Name;
             fields["NATIONALITY"] = item.Nationality;
-            fields["SEX"] = item.Sex;
             fields["BIRTHDATE"] = item.BirthDate;
             fields["EXPIRYDATE"] = item.ExpiryDate;
         }
@@ -1047,7 +1121,6 @@ public partial class MainRuntimeViewModel : ObservableObject
             string documentNo,
             string name,
             string nationality,
-            string sex,
             string birthDate,
             string expiryDate,
             string rawJson)
@@ -1058,7 +1131,6 @@ public partial class MainRuntimeViewModel : ObservableObject
             DocumentNo = documentNo;
             Name = name;
             Nationality = nationality;
-            Sex = sex;
             BirthDate = birthDate;
             ExpiryDate = expiryDate;
             RawJson = rawJson;
@@ -1070,7 +1142,6 @@ public partial class MainRuntimeViewModel : ObservableObject
         public string DocumentNo { get; }
         public string Name { get; }
         public string Nationality { get; }
-        public string Sex { get; }
         public string BirthDate { get; }
         public string ExpiryDate { get; }
         public string RawJson { get; }
@@ -1078,5 +1149,4 @@ public partial class MainRuntimeViewModel : ObservableObject
         [ObservableProperty]
         private bool isSelected;
     }
-
 }

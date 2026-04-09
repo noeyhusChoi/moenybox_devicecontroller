@@ -1,0 +1,50 @@
+name: Sync docs to docs-hub
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-docs-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+
+      - name: Checkout docs-hub
+        uses: actions/checkout@v4
+        with:
+          repository: MoneyBox-Skypay/docs
+          token: ${{ secrets.DOCS_HUB_PAT }}
+          path: docs-hub
+
+      - name: Sync docs
+        run: |
+          TARGET="docs-hub/projects/kiosk"
+          mkdir -p "$TARGET"
+          rm -rf "$TARGET"/*
+          cp -r docs/* "$TARGET"/
+
+      - name: Commit and push
+        working-directory: docs-hub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add projects/
+          if git diff --cached --quiet; then
+            echo "No changes to sync"
+            exit 0
+          fi
+
+          git commit -m "sync(kiosk): kiosk docs 동기화
+
+          Source: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+          git push

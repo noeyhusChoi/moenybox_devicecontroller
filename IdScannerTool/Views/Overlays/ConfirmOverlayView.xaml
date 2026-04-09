@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="IdScannerTool.Views.Overlays.ConfirmOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    mc:Ignorable="d">
+    <Grid Width="480" Height="270">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <ui:SymbolIcon
+            Grid.Row="0"
+            FontSize="48"
+            FontWeight="Bold"
+            Symbol="Info24" />
+
+        <ui:TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontTypography="Subtitle"
+            Text="{Binding Title}" />
+
+        <ui:TextBlock
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="14"
+            FontTypography="Body"
+            Text="{Binding Message}" />
+
+        <ui:Button
+            Grid.Row="3"
+            Width="120"
+            Height="36"
+            Margin="0,18,0,0"
+            HorizontalAlignment="Right"
+            Appearance="Primary"
+            Command="{Binding ConfirmCommand}"
+            Content="확인"
+            FontWeight="SemiBold" />
+    </Grid>
+</UserControl>

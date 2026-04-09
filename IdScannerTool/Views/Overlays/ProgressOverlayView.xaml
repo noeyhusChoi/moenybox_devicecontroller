@@ -1,0 +1,69 @@
+﻿<UserControl
+    x:Class="IdScannerTool.Views.Overlays.ProgressOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid Width="480" Height="270">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="20"
+            FontWeight="SemiBold"
+            Text="{Binding Title}" />
+
+        <Grid
+            Grid.Row="1"
+            Width="60"
+            Height="60"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <ui:ProgressRing
+                Width="46"
+                Height="46"
+                IsIndeterminate="True"
+                Visibility="{Binding IsSpinning, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="34"
+                FontWeight="Bold"
+                LineHeight="60"
+                Text="{Binding IndicatorText}"
+                TextAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSpinning}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <TextBlock
+            Grid.Row="2"
+            Margin="0,10,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="14"
+            Text="{Binding Message}"
+            TextWrapping="Wrap" />
+    </Grid>
+</UserControl>

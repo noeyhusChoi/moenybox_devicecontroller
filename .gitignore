@@ -1,0 +1,30 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Visual Studio / Rider workspace files
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.slnLaunch.user
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Logs and diagnostics
+*.log
+*.tmp
+*.temp
+
+# Test and coverage artifacts
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Codex local workspace artifacts
+.codex_tmp/

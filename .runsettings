@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <CEMS_TEST_BASE_URL>https://stage-cems.moneybox.or.kr/api/cmdV2.php</CEMS_TEST_BASE_URL>
+      <CEMS_TEST_API_KEY>C4E7I4W5C4B6L3K4T2C4</CEMS_TEST_API_KEY>
+      <CEMS_TEST_CURRENCY>USD</CEMS_TEST_CURRENCY>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>

@@ -6,8 +6,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid MinWidth="360">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -44,6 +49,22 @@
 
         <StackPanel
             Grid.Row="3"
+            Margin="0,16,0,0"
+            Visibility="{Binding ShowProgress, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ProgressBar
+                Height="14"
+                Minimum="0"
+                Maximum="100"
+                Value="{Binding ProgressPercent}" />
+            <TextBlock
+                Margin="0,8,0,0"
+                HorizontalAlignment="Right"
+                FontWeight="SemiBold"
+                Text="{Binding ProgressPercent, StringFormat={}{0}%}" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="4"
             Margin="0,24,0,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">

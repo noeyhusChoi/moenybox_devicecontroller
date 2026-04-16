@@ -37,6 +37,12 @@ public partial class UpdateOverlayViewModel : ObservableObject
     [ObservableProperty]
     private bool canUpdate;
 
+    [ObservableProperty]
+    private int progressPercent;
+
+    [ObservableProperty]
+    private bool showProgress;
+
     partial void OnCanUpdateChanged(bool value)
     {
         UpdateCommand.NotifyCanExecuteChanged();

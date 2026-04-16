@@ -56,22 +56,7 @@
             Grid.Row="0"
             ShowClose="True"
             ShowMaximize="True"
-            ShowMinimize="True">
-            <ui:TitleBar.TrailingContent>
-                <StackPanel Orientation="Horizontal">
-                    <ui:Button
-                        Margin="0,0,8,0"
-                        VerticalAlignment="Center"
-                        Appearance="Secondary"
-                        Command="{Binding OpenUpdatePopupCommand}"
-                        Content="업데이트" />
-                    <!--<ui:ToggleSwitch
-                        VerticalAlignment="Center"
-                        Content="{Binding IsDarkTheme}"
-                        IsChecked="{Binding IsDarkTheme, Mode=TwoWay}" />-->
-                </StackPanel>
-            </ui:TitleBar.TrailingContent>
-        </ui:TitleBar>
+            ShowMinimize="True" />
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
 

@@ -411,6 +411,7 @@ public partial class ShellViewModel : ObservableObject
         _updateOverlay.LatestVersion = result.Update?.Version ?? _updateOverlay.CurrentVersion;
     }
 
+    #if false
     private async Task StartUpdateAsync()
     {
         if (_updateBusy || _updateOverlay is null)
@@ -427,10 +428,11 @@ public partial class ShellViewModel : ObservableObject
 
         _updateBusy = true;
         _updateOverlay.IsBusy = true;
+        _updateOverlay.ShowProgress = true;
+        _updateOverlay.ProgressPercent = 0;
         try
         {
-            CloseCustomOverlay();
-            _appOverlayService.ShowProgress(
+            _updateOverlay.StatusMessage = $"버전 {checkResult.Update.Version} 다운로드 중입니다. 0%";
                 "업데이트 다운로드",
                 $"버전 {checkResult.Update.Version} 다운로드 중... 0%");
 
@@ -451,6 +453,8 @@ public partial class ShellViewModel : ObservableObject
             _updateBusy = false;
         }
     }
+
+    #endif
 
     private void PauseMainBackgroundFlowsForUpdate()
     {

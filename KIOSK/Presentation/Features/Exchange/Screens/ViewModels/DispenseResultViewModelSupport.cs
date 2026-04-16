@@ -44,7 +44,7 @@ internal static class DispenseResultViewModelSupport
         var current = new DirectoryInfo(AppContext.BaseDirectory);
         while (current is not null)
         {
-            var candidate = Path.Combine(current.FullName, "Assets", "Image", "Flag", $"{currencyCode}.png");
+            var candidate = Path.Combine(current.FullName, "Assets", "Flag", $"{currencyCode}.png");
             if (File.Exists(candidate))
                 return candidate;
 

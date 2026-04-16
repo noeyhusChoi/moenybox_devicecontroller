@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:Kiosk.Application.Services.Resx"
     behavior:FocusBoundary.EntryTarget="{Binding ElementName=ServiceCardContainer}"
@@ -13,59 +12,26 @@
     d:Language="ko-KR"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style x:Key="ServiceCardButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="240" />
-            <Setter Property="Margin" Value="0,0,0,32" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Background" Value="{DynamicResource AccentSurfaceBackgroundBrush}" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="Opacity" Value="1" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="32"
-                            Opacity="{TemplateBinding Opacity}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.82" />
-                </Trigger>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-
         <Style x:Key="ServiceCardTitleTextStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="50" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="FontSize" Value="53" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style x:Key="ServiceCardSubtitleTextStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,16,0,0" />
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
     </UserControl.Resources>
 
-    <Grid
-        Width="1080"
-        Height="1705"
-        Background="{DynamicResource AppBackgroundBrush}">
+    <Grid Margin="72" Background="{DynamicResource AppBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="205" />
-            <RowDefinition Height="224" />
+            <RowDefinition Height="190" />
+            <RowDefinition Height="160" />
+            <RowDefinition Height="124" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -75,7 +41,7 @@
             VerticalAlignment="Center">
             <TextBlock
                 FontSize="60"
-                FontWeight="SemiBold"
+                FontWeight="Bold"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{resx:ResxLoc Menu.Title}"
                 TextAlignment="Center" />
@@ -90,9 +56,8 @@
 
         <Grid
             x:Name="ServiceCardContainer"
-            Grid.Row="2"
-            Margin="72,0"
-            VerticalAlignment="Center"
+            Grid.Row="3"
+            VerticalAlignment="Top"
             behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="VerticalStack">
             <Grid.RowDefinitions>
@@ -104,17 +69,27 @@
             <Button
                 x:Name="TransportationCardButton"
                 Grid.Row="0"
+                Height="310"
+                Margin="0,0,0,32"
                 Command="{Binding Command}"
                 DataContext="{Binding TransportationCard}"
-                IsEnabled="{Binding IsEnabled}"
-                Style="{StaticResource ServiceCardButtonStyle}">
+                Style="{StaticResource FilledWhiteButtonStyle}">
                 <Grid Margin="90,52">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="140" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Style="{StaticResource ServiceCardTitleTextStyle}" Text="{Binding Title}" />
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Foreground="{DynamicResource ControlDefaultPrimaryForegroundBrush}"
+                            Style="{StaticResource ServiceCardTitleTextStyle}"
+                            Text="{Binding Title}" />
+                        <TextBlock
+                            Foreground="{DynamicResource ControlDefaultSecondaryForegroundBrush}"
+                            Style="{StaticResource ServiceCardSubtitleTextStyle}"
+                            Text="{Binding Subtitle}" />
+                    </StackPanel>
 
                     <Image
                         Grid.Column="1"
@@ -128,50 +103,73 @@
             <Button
                 x:Name="ExchangeCardButton"
                 Grid.Row="1"
+                Height="310"
+                Margin="0,0,0,32"
                 behavior:FocusContainer.IsPreferredFocus="True"
                 Command="{Binding Command}"
                 DataContext="{Binding ExchangeCard}"
-                IsEnabled="{Binding IsEnabled}"
-                Style="{StaticResource ServiceCardButtonStyle}">
-                <DockPanel Margin="90,52" LastChildFill="True">
-                    <TextBlock
-                        x:Name="ExchangeCardTitleText"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontSize="50"
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextPrimaryBrush}"
-                        Text="{resx:ResxLoc Menu.BuyTitle}" />
+                Style="{StaticResource FilledPrimaryButtonStyle}">
+                <Grid Margin="90,52">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="160" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Foreground="{DynamicResource ControlFeaturedPrimaryForegroundBrush}"
+                            Style="{StaticResource ServiceCardTitleTextStyle}"
+                            Text="{Binding Title}" />
+                        <TextBlock
+                            Foreground="{DynamicResource ControlFeaturedSecondaryForegroundBrush}"
+                            Style="{StaticResource ServiceCardSubtitleTextStyle}"
+                            Text="{Binding Subtitle}" />
+                    </StackPanel>
+
                     <Image
-                        HorizontalAlignment="Right"
+                        Grid.Column="1"
+                        Width="160"
+                        Height="160"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Source="{Binding IconAssetPath}"
                         Stretch="Uniform" />
-                </DockPanel>
+                </Grid>
             </Button>
 
             <Button
                 x:Name="TaxRefundCardButton"
                 Grid.Row="2"
+                Height="310"
                 Command="{Binding Command}"
                 DataContext="{Binding TaxRefundCard}"
-                IsEnabled="{Binding IsEnabled}"
-                Style="{StaticResource ServiceCardButtonStyle}">
-                <DockPanel Margin="90,52" LastChildFill="True">
-                    <TextBlock
-                        x:Name="TaxRefundCardTitleText"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontSize="50"
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextPrimaryBrush}"
-                        Text="택스리펀드" />
+                Style="{StaticResource FilledDarkButtonStyle}">
+                <Grid Margin="90,52">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="160" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Foreground="{DynamicResource ControlStrongPrimaryForegroundBrush}"
+                            Style="{StaticResource ServiceCardTitleTextStyle}"
+                            Text="{Binding Title}" />
+                        <TextBlock
+                            Foreground="{DynamicResource ControlStrongSecondaryForegroundBrush}"
+                            Style="{StaticResource ServiceCardSubtitleTextStyle}"
+                            Text="{Binding Subtitle}" />
+                    </StackPanel>
+
                     <Image
-                        HorizontalAlignment="Right"
+                        Grid.Column="1"
+                        Width="160"
+                        Height="160"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Source="{Binding IconAssetPath}"
                         Stretch="Uniform" />
-                </DockPanel>
+                </Grid>
             </Button>
         </Grid>
     </Grid>

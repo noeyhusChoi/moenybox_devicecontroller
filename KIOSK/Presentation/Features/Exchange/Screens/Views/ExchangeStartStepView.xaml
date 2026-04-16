@@ -4,50 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <Style x:Key="StartPrimaryActionButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="{DynamicResource AccentBackgroundBrush}" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="32">
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="60"
-                                FontWeight="SemiBold"
-                                Foreground="{DynamicResource TextOnAccentBrush}"
-                                Text="{Binding PrimaryText}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                    <Setter Property="BorderThickness" Value="6" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -57,7 +22,7 @@
             Text="{Binding Title}" />
 
         <Grid
-            Grid.Row="1"
+            Grid.Row="2"
             behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="VerticalStack"
             Background="Transparent">
@@ -77,14 +42,17 @@
             <Button
                 x:Name="PrimaryActionButton"
                 Grid.Row="2"
-                Width="936"
-                Height="310"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
                 Command="{Binding PrimaryCommand}"
-                Cursor="Hand"
-                Style="{StaticResource StartPrimaryActionButtonStyle}"
-                Visibility="{Binding ShowPrimaryAction, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                FontSize="60"
+                FontWeight="SemiBold"
+                Style="{StaticResource FilledPrimaryButtonStyle}"
+                Visibility="{Binding ShowPrimaryAction, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="{Binding PrimaryText}"
+                    TextAlignment="Center" />
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

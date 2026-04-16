@@ -4,19 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignWidth="1080"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="LimitLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="34" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="#555A65" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="LimitValueStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="34" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -24,42 +25,37 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <Border
+            Margin="0,-70,0,0"
+            Padding="16,10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Panel.ZIndex="10"
+            Background="{DynamicResource DebugPanelBackgroundBrush}"
+            Opacity="0.4">
+            <TextBlock
+                MaxWidth="320"
+                FontSize="24"
+                FontWeight="Medium"
+                Foreground="{DynamicResource TextSecondaryBrush}"
+                Text="{Binding StatusMessage}"
+                TextWrapping="Wrap" />
+        </Border>
+
 
         <TextBlock
             Grid.Row="0"
             Style="{StaticResource ExchangeStepTitleStyle}"
             Text="{Binding Title}" />
 
-        <Grid Grid.Row="1" Width="936" Height="1020">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="24" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Border
-                Padding="16,10"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Panel.ZIndex="10"
-                Background="#EDEFF5"
-                CornerRadius="16">
-                <TextBlock
-                    MaxWidth="320"
-                    FontSize="24"
-                    FontWeight="Medium"
-                    Foreground="{DynamicResource TextSecondaryBrush}"
-                    Text="{Binding StatusMessage}"
-                    TextWrapping="Wrap" />
-            </Border>
-
-        <Border
-            Grid.Row="0"
-            Background="{DynamicResource CardBackgroundBrush}"
-            CornerRadius="32">
+        <Border Grid.Row="2" Style="{StaticResource CardSurfaceBorderStyle}">
             <Grid Margin="54">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="80" />
@@ -108,7 +104,7 @@
                 <Border
                     Grid.Row="1"
                     Height="2"
-                    Background="{DynamicResource FeatureDividerBrush}" />
+                    Background="{DynamicResource FeatureDividerDefaultBrush}" />
 
                 <DockPanel Grid.Row="2" LastChildFill="True">
                     <TextBlock
@@ -131,30 +127,30 @@
 
                     <Border
                         Grid.Column="0"
-                        Background="{DynamicResource SurfaceMutedBackgroundBrush}"
+                        Background="{DynamicResource AppBackgroundBrush}"
                         CornerRadius="32">
                         <Image Source="{Binding GuideImagePath}" Stretch="Uniform" />
                     </Border>
 
-                    <Border
-                        Grid.Column="2"
-                        Padding="32"
-                        Background="{DynamicResource SurfaceMutedBackgroundBrush}"
-                        CornerRadius="32">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="4" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Row="0" VerticalAlignment="Center">
-                                <TextBlock
-                                    FontSize="34"
-                                    FontWeight="Medium"
-                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                    Text="입금" />
-                                <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextPrimaryBrush}">
+                        <Border
+                            Grid.Row="0"
+                            Background="{DynamicResource AppBackgroundBrush}"
+                            CornerRadius="32">
+                            <StackPanel Margin="40,0" VerticalAlignment="Center">
+                                <Border
+                                    Width="54"
+                                    Height="54"
+                                    HorizontalAlignment="Left">
+                                    <Image Source="pack://application:,,,/Assets/Flag/AED.png" Stretch="Fill" />
+                                </Border>
+                                <TextBlock Margin="0,16,0,0" Foreground="{DynamicResource TextPrimaryBrush}">
                                     <Run
                                         FontSize="50"
                                         FontWeight="Bold"
@@ -166,20 +162,20 @@
                                         Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
                                 </TextBlock>
                             </StackPanel>
+                        </Border>
 
-                            <Border
-                                Grid.Row="1"
-                                Height="2"
-                                Margin="0,16"
-                                Background="{DynamicResource FeatureDividerBrush}" />
-
-                            <StackPanel Grid.Row="2" VerticalAlignment="Center">
-                                <TextBlock
-                                    FontSize="34"
-                                    FontWeight="Medium"
-                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                    Text="환전" />
-                                <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource AccentBackgroundBrush}">
+                        <Border
+                            Grid.Row="2"
+                            Background="{DynamicResource AppBackgroundBrush}"
+                            CornerRadius="32">
+                            <StackPanel Margin="40,0" VerticalAlignment="Center">
+                                <Border
+                                    Width="54"
+                                    Height="54"
+                                    HorizontalAlignment="Left">
+                                    <Image Source="pack://application:,,,/Assets/Flag/AED.png" Stretch="Fill" />
+                                </Border>
+                                <TextBlock Margin="0,16,0,0" Foreground="{DynamicResource AccentBackgroundBrush}">
                                     <Run
                                         FontSize="50"
                                         FontWeight="Bold"
@@ -191,55 +187,68 @@
                                         Text="{Binding TargetCurrencyCode, Mode=OneWay}" />
                                 </TextBlock>
                             </StackPanel>
-                        </Grid>
-                    </Border>
+                        </Border>
+
+                        <Border
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Width="66"
+                            Height="66"
+                            VerticalAlignment="Center"
+                            Background="{StaticResource AppBackgroundBrush}"
+                            BorderBrush="{DynamicResource TextOnAccentBrush}"
+                            BorderThickness="6"
+                            CornerRadius="33">
+                            <Image
+                                Width="40"
+                                Height="40"
+                                Source="pack://application:,,,/Assets/Icon/ico_chevron_down.png"
+                                Stretch="Fill" />
+                        </Border>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>
 
-            <Border
-                Grid.Row="2"
-                Background="{DynamicResource CardBackgroundBrush}"
-                CornerRadius="32">
-                <StackPanel Margin="54,36">
-                    <DockPanel LastChildFill="True">
-                        <TextBlock Style="{StaticResource LimitLabelStyle}" Text="1일 최대 환전한도" />
-                        <TextBlock Grid.Column="1" Style="{StaticResource LimitValueStyle}">
-                            <Run Text="{Binding DailyMaximumAmountText, Mode=OneWay}" />
-                            <Run Text=" " />
-                            <Run Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
-                        </TextBlock>
-                    </DockPanel>
+        <Border Grid.Row="4" Style="{StaticResource CardSurfaceBorderStyle}">
+            <StackPanel Margin="54,36">
+                <DockPanel LastChildFill="True">
+                    <TextBlock Style="{StaticResource LimitLabelStyle}" Text="1일 최대 환전한도" />
+                    <TextBlock Grid.Column="1" Style="{StaticResource LimitValueStyle}">
+                        <Run Text="{Binding DailyMaximumAmountText, Mode=OneWay}" />
+                        <Run Text=" " />
+                        <Run Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
+                    </TextBlock>
+                </DockPanel>
 
-                    <Border
-                        Height="2"
-                        Margin="0,16"
-                        Background="{DynamicResource FeatureDividerBrush}" />
+                <Border
+                    Height="2"
+                    Margin="0,16"
+                    Background="{DynamicResource FeatureDividerDefaultBrush}" />
 
-                    <DockPanel LastChildFill="True">
-                        <TextBlock Style="{StaticResource LimitLabelStyle}" Text="잔여 1일 환전한도" />
-                        <TextBlock Grid.Column="1" Style="{StaticResource LimitValueStyle}">
-                            <Run Text="{Binding DailyRemainingMaximumAmountText, Mode=OneWay}" />
-                            <Run Text=" " />
-                            <Run Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
-                        </TextBlock>
-                    </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Style="{StaticResource LimitLabelStyle}" Text="잔여 1일 환전한도" />
+                    <TextBlock Grid.Column="1" Style="{StaticResource LimitValueStyle}">
+                        <Run Text="{Binding DailyRemainingMaximumAmountText, Mode=OneWay}" />
+                        <Run Text=" " />
+                        <Run Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
+                    </TextBlock>
+                </DockPanel>
 
-                    <Border
-                        Height="2"
-                        Margin="0,16"
-                        Background="{DynamicResource FeatureDividerBrush}" />
+                <Border
+                    Height="2"
+                    Margin="0,16"
+                    Background="{DynamicResource FeatureDividerDefaultBrush}" />
 
-                    <DockPanel LastChildFill="True">
-                        <TextBlock Style="{StaticResource LimitLabelStyle}" Text="1일 최대 환전 가능 금액" />
-                        <TextBlock Grid.Column="1" Style="{StaticResource LimitValueStyle}">
-                            <Run Text="{Binding DailyAvailableExchangeAmountText, Mode=OneWay}" />
-                            <Run Text=" " />
-                            <Run Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
-                        </TextBlock>
-                    </DockPanel>
-                </StackPanel>
-            </Border>
-        </Grid>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Style="{StaticResource LimitLabelStyle}" Text="1일 최대 환전 가능 금액" />
+                    <TextBlock Grid.Column="1" Style="{StaticResource LimitValueStyle}">
+                        <Run Text="{Binding DailyAvailableExchangeAmountText, Mode=OneWay}" />
+                        <Run Text=" " />
+                        <Run Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
+                    </TextBlock>
+                </DockPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

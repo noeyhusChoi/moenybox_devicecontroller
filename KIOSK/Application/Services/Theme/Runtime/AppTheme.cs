@@ -3,10 +3,7 @@ namespace Kiosk.Application.Services.Theme;
 public sealed class AppTheme : IAppTheme
 {
     private static readonly Uri LightThemeUri = new("/Resources/Colors/Colors.Semantic.Light.xaml", UriKind.Relative);
-    private static readonly Uri LightRedThemeUri = new("/Resources/Colors/Colors.Semantic.LightRed.xaml", UriKind.Relative);
-    private static readonly Uri LightOrangeThemeUri = new("/Resources/Colors/Colors.Semantic.LightOrange.xaml", UriKind.Relative);
-    private static readonly Uri LightGreenThemeUri = new("/Resources/Colors/Colors.Semantic.LightGreen.xaml", UriKind.Relative);
-    private static readonly Uri BlackThemeUri = new("/Resources/Colors/Colors.Semantic.Black.xaml", UriKind.Relative);
+    private static readonly Uri HighContrastThemeUri = new("/Resources/Colors/Colors.Semantic.HighContrast.xaml", UriKind.Relative);
 
     public AppThemeKind CurrentTheme { get; private set; } = AppThemeKind.Light;
 
@@ -22,10 +19,7 @@ public sealed class AppTheme : IAppTheme
         {
             Source = theme switch
             {
-                AppThemeKind.LightRed => LightRedThemeUri,
-                AppThemeKind.LightOrange => LightOrangeThemeUri,
-                AppThemeKind.LightGreen => LightGreenThemeUri,
-                AppThemeKind.Black => BlackThemeUri,
+                AppThemeKind.HighContrast => HighContrastThemeUri,
                 _ => LightThemeUri
             }
         };
@@ -39,6 +33,7 @@ public sealed class AppTheme : IAppTheme
 
             if (source.EndsWith("Colors.Semantic.Current.xaml", StringComparison.OrdinalIgnoreCase) ||
                 source.EndsWith("Colors.Semantic.Light.xaml", StringComparison.OrdinalIgnoreCase) ||
+                source.EndsWith("Colors.Semantic.HighContrast.xaml", StringComparison.OrdinalIgnoreCase) ||
                 source.EndsWith("Colors.Semantic.LightRed.xaml", StringComparison.OrdinalIgnoreCase) ||
                 source.EndsWith("Colors.Semantic.LightOrange.xaml", StringComparison.OrdinalIgnoreCase) ||
                 source.EndsWith("Colors.Semantic.LightGreen.xaml", StringComparison.OrdinalIgnoreCase) ||
@@ -60,6 +55,6 @@ public sealed class AppTheme : IAppTheme
 
     public void ToggleTheme()
     {
-        SetTheme(CurrentTheme == AppThemeKind.Light ? AppThemeKind.LightOrange : AppThemeKind.Light);
+        SetTheme(CurrentTheme == AppThemeKind.Light ? AppThemeKind.HighContrast : AppThemeKind.Light);
     }
 }

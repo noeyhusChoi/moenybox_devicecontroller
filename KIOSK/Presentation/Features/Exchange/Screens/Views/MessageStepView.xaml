@@ -19,7 +19,7 @@
         <Border
             Grid.Row="1"
             Padding="56"
-            Background="{DynamicResource PanelBackgroundBrush}"
+            Background="{DynamicResource CardBackgroundBrush}"
             BorderBrush="{DynamicResource BorderDefaultBrush}"
             BorderThickness="1"
             CornerRadius="36">
@@ -54,7 +54,7 @@
                             Height="64"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Background="{DynamicResource PanelBackgroundBrush}"
+                            Background="{DynamicResource CardBackgroundBrush}"
                             CornerRadius="32" />
                     </Grid>
                     <TextBlock

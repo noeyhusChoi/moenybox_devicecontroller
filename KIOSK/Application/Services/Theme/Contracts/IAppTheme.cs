@@ -3,10 +3,7 @@ namespace Kiosk.Application.Services.Theme;
 public enum AppThemeKind
 {
     Light,
-    LightRed,
-    LightOrange,
-    LightGreen,
-    Black
+    HighContrast
 }
 
 public interface IAppTheme

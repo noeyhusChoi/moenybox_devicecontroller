@@ -68,7 +68,7 @@
                 <RowDefinition>
                     <RowDefinition.Style>
                         <Style TargetType="RowDefinition">
-                            <Setter Property="Height" Value="205" />
+                            <Setter Property="Height" Value="190" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding CollapseShellChrome}" Value="True">
                                     <Setter Property="Height" Value="0" />
@@ -78,7 +78,7 @@
                     </RowDefinition.Style>
                 </RowDefinition>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="256" />
+                <RowDefinition Height="170" />
             </Grid.RowDefinitions>
 
             <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding ProgressSteps}">
@@ -97,7 +97,7 @@
             <ContentControl
                 x:Name="StepContentHost"
                 Grid.Row="1"
-                Margin="72,0"
+                Margin="72"
                 behavior:FocusBoundary.DownTarget="{Binding ElementName=BottomActionHost}"
                 behavior:FocusContainer.Mode="None"
                 Content="{Binding CurrentStepViewModel}"
@@ -108,7 +108,6 @@
             <ContentControl
                 x:Name="BottomActionHost"
                 Grid.Row="2"
-                Margin="72,0"
                 behavior:FocusBoundary.UpTarget="{Binding ElementName=StepContentHost}"
                 behavior:FocusContainer.Mode="None"
                 Content="{Binding CurrentBottomActionViewModel}"
@@ -119,11 +118,11 @@
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource AppBackgroundBrush}" />
-                <Style.Triggers>
+                <!--<Style.Triggers>
                     <DataTrigger Binding="{Binding UseFeatureBackground}" Value="True">
                         <Setter Property="Background" Value="{DynamicResource FeatureBackgroundBrush}" />
                     </DataTrigger>
-                </Style.Triggers>
+                </Style.Triggers>-->
             </Style>
         </Border.Style>
     </Border>

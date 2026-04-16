@@ -2,6 +2,7 @@
     x:Class="Kiosk.Views.Steps.ConsentStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,26 +10,10 @@
     IsTabStop="False"
     KeyboardNavigation.IsTabStop="False"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <Style x:Key="ConsentLinkButtonStyle" BasedOn="{StaticResource PlainLinkButtonStyle}" TargetType="Button">
-            <Setter Property="Focusable" Value="True" />
-            <Setter Property="IsTabStop" Value="True" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="3" />
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -37,14 +22,18 @@
             Style="{StaticResource ExchangeStepTitleStyle}"
             Text="{Binding Title}" />
 
-        <Grid Grid.Row="1" Width="936" Height="1100" Focusable="False" KeyboardNavigation.IsTabStop="False" KeyboardNavigation.DirectionalNavigation="Continue">
+        <Grid
+            Grid.Row="2"
+            Focusable="False"
+            KeyboardNavigation.DirectionalNavigation="Continue"
+            KeyboardNavigation.IsTabStop="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="352" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="83" />
-                <RowDefinition Height="106" />
-                <RowDefinition Height="255" />
-                <RowDefinition Height="93" />
+                <RowDefinition Height="72" />
+                <RowDefinition Height="88" />
+                <RowDefinition Height="72" />
+                <RowDefinition Height="257" />
+                <RowDefinition Height="72" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -55,71 +44,102 @@
                 Source="pack://application:,,,/Assets/Image/Passport.png"
                 Stretch="Uniform" />
 
-
-        <Border
-            Grid.Row="2"
-            HorizontalAlignment="Center"
-            Background="{DynamicResource AccentSurfaceBackgroundBrush}"
-            CornerRadius="41.5">
-            <TextBlock
-                Margin="40,16"
+            <Border
+                Grid.Row="2"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="34"
-                FontWeight="SemiBold"
-                Foreground="{DynamicResource AccentEmphasisForegroundBrush}"
-                Text="{Binding SupportedDocumentTypes}" />
-        </Border>
-
-        <Border
-            Grid.Row="4"
-            Width="936"
-            Height="255"
-            Background="{DynamicResource CardBackgroundBrush}"
-            CornerRadius="32">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="140" />
-                    <RowDefinition Height="4" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Grid
-                    Height="60"
+                BorderBrush="{DynamicResource Gray200Brush}"
+                BorderThickness="2"
+                CornerRadius="41.5">
+                <TextBlock
+                    Margin="40,16"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60" />
-                        <ColumnDefinition Width="24" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    VerticalAlignment="Center"
+                    FontSize="34"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource AccentEmphasisForegroundBrush}"
+                    Text="{Binding SupportedDocumentTypes}" />
+            </Border>
+
+            <Border
+                Grid.Row="4"
+                Style="{StaticResource CardSurfaceBorderStyle}"
+                Width="936"
+                Height="255"
+                >
+                <Grid
+                    behavior:FocusContainer.InitialFocus="True"
+                    behavior:FocusContainer.Mode="VerticalStack"
+                    Focusable="False"
+                    KeyboardNavigation.DirectionalNavigation="Continue"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="140" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
                     <CheckBox
-                        Grid.Column="0"
-                        Width="60"
-                        Height="60"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Stretch"
+                        behavior:FocusContainer.IsPreferredFocus="True"
+                        Cursor="Hand"
                         FocusVisualStyle="{x:Null}"
+                        Focusable="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
+                        IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
+                        KeyboardNavigation.IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
                         IsChecked="{Binding IsAgreed, Mode=TwoWay}">
                         <CheckBox.Template>
                             <ControlTemplate TargetType="CheckBox">
-                                <Border
-                                    x:Name="CheckBorder"
-                                    Width="60"
-                                    Height="60"
-                                    Background="{DynamicResource CardBackgroundBrush}"
-                                    BorderBrush="{DynamicResource BorderStrongBrush}"
-                                    BorderThickness="3"
-                                    CornerRadius="16">
-                                    <Path
-                                        x:Name="Tick"
-                                        Width="30"
-                                        Height="22"
-                                        Data="M 2,12 L 10,20 L 28,2"
-                                        Stroke="{DynamicResource AccentBackgroundBrush}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeThickness="4"
-                                        Visibility="Collapsed" />
+                                <Border Background="Transparent">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition Width="24" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border
+                                            x:Name="CheckFocusRing"
+                                            Grid.Column="0"
+                                            Width="72"
+                                            Height="72"
+                                            Margin="-6"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="Transparent"
+                                            BorderBrush="Black"
+                                            BorderThickness="4"
+                                            CornerRadius="22"
+                                            Visibility="Collapsed" />
+
+                                        <Border
+                                            x:Name="CheckBorder"
+                                            Grid.Column="0"
+                                            Width="60"
+                                            Height="60"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="{DynamicResource CardBackgroundBrush}"
+                                            BorderBrush="{DynamicResource BorderStrongBrush}"
+                                            BorderThickness="3"
+                                            CornerRadius="16">
+                                            <Path
+                                                x:Name="Tick"
+                                                Width="30"
+                                                Height="22"
+                                                Data="M 2,12 L 10,20 L 28,2"
+                                                Stroke="{DynamicResource AccentBackgroundBrush}"
+                                                StrokeEndLineCap="Round"
+                                                StrokeLineJoin="Round"
+                                                StrokeThickness="4"
+                                                Visibility="Collapsed" />
+                                        </Border>
+
+                                        <ContentPresenter
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            RecognizesAccessKey="True" />
+                                    </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsChecked" Value="True">
@@ -128,58 +148,55 @@
                                         <Setter TargetName="Tick" Property="Visibility" Value="Visible" />
                                         <Setter TargetName="Tick" Property="Stroke" Value="{DynamicResource TextOnAccentBrush}" />
                                     </Trigger>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsKeyboardFocused}" Value="True" />
-                                            <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                                        <Setter TargetName="CheckBorder" Property="BorderThickness" Value="5" />
-                                    </MultiDataTrigger>
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                        <Setter TargetName="CheckFocusRing" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="CheckBorder" Property="BorderThickness" Value="4" />
+                                    </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </CheckBox.Template>
+
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="40"
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            Text="{Binding TermsTitle}" />
                     </CheckBox>
 
-                    <TextBlock
-                        Grid.Column="2"
+                    <Rectangle
+                        Grid.Row="1"
+                        Height="2"
                         VerticalAlignment="Center"
-                        FontSize="40"
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextPrimaryBrush}"
-                        Text="{Binding TermsTitle}" />
-                </Grid>
+                        Fill="{DynamicResource FeatureDividerDefaultBrush}" />
 
-                <Rectangle
-                    Grid.Row="1"
-                    Height="2"
-                    VerticalAlignment="Center"
-                    Fill="{DynamicResource FeatureDividerBrush}" />
-                <Button
-                    Grid.Row="2"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Command="{Binding ViewTermsCommand}"
-                    Cursor="Hand"
-                    Style="{StaticResource ConsentLinkButtonStyle}">
-                    <StackPanel
+                    <Button
+                        Grid.Row="2"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="34"
-                            FontWeight="Medium"
-                            Foreground="{DynamicResource TextPrimaryBrush}"
-                            Text="{Binding TermsLinkText}" />
-                        <TextBlock
-                            FontSize="34"
-                            Foreground="{DynamicResource TextPrimaryBrush}"
-                            Text="›" />
-                    </StackPanel>
-                </Button>
-
-            </Grid>
-        </Border>
+                        Command="{Binding ViewTermsCommand}"
+                        Cursor="Hand"
+                        Focusable="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
+                        IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
+                        KeyboardNavigation.IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
+                        Style="{StaticResource FocusablePlainLinkButtonStyle}">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                FontSize="34"
+                                FontWeight="Medium"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="{Binding TermsLinkText}" />
+                            <TextBlock
+                                FontSize="34"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="›" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
 
             <TextBlock
                 Grid.Row="6"

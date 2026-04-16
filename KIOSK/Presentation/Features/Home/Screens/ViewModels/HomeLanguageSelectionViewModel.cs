@@ -41,6 +41,9 @@ public sealed partial class HomeLanguageSelectionViewModel : ObservableObject
             TraditionalChineseLanguage
         ];
 
+    public IReadOnlyList<HomeLanguageOptionViewModel> VisibleLanguageOptions =>
+        LanguageOptions.Where(option => option.IsVisible).ToList();
+
     private HomeLanguageOptionViewModel CreateLanguageOption(string languageCode, string label, string assetPath)
     {
         return new HomeLanguageOptionViewModel(
@@ -58,6 +61,8 @@ public sealed partial class HomeLanguageSelectionViewModel : ObservableObject
         {
             option.IsVisible = visibleCodes.Contains(option.LanguageCode);
         }
+
+        OnPropertyChanged(nameof(VisibleLanguageOptions));
     }
 
     private void SetInitialSelection()

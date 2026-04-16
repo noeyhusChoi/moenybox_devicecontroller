@@ -48,8 +48,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Panel.ZIndex="10"
-                Background="#FFF7E8"
-                BorderBrush="#FFD79C"
+                Background="{DynamicResource StatusWarningBackgroundBrush}"
+                BorderBrush="{DynamicResource StatusWarningBorderBrush}"
                 BorderThickness="2"
                 CornerRadius="18">
                 <Border.Style>
@@ -65,187 +65,186 @@
                 <TextBlock
                     FontSize="28"
                     FontWeight="SemiBold"
-                    Foreground="#A35A00"
+                    Foreground="{DynamicResource StatusWarningForegroundBrush}"
                     Text="{Binding RemainingAmountText, StringFormat=거스름돈 {0} KRW}" />
             </Border>
 
             <StackPanel Margin="0,80,0,0">
-            <Grid
-                Width="120"
-                Height="120"
-                HorizontalAlignment="Center">
-                <Ellipse Fill="{DynamicResource AccentBackgroundBrush}" />
-                <Path
-                    Width="52"
-                    Height="38"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M 4,20 L 18,34 L 48,6"
-                    Stroke="White"
-                    StrokeEndLineCap="Round"
-                    StrokeLineJoin="Round"
-                    StrokeThickness="8" />
-            </Grid>
+                <Grid
+                    Width="120"
+                    Height="120"
+                    HorizontalAlignment="Center">
+                    <Ellipse Fill="{DynamicResource AccentBackgroundBrush}" />
+                    <Path
+                        Width="52"
+                        Height="38"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M 4,20 L 18,34 L 48,6"
+                        Stroke="{DynamicResource TextOnAccentBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeThickness="8" />
+                </Grid>
 
-            <TextBlock
-                Margin="0,32,0,0"
-                Style="{StaticResource ResultTitleStyle}"
-                Text="{Binding Headline}" />
+                <TextBlock
+                    Margin="0,32,0,0"
+                    Style="{StaticResource ResultTitleStyle}"
+                    Text="{Binding Headline}" />
 
-            <Border
-                Margin="0,48,0,0"
-                Padding="54"
-                Background="{DynamicResource CardBackgroundBrush}"
-                CornerRadius="32">
-                <StackPanel>
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Border
-                            Padding="16,16,24,16"
-                            BorderBrush="{DynamicResource SurfaceMutedBackgroundBrush}"
-                            BorderThickness="3"
-                            CornerRadius="40">
+                <Border
+                    Margin="0,48,0,0"
+                    Padding="54"
+                    Style="{StaticResource CardSurfaceBorderStyle}">
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Border
+                                Padding="16,16,24,16"
+                                BorderBrush="{DynamicResource SurfaceMutedBackgroundBrush}"
+                                BorderThickness="3"
+                                CornerRadius="40">
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="50" Height="50">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding SourceFlagImagePath}" Stretch="UniformToFill" />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock
+                                        Margin="16,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="34"
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="{Binding SourceCurrencyCode}" />
+                                </StackPanel>
+                            </Border>
+                            <Separator Width="16" Background="Transparent" />
+
                             <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="50" Height="50">
-                                    <Ellipse.Fill>
-                                        <ImageBrush ImageSource="{Binding SourceFlagImagePath}" Stretch="UniformToFill" />
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <TextBlock
-                                    Margin="16,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="34"
-                                    FontWeight="Bold"
-                                    Foreground="{DynamicResource TextPrimaryBrush}"
-                                    Text="{Binding SourceCurrencyCode}" />
+                                <Ellipse
+                                    Width="11"
+                                    Height="11"
+                                    Margin="0,0,16,0"
+                                    Fill="{DynamicResource AccentBackgroundBrush}" />
+                                <Ellipse
+                                    Width="11"
+                                    Height="11"
+                                    Margin="0,0,16,0"
+                                    Fill="{DynamicResource AccentBackgroundBrush}" />
+                                <Ellipse
+                                    Width="11"
+                                    Height="11"
+                                    Margin="0,0,16,0"
+                                    Fill="{DynamicResource AccentBackgroundBrush}" />
+                                <Polygon
+                                    Height="20"
+                                    Fill="{DynamicResource AccentBackgroundBrush}"
+                                    Points="0,20 0,0 16,10" />
                             </StackPanel>
-                        </Border>
-                        <Separator Width="16" Background="Transparent" />
-
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse
-                                Width="11"
-                                Height="11"
-                                Margin="0,0,16,0"
-                                Fill="{DynamicResource AccentBackgroundBrush}" />
-                            <Ellipse
-                                Width="11"
-                                Height="11"
-                                Margin="0,0,16,0"
-                                Fill="{DynamicResource AccentBackgroundBrush}" />
-                            <Ellipse
-                                Width="11"
-                                Height="11"
-                                Margin="0,0,16,0"
-                                Fill="{DynamicResource AccentBackgroundBrush}" />
-                            <Polygon
-                                Height="20"
-                                Fill="{DynamicResource AccentBackgroundBrush}"
-                                Points="0,20 0,0 16,10" />
+                            <Separator Width="16" Background="Transparent" />
+                            <Border
+                                Padding="16,16,24,16"
+                                BorderBrush="{DynamicResource SurfaceMutedBackgroundBrush}"
+                                BorderThickness="3"
+                                CornerRadius="40">
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="50" Height="50">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding TargetFlagImagePath}" Stretch="UniformToFill" />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock
+                                        Margin="16,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="34"
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="{Binding TargetCurrencyCode}" />
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
-                        <Separator Width="16" Background="Transparent" />
-                        <Border
-                            Padding="16,16,24,16"
-                            BorderBrush="{DynamicResource SurfaceMutedBackgroundBrush}"
-                            BorderThickness="3"
-                            CornerRadius="40">
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="50" Height="50">
-                                    <Ellipse.Fill>
-                                        <ImageBrush ImageSource="{Binding TargetFlagImagePath}" Stretch="UniformToFill" />
-                                    </Ellipse.Fill>
-                                </Ellipse>
+
+                        <Grid Margin="0,40,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="88" />
+                                <RowDefinition Height="88" />
+                                <RowDefinition Height="88" />
+                            </Grid.RowDefinitions>
+
+                            <DockPanel
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                LastChildFill="True">
+                                <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="환율" />
+                                <TextBlock Style="{StaticResource SummaryValueStyle}" Text="{Binding ExchangeRateText, StringFormat={}{0} KRW}" />
+                            </DockPanel>
+
+                            <Border
+                                Grid.Row="1"
+                                Height="2"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource FeatureDividerDefaultBrush}" />
+                            <DockPanel
+                                Grid.Row="1"
+                                VerticalAlignment="Center"
+                                LastChildFill="True">
+                                <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="입금 금액" />
+                                <TextBlock Style="{StaticResource SummaryValueStyle}" Text="{Binding DepositAmountText, StringFormat={}{0} USD}" />
+                            </DockPanel>
+
+                            <Border
+                                Grid.Row="2"
+                                Height="2"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource FeatureDividerDefaultBrush}" />
+
+                            <DockPanel
+                                Grid.Row="2"
+                                VerticalAlignment="Center"
+                                LastChildFill="True">
+                                <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="지급 금액" />
                                 <TextBlock
-                                    Margin="16,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="34"
-                                    FontWeight="Bold"
-                                    Foreground="{DynamicResource TextPrimaryBrush}"
-                                    Text="{Binding TargetCurrencyCode}" />
-                            </StackPanel>
+                                    Foreground="{DynamicResource PrimaryBrush}"
+                                    Style="{StaticResource SummaryValueStyle}"
+                                    Text="{Binding DispensedAmountText, StringFormat={}{0} KRW}" />
+                            </DockPanel>
+                        </Grid>
+
+                        <Border
+                            Margin="0,40,0,0"
+                            Background="{DynamicResource SurfaceMutedBackgroundBrush}"
+                            CornerRadius="24">
+                            <ItemsControl ItemsSource="{Binding BreakdownRows}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel
+                                            Margin="24"
+                                            VerticalAlignment="Center"
+                                            LastChildFill="True">
+                                            <TextBlock
+                                                FontSize="34"
+                                                FontWeight="Medium"
+                                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                                Text="{Binding DenominationText}"
+                                                TextAlignment="Left" />
+                                            <TextBlock
+                                                FontSize="34"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                                Text="{Binding Count}"
+                                                TextAlignment="Right" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Border>
                     </StackPanel>
-
-                    <Grid Margin="0,40,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="88" />
-                            <RowDefinition Height="88" />
-                            <RowDefinition Height="88" />
-                        </Grid.RowDefinitions>
-
-                        <DockPanel
-                            Grid.Row="0"
-                            VerticalAlignment="Center"
-                            LastChildFill="True">
-                            <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="환율" />
-                            <TextBlock Style="{StaticResource SummaryValueStyle}" Text="{Binding ExchangeRateText, StringFormat={}{0} KRW}" />
-                        </DockPanel>
-
-                        <Border
-                            Grid.Row="1"
-                            Height="2"
-                            VerticalAlignment="Top"
-                            Background="{DynamicResource FeatureDividerBrush}" />
-                        <DockPanel
-                            Grid.Row="1"
-                            VerticalAlignment="Center"
-                            LastChildFill="True">
-                            <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="입금 금액" />
-                            <TextBlock Style="{StaticResource SummaryValueStyle}" Text="{Binding DepositAmountText, StringFormat={}{0} USD}" />
-                        </DockPanel>
-
-                        <Border
-                            Grid.Row="2"
-                            Height="2"
-                            VerticalAlignment="Top"
-                            Background="{DynamicResource FeatureDividerBrush}" />
-
-                        <DockPanel
-                            Grid.Row="2"
-                            VerticalAlignment="Center"
-                            LastChildFill="True">
-                            <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="지급 금액" />
-                            <TextBlock
-                                Foreground="{DynamicResource PrimaryBrush}"
-                                Style="{StaticResource SummaryValueStyle}"
-                                Text="{Binding DispensedAmountText, StringFormat={}{0} KRW}" />
-                        </DockPanel>
-                    </Grid>
-
-                    <Border
-                        Margin="0,40,0,0"
-                        Background="{DynamicResource SurfaceMutedBackgroundBrush}"
-                        CornerRadius="24">
-                        <ItemsControl ItemsSource="{Binding BreakdownRows}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="2" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel
-                                        Margin="24"
-                                        VerticalAlignment="Center"
-                                        LastChildFill="True">
-                                        <TextBlock
-                                            FontSize="34"
-                                            FontWeight="Medium"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="{Binding DenominationText}"
-                                            TextAlignment="Left" />
-                                        <TextBlock
-                                            FontSize="34"
-                                            FontWeight="SemiBold"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="{Binding Count}"
-                                            TextAlignment="Right" />
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Border>
-                </StackPanel>
-            </Border>
+                </Border>
             </StackPanel>
         </Grid>
     </Grid>

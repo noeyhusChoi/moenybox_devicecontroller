@@ -9,7 +9,8 @@
     KeyboardNavigation.IsTabStop="False">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -18,7 +19,7 @@
             Style="{StaticResource ExchangeStepTitleStyle}"
             Text="{Binding Title}" />
 
-        <Grid Grid.Row="1" Background="Transparent">
+        <Grid Grid.Row="2" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="710" />
                 <RowDefinition Height="24" />
@@ -27,16 +28,7 @@
 
             <Border
                 Grid.Row="0"
-                Background="{DynamicResource CardBackgroundBrush}"
-                CornerRadius="32">
-                <Border.Effect>
-                    <DropShadowEffect
-                        BlurRadius="14"
-                        Opacity="0.08"
-                        RenderingBias="Quality"
-                        ShadowDepth="0"
-                        Color="#1F2023" />
-                </Border.Effect>
+                Style="{StaticResource CardSurfaceBorderStyle}">
                 <Grid Margin="54">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -56,7 +48,7 @@
 
                     <Border
                         Grid.Row="2"
-                        Background="#D4DEEC"
+                        Background="{DynamicResource MediaPreviewBackgroundBrush}"
                         CornerRadius="32">
                         <Grid ClipToBounds="True">
                             <controls:VideoPlayerControl
@@ -73,16 +65,7 @@
             <Border
                 Grid.Row="2"
                 Padding="52,0"
-                Background="{DynamicResource CardBackgroundBrush}"
-                CornerRadius="32">
-                <Border.Effect>
-                    <DropShadowEffect
-                        BlurRadius="14"
-                        Opacity="0.08"
-                        RenderingBias="Quality"
-                        ShadowDepth="0"
-                        Color="#1F2023" />
-                </Border.Effect>
+                Style="{StaticResource CardSurfaceBorderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -98,7 +81,7 @@
                         Foreground="{DynamicResource AccentEmphasisForegroundBrush}"
                         Text="스캔 가능 신분증"
                         TextAlignment="Center" />
-                    <Rectangle Grid.Row="1" Fill="{StaticResource FeatureDividerBrush}" />
+                    <Rectangle Grid.Row="1" Fill="{StaticResource FeatureDividerDefaultBrush}" />
                     <TextBlock
                         Grid.Row="2"
                         VerticalAlignment="Center"

@@ -42,9 +42,9 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
+                <RowDefinition Height="105" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="115" />
+                <RowDefinition Height="125" />
             </Grid.RowDefinitions>
 
             <Grid Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
@@ -56,7 +56,7 @@
                 </Grid.RenderTransform>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100" />
+                    <RowDefinition Height="105" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -86,8 +86,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Panel.ZIndex="10"
-            Background="#F2FFFFFF"
-            BorderBrush="#33000000"
+            Background="{DynamicResource AccessibilityMinimapBackgroundBrush}"
+            BorderBrush="{DynamicResource AccessibilityMinimapBorderBrush}"
             BorderThickness="1"
             CornerRadius="12"
             IsHitTestVisible="False"
@@ -95,8 +95,8 @@
             <Grid ClipToBounds="True">
                 <Border
                     Margin="8"
-                    Background="#14000000"
-                    BorderBrush="#25000000"
+                    Background="{DynamicResource AccessibilityMinimapSurfaceBackgroundBrush}"
+                    BorderBrush="{DynamicResource AccessibilityMinimapSurfaceBorderBrush}"
                     BorderThickness="1"
                     CornerRadius="6" />
 
@@ -109,8 +109,8 @@
                         Canvas.Top="{Binding MinimapViewportTop}"
                         Width="{Binding MinimapViewportWidth}"
                         Height="{Binding MinimapViewportHeight}"
-                        Background="#339AD4FF"
-                        BorderBrush="{StaticResource Primary500Brush}"
+                        Background="{DynamicResource AccessibilityMinimapViewportBackgroundBrush}"
+                        BorderBrush="{DynamicResource AccessibilityMinimapViewportBorderBrush}"
                         BorderThickness="2"
                         CornerRadius="6" />
                 </Canvas>

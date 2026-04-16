@@ -150,7 +150,7 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
         [
             CreateProgressStep("1", "통화 선택", progressStage == 1, progressStage > 1),
             CreateProgressStep("2", "신분증 스캔", progressStage == 2, progressStage > 2),
-            CreateProgressStep("3", "외화 투입", progressStage == 3, progressStage > 3),
+            CreateProgressStep("3", "외화 입금", progressStage == 3, progressStage > 3),
             CreateProgressStep("4", "원화 수령", progressStage == 4, false)
         ];
     }

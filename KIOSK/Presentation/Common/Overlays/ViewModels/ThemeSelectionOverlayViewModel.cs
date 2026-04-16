@@ -12,25 +12,18 @@ public sealed class ThemeSelectionOverlayViewModel
     {
         CurrentTheme = currentTheme;
         CloseCommand = closeCommand;
-        SelectBlueCommand = new RelayCommand(() => applyTheme(AppThemeKind.Light));
-        SelectRedCommand = new RelayCommand(() => applyTheme(AppThemeKind.LightRed));
-        SelectOrangeCommand = new RelayCommand(() => applyTheme(AppThemeKind.LightOrange));
-        SelectGreenCommand = new RelayCommand(() => applyTheme(AppThemeKind.LightGreen));
-        SelectDarkCommand = new RelayCommand(() => applyTheme(AppThemeKind.Black));
+        SelectDefaultCommand = new RelayCommand(() => applyTheme(AppThemeKind.Light));
+        SelectHighContrastCommand = new RelayCommand(() => applyTheme(AppThemeKind.HighContrast));
     }
 
     public AppThemeKind CurrentTheme { get; }
-    public string Title => "테마 선택";
+    public string Title => "Theme";
+    public string DefaultLabel => "Default";
+    public string HighContrastLabel => "High Contrast";
     public IRelayCommand CloseCommand { get; }
-    public IRelayCommand SelectBlueCommand { get; }
-    public IRelayCommand SelectRedCommand { get; }
-    public IRelayCommand SelectOrangeCommand { get; }
-    public IRelayCommand SelectGreenCommand { get; }
-    public IRelayCommand SelectDarkCommand { get; }
+    public IRelayCommand SelectDefaultCommand { get; }
+    public IRelayCommand SelectHighContrastCommand { get; }
 
-    public bool IsBlueSelected => CurrentTheme == AppThemeKind.Light;
-    public bool IsRedSelected => CurrentTheme == AppThemeKind.LightRed;
-    public bool IsOrangeSelected => CurrentTheme == AppThemeKind.LightOrange;
-    public bool IsGreenSelected => CurrentTheme == AppThemeKind.LightGreen;
-    public bool IsDarkSelected => CurrentTheme == AppThemeKind.Black;
+    public bool IsDefaultSelected => CurrentTheme == AppThemeKind.Light;
+    public bool IsHighContrastSelected => CurrentTheme == AppThemeKind.HighContrast;
 }

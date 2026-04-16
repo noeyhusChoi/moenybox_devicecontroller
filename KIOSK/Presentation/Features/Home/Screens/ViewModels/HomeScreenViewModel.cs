@@ -77,7 +77,7 @@ public sealed partial class HomeScreenViewModel : ObservableObject
             "교통선불카드",
             "Transportation prepaid card",
             "교통선불카드 서비스로 이동합니다.",
-            "pack://application:,,,/Assets/Image/Card.png",
+            "pack://application:,,,/Assets/Image/img_card.png",
             false,
             requestTransportationCommand);
         ExchangeCard = new HomeServiceCardViewModel(
@@ -85,7 +85,7 @@ public sealed partial class HomeScreenViewModel : ObservableObject
             "외화 판매",
             "Exchange",
             "외화를 원화로 환전하는 플로우로 이동합니다.",
-            "pack://application:,,,/Assets/Image/Exchange.png",
+            "pack://application:,,,/Assets/Image/img_exchange.png",
             true,
             requestExchangeCommand);
         TaxRefundCard = new HomeServiceCardViewModel(
@@ -93,7 +93,7 @@ public sealed partial class HomeScreenViewModel : ObservableObject
             "택스 리펀드",
             "Tax refund",
             "추후 연결될 택스 리펀드 서비스입니다.",
-            "pack://application:,,,/Assets/Image/Refund.png",
+            "pack://application:,,,/Assets/Image/img_refund.png",
             false,
             requestTaxRefundCommand);
     }

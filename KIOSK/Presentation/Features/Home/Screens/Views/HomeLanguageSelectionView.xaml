@@ -4,50 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    behavior:FocusBoundary.EntryTarget="{Binding ElementName=LanguageRow1}"
+    xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
+    behavior:FocusBoundary.EntryTarget="{Binding ElementName=LanguageItemsControl}"
     d:DesignHeight="1705"
     d:DesignWidth="1080"
     d:Language="ko-KR"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
-        <Style x:Key="LanguageTileButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="452" />
-            <Setter Property="Height" Value="311" />
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="VerticalContentAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{DynamicResource AccentSurfaceBackgroundBrush}" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="32">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-
         <Style x:Key="LanguageTileLabelTextStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="FontSize" Value="39" />
@@ -55,16 +19,14 @@
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
+
     </UserControl.Resources>
 
-    <Grid
-        Width="1080"
-        Height="1705"
-        Background="{DynamicResource AppBackgroundBrush}">
+    <Grid Margin="72" Background="{DynamicResource AppBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="210" />
-            <RowDefinition Height="173" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="190" />
+            <RowDefinition Height="160" />
+            <RowDefinition Height="124" />
             <RowDefinition Height="996" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -77,7 +39,7 @@
                 FontSize="59"
                 FontWeight="Bold"
                 Foreground="{DynamicResource TextPrimaryBrush}"
-                Text="언어를 선택해주세요."
+                Text="언어를 선택해주세요"
                 TextAlignment="Center" />
             <TextBlock
                 Margin="0,21,0,0"
@@ -88,167 +50,90 @@
                 TextAlignment="Center" />
         </StackPanel>
 
-        <StackPanel
-            x:Name="LanguageSelectionContainer"
+        <ItemsControl
+            x:Name="LanguageItemsControl"
             Grid.Row="3"
             Width="936"
             Height="996"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top">
-            <Grid
-                x:Name="LanguageRow1"
-                Margin="0,0,0,32"
-                behavior:FocusBoundary.DownTarget="{Binding ElementName=LanguageRow2}"
-                behavior:FocusContainer.InitialFocus="True"
-                behavior:FocusContainer.Mode="HorizontalStack">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="452" />
-                    <ColumnDefinition Width="32" />
-                    <ColumnDefinition Width="452" />
-                </Grid.ColumnDefinitions>
-
-                <Button
-                    x:Name="KoreanLanguageButton"
-                    Grid.Column="0"
-                    behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                    Command="{Binding SelectCommand}"
-                    DataContext="{Binding KoreanLanguage}"
-                    Style="{StaticResource LanguageTileButtonStyle}"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Ellipse Width="100" Height="100">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="{Binding AssetPath}" Stretch="Fill" />
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <TextBlock
-                            Margin="0,32,0,0"
-                            FontFamily="{StaticResource Noto Sans KR}"
-                            Style="{StaticResource LanguageTileLabelTextStyle}"
-                            Text="{Binding Label}" />
-                    </StackPanel>
-                </Button>
-
-                <Button
-                    x:Name="EnglishLanguageButton"
-                    Grid.Column="2"
-                    behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                    Command="{Binding SelectCommand}"
-                    DataContext="{Binding EnglishLanguage}"
-                    Style="{StaticResource LanguageTileButtonStyle}"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border
-                            Width="100"
-                            Height="100"
-                            ClipToBounds="True"
-                            CornerRadius="50">
-                            <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                        </Border>
-                        <TextBlock
-                            Margin="0,32,0,0"
-                            FontFamily="{StaticResource Noto Sans}"
-                            Style="{StaticResource LanguageTileLabelTextStyle}"
-                            Text="{Binding Label}" />
-                    </StackPanel>
-                </Button>
-            </Grid>
-
-            <Grid
-                x:Name="LanguageRow2"
-                Margin="0,0,0,32"
-                behavior:FocusBoundary.DownTarget="{Binding ElementName=LanguageRow3}"
-                behavior:FocusBoundary.UpTarget="{Binding ElementName=LanguageRow1}"
-                behavior:FocusContainer.Mode="HorizontalStack">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="452" />
-                    <ColumnDefinition Width="32" />
-                    <ColumnDefinition Width="452" />
-                </Grid.ColumnDefinitions>
-
-                <Button
-                    x:Name="JapaneseLanguageButton"
-                    Grid.Column="0"
-                    behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                    Command="{Binding SelectCommand}"
-                    DataContext="{Binding JapaneseLanguage}"
-                    Style="{StaticResource LanguageTileButtonStyle}"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border
-                            Width="100"
-                            Height="100"
-                            ClipToBounds="True"
-                            CornerRadius="50">
-                            <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                        </Border>
-                        <TextBlock
-                            Margin="0,32,0,0"
-                            FontFamily="{StaticResource Noto Sans JP}"
-                            Style="{StaticResource LanguageTileLabelTextStyle}"
-                            Text="{Binding Label}" />
-                    </StackPanel>
-                </Button>
-
-                <Button
-                    x:Name="SimplifiedChineseLanguageButton"
-                    Grid.Column="2"
-                    behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                    Command="{Binding SelectCommand}"
-                    DataContext="{Binding SimplifiedChineseLanguage}"
-                    Style="{StaticResource LanguageTileButtonStyle}"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border
-                            Width="100"
-                            Height="100"
-                            ClipToBounds="True"
-                            CornerRadius="50">
-                            <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                        </Border>
-                        <TextBlock
-                            Margin="0,32,0,0"
-                            FontFamily="{StaticResource Noto Sans SC}"
-                            Style="{StaticResource LanguageTileLabelTextStyle}"
-                            Text="{Binding Label}" />
-                    </StackPanel>
-                </Button>
-            </Grid>
-
-            <Grid
-                x:Name="LanguageRow3"
-                behavior:FocusBoundary.UpTarget="{Binding ElementName=LanguageRow2}"
-                behavior:FocusContainer.Mode="HorizontalStack">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="452" />
-                    <ColumnDefinition Width="32" />
-                    <ColumnDefinition Width="452" />
-                </Grid.ColumnDefinitions>
-
-                <Button
-                    x:Name="TraditionalChineseLanguageButton"
-                    Grid.Column="0"
-                    behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
-                    Command="{Binding SelectCommand}"
-                    DataContext="{Binding TraditionalChineseLanguage}"
-                    Style="{StaticResource LanguageTileButtonStyle}"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border
-                            Width="100"
-                            Height="100"
-                            ClipToBounds="True"
-                            CornerRadius="50">
-                            <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                        </Border>
-                        <TextBlock
-                            Margin="0,32,0,0"
-                            FontFamily="{StaticResource Noto Sans TC}"
-                            Style="{StaticResource LanguageTileLabelTextStyle}"
-                            Text="{Binding Label}" />
-                    </StackPanel>
-                </Button>
-            </Grid>
-        </StackPanel>
+            VerticalAlignment="Top"
+            ItemsSource="{Binding VisibleLanguageOptions}"
+            KeyboardNavigation.DirectionalNavigation="Continue"
+            KeyboardNavigation.TabNavigation="Continue">
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <Border Margin="-16">
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <primitives:UniformGrid
+                        behavior:FocusContainer.InitialFocus="True"
+                        behavior:FocusContainer.Mode="UniformGrid"
+                        Columns="2"
+                        Rows="3" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Margin="16"
+                        behavior:FocusContainer.IsPreferredFocus="{Binding IsSelected}"
+                        Command="{Binding SelectCommand}"
+                        Cursor="Hand"
+                        Style="{StaticResource FilledWhiteButtonStyle}">
+                        <Grid
+                            Margin="0,30"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="32" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border
+                                Grid.Row="0"
+                                Width="100"
+                                Height="100"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                ClipToBounds="True"
+                                CornerRadius="50">
+                                <Image Source="{Binding AssetPath}" Stretch="Fill" />
+                            </Border>
+                            <TextBlock
+                                Grid.Row="2"
+                                Margin="0"
+                                FontWeight="SemiBold"
+                                Text="{Binding Label}">
+                                <TextBlock.Style>
+                                    <Style BasedOn="{StaticResource LanguageTileLabelTextStyle}" TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding LanguageCode}" Value="ko-KR">
+                                                <Setter Property="FontFamily" Value="{StaticResource Noto Sans KR}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding LanguageCode}" Value="en-US">
+                                                <Setter Property="FontFamily" Value="{StaticResource Noto Sans}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding LanguageCode}" Value="ja-JP">
+                                                <Setter Property="FontFamily" Value="{StaticResource Noto Sans JP}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding LanguageCode}" Value="zh-CN">
+                                                <Setter Property="FontFamily" Value="{StaticResource Noto Sans SC}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding LanguageCode}" Value="zh-TW">
+                                                <Setter Property="FontFamily" Value="{StaticResource Noto Sans TC}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

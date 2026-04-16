@@ -15,7 +15,7 @@ public sealed class HeaderViewModelFactory : IHeaderViewModelFactory
     }
 
     public string GetLogoAssetPath()
-        => _appTheme.CurrentTheme == AppThemeKind.Black
+        => _appTheme.CurrentTheme == AppThemeKind.HighContrast
             ? "pack://application:,,,/Assets/Image/LOGO_CI_white.png"
             : "pack://application:,,,/Assets/Image/LOGO_CI_black.png";
 

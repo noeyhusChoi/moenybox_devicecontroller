@@ -4,56 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <Style x:Key="BackActionButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="3" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="FontSize" Value="50" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="24">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                    <Setter Property="BorderThickness" Value="6" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-
     <Grid
         Width="936"
-        Height="127"
+        Height="170"
+        VerticalAlignment="Top"
         behavior:FocusContainer.Mode="HorizontalStack">
         <Button
             x:Name="BackButton"
             Width="336"
-            Height="127"
+            Height="120"
             HorizontalAlignment="Left"
+            VerticalAlignment="Top"
             Command="{Binding BackCommand}"
             Content="{Binding BackText}"
             IsEnabled="{Binding IsBackEnabled}"
-            Style="{StaticResource BackActionButtonStyle}" />
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
     </Grid>
 </UserControl>

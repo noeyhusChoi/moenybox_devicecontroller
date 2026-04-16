@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Focusable="False"
     IsTabStop="False"
@@ -13,8 +12,8 @@
         FocusManager.FocusedElement="{Binding ElementName=TermsCloseButton}"
         FocusManager.IsFocusScope="True"
         Focusable="False"
-        KeyboardNavigation.IsTabStop="False"
-        KeyboardNavigation.DirectionalNavigation="Continue">
+        KeyboardNavigation.DirectionalNavigation="Continue"
+        KeyboardNavigation.IsTabStop="False">
         <Grid.Background>
             <StaticResource ResourceKey="OverlayDimBrush" />
         </Grid.Background>
@@ -55,43 +54,13 @@
                     Height="127"
                     HorizontalAlignment="Center"
                     Command="{Binding CloseCommand}"
-                    Content="{Binding ConfirmText}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Focusable" Value="True" />
-                            <Setter Property="IsTabStop" Value="True" />
-                            <Setter Property="Background" Value="{DynamicResource AccentBackgroundBrush}" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0" />
-                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                            <Setter Property="FontSize" Value="46" />
-                            <Setter Property="FontWeight" Value="SemiBold" />
-                            <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border
-                                            Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            CornerRadius="24">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                                    <Setter Property="BorderThickness" Value="6" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
+                        Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="46"
+                        FontWeight="SemiBold"
+                        Text="{Binding ConfirmText}" />
                 </Button>
             </Grid>
         </Border>

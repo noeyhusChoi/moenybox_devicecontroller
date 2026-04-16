@@ -1,4 +1,24 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Kiosk">
+
+    <DropShadowEffect
+        x:Key="FilledCardButtonShadowEffect"
+        x:Shared="False"
+        BlurRadius="14"
+        Direction="270"
+        Opacity="0.08"
+        RenderingBias="Quality"
+        ShadowDepth="10"
+        Color="#1F2023" />
+
+    <Style x:Key="CardSurfaceBorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource CardSurfaceBrush}" />
+        <Setter Property="CornerRadius" Value="32" />
+        <Setter Property="Effect" Value="{DynamicResource FilledCardButtonShadowEffect}" />
+    </Style>
+
     <Style x:Key="PlainLinkButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -21,10 +41,37 @@
         </Setter>
     </Style>
 
-    <Style x:Key="RoundButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
-        <Setter Property="BorderThickness" Value="0" />
+    <Style
+        x:Key="FocusablePlainLinkButtonStyle"
+        BasedOn="{StaticResource PlainLinkButtonStyle}"
+        TargetType="Button">
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="IsTabStop" Value="True" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="FilledButtonBaseStyle" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlDefaultPrimaryForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlSurfaceBorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="49" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -32,12 +79,146 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="32">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        CornerRadius="32"
+                        Effect="{DynamicResource FilledCardButtonShadowEffect}"
+                        Opacity="{TemplateBinding Opacity}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.82" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
     </Style>
 
+    <Style
+        x:Key="FilledWhiteButtonStyle"
+        BasedOn="{StaticResource FilledButtonBaseStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlSurfaceBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlDefaultPrimaryForegroundBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ControlSurfacePressedBrush}" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="FilledPrimaryButtonStyle"
+        BasedOn="{StaticResource FilledButtonBaseStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ControlPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlPrimaryBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlFeaturedPrimaryForegroundBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ControlPrimaryPressedBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource ControlDisabledBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource ControlDisabledForegroundBrush}" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="FilledDarkButtonStyle"
+        BasedOn="{StaticResource FilledButtonBaseStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ControlSurfaceStrongBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlSurfaceStrongBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlStrongPrimaryForegroundBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ControlSurfaceStrongPressedBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource ControlDisabledBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource ControlDisabledForegroundBrush}" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="FilledActionPrimaryButtonStyle"
+        BasedOn="{StaticResource FilledButtonBaseStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ControlActionPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlActionPrimaryBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlActionPrimaryForegroundBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ControlActionPrimaryPressedBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource ControlDisabledBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ControlDisabledBorderBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource ControlDisabledForegroundBrush}" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="OutlinedActionSecondaryButtonStyle"
+        BasedOn="{StaticResource FilledButtonBaseStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ControlActionSecondaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlActionSecondaryPrimaryForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlActionSecondaryBorderBrush}" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ControlActionSecondaryPressedBrush}" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

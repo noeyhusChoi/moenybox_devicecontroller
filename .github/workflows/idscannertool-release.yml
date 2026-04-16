@@ -115,16 +115,6 @@ jobs:
             --channel win `
             --outputDir artifacts\velopack
 
-          $generatedSetupPath = "artifacts\\velopack\\$packId-win-Setup.exe"
-          $renamedSetupPath = 'artifacts\velopack\Setup.exe'
-          if (Test-Path $generatedSetupPath) {
-            if (Test-Path $renamedSetupPath) {
-              Remove-Item $renamedSetupPath -Force
-            }
-
-            Move-Item $generatedSetupPath $renamedSetupPath
-          }
-
       - name: Upload Velopack packages to GitHub Releases
         shell: pwsh
         run: |

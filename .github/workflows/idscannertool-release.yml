@@ -93,6 +93,8 @@ jobs:
         run: >
           dotnet publish IdScannerTool\IdScannerTool.csproj
           -c Release
+          -r win-x86
+          --self-contained true
           -p:Platform=x86
           -p:Version=${{ env.APP_VERSION }}
           -o artifacts\publish\IdScannerTool
@@ -100,16 +102,28 @@ jobs:
       - name: Pack Velopack release
         shell: pwsh
         run: |
+          $packId = 'MBoxIDScanner'
+          $mainExe = 'M-Box ID Scanner.exe'
           .\.tools\vpk\vpk.exe pack `
-            --packId IdScannerTool `
+            --packId $packId `
             --packVersion $env:APP_VERSION `
             --packDir artifacts\publish\IdScannerTool `
-            --mainExe IdScannerTool.exe `
+            --mainExe $mainExe `
             --packAuthors Moneybox `
             --packTitle "M-Box ID Scanner" `
             --noPortable `
             --channel win `
             --outputDir artifacts\velopack
+
+          $generatedSetupPath = "artifacts\\velopack\\$packId-win-Setup.exe"
+          $renamedSetupPath = 'artifacts\velopack\Setup.exe'
+          if (Test-Path $generatedSetupPath) {
+            if (Test-Path $renamedSetupPath) {
+              Remove-Item $renamedSetupPath -Force
+            }
+
+            Move-Item $generatedSetupPath $renamedSetupPath
+          }
 
       - name: Upload Velopack packages to GitHub Releases
         shell: pwsh

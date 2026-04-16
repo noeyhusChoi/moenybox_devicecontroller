@@ -12,6 +12,7 @@
     <UseWPF>true</UseWPF>
     <Platforms>x86</Platforms>
     <PlatformTarget>x86</PlatformTarget>
+    <AssemblyName>M-Box ID Scanner</AssemblyName>
     <StartupObject>IdScannerTool.App</StartupObject>
     <Configurations>Debug;Release;Remote</Configurations>
     <Version>1.0.5</Version>

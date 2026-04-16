@@ -76,7 +76,7 @@ public partial class App : Application
         var appDataRoot = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Moneybox",
-            "IdScannerTool");
+            "MBoxIDScanner");
         var configPath = Path.Combine(installRoot, "Config.ini");
         var serialKeyPath = Path.Combine(appDataRoot, "serial-key.json");
         var apiKeyPath = Path.Combine(appDataRoot, "api-key.json");

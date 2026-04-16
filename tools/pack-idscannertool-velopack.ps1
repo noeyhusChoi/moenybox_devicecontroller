@@ -15,6 +15,9 @@ $projectPath = Join-Path $repoRoot "IdScannerTool\IdScannerTool.csproj"
 $publishDir = Join-Path $repoRoot "artifacts\publish\IdScannerTool"
 $releaseDir = Join-Path $repoRoot "artifacts\velopack"
 $toolDir = Join-Path $repoRoot ".tools\vpk"
+$setupFileName = "Setup.exe"
+$packId = "MBoxIDScanner"
+$mainExe = "M-Box ID Scanner.exe"
 
 if (Test-Path $publishDir) {
     Remove-Item $publishDir -Recurse -Force
@@ -32,6 +35,8 @@ dotnet tool install --tool-path $toolDir vpk --version 0.0.1298 | Out-Host
 
 dotnet publish $projectPath `
     -c Release `
+    -r win-x86 `
+    --self-contained true `
     -p:Platform=x86 `
     -p:Version=$Version `
     -o $publishDir | Out-Host
@@ -39,14 +44,24 @@ dotnet publish $projectPath `
 $vpk = Join-Path $toolDir "vpk.exe"
 
 & $vpk pack `
-    --packId IdScannerTool `
+    --packId $packId `
     --packVersion $Version `
     --packDir $publishDir `
-    --mainExe IdScannerTool.exe `
+    --mainExe $mainExe `
     --packAuthors Moneybox `
     --packTitle "M-Box ID Scanner" `
     --channel $Channel `
     --outputDir $releaseDir | Out-Host
+
+$generatedSetupPath = Join-Path $releaseDir "$packId-win-Setup.exe"
+$renamedSetupPath = Join-Path $releaseDir $setupFileName
+if (Test-Path $generatedSetupPath) {
+    if (Test-Path $renamedSetupPath) {
+        Remove-Item $renamedSetupPath -Force
+    }
+
+    Move-Item $generatedSetupPath $renamedSetupPath
+}
 
 if (-not $Upload) {
     Write-Host "Velopack package created at: $releaseDir"

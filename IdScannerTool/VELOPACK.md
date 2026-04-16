@@ -36,6 +36,9 @@ pwsh .\tools\pack-idscannertool-velopack.ps1 -Version 1.0.0 -Upload -PublishRele
 산출물 위치:
 - `artifacts\publish\IdScannerTool`
 - `artifacts\velopack`
+- 내부 pack id / exe: `MBoxIDScanner`, `M-Box ID Scanner.exe`
+- 설치 파일명: `Setup.exe`
+- publish 방식: `win-x86 self-contained`
 
 ## GitHub Actions
 

@@ -14,7 +14,7 @@ on:
         type: boolean
   push:
     tags:
-      - "idscannertool-v*"
+      - "v*"
 
 permissions:
   contents: write
@@ -45,7 +45,7 @@ jobs:
           $version = '${{ github.event.inputs.version }}'
           if ([string]::IsNullOrWhiteSpace($version)) {
             $tag = '${{ github.ref_name }}'
-            if ($tag -match '^idscannertool-v(.+)$') {
+            if ($tag -match '^v(.+)$') {
               $version = $Matches[1]
             } else {
               throw "Unable to resolve release version."
@@ -136,7 +136,7 @@ jobs:
             '--token', $env:VELOPACK_RELEASE_TOKEN,
             '--channel', 'win',
             '--merge',
-            '--tag', "idscannertool-v$env:APP_VERSION",
+            '--tag', "v$env:APP_VERSION",
             '--releaseName', "M-Box ID Scanner v$env:APP_VERSION"
           )
 

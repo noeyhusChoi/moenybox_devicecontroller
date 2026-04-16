@@ -47,7 +47,7 @@ pwsh .\tools\pack-idscannertool-velopack.ps1 -Version 1.0.0 -Upload -PublishRele
 
 트리거:
 - 수동 실행
-- `idscannertool-v*` 태그 push
+- `v*` 태그 push
 
 필요 설정:
 - secret: `VELOPACK_RELEASE_TOKEN`

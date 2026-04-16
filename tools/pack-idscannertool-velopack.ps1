@@ -79,7 +79,7 @@ $uploadArgs = @(
     "--token", $env:VELOPACK_RELEASE_TOKEN,
     "--channel", $Channel,
     "--merge",
-    "--tag", "idscannertool-v$Version",
+    "--tag", "v$Version",
     "--releaseName", "M-Box ID Scanner v$Version"
 )
 

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Velopack;
 using Velopack.Sources;
 
@@ -7,10 +7,11 @@ namespace IdScannerTool.Services;
 public interface IAppUpdateService
 {
     Task<AppUpdateCheckResult> CheckForUpdatesAsync(CancellationToken cancellationToken = default);
-    Task DownloadAndApplyAsync(
+    Task DownloadUpdateAsync(
         PendingAppUpdate update,
         Action<int>? progress = null,
         CancellationToken cancellationToken = default);
+    void ApplyUpdateAndRestart(PendingAppUpdate update);
 }
 
 public sealed record PendingAppUpdate(
@@ -71,7 +72,7 @@ public sealed class AppUpdateService : IAppUpdateService
             new PendingAppUpdate(version, notes, update));
     }
 
-    public async Task DownloadAndApplyAsync(
+    public async Task DownloadUpdateAsync(
         PendingAppUpdate update,
         Action<int>? progress = null,
         CancellationToken cancellationToken = default)
@@ -85,7 +86,20 @@ public sealed class AppUpdateService : IAppUpdateService
         }
 
         var manager = CreateManager(settings);
-        await manager.DownloadUpdatesAsync(update.NativeInfo, progress).ConfigureAwait(false);
+        await manager.DownloadUpdatesAsync(update.NativeInfo, progress, cancellationToken).ConfigureAwait(false);
+    }
+
+    public void ApplyUpdateAndRestart(PendingAppUpdate update)
+    {
+        ArgumentNullException.ThrowIfNull(update);
+
+        var settings = LoadSettings();
+        if (!settings.IsEnabled || string.IsNullOrWhiteSpace(settings.RepoUrl))
+        {
+            throw new InvalidOperationException("업데이트 설정이 올바르지 않습니다.");
+        }
+
+        var manager = CreateManager(settings);
         manager.ApplyUpdatesAndRestart(update.NativeInfo);
     }
 

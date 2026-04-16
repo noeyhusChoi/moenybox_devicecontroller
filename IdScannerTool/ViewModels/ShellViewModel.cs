@@ -198,7 +198,9 @@ public partial class ShellViewModel : ObservableObject
         _updateOverlay = new UpdateOverlayViewModel(
             GetCurrentVersion(),
             updateAction: StartUpdateAsync,
-            closeAction: CloseCustomOverlay);
+            closeAction: CloseCustomOverlay,
+            cancelAction: CancelUpdateDownload,
+            restartAction: RestartAfterUpdateDownload);
         _updateOverlay.IsBusy = true;
         PauseMainBackgroundFlowsForUpdate();
         ShowCustomOverlay(_updateOverlay);
@@ -408,6 +410,13 @@ public partial class ShellViewModel : ObservableObject
         _updateOverlay.IsBusy = false;
         _updateOverlay.StatusMessage = result.Message;
         _updateOverlay.CanUpdate = result.IsConfigured && result.IsUpdateAvailable && result.Update is not null;
+        _updateOverlay.CanClose = true;
+        _updateOverlay.CanCancel = false;
+        _updateOverlay.CanRestart = false;
+        _updateOverlay.CloseButtonText = "닫기";
+        _updateOverlay.UpdateButtonText = "업데이트";
+        _updateOverlay.ShowProgress = false;
+        _updateOverlay.ProgressPercent = 0;
         _updateOverlay.LatestVersion = result.Update?.Version ?? _updateOverlay.CurrentVersion;
     }
 

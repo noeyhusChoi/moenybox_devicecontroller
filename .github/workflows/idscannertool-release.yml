@@ -70,6 +70,21 @@ jobs:
         run: |
           dotnet tool install --tool-path .tools\vpk vpk --version 0.0.1298
 
+      - name: Download previous Velopack releases
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts\velopack | Out-Null
+
+          try {
+            .\.tools\vpk\vpk.exe download github `
+              --outputDir artifacts\velopack `
+              --repoUrl $env:VELOPACK_REPO_URL `
+              --token $env:VELOPACK_RELEASE_TOKEN `
+              --channel win
+          } catch {
+            Write-Host "No previous release artifacts were downloaded. Continuing with a full package only."
+          }
+
       - name: Publish IdScannerTool
         run: >
           dotnet publish IdScannerTool\IdScannerTool.csproj

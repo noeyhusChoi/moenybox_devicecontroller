@@ -72,12 +72,25 @@
                 Margin="0,0,8,0"
                 Appearance="Secondary"
                 Command="{Binding CloseCommand}"
-                Content="닫기" />
+                Content="{Binding CloseButtonText}"
+                Visibility="{Binding CanClose, Converter={StaticResource BoolToVisibilityConverter}}" />
             <ui:Button
+                Margin="0,0,8,0"
+                Appearance="Secondary"
+                Command="{Binding CancelCommand}"
+                Content="취소"
+                Visibility="{Binding CanCancel, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <ui:Button
+                Margin="0,0,8,0"
                 Appearance="Primary"
                 Command="{Binding UpdateCommand}"
-                Content="업데이트"
-                IsEnabled="{Binding CanUpdate}" />
+                Content="{Binding UpdateButtonText}"
+                Visibility="{Binding CanUpdate, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <ui:Button
+                Appearance="Primary"
+                Command="{Binding RestartCommand}"
+                Content="지금 재시작"
+                Visibility="{Binding CanRestart, Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
     </Grid>
 </UserControl>

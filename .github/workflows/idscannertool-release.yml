@@ -38,7 +38,7 @@ jobs:
       - name: Resolve release settings
         shell: pwsh
         run: |
-          $version = '${{ inputs.version }}'
+          $version = '${{ github.event.inputs.version }}'
           if ([string]::IsNullOrWhiteSpace($version)) {
             $tag = '${{ github.ref_name }}'
             if ($tag -match '^idscannertool-v(.+)$') {
@@ -94,6 +94,7 @@ jobs:
       - name: Upload Velopack packages to GitHub Releases
         shell: pwsh
         run: |
+          $publishRelease = '${{ github.event.inputs.publish_release }}'
           $uploadArgs = @(
             'upload', 'github',
             '--outputDir', 'artifacts\\velopack',
@@ -105,7 +106,7 @@ jobs:
             '--releaseName', "IdScannerTool v$env:APP_VERSION"
           )
 
-          if ('${{ inputs.publish_release }}' -eq 'true' -or '${{ github.event_name }}' -eq 'push') {
+          if ($publishRelease -eq 'true' -or '${{ github.event_name }}' -eq 'push') {
             $uploadArgs += '--publish'
           }
 

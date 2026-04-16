@@ -1,0 +1,118 @@
+name: IdScannerTool Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version (example: 1.0.0)
+        required: true
+        type: string
+      publish_release:
+        description: Publish release instead of draft
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags:
+      - "idscannertool-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Resolve release settings
+        shell: pwsh
+        run: |
+          $version = '${{ inputs.version }}'
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            $tag = '${{ github.ref_name }}'
+            if ($tag -match '^idscannertool-v(.+)$') {
+              $version = $Matches[1]
+            } else {
+              throw "Unable to resolve release version."
+            }
+          }
+
+          $repoUrl = '${{ vars.VELOPACK_REPO_URL }}'
+          if ([string]::IsNullOrWhiteSpace($repoUrl)) {
+            $repoUrl = 'https://github.com/noeyhusChoi/moenybox_devicecontroller'
+          }
+
+          $token = '${{ secrets.VELOPACK_RELEASE_TOKEN }}'
+          if ([string]::IsNullOrWhiteSpace($token)) {
+            $token = '${{ github.token }}'
+          }
+
+          "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VELOPACK_REPO_URL=$repoUrl" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VELOPACK_RELEASE_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Restore
+        run: dotnet restore DeviceController.sln
+
+      - name: Install vpk
+        shell: pwsh
+        run: |
+          dotnet tool install --tool-path .tools\vpk vpk --version 0.0.1298
+
+      - name: Publish IdScannerTool
+        run: >
+          dotnet publish IdScannerTool\IdScannerTool.csproj
+          -c Release
+          -p:Platform=x86
+          -p:Version=${{ env.APP_VERSION }}
+          -o artifacts\publish\IdScannerTool
+
+      - name: Pack Velopack release
+        shell: pwsh
+        run: |
+          .\.tools\vpk\vpk.exe pack `
+            --packId IdScannerTool `
+            --packVersion $env:APP_VERSION `
+            --packDir artifacts\publish\IdScannerTool `
+            --mainExe IdScannerTool.exe `
+            --packAuthors Moneybox `
+            --packTitle IdScannerTool `
+            --channel win `
+            --outputDir artifacts\velopack
+
+      - name: Upload Velopack packages to GitHub Releases
+        shell: pwsh
+        run: |
+          $uploadArgs = @(
+            'upload', 'github',
+            '--outputDir', 'artifacts\\velopack',
+            '--repoUrl', $env:VELOPACK_REPO_URL,
+            '--token', $env:VELOPACK_RELEASE_TOKEN,
+            '--channel', 'win',
+            '--merge',
+            '--tag', "idscannertool-v$env:APP_VERSION",
+            '--releaseName', "IdScannerTool v$env:APP_VERSION"
+          )
+
+          if ('${{ inputs.publish_release }}' -eq 'true' -or '${{ github.event_name }}' -eq 'push') {
+            $uploadArgs += '--publish'
+          }
+
+          .\.tools\vpk\vpk.exe @uploadArgs
+
+      - name: Upload packaged artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: idscannertool-velopack-${{ env.APP_VERSION }}
+          path: artifacts/velopack

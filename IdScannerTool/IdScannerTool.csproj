@@ -17,10 +17,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.9" />
+    <PackageReference Include="Velopack" Version="0.0.1298" />
     <PackageReference Include="WPF-UI" Version="4.2.0" />
   </ItemGroup>
 
@@ -37,9 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Config.ini">
+    <Content Include="Config.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

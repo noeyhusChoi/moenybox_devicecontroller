@@ -7,12 +7,23 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
+using Velopack;
 
 namespace IdScannerTool;
 
 public partial class App : Application
 {
     private IHost? _host;
+
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        VelopackApp.Build().Run();
+
+        var app = new App();
+        app.InitializeComponent();
+        app.Run();
+    }
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -61,17 +72,24 @@ public partial class App : Application
 
     private static IHost BuildHost()
     {
-        var serialKeyPath = Path.Combine(AppContext.BaseDirectory, "serial-key.json");
-        var apiKeyPath = Path.Combine(AppContext.BaseDirectory, "api-key.json");
-        var ocrDbPath = Path.Combine(AppContext.BaseDirectory, "ocr-history.db");
-        var externalOcrRoot = Path.Combine(AppContext.BaseDirectory, "OCR");
-        var externalOcrExecutablePath = Path.Combine(externalOcrRoot, "moneybox_ocr.exe");
+        var installRoot = AppContext.BaseDirectory;
+        var appDataRoot = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Moneybox",
+            "IdScannerTool");
+        var configPath = Path.Combine(installRoot, "Config.ini");
+        var serialKeyPath = Path.Combine(appDataRoot, "serial-key.json");
+        var apiKeyPath = Path.Combine(appDataRoot, "api-key.json");
+        var ocrDbPath = Path.Combine(appDataRoot, "ocr-history.db");
+        var externalOcrAssetRoot = Path.Combine(installRoot, "OCR");
+        var externalOcrDataRoot = Path.Combine(appDataRoot, "OCR");
+        var externalOcrExecutablePath = Path.Combine(externalOcrAssetRoot, "moneybox_ocr.exe");
         var descriptor = BuildIdScannerDescriptor();
         var runtimeOptions = BuildRuntimeOptions();
         var externalOcrOptions = new ExternalOcrOptions(
-            InputDir: Path.Combine(externalOcrRoot, "Input"),
-            ResultDir: Path.Combine(externalOcrRoot, "Result"),
-            ResultTypeDir: Path.Combine(externalOcrRoot, "ResultType"),
+            InputDir: Path.Combine(externalOcrDataRoot, "Input"),
+            ResultDir: Path.Combine(externalOcrDataRoot, "Result"),
+            ResultTypeDir: Path.Combine(externalOcrDataRoot, "ResultType"),
             ResultTimeout: TimeSpan.FromSeconds(10),
             PollInterval: TimeSpan.FromMilliseconds(200));
         var externalOcrProcessOptions = new ExternalOcrProcessOptions(
@@ -86,7 +104,7 @@ public partial class App : Application
                 services.AddSingleton(externalOcrProcessOptions);
                 services.AddSingleton(_ => new HttpClient
                 {
-                    BaseAddress = new Uri("https://uabo68j622.execute-api.ap-northeast-2.amazonaws.com/stage/"),
+                    BaseAddress = new Uri("https://dxjhw783se.execute-api.ap-northeast-2.amazonaws.com/prod/"),
                     Timeout = TimeSpan.FromSeconds(15)
                 });
 
@@ -95,6 +113,7 @@ public partial class App : Application
                 services.AddSingleton<ISerialRegistrationStateService, SerialRegistrationStateService>();
                 services.AddSingleton<IStartupSequenceService, StartupSequenceService>();
                 services.AddSingleton<IDeviceApiClient, DeviceApiClient>();
+                services.AddSingleton<IAppUpdateService>(_ => new AppUpdateService(configPath));
                 services.AddSingleton<IOcrHistoryStore>(_ => new OcrSqliteStore(ocrDbPath));
                 services.AddSingleton<IHistoryExcelExportService, HistoryExcelExportService>();
                 services.AddSingleton<IAppOverlayService, AppOverlayService>();
@@ -144,7 +163,8 @@ public partial class App : Application
                         sp.GetRequiredService<MainRuntimeViewModel>(),
                         sp.GetRequiredService<IAppOverlayService>(),
                         sp.GetRequiredService<IStartupSequenceService>(),
-                        sp.GetRequiredService<IDeviceConnectionMonitorService>()));
+                        sp.GetRequiredService<IDeviceConnectionMonitorService>(),
+                        sp.GetRequiredService<IAppUpdateService>()));
 
                 services.AddSingleton<MainWindow>(sp => new MainWindow
                 {

@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using IdScannerTool.Services;
 using IdScannerTool.ViewModels.Overlays;
+using System.Reflection;
 using System.Windows;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
@@ -15,8 +17,13 @@ public partial class ShellViewModel : ObservableObject
     private readonly IAppOverlayService _appOverlayService;
     private readonly IStartupSequenceService _startupSequenceService;
     private readonly IDeviceConnectionMonitorService _connectionMonitor;
+    private readonly IAppUpdateService _appUpdateService;
+    private UpdateOverlayViewModel? _updateOverlay;
     private bool _startupBusy;
+    private bool _updateBusy;
+    private bool _updateFlowVisible;
     private bool _overlayAwaitingConfirmation;
+    private bool _customOverlayVisible;
     private TaskCompletionSource<bool>? _overlayConfirmTcs;
     private bool _suppressThemeApply;
 
@@ -26,7 +33,8 @@ public partial class ShellViewModel : ObservableObject
         MainRuntimeViewModel main,
         IAppOverlayService appOverlayService,
         IStartupSequenceService startupSequenceService,
-        IDeviceConnectionMonitorService connectionMonitor)
+        IDeviceConnectionMonitorService connectionMonitor,
+        IAppUpdateService appUpdateService)
     {
         _loading = loading;
         _registration = registration;
@@ -34,6 +42,7 @@ public partial class ShellViewModel : ObservableObject
         _appOverlayService = appOverlayService;
         _startupSequenceService = startupSequenceService;
         _connectionMonitor = connectionMonitor;
+        _appUpdateService = appUpdateService;
 
         _connectionMonitor.ConnectionFaulted += OnConnectionFaulted;
         _connectionMonitor.ConnectionRecovered += OnConnectionRecovered;
@@ -178,11 +187,45 @@ public partial class ShellViewModel : ObservableObject
         _main.SetAutoStandbyEnabled(true);
     }
 
+    [RelayCommand]
+    private async Task OpenUpdatePopupAsync()
+    {
+        if (_updateBusy || _overlayAwaitingConfirmation)
+        {
+            return;
+        }
+
+        _updateOverlay = new UpdateOverlayViewModel(
+            GetCurrentVersion(),
+            updateAction: StartUpdateAsync,
+            closeAction: CloseCustomOverlay);
+        _updateOverlay.IsBusy = true;
+        PauseMainBackgroundFlowsForUpdate();
+        ShowCustomOverlay(_updateOverlay);
+
+        try
+        {
+            var checkResult = await _appUpdateService.CheckForUpdatesAsync();
+            ApplyUpdateCheckResult(checkResult);
+        }
+        catch (Exception ex)
+        {
+            if (_updateOverlay is not null)
+            {
+                _updateOverlay.IsBusy = false;
+                _updateOverlay.LatestVersion = "-";
+                _updateOverlay.CanUpdate = false;
+                _updateOverlay.StatusMessage = ex.Message;
+            }
+        }
+    }
+
     public static ShellViewModel Create(
         MainRuntimeViewModel main,
         IAppOverlayService appOverlayService,
         IStartupSequenceService startupSequenceService,
-        IDeviceConnectionMonitorService connectionMonitor)
+        IDeviceConnectionMonitorService connectionMonitor,
+        IAppUpdateService appUpdateService)
     {
         var loading = new LoadingViewModel();
         ShellViewModel? shell = null;
@@ -192,7 +235,14 @@ public partial class ShellViewModel : ObservableObject
             registerFunc: serial => shell!.SaveRegistrationAsync(serial),
             retryFunc: () => shell!.InitializeStartupSequenceAsync());
 
-        shell = new ShellViewModel(loading, registration, main, appOverlayService, startupSequenceService, connectionMonitor);
+        shell = new ShellViewModel(
+            loading,
+            registration,
+            main,
+            appOverlayService,
+            startupSequenceService,
+            connectionMonitor,
+            appUpdateService);
         loading.ConfigureActions(
             retryAction: () => shell.InitializeStartupSequenceAsync(),
             cancelAction: () => Application.Current?.Shutdown());
@@ -237,8 +287,14 @@ public partial class ShellViewModel : ObservableObject
 
     private void ApplyAppOverlay(AppOverlaySnapshot snapshot)
     {
-        // 확인 오버레이 대기 중에는 다른 표시(Progress/Result)로 덮어쓰지 않되,
-        // Hide(IsVisible=false)는 반드시 통과시켜 닫힘이 막히지 않게 한다.
+        if (_customOverlayVisible)
+        {
+            if (!snapshot.IsVisible || !snapshot.ShowConfirmButton)
+            {
+                return;
+            }
+        }
+
         if (_overlayAwaitingConfirmation && snapshot.IsVisible && !snapshot.ShowConfirmButton)
         {
             return;
@@ -270,7 +326,7 @@ public partial class ShellViewModel : ObservableObject
             return;
         }
 
-        if (_overlayAwaitingConfirmation)
+        if (_overlayAwaitingConfirmation || _updateFlowVisible)
         {
             return;
         }
@@ -288,6 +344,7 @@ public partial class ShellViewModel : ObservableObject
         {
             _overlayAwaitingConfirmation = false;
         }
+
         if (!confirmed)
         {
             return;
@@ -303,8 +360,6 @@ public partial class ShellViewModel : ObservableObject
     private async Task HandleConnectionRecoveredAsync(DeviceConnectionRecoveredEvent _)
     {
         await Task.CompletedTask;
-        // Recovery 이벤트는 자동 재검증을 트리거하지 않는다.
-        // 재진입은 사용자의 확인(HandleConnectionFaultedAsync) 경로에서만 수행한다.
     }
 
     private async Task<bool> ShowOverlayWithConfirmationAsync(string title, string message)
@@ -318,9 +373,101 @@ public partial class ShellViewModel : ObservableObject
 
     private void HideOverlay()
     {
+        _customOverlayVisible = false;
+        ResumeMainBackgroundFlowsAfterUpdate();
         _overlayConfirmTcs?.TrySetResult(false);
         _overlayConfirmTcs = null;
         _appOverlayService.Hide();
+    }
+
+    private void ShowCustomOverlay(object overlayContent)
+    {
+        _customOverlayVisible = true;
+        IsOverlayVisible = true;
+        CurrentOverlayContent = overlayContent;
+    }
+
+    private void CloseCustomOverlay()
+    {
+        _customOverlayVisible = false;
+        ResumeMainBackgroundFlowsAfterUpdate();
+        if (!_overlayAwaitingConfirmation)
+        {
+            IsOverlayVisible = false;
+            CurrentOverlayContent = null;
+        }
+    }
+
+    private void ApplyUpdateCheckResult(AppUpdateCheckResult result)
+    {
+        if (_updateOverlay is null)
+        {
+            return;
+        }
+
+        _updateOverlay.IsBusy = false;
+        _updateOverlay.StatusMessage = result.Message;
+        _updateOverlay.CanUpdate = result.IsConfigured && result.IsUpdateAvailable && result.Update is not null;
+        _updateOverlay.LatestVersion = result.Update?.Version ?? _updateOverlay.CurrentVersion;
+    }
+
+    private async Task StartUpdateAsync()
+    {
+        if (_updateBusy || _updateOverlay is null)
+        {
+            return;
+        }
+
+        var checkResult = await _appUpdateService.CheckForUpdatesAsync();
+        ApplyUpdateCheckResult(checkResult);
+        if (!checkResult.IsConfigured || !checkResult.IsUpdateAvailable || checkResult.Update is null)
+        {
+            return;
+        }
+
+        _updateBusy = true;
+        _updateOverlay.IsBusy = true;
+        try
+        {
+            CloseCustomOverlay();
+            _appOverlayService.ShowProgress(
+                "업데이트 다운로드",
+                $"버전 {checkResult.Update.Version} 다운로드 중... 0%");
+
+            await _appUpdateService.DownloadAndApplyAsync(
+                checkResult.Update,
+                progress => _appOverlayService.UpdateProgressMessage(
+                    $"버전 {checkResult.Update.Version} 다운로드 중... {progress}%"));
+        }
+        catch (Exception ex)
+        {
+            _appOverlayService.Hide();
+            _updateOverlay.IsBusy = false;
+            _updateOverlay.StatusMessage = ex.Message;
+            ShowCustomOverlay(_updateOverlay);
+        }
+        finally
+        {
+            _updateBusy = false;
+        }
+    }
+
+    private void PauseMainBackgroundFlowsForUpdate()
+    {
+        _updateFlowVisible = true;
+        if (ReferenceEquals(CurrentViewModel, _main))
+        {
+            _main.SetUpdateFlowPaused(true);
+        }
+    }
+
+    private void ResumeMainBackgroundFlowsAfterUpdate()
+    {
+        _updateFlowVisible = false;
+        if (ReferenceEquals(CurrentViewModel, _main) && !_updateBusy)
+        {
+            _main.SetUpdateFlowPaused(false);
+        }
     }
 
     private void ApplyStageProgressOnUi(StartupVerificationProgress progress)
@@ -333,5 +480,20 @@ public partial class ShellViewModel : ObservableObject
         }
 
         dispatcher.Invoke(() => _loading.ApplyStageProgress(progress));
+    }
+
+    private static string GetCurrentVersion()
+    {
+        var assembly = typeof(App).Assembly;
+        var informational = assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion?
+            .Split('+')[0];
+        if (!string.IsNullOrWhiteSpace(informational))
+        {
+            return informational;
+        }
+
+        return assembly.GetName().Version?.ToString(3) ?? "0.0.0";
     }
 }

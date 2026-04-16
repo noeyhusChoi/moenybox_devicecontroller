@@ -63,7 +63,7 @@ jobs:
           "VELOPACK_RELEASE_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - name: Restore
-        run: dotnet restore DeviceController.sln
+        run: dotnet restore IdScannerTool\IdScannerTool.csproj
 
       - name: Install vpk
         shell: pwsh

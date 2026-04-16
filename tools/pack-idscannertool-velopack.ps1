@@ -44,7 +44,7 @@ $vpk = Join-Path $toolDir "vpk.exe"
     --packDir $publishDir `
     --mainExe IdScannerTool.exe `
     --packAuthors Moneybox `
-    --packTitle IdScannerTool `
+    --packTitle "M-Box ID Scanner" `
     --channel $Channel `
     --outputDir $releaseDir | Out-Host
 
@@ -65,7 +65,7 @@ $uploadArgs = @(
     "--channel", $Channel,
     "--merge",
     "--tag", "idscannertool-v$Version",
-    "--releaseName", "IdScannerTool v$Version"
+    "--releaseName", "M-Box ID Scanner v$Version"
 )
 
 if ($PublishRelease) {

@@ -52,7 +52,7 @@
         </Grid.RowDefinitions>
 
         <ui:TitleBar
-            Title="신분증스캐너"
+            Title="M-Box ID Scanner"
             Grid.Row="0"
             ShowClose="True"
             ShowMaximize="True"

@@ -106,7 +106,7 @@ jobs:
             --packDir artifacts\publish\IdScannerTool `
             --mainExe IdScannerTool.exe `
             --packAuthors Moneybox `
-            --packTitle IdScannerTool `
+            --packTitle "M-Box ID Scanner" `
             --noPortable `
             --channel win `
             --outputDir artifacts\velopack
@@ -123,7 +123,7 @@ jobs:
             '--channel', 'win',
             '--merge',
             '--tag', "idscannertool-v$env:APP_VERSION",
-            '--releaseName', "IdScannerTool v$env:APP_VERSION"
+            '--releaseName', "M-Box ID Scanner v$env:APP_VERSION"
           )
 
           if ($publishRelease -eq 'true' -or '${{ github.event_name }}' -eq 'push') {

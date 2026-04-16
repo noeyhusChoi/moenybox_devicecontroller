@@ -36,7 +36,7 @@ public partial class ShellViewModel
         _updateOverlay.ProgressPercent = 0;
         _updateOverlay.CloseButtonText = "닫기";
         _updateOverlay.UpdateButtonText = "업데이트";
-        _updateOverlay.StatusMessage = $"버전 {checkResult.Update.Version} 다운로드 중입니다. 0%";
+        _updateOverlay.StatusMessage = $"버전 {checkResult.Update.Version} 다운로드 중입니다.";
 
         try
         {
@@ -49,7 +49,7 @@ public partial class ShellViewModel
                     void UpdateProgress()
                     {
                         _updateOverlay.ProgressPercent = progress;
-                        _updateOverlay.StatusMessage = $"버전 {checkResult.Update.Version} 다운로드 중입니다. {progress}%";
+                        _updateOverlay.StatusMessage = $"버전 {checkResult.Update.Version} 다운로드 중입니다.";
                     }
 
                     if (dispatcher is null || dispatcher.CheckAccess())

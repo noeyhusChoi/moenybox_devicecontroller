@@ -168,7 +168,7 @@ public partial class App : Application
 
                 services.AddSingleton<MainWindow>(sp => new MainWindow
                 {
-                    Title = "ID Scanner Controller",
+                    Title = "M-Box ID Scanner",
                     DataContext = sp.GetRequiredService<ShellViewModel>()
                 });
             })

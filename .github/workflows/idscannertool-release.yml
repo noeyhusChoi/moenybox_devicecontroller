@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           lfs: true
 
       - name: Setup .NET
@@ -103,6 +103,7 @@ jobs:
             --mainExe IdScannerTool.exe `
             --packAuthors Moneybox `
             --packTitle IdScannerTool `
+            --noPortable `
             --channel win `
             --outputDir artifacts\velopack
 
@@ -126,9 +127,3 @@ jobs:
           }
 
           .\.tools\vpk\vpk.exe @uploadArgs
-
-      - name: Upload packaged artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: idscannertool-velopack-${{ env.APP_VERSION }}
-          path: artifacts/velopack

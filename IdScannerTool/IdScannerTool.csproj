@@ -15,7 +15,7 @@
     <AssemblyName>M-Box ID Scanner</AssemblyName>
     <StartupObject>IdScannerTool.App</StartupObject>
     <Configurations>Debug;Release;Remote</Configurations>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <AssemblyTitle>M-Box ID Scanner</AssemblyTitle>
     <Product>M-Box ID Scanner</Product>
     <Description>M-Box ID Scanner</Description>

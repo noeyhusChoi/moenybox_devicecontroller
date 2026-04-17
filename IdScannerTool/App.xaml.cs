@@ -73,10 +73,10 @@ public partial class App : Application
     private static IHost BuildHost()
     {
         var installRoot = AppContext.BaseDirectory;
-        var appDataRoot = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Moneybox",
-            "MBoxIDScanner");
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var appDataRoot = Path.Combine(localAppData, "MBoxIDScanner");
+        var legacyAppDataRoot = Path.Combine(localAppData, "Moneybox", "MBoxIDScanner");
+        MigrateLegacyAppData(legacyAppDataRoot, appDataRoot);
         var configPath = Path.Combine(installRoot, "Config.ini");
         var serialKeyPath = Path.Combine(appDataRoot, "serial-key.json");
         var apiKeyPath = Path.Combine(appDataRoot, "api-key.json");
@@ -173,6 +173,53 @@ public partial class App : Application
                 });
             })
             .Build();
+    }
+
+    private static void MigrateLegacyAppData(string legacyRoot, string currentRoot)
+    {
+        if (string.IsNullOrWhiteSpace(legacyRoot) ||
+            string.IsNullOrWhiteSpace(currentRoot) ||
+            string.Equals(legacyRoot, currentRoot, StringComparison.OrdinalIgnoreCase) ||
+            !Directory.Exists(legacyRoot))
+        {
+            return;
+        }
+
+        Directory.CreateDirectory(currentRoot);
+
+        foreach (var filePath in Directory.EnumerateFiles(legacyRoot, "*", SearchOption.TopDirectoryOnly))
+        {
+            var destinationPath = Path.Combine(currentRoot, Path.GetFileName(filePath));
+            if (File.Exists(destinationPath))
+            {
+                continue;
+            }
+
+            File.Move(filePath, destinationPath);
+        }
+
+        foreach (var directoryPath in Directory.EnumerateDirectories(legacyRoot, "*", SearchOption.TopDirectoryOnly))
+        {
+            var destinationPath = Path.Combine(currentRoot, Path.GetFileName(directoryPath));
+            if (Directory.Exists(destinationPath))
+            {
+                continue;
+            }
+
+            Directory.Move(directoryPath, destinationPath);
+        }
+
+        if (!Directory.EnumerateFileSystemEntries(legacyRoot).Any())
+        {
+            Directory.Delete(legacyRoot, recursive: false);
+            var parent = Path.GetDirectoryName(legacyRoot);
+            if (!string.IsNullOrWhiteSpace(parent) &&
+                Directory.Exists(parent) &&
+                !Directory.EnumerateFileSystemEntries(parent).Any())
+            {
+                Directory.Delete(parent, recursive: false);
+            }
+        }
     }
 
     private static DeviceDescriptor BuildIdScannerDescriptor()

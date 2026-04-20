@@ -2,10 +2,13 @@
     x:Class="Kiosk.Views.Steps.ScanCompletedStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
         <Style x:Key="ResultHeadlineStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="59" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -25,7 +28,7 @@
         <Style x:Key="ResultNoticeStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="40" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="{DynamicResource AccentEmphasisForegroundBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextAccentBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
@@ -80,6 +83,11 @@
     </UserControl.Resources>
 
     <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
+        </Grid.RowDefinitions>
+
         <StackPanel Margin="0,208,0,0" HorizontalAlignment="Center">
             <Image
                 Width="360"
@@ -114,5 +122,63 @@
                 Style="{StaticResource ErrorDetailStyle}"
                 Text="{Binding ErrorDetailText}" />
         </StackPanel>
+
+        <Grid
+            Grid.Row="1"
+            Width="936"
+            Height="120"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False"
+            Visibility="{Binding HasSecondaryAction, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="12*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+            <Button
+                Grid.Column="2"
+                Command="{Binding PrimaryCommand}"
+                Content="{Binding PrimaryText}"
+                IsEnabled="{Binding IsPrimaryEnabled}"
+                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+        </Grid>
+
+        <Grid
+            Grid.Row="1"
+            Width="936"
+            Height="120"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasSecondaryAction}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <Button
+                Width="936"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding PrimaryCommand}"
+                Content="{Binding PrimaryText}"
+                IsEnabled="{Binding IsPrimaryEnabled}"
+                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+        </Grid>
     </Grid>
 </UserControl>

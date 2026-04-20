@@ -14,6 +14,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="72" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -78,19 +79,38 @@
                                 HorizontalAlignment="Center"
                                 FontSize="40"
                                 FontWeight="SemiBold"
-                                Foreground="{DynamicResource ControlDefaultPrimaryForegroundBrush}"
+                                Foreground="{DynamicResource OnDefaultPrimaryBrush}"
                                 Text="{Binding Code}" />
                             <TextBlock
                                 Grid.Row="3"
                                 HorizontalAlignment="Center"
                                 FontSize="34"
                                 FontWeight="SemiBold"
-                                Foreground="{DynamicResource ControlDefaultSecondaryForegroundBrush}"
+                                Foreground="{DynamicResource OnDefaultSecondaryBrush}"
                                 Text="{Binding RateText}" />
                         </Grid>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <Grid
+            Grid.Row="3"
+            Width="936"
+            Height="170"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Button
+                Width="336"
+                Height="120"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+        </Grid>
     </Grid>
 </UserControl>

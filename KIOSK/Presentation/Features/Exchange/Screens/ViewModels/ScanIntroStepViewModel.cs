@@ -11,8 +11,8 @@ public sealed partial class ScanIntroStepViewModel : ExchangeStepViewModelBase, 
     public ScanIntroStepViewModel()
     {
         Title = "신분증 스캔을 진행해주세요";
-        IntroMessage = "신분증을 아래 안내 영상처럼 올려주세요.";
-        Body = "얼굴 사진이 있는 정보면을 아래로하여\n스캐너에 올려주세요";
+        IntroMessage = "신분증을 아래 안내 영상처럼 올려주세요";
+        Body = "얼굴 사진이 있는 면을 아래로 하여\n스캐너에 올려주세요";
         PreviewVideoPath = DefaultPreviewVideoPath;
     }
 

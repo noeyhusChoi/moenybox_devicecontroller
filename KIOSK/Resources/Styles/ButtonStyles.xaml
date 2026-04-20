@@ -61,9 +61,9 @@
     </Style>
 
     <Style x:Key="FilledButtonBaseStyle" TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlDefaultPrimaryForegroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ControlSurfaceBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceDefaultBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceDefaultBorderBrush}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="FontSize" Value="49" />
@@ -105,12 +105,12 @@
         x:Key="FilledWhiteButtonStyle"
         BasedOn="{StaticResource FilledButtonBaseStyle}"
         TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ControlSurfaceBorderBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlDefaultPrimaryForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceDefaultBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceDefaultBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnDefaultPrimaryBrush}" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource ControlSurfacePressedBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceDefaultPressedBrush}" />
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -126,16 +126,16 @@
         x:Key="FilledPrimaryButtonStyle"
         BasedOn="{StaticResource FilledButtonBaseStyle}"
         TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource ControlPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ControlPrimaryBorderBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlFeaturedPrimaryForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceAccentBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceAccentBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnAccentPrimaryBrush}" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource ControlPrimaryPressedBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceAccentPressedBrush}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{DynamicResource ControlDisabledBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource ControlDisabledForegroundBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceDisabledBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource OnDisabledPrimaryBrush}" />
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -151,16 +151,16 @@
         x:Key="FilledDarkButtonStyle"
         BasedOn="{StaticResource FilledButtonBaseStyle}"
         TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource ControlSurfaceStrongBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ControlSurfaceStrongBorderBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlStrongPrimaryForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceStrongBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceStrongBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnStrongPrimaryBrush}" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource ControlSurfaceStrongPressedBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceStrongPressedBrush}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{DynamicResource ControlDisabledBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource ControlDisabledForegroundBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceDisabledBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource OnDisabledPrimaryBrush}" />
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -176,17 +176,17 @@
         x:Key="FilledActionPrimaryButtonStyle"
         BasedOn="{StaticResource FilledButtonBaseStyle}"
         TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource ControlActionPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ControlActionPrimaryBorderBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlActionPrimaryForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceActionPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceActionPrimaryBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnActionPrimaryPrimaryBrush}" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource ControlActionPrimaryPressedBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceActionPrimaryPressedBrush}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{DynamicResource ControlDisabledBrush}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ControlDisabledBorderBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource ControlDisabledForegroundBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceDisabledBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource SurfaceDisabledBorderBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource OnDisabledPrimaryBrush}" />
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -202,15 +202,15 @@
         x:Key="OutlinedActionSecondaryButtonStyle"
         BasedOn="{StaticResource FilledButtonBaseStyle}"
         TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource ControlActionSecondaryBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlActionSecondaryPrimaryForegroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ControlActionSecondaryBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceActionSecondaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnActionSecondaryPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceActionSecondaryBorderBrush}" />
         <Setter Property="BorderThickness" Value="3" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource ControlActionSecondaryPressedBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SurfaceActionSecondaryPressedBrush}" />
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>

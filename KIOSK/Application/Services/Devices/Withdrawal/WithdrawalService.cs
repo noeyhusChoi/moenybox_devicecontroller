@@ -1,7 +1,3 @@
-using DeviceKit.Commands;
-using DeviceKit.Drivers.Withdrawal;
-using DeviceKit.Engine;
-using DeviceKit.Status;
 using Kiosk.Infrastructure.Database.Repositories;
 using Microsoft.Extensions.Logging;
 using DeviceKitWithdrawalDispenseResult = DeviceKit.Commands.Withdrawal.WithdrawalDispenseResult;

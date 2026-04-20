@@ -80,7 +80,7 @@
                 <TextBlock
                     Grid.Column="0"
                     FontSize="38"
-                    Foreground="{DynamicResource AccentForegroundBrush}"
+                    Foreground="{DynamicResource TextAccentStrongBrush}"
                     Text="◔" />
                 <TextBlock
                     Grid.Column="2"

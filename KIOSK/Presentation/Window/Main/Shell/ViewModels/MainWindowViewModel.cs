@@ -4,7 +4,6 @@ using Kiosk.Application.Services.Resx;
 using Kiosk.Application.Services.Theme;
 using Kiosk.Infrastructure.Initialization;
 using System.ComponentModel;
-using System.Windows.Media;
 using Kiosk.ViewModels.Overlays;
 
 namespace Kiosk.ViewModels
@@ -23,7 +22,6 @@ namespace Kiosk.ViewModels
 
         private readonly IAppInitializer _initializer;
         private readonly IHeaderViewModelFactory _headerViewModelFactory;
-        private readonly IAppCulture _appCulture;
         private readonly IAppTheme _appTheme;
         private bool _initialized;
 
@@ -45,8 +43,9 @@ namespace Kiosk.ViewModels
         [ObservableProperty]
         private object? currentUtilityOverlayViewModel;
 
-        [ObservableProperty]
-        private FontFamily currentAppFontFamily = null!;
+        public bool IsProgressChromeVisible => CurrentScreenViewModel == ExchangeShell &&
+                                               ExchangeShell.ShowStepHeader &&
+                                               !ExchangeShell.CollapseShellChrome;
 
         [ObservableProperty]
         private bool isAccessibilityZoomEnabled;
@@ -68,24 +67,21 @@ namespace Kiosk.ViewModels
         public MainWindowViewModel(
             IAppInitializer initializer,
             IHeaderViewModelFactory headerViewModelFactory,
-            IAppCulture appCulture,
             IAppTheme appTheme,
             HomeShellViewModel homeShell,
             ExchangeShellViewModel exchangeShell)
         {
             _initializer = initializer;
             _headerViewModelFactory = headerViewModelFactory;
-            _appCulture = appCulture;
             _appTheme = appTheme;
             HomeShell = homeShell;
             ExchangeShell = exchangeShell;
             HomeShell.ServiceEntryRequested += OnHomeServiceEntryRequested;
             ExchangeShell.HomeRequested += OnExchangeHomeRequested;
+            ExchangeShell.PropertyChanged += OnExchangeShellPropertyChanged;
             _initializer.ProgressChanged += OnProgressChanged;
-            _appCulture.CultureChanged += OnCultureChanged;
             _appTheme.ThemeChanged += OnThemeChanged;
             UtilityBarViewModel = new UtilityBarViewModel(ShowHome, ToggleAccessibilityZoom, ToggleKeyboardNavigation, OpenThemeSelector);
-            CurrentAppFontFamily = ResolveFontFamily();
             UtilityBarViewModel.SetZoomState(false);
             UtilityBarViewModel.SetAccessibilityState(KeyboardNavigationState.Instance.IsEnabled);
             RefreshThemeButtonState();
@@ -110,15 +106,19 @@ namespace Kiosk.ViewModels
             StatusMessage = message;
         }
 
-        private void OnCultureChanged(object? sender, EventArgs e)
-        {
-            CurrentAppFontFamily = ResolveFontFamily();
-        }
-
         private void OnThemeChanged(object? sender, EventArgs e)
         {
             RefreshThemeButtonState();
             HeaderViewModel.LogoAssetPath = _headerViewModelFactory.GetLogoAssetPath();
+        }
+
+        private void OnExchangeShellPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is nameof(ExchangeShellViewModel.ShowStepHeader)
+                or nameof(ExchangeShellViewModel.CollapseShellChrome))
+            {
+                OnPropertyChanged(nameof(IsProgressChromeVisible));
+            }
         }
 
         private async void OnHomeServiceEntryRequested(object? sender, HomeServiceEntryRequestedEventArgs e)
@@ -167,6 +167,7 @@ namespace Kiosk.ViewModels
             CurrentScreenViewModel = HomeShell;
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateHomeHeader());
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
         }
 
         private async Task ShowExchangeAsync()
@@ -174,21 +175,8 @@ namespace Kiosk.ViewModels
             CurrentScreenViewModel = ExchangeShell;
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeShell.TimerText));
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
             await ExchangeShell.StartFlowAsync();
-        }
-
-        private FontFamily ResolveFontFamily()
-        {
-            var resourceKey = _appCulture.CurrentCulture.Name switch
-            {
-                "ko-KR" => "Noto Sans KR",
-                "ja-JP" => "Noto Sans JP",
-                "zh-CN" => "Noto Sans SC",
-                "zh-TW" => "Noto Sans TC",
-                _ => "Noto Sans",
-            };
-
-            return (FontFamily)System.Windows.Application.Current.Resources[resourceKey];
         }
 
         private void ToggleAccessibilityZoom()

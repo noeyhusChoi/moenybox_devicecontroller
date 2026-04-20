@@ -24,8 +24,8 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="200" />
             <RowDefinition Height="592" />
+            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
-
 
         <TextBlock
             Grid.Row="0"
@@ -99,6 +99,24 @@
                     </TextBlock>
                 </Grid>
             </Button>
+        </Grid>
+
+        <Grid
+            Grid.Row="3"
+            Height="170"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Button
+                Width="336"
+                Height="120"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
         </Grid>
     </Grid>
 </UserControl>

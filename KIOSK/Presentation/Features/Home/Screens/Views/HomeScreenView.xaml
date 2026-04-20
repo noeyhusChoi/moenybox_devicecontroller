@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     x:Class="Kiosk.Views.HomeScreenView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -82,13 +82,23 @@
 
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock
-                            Foreground="{DynamicResource ControlDefaultPrimaryForegroundBrush}"
+                            Foreground="{DynamicResource OnDefaultPrimaryBrush}"
                             Style="{StaticResource ServiceCardTitleTextStyle}"
                             Text="{Binding Title}" />
+                        <TextBlock Foreground="{DynamicResource OnDefaultSecondaryBrush}" Style="{StaticResource ServiceCardSubtitleTextStyle}">
+                            <Run>Prepaid Card</Run>
+                            <Ellipse
+                                Width="10"
+                                Height="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Fill="AliceBlue" />
+                            <Run>プリペイドカード</Run>
+                        </TextBlock>
                         <TextBlock
-                            Foreground="{DynamicResource ControlDefaultSecondaryForegroundBrush}"
+                            Foreground="{DynamicResource OnDefaultSecondaryBrush}"
                             Style="{StaticResource ServiceCardSubtitleTextStyle}"
-                            Text="{Binding Subtitle}" />
+                            Text="预付卡· 預付卡" />
                     </StackPanel>
 
                     <Image
@@ -117,11 +127,11 @@
 
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock
-                            Foreground="{DynamicResource ControlFeaturedPrimaryForegroundBrush}"
+                            Foreground="{DynamicResource OnAccentPrimaryBrush}"
                             Style="{StaticResource ServiceCardTitleTextStyle}"
                             Text="{Binding Title}" />
                         <TextBlock
-                            Foreground="{DynamicResource ControlFeaturedSecondaryForegroundBrush}"
+                            Foreground="{DynamicResource OnAccentSecondaryBrush}"
                             Style="{StaticResource ServiceCardSubtitleTextStyle}"
                             Text="{Binding Subtitle}" />
                     </StackPanel>
@@ -152,11 +162,11 @@
 
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock
-                            Foreground="{DynamicResource ControlStrongPrimaryForegroundBrush}"
+                            Foreground="{DynamicResource OnStrongPrimaryBrush}"
                             Style="{StaticResource ServiceCardTitleTextStyle}"
                             Text="{Binding Title}" />
                         <TextBlock
-                            Foreground="{DynamicResource ControlStrongSecondaryForegroundBrush}"
+                            Foreground="{DynamicResource OnStrongSecondaryBrush}"
                             Style="{StaticResource ServiceCardSubtitleTextStyle}"
                             Text="{Binding Subtitle}" />
                     </StackPanel>

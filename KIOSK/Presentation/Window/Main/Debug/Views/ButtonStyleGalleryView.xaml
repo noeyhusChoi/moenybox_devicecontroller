@@ -133,7 +133,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="53"
                                     FontWeight="Bold"
-                                    Foreground="{DynamicResource ControlDefaultPrimaryForegroundBrush}"
+                                    Foreground="{DynamicResource OnDefaultPrimaryBrush}"
                                     Text="Filled White" />
                             </Grid>
                         </Button>
@@ -146,7 +146,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="53"
                                     FontWeight="Bold"
-                                    Foreground="{DynamicResource ControlFeaturedPrimaryForegroundBrush}"
+                                    Foreground="{DynamicResource OnAccentPrimaryBrush}"
                                     Text="Filled Featured" />
                             </Grid>
                         </Button>
@@ -159,7 +159,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="53"
                                     FontWeight="Bold"
-                                    Foreground="{DynamicResource ControlStrongPrimaryForegroundBrush}"
+                                    Foreground="{DynamicResource OnStrongPrimaryBrush}"
                                     Text="Filled Dark" />
                             </Grid>
                         </Button>
@@ -174,7 +174,7 @@
                                 VerticalAlignment="Center"
                                 FontSize="53"
                                 FontWeight="Bold"
-                            Foreground="{DynamicResource ControlActionPrimaryForegroundBrush}"
+                            Foreground="{DynamicResource OnActionPrimaryPrimaryBrush}"
                                 Text="Filled Action" />
                         </Grid>
                     </Button>

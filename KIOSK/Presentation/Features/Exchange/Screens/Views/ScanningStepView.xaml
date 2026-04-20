@@ -2,11 +2,17 @@
     x:Class="Kiosk.Views.Steps.ScanningStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
+        </Grid.RowDefinitions>
+
         <StackPanel Margin="0,208,0,0" HorizontalAlignment="Center">
             <Image
                 Width="360"
@@ -20,7 +26,7 @@
                 FontSize="59"
                 FontWeight="Bold"
                 Foreground="{DynamicResource TextPrimaryBrush}"
-                Text="신분증 스캔이 진행중입니다." />
+                Text="신분증 스캔을 진행중입니다." />
             <TextBlock
                 Margin="0,24,0,0"
                 HorizontalAlignment="Center"
@@ -29,5 +35,24 @@
                 Foreground="{DynamicResource TextSecondaryBrush}"
                 Text="잠시만 기다려주세요.." />
         </StackPanel>
+
+        <Grid
+            Grid.Row="1"
+            Width="936"
+            Height="170"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Button
+                Width="336"
+                Height="120"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+        </Grid>
     </Grid>
 </UserControl>

@@ -39,7 +39,7 @@
                         VerticalAlignment="Center"
                         FontSize="22"
                         FontWeight="SemiBold"
-                        Foreground="{DynamicResource AccentForegroundBrush}"
+                        Foreground="{DynamicResource StatusInfoBackgroundBrush}"
                         Text="안내" />
                 </Border>
                 <StackPanel
@@ -48,13 +48,13 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                     <Grid Width="144" Height="144">
-                        <Ellipse Fill="{DynamicResource AccentBackgroundBrush}" />
+                        <Ellipse Fill="{DynamicResource StatusInfoBackgroundBrush}" />
                         <Border
                             Width="64"
                             Height="64"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Background="{DynamicResource CardBackgroundBrush}"
+                            Background="{DynamicResource StatusInfoForegroundBrush}"
                             CornerRadius="32" />
                     </Grid>
                     <TextBlock

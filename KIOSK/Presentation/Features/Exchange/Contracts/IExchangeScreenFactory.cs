@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.Input;
 using Kiosk.Application.Features.ExchangeV2.StateMachine;
-using Kiosk.ViewModels.BottomActions;
 using Kiosk.ViewModels.Steps;
 
 namespace Kiosk.ViewModels;
@@ -12,7 +11,7 @@ public interface IExchangeScreenFactory
         ExchangeFlowContext context,
         Func<Task> showModalAsync);
 
-    BottomActionViewModelBase? CreateBottomAction(
+    void ConfigureStepActions(
         ExchangeStep step,
         ExchangeFlowContext context,
         ExchangeStepViewModelBase? stepViewModel,

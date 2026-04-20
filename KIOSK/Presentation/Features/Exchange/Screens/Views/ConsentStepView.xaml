@@ -15,6 +15,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="72" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -56,16 +57,15 @@
                     VerticalAlignment="Center"
                     FontSize="34"
                     FontWeight="SemiBold"
-                    Foreground="{DynamicResource AccentEmphasisForegroundBrush}"
+                    Foreground="{DynamicResource TextAccentStrongBrush}"
                     Text="{Binding SupportedDocumentTypes}" />
             </Border>
 
             <Border
                 Grid.Row="4"
-                Style="{StaticResource CardSurfaceBorderStyle}"
                 Width="936"
                 Height="255"
-                >
+                Style="{StaticResource CardSurfaceBorderStyle}">
                 <Grid
                     behavior:FocusContainer.InitialFocus="True"
                     behavior:FocusContainer.Mode="VerticalStack"
@@ -85,9 +85,9 @@
                         Cursor="Hand"
                         FocusVisualStyle="{x:Null}"
                         Focusable="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
+                        IsChecked="{Binding IsAgreed, Mode=TwoWay}"
                         IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
-                        KeyboardNavigation.IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}"
-                        IsChecked="{Binding IsAgreed, Mode=TwoWay}">
+                        KeyboardNavigation.IsTabStop="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}">
                         <CheckBox.Template>
                             <ControlTemplate TargetType="CheckBox">
                                 <Border Background="Transparent">
@@ -146,7 +146,7 @@
                                         <Setter TargetName="CheckBorder" Property="Background" Value="{DynamicResource AccentBackgroundBrush}" />
                                         <Setter TargetName="CheckBorder" Property="BorderThickness" Value="0" />
                                         <Setter TargetName="Tick" Property="Visibility" Value="Visible" />
-                                        <Setter TargetName="Tick" Property="Stroke" Value="{DynamicResource TextOnAccentBrush}" />
+                                        <Setter TargetName="Tick" Property="Stroke" Value="{DynamicResource OnAccentPrimaryBrush}" />
                                     </Trigger>
                                     <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                         <Setter TargetName="CheckFocusRing" Property="Visibility" Value="Visible" />
@@ -205,6 +205,34 @@
                 FontSize="34"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{Binding Body}" />
+        </Grid>
+
+        <Grid
+            Grid.Row="3"
+            Width="936"
+            Height="120"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="12*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+            <Button
+                Grid.Column="2"
+                Command="{Binding PrimaryCommand}"
+                Content="{Binding PrimaryText}"
+                IsEnabled="{Binding IsPrimaryEnabled}"
+                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
         </Grid>
     </Grid>
 </UserControl>

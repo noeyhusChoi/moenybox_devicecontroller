@@ -47,14 +47,18 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
     public string? FlagImagePath { get; }
     public string? GuideImagePath { get; }
     public IReadOnlyList<string> AcceptedDenominationImagePaths { get; }
+
     [ObservableProperty]
     private string depositAmountText = "0";
+
     [ObservableProperty]
     private string exchangeAmountText = "0.00";
+
     public string ExchangeRateText { get; }
     public string DailyMaximumAmountText { get; }
     public string DailyRemainingMaximumAmountText { get; }
     public string DailyAvailableExchangeAmountText { get; }
+
     [ObservableProperty]
     private string statusMessage = string.Empty;
 

@@ -84,6 +84,9 @@
       <None Remove="Assets\Flag\TWD.png" />
       <None Remove="Assets\Flag\USD.png" />
       <None Remove="Assets\Flag\VND.png" />
+      <None Remove="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Bold.otf" />
+      <None Remove="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Medium.otf" />
+      <None Remove="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Regular.otf" />
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit1.gif" />
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit2.gif" />
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_AUD.gif" />
@@ -226,6 +229,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Bold.otf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Medium.otf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Regular.otf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>

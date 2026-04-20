@@ -6,7 +6,7 @@ namespace Kiosk.ViewModels.Steps;
 public partial class ScanningStepViewModel : ExchangeStepViewModelBase, IScannerEventConsumer
 {
     public ScanningStepViewModel(
-        string? body = "얼굴 사진이 있는 면을 아래로 하여 스캐너에 올려주세요.",
+        string? body = "얼굴 사진이 있는 면을 아래로 하여 스캐너에 올려주세요",
         string? title = "신분증 스캔을 진행해 주세요")
     {
         Title = title;

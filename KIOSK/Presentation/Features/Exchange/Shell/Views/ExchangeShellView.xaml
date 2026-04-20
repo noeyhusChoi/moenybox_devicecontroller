@@ -2,8 +2,6 @@
     x:Class="Kiosk.Views.ExchangeShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:actionViews="clr-namespace:Kiosk.Views.Actions"
-    xmlns:actionVm="clr-namespace:Kiosk.ViewModels.BottomActions"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -51,15 +49,6 @@
         <DataTemplate DataType="{x:Type stepVm:DispenseFailureStepViewModel}">
             <stepViews:DispenseFailureStepView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type actionVm:BackOnlyActionViewModel}">
-            <actionViews:BackOnlyActionView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type actionVm:BackAndPrimaryActionViewModel}">
-            <actionViews:BackAndPrimaryActionView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type actionVm:PrimaryOnlyActionViewModel}">
-            <actionViews:PrimaryOnlyActionView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <Border>
@@ -78,7 +67,6 @@
                     </RowDefinition.Style>
                 </RowDefinition>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="170" />
             </Grid.RowDefinitions>
 
             <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding ProgressSteps}">
@@ -98,19 +86,8 @@
                 x:Name="StepContentHost"
                 Grid.Row="1"
                 Margin="72"
-                behavior:FocusBoundary.DownTarget="{Binding ElementName=BottomActionHost}"
                 behavior:FocusContainer.Mode="None"
                 Content="{Binding CurrentStepViewModel}"
-                Focusable="False"
-                IsTabStop="False"
-                KeyboardNavigation.IsTabStop="False" />
-
-            <ContentControl
-                x:Name="BottomActionHost"
-                Grid.Row="2"
-                behavior:FocusBoundary.UpTarget="{Binding ElementName=StepContentHost}"
-                behavior:FocusContainer.Mode="None"
-                Content="{Binding CurrentBottomActionViewModel}"
                 Focusable="False"
                 IsTabStop="False"
                 KeyboardNavigation.IsTabStop="False" />

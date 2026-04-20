@@ -14,6 +14,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -42,17 +43,36 @@
             <Button
                 x:Name="PrimaryActionButton"
                 Grid.Row="2"
-                Command="{Binding PrimaryCommand}"
+                Command="{Binding StartCommand}"
                 FontSize="60"
                 FontWeight="SemiBold"
                 Style="{StaticResource FilledPrimaryButtonStyle}"
-                Visibility="{Binding ShowPrimaryAction, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding ShowStartAction, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="{Binding PrimaryText}"
+                    Text="{Binding StartText}"
                     TextAlignment="Center" />
             </Button>
+        </Grid>
+
+        <Grid
+            Grid.Row="3"
+            Height="170"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Button
+                Width="336"
+                Height="120"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}"
+                Visibility="{Binding HasSecondaryAction, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Grid>
 </UserControl>

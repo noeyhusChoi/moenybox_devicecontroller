@@ -46,7 +46,7 @@ public sealed class DispenseSuccessStepViewModel : ExchangeStepViewModelBase
         SourceFlagImagePath = DispenseResultViewModelSupport.CreateFlagPath(SourceCurrencyCode);
         TargetFlagImagePath = DispenseResultViewModelSupport.CreateFlagPath(TargetCurrencyCode);
 
-        Headline = "거래가 완료되었습니다";
+        Headline = "거래가 완료되었습니다.";
         ExchangeRateText = exchangeRate.ToString("0.00", CultureInfo.InvariantCulture);
         DepositAmountText = depositAmount.ToString("0.##", CultureInfo.InvariantCulture);
         RemainingAmountText = Math.Max(0m, requestedAmount - dispensedAmount).ToString("#,0.##", CultureInfo.InvariantCulture);

@@ -12,13 +12,13 @@ public sealed class ScanCompletedStepViewModel : ExchangeStepViewModelBase
         Title = title;
         IsSuccess = isSuccess;
         Headline = isSuccess
-            ? "신분증 스캔이 완료 되었습니다"
-            : "신분증 스캔에 실패하였습니다";
+            ? "신분증 스캔이 완료되었습니다."
+            : "신분증 스캔에 실패하였습니다.";
         Description = isSuccess
-            ? "신분증 및 여권을 반드시 회수하신 후\n다음 스텝을 진행해주세요"
+            ? "신분증 정보가 정상적으로 확인되었습니다.\n다음 단계로 진행해주세요"
             : "안내 영상을 자세히 확인하신 후\n안내에 따라 신분증을 다시 스캔해주세요";
         NoticeText = isSuccess
-            ? "분실에 대한 책임은 당사가 지지 않습니다"
+            ? "분실에 대한 책임은 당사가 지지 않습니다."
             : string.Empty;
         ErrorDetailText = isSuccess || string.IsNullOrWhiteSpace(errorMessage)
             ? string.Empty

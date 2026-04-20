@@ -2,6 +2,7 @@
     x:Class="Kiosk.Views.Steps.DispenseSuccessStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:stepVm="clr-namespace:Kiosk.ViewModels.Steps"
@@ -35,6 +36,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="224" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -48,8 +50,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Panel.ZIndex="10"
-                Background="{DynamicResource StatusWarningBackgroundBrush}"
-                BorderBrush="{DynamicResource StatusWarningBorderBrush}"
+                Background="{DynamicResource DebugBadgeBackgroundBrush}"
+                BorderBrush="{DynamicResource DebugBadgeBorderBrush}"
                 BorderThickness="2"
                 CornerRadius="18">
                 <Border.Style>
@@ -65,7 +67,7 @@
                 <TextBlock
                     FontSize="28"
                     FontWeight="SemiBold"
-                    Foreground="{DynamicResource StatusWarningForegroundBrush}"
+                    Foreground="{DynamicResource DebugBadgeForegroundBrush}"
                     Text="{Binding RemainingAmountText, StringFormat=거스름돈 {0} KRW}" />
             </Border>
 
@@ -74,14 +76,14 @@
                     Width="120"
                     Height="120"
                     HorizontalAlignment="Center">
-                    <Ellipse Fill="{DynamicResource AccentBackgroundBrush}" />
+                    <Ellipse Fill="{DynamicResource StatusSuccessBackgroundBrush}" />
                     <Path
                         Width="52"
                         Height="38"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Data="M 4,20 L 18,34 L 48,6"
-                        Stroke="{DynamicResource TextOnAccentBrush}"
+                        Stroke="{DynamicResource StatusSuccessForegroundBrush}"
                         StrokeEndLineCap="Round"
                         StrokeLineJoin="Round"
                         StrokeThickness="8" />
@@ -204,7 +206,7 @@
                                 LastChildFill="True">
                                 <TextBlock Style="{StaticResource SummaryLabelStyle}" Text="지급 금액" />
                                 <TextBlock
-                                    Foreground="{DynamicResource PrimaryBrush}"
+                                    Foreground="{DynamicResource TextAccentBrush}"
                                     Style="{StaticResource SummaryValueStyle}"
                                     Text="{Binding DispensedAmountText, StringFormat={}{0} KRW}" />
                             </DockPanel>
@@ -246,6 +248,34 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
+        </Grid>
+
+        <Grid
+            Grid.Row="2"
+            Width="936"
+            Height="120"
+            VerticalAlignment="Top"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="12*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryText}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+            <Button
+                Grid.Column="2"
+                Command="{Binding PrimaryCommand}"
+                Content="{Binding PrimaryText}"
+                IsEnabled="{Binding IsPrimaryEnabled}"
+                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
         </Grid>
     </Grid>
 </UserControl>

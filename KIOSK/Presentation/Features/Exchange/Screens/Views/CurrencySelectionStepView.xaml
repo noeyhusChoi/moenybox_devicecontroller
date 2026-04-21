@@ -13,8 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="72" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -23,7 +23,9 @@
             Text="{Binding Title}" />
 
         <ItemsControl
+            x:Name="CurrencyOptionContainer"
             Grid.Row="2"
+            behavior:FocusBoundary.DownTarget="{Binding ElementName=PreviousActionButton}"
             Focusable="False"
             ItemsSource="{Binding Options}"
             KeyboardNavigation.DirectionalNavigation="None"
@@ -49,7 +51,6 @@
                 <DataTemplate>
                     <Button
                         Margin="12"
-                        BorderBrush="Transparent"
                         Command="{Binding SelectCommand}"
                         Cursor="Hand"
                         Style="{StaticResource FilledWhiteButtonStyle}">
@@ -63,17 +64,16 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Border
+
+                            <Ellipse
                                 Grid.Row="0"
                                 Width="70"
                                 Height="70"
-                                VerticalAlignment="Top"
-                                BorderBrush="LightGray"
-                                BorderThickness="1"
-                                ClipToBounds="True"
-                                CornerRadius="32">
-                                <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                            </Border>
+                                Stroke="LightGray">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding AssetPath}" Stretch="Fill" />
+                                </Ellipse.Fill>
+                            </Ellipse>
                             <TextBlock
                                 Grid.Row="2"
                                 HorizontalAlignment="Center"
@@ -94,23 +94,17 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Grid
+        <Button
+            x:Name="PreviousActionButton"
             Grid.Row="3"
-            Width="936"
-            Height="170"
-            VerticalAlignment="Top"
-            behavior:FocusContainer.Mode="HorizontalStack"
-            Focusable="False"
-            KeyboardNavigation.IsTabStop="False">
-            <Button
-                Width="336"
-                Height="120"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
-                IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
-        </Grid>
+            Width="336"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.UpTarget="{Binding ElementName=CurrencyOptionContainer}"
+            Command="{Binding SecondaryCommand}"
+            Content="{Binding SecondaryText}"
+            IsEnabled="{Binding IsSecondaryEnabled}"
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
     </Grid>
 </UserControl>

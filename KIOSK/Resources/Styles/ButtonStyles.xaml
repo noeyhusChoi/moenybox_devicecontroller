@@ -14,7 +14,7 @@
         Color="#1F2023" />
 
     <Style x:Key="CardSurfaceBorderStyle" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource CardSurfaceBrush}" />
+        <Setter Property="Background" Value="{DynamicResource CardPrimaryBackgroundBrush}" />
         <Setter Property="CornerRadius" Value="32" />
         <Setter Property="Effect" Value="{DynamicResource FilledCardButtonShadowEffect}" />
     </Style>
@@ -55,7 +55,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
@@ -96,7 +96,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
@@ -117,7 +117,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
@@ -142,7 +142,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
@@ -167,7 +167,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
@@ -179,6 +179,8 @@
         <Setter Property="Background" Value="{DynamicResource SurfaceActionPrimaryBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource SurfaceActionPrimaryBorderBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource OnActionPrimaryPrimaryBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="{DynamicResource SurfaceActionPrimaryPressedBrush}" />
@@ -193,7 +195,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
@@ -217,7 +219,7 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
                     <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>

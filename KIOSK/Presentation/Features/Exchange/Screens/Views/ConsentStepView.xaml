@@ -15,7 +15,6 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="72" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -24,7 +23,9 @@
             Text="{Binding Title}" />
 
         <Grid
+            x:Name="ConsentContentContainer"
             Grid.Row="2"
+            behavior:FocusBoundary.DownTarget="{Binding ElementName=ConsentActionContainer}"
             Focusable="False"
             KeyboardNavigation.DirectionalNavigation="Continue"
             KeyboardNavigation.IsTabStop="False">
@@ -36,6 +37,7 @@
                 <RowDefinition Height="257" />
                 <RowDefinition Height="72" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Image
@@ -107,7 +109,7 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="Black"
+                                            BorderBrush="{DynamicResource CheckboxFocusRingBrush}"
                                             BorderThickness="4"
                                             CornerRadius="22"
                                             Visibility="Collapsed" />
@@ -119,8 +121,8 @@
                                             Height="60"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Background="{DynamicResource CardBackgroundBrush}"
-                                            BorderBrush="{DynamicResource BorderStrongBrush}"
+                                            Background="{DynamicResource CheckboxBackgroundBrush}"
+                                            BorderBrush="{DynamicResource CheckboxBorderBrush}"
                                             BorderThickness="3"
                                             CornerRadius="16">
                                             <Path
@@ -128,7 +130,7 @@
                                                 Width="30"
                                                 Height="22"
                                                 Data="M 2,12 L 10,20 L 28,2"
-                                                Stroke="{DynamicResource AccentBackgroundBrush}"
+                                                Stroke="{DynamicResource CheckboxCheckmarkBrush}"
                                                 StrokeEndLineCap="Round"
                                                 StrokeLineJoin="Round"
                                                 StrokeThickness="4"
@@ -143,13 +145,14 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsChecked" Value="True">
-                                        <Setter TargetName="CheckBorder" Property="Background" Value="{DynamicResource AccentBackgroundBrush}" />
+                                        <Setter TargetName="CheckBorder" Property="Background" Value="{DynamicResource CheckboxCheckedBackgroundBrush}" />
                                         <Setter TargetName="CheckBorder" Property="BorderThickness" Value="0" />
                                         <Setter TargetName="Tick" Property="Visibility" Value="Visible" />
-                                        <Setter TargetName="Tick" Property="Stroke" Value="{DynamicResource OnAccentPrimaryBrush}" />
+                                        <Setter TargetName="Tick" Property="Stroke" Value="{DynamicResource CheckboxCheckmarkBrush}" />
                                     </Trigger>
                                     <Trigger Property="IsKeyboardFocusWithin" Value="True">
                                         <Setter TargetName="CheckFocusRing" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{DynamicResource CheckboxFocusRingBrush}" />
                                         <Setter TargetName="CheckBorder" Property="BorderThickness" Value="4" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -205,34 +208,36 @@
                 FontSize="34"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{Binding Body}" />
-        </Grid>
 
-        <Grid
-            Grid.Row="3"
-            Width="936"
-            Height="120"
-            VerticalAlignment="Top"
-            behavior:FocusContainer.Mode="HorizontalStack"
-            Focusable="False"
-            KeyboardNavigation.IsTabStop="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*" />
-                <ColumnDefinition Width="24" />
-                <ColumnDefinition Width="12*" />
-            </Grid.ColumnDefinitions>
+            <Grid
+                x:Name="ConsentActionContainer"
+                Grid.Row="7"
+                Height="120"
+                VerticalAlignment="Bottom"
+                behavior:FocusBoundary.UpTarget="{Binding ElementName=ConsentContentContainer}"
+                behavior:FocusContainer.Mode="HorizontalStack"
+                Focusable="False"
+                KeyboardNavigation.IsTabStop="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="12*" />
+                </Grid.ColumnDefinitions>
 
-            <Button
-                Grid.Column="0"
-                Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
-                IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
-            <Button
-                Grid.Column="2"
-                Command="{Binding PrimaryCommand}"
-                Content="{Binding PrimaryText}"
-                IsEnabled="{Binding IsPrimaryEnabled}"
-                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding SecondaryCommand}"
+                    Content="{Binding SecondaryText}"
+                    IsEnabled="{Binding IsSecondaryEnabled}"
+                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding PrimaryCommand}"
+                    Content="{Binding PrimaryText}"
+                    IsEnabled="{Binding IsPrimaryEnabled}"
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

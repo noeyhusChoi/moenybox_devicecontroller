@@ -85,7 +85,7 @@
     <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="170" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackPanel Margin="0,208,0,0" HorizontalAlignment="Center">
@@ -124,10 +124,13 @@
         </StackPanel>
 
         <Grid
+            x:Name="ScanCompletedDualActionContainer"
             Grid.Row="1"
             Width="936"
             Height="120"
             VerticalAlignment="Top"
+            behavior:FocusBoundary.EntryTarget="{Binding ElementName=ScanCompletedDualActionContainer}"
+            behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
             KeyboardNavigation.IsTabStop="False"
@@ -153,10 +156,13 @@
         </Grid>
 
         <Grid
+            x:Name="ScanCompletedSingleActionContainer"
             Grid.Row="1"
             Width="936"
             Height="120"
-            VerticalAlignment="Top"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.EntryTarget="{Binding ElementName=ScanCompletedSingleActionContainer}"
+            behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
             KeyboardNavigation.IsTabStop="False">
@@ -173,8 +179,6 @@
 
             <Button
                 Width="936"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
                 Command="{Binding PrimaryCommand}"
                 Content="{Binding PrimaryText}"
                 IsEnabled="{Binding IsPrimaryEnabled}"

@@ -108,7 +108,9 @@
       <None Remove="Assets\Gif\IDScan_ID.gif" />
       <None Remove="Assets\Gif\IDScan_Passport.gif" />
       <None Remove="Assets\Icon\ico.svg" />
+      <None Remove="Assets\Icon\ico_accessibility.svg" />
       <None Remove="Assets\Icon\ico_arrow_rotate.png" />
+      <None Remove="Assets\Icon\ico_call.svg" />
       <None Remove="Assets\Icon\ico_charge.png" />
       <None Remove="Assets\Icon\ico_check.png" />
       <None Remove="Assets\Icon\ico_chevron_down.png" />
@@ -116,10 +118,13 @@
       <None Remove="Assets\Icon\ico_chevron_right.png" />
       <None Remove="Assets\Icon\ico_chevron_right.svg" />
       <None Remove="Assets\Icon\ico_chevron_up.png" />
+      <None Remove="Assets\Icon\ico_enlarge.svg" />
+      <None Remove="Assets\Icon\ico_home.svg" />
       <None Remove="Assets\Icon\ico_minue.png" />
       <None Remove="Assets\Icon\ico_plus.png" />
       <None Remove="Assets\Icon\ico_stop.png" />
       <None Remove="Assets\Icon\ico_timer.png" />
+      <None Remove="Assets\Icon\ico_voice.svg" />
       <None Remove="Assets\Image\Bill.png" />
       <None Remove="Assets\Image\Card.png" />
       <None Remove="Assets\Image\character-complete.png" />
@@ -241,7 +246,13 @@
       <Resource Include="Assets\Icon\ico.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\ico_accessibility.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico_arrow_rotate.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_call.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_charge.png">
@@ -265,6 +276,12 @@
       <Resource Include="Assets\Icon\ico_chevron_up.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\ico_enlarge.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_home.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico_minue.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -275,6 +292,9 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_timer.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_voice.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\Exchange.png">

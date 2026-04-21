@@ -44,7 +44,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="105" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="125" />
+                <RowDefinition Height="170" />
             </Grid.RowDefinitions>
 
             <Grid Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
@@ -83,7 +83,7 @@
                     Focusable="False" />
             </Grid>
 
-            <views:UtilityBarView
+            <views:UtilityBarModernView
                 x:Name="UtilityBarHost"
                 Grid.Row="2"
                 behavior:FocusBoundary.UpTarget="{Binding ElementName=ScreenHost}"

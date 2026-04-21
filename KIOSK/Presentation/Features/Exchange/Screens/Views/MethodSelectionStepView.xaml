@@ -24,7 +24,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="200" />
             <RowDefinition Height="592" />
-            <RowDefinition Height="170" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -35,8 +35,10 @@
             Text="{Binding Title}" />
 
         <Grid
+            x:Name="MethodOptionContainer"
             Grid.Row="2"
             VerticalAlignment="Stretch"
+            behavior:FocusBoundary.DownTarget="{Binding ElementName=PreviousActionButton}"
             behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
@@ -101,22 +103,17 @@
             </Button>
         </Grid>
 
-        <Grid
+        <Button
+            x:Name="PreviousActionButton"
             Grid.Row="3"
-            Height="170"
-            VerticalAlignment="Top"
-            behavior:FocusContainer.Mode="HorizontalStack"
-            Focusable="False"
-            KeyboardNavigation.IsTabStop="False">
-            <Button
-                Width="336"
-                Height="120"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
-                IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
-        </Grid>
+            Width="336"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.UpTarget="{Binding ElementName=MethodOptionContainer}"
+            Command="{Binding SecondaryCommand}"
+            Content="{Binding SecondaryText}"
+            IsEnabled="{Binding IsSecondaryEnabled}"
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
     </Grid>
 </UserControl>

@@ -31,7 +31,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="24" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="170" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Border
@@ -254,10 +254,12 @@
         </Border>
 
         <Grid
+            x:Name="DepositActionContainer"
             Grid.Row="5"
-            Width="936"
             Height="120"
-            VerticalAlignment="Top"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.EntryTarget="{Binding ElementName=DepositActionContainer}"
+            behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
             KeyboardNavigation.IsTabStop="False">

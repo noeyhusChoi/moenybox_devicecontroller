@@ -9,8 +9,8 @@
 
     <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <StackPanel Margin="0,208,0,0" HorizontalAlignment="Center">
@@ -35,20 +35,20 @@
                 Foreground="{DynamicResource TextSecondaryBrush}"
                 Text="잠시만 기다려주세요.." />
         </StackPanel>
-
         <Grid
+            x:Name="ScanningActionContainer"
             Grid.Row="1"
-            Width="936"
-            Height="170"
-            VerticalAlignment="Top"
+            Width="336"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.EntryTarget="{Binding ElementName=ScanningSecondaryButton}"
+            behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
             KeyboardNavigation.IsTabStop="False">
             <Button
-                Width="336"
-                Height="120"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
+                x:Name="ScanningSecondaryButton"
                 Command="{Binding SecondaryCommand}"
                 Content="{Binding SecondaryText}"
                 IsEnabled="{Binding IsSecondaryEnabled}"

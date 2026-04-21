@@ -9,12 +9,12 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-    <Grid>
+    <Grid behavior:FocusContainer.InitialFocus="True" behavior:FocusContainer.Mode="VerticalStack">
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -22,57 +22,45 @@
             Style="{StaticResource ExchangeStepTitleStyle}"
             Text="{Binding Title}" />
 
-        <Grid
-            Grid.Row="2"
-            behavior:FocusContainer.InitialFocus="True"
-            behavior:FocusContainer.Mode="VerticalStack"
-            Background="Transparent">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="144" />
-                <RowDefinition Height="310" />
-            </Grid.RowDefinitions>
 
+        <Border
+            Grid.Row="1"
+            Width="600"
+            Height="400"
+            Margin="52">
             <Image
-                Grid.Row="0"
                 Width="300"
                 Height="300"
                 Source="{Binding ImageAssetPath}"
                 Stretch="Uniform" />
+        </Border>
 
-            <Button
-                x:Name="PrimaryActionButton"
-                Grid.Row="2"
-                Command="{Binding StartCommand}"
+        <Button
+            x:Name="PrimaryActionButton"
+            Grid.Row="2"
+            Height="280"
+            Command="{Binding StartCommand}"
+            Style="{StaticResource FilledPrimaryButtonStyle}"
+            Visibility="{Binding ShowStartAction, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 FontSize="60"
                 FontWeight="SemiBold"
-                Style="{StaticResource FilledPrimaryButtonStyle}"
-                Visibility="{Binding ShowStartAction, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Text="{Binding StartText}"
-                    TextAlignment="Center" />
-            </Button>
-        </Grid>
+                Text="{Binding StartText}"
+                TextAlignment="Center" />
+        </Button>
 
-        <Grid
+        <Button
             Grid.Row="3"
-            Height="170"
-            VerticalAlignment="Top"
-            behavior:FocusContainer.Mode="HorizontalStack"
-            Focusable="False"
-            KeyboardNavigation.IsTabStop="False">
-            <Button
-                Width="336"
-                Height="120"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
-                IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}"
-                Visibility="{Binding HasSecondaryAction, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        </Grid>
+            Width="336"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Command="{Binding SecondaryCommand}"
+            Content="{Binding SecondaryText}"
+            IsEnabled="{Binding IsSecondaryEnabled}"
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}"
+            Visibility="{Binding HasSecondaryAction, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

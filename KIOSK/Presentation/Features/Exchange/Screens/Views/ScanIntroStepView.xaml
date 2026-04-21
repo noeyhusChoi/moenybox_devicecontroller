@@ -13,7 +13,6 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="72" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -26,11 +25,10 @@
                 <RowDefinition Height="710" />
                 <RowDefinition Height="24" />
                 <RowDefinition Height="224" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Border
-                Grid.Row="0"
-                Style="{StaticResource CardSurfaceBorderStyle}">
+            <Border Grid.Row="0" Style="{StaticResource CardSurfaceBorderStyle}">
                 <Grid Margin="54">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -94,34 +92,38 @@
                         TextAlignment="Center" />
                 </Grid>
             </Border>
+
+            <Grid
+                x:Name="ScanIntroActionContainer"
+                Grid.Row="3"
+                Width="936"
+                Height="120"
+                VerticalAlignment="Bottom"
+                behavior:FocusBoundary.EntryTarget="{Binding ElementName=ScanIntroActionContainer}"
+                behavior:FocusContainer.InitialFocus="True"
+                behavior:FocusContainer.Mode="HorizontalStack"
+                Focusable="False"
+                KeyboardNavigation.IsTabStop="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="12*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding SecondaryCommand}"
+                    Content="{Binding SecondaryText}"
+                    IsEnabled="{Binding IsSecondaryEnabled}"
+                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding PrimaryCommand}"
+                    Content="{Binding PrimaryText}"
+                    IsEnabled="{Binding IsPrimaryEnabled}"
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+            </Grid>
         </Grid>
 
-        <Grid
-            Grid.Row="3"
-            Width="936"
-            Height="120"
-            VerticalAlignment="Top"
-            behavior:FocusContainer.Mode="HorizontalStack"
-            Focusable="False"
-            KeyboardNavigation.IsTabStop="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*" />
-                <ColumnDefinition Width="24" />
-                <ColumnDefinition Width="12*" />
-            </Grid.ColumnDefinitions>
-
-            <Button
-                Grid.Column="0"
-                Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
-                IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
-            <Button
-                Grid.Column="2"
-                Command="{Binding PrimaryCommand}"
-                Content="{Binding PrimaryText}"
-                IsEnabled="{Binding IsPrimaryEnabled}"
-                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
-        </Grid>
     </Grid>
 </UserControl>

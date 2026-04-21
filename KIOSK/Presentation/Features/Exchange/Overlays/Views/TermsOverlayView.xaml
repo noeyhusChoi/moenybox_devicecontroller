@@ -22,7 +22,7 @@
             Padding="48"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Background="{DynamicResource CardBackgroundBrush}"
+            Background="{DynamicResource CardPrimaryBackgroundBrush}"
             CornerRadius="32">
             <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
                 <Grid.RowDefinitions>

@@ -9,7 +9,6 @@
     xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
     d:DataContext="{d:DesignInstance Type=stepVm:DispenseFailureStepViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="1235"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="ResultTitleStyle" TargetType="TextBlock">
@@ -33,7 +32,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid VerticalAlignment="Top">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="32" />
@@ -42,7 +41,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="24" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="170" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <svg:SvgIcon
@@ -50,9 +49,10 @@
             Width="120"
             Height="120"
             HorizontalAlignment="Center"
-            Fill="{DynamicResource StatusErrorBackgroundBrush}"
-            Stroke="{DynamicResource StatusErrorForegroundBrush}"
-            UriSource="pack://application:,,,/Assets/Icon/ico.svg" />
+            AppName="KIOSK"
+            Fill="{DynamicResource StatusSuccessBackgroundBrush}"
+            Stroke="{DynamicResource StatusSuccessForegroundBrush}"
+            UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico.svg" />
 
         <TextBlock
             Grid.Row="2"
@@ -67,7 +67,7 @@
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <Border
                         Padding="16,16,24,16"
-                        BorderBrush="{DynamicResource SurfaceMutedBackgroundBrush}"
+                        BorderBrush="{DynamicResource CardSecondaryBorderBrush}"
                         BorderThickness="3"
                         CornerRadius="40">
                         <StackPanel Orientation="Horizontal">
@@ -111,7 +111,7 @@
                     <Separator Width="16" Background="Transparent" />
                     <Border
                         Padding="16,16,24,16"
-                        BorderBrush="{DynamicResource SurfaceMutedBackgroundBrush}"
+                        BorderBrush="{DynamicResource CardSecondaryBorderBrush}"
                         BorderThickness="3"
                         CornerRadius="40">
                         <StackPanel Orientation="Horizontal">
@@ -252,26 +252,28 @@
                         <svg:SvgIcon
                             Width="24"
                             Height="24"
-                            Margin="0,-4,00,0"
+                            Margin="10,6,0,0"
+                            AppName="KIOSK"
+                            Fill="{DynamicResource TextSecondaryBrush}"
                             Stroke="{DynamicResource TextSecondaryBrush}"
-                            UriSource="pack://application:,,,/Assets/Icon/ico_chevron_right.svg" />
+                            UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_chevron_right.svg" />
                     </StackPanel>
                 </Border>
             </Grid>
         </Border>
 
         <Grid
+            x:Name="DispenseFailureActionContainer"
             Grid.Row="7"
-            Width="936"
             Height="120"
-            VerticalAlignment="Top"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.EntryTarget="{Binding ElementName=DispenseFailurePrimaryButton}"
+            behavior:FocusContainer.InitialFocus="True"
             behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
             KeyboardNavigation.IsTabStop="False">
             <Button
-                Width="936"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
+                x:Name="DispenseFailurePrimaryButton"
                 Command="{Binding PrimaryCommand}"
                 Content="{Binding PrimaryText}"
                 IsEnabled="{Binding IsPrimaryEnabled}"

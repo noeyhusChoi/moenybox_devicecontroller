@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Kiosk.Application.Features.ExchangeV2.Orchestration;
 using Kiosk.Application.Services.Resx;
 using Kiosk.Application.Services.Theme;
 using Kiosk.Infrastructure.Initialization;
@@ -78,6 +79,7 @@ namespace Kiosk.ViewModels
             ExchangeShell = exchangeShell;
             HomeShell.ServiceEntryRequested += OnHomeServiceEntryRequested;
             ExchangeShell.HomeRequested += OnExchangeHomeRequested;
+            ExchangeShell.ExchangeCompleted += OnExchangeCompleted;
             ExchangeShell.PropertyChanged += OnExchangeShellPropertyChanged;
             _initializer.ProgressChanged += OnProgressChanged;
             _appTheme.ThemeChanged += OnThemeChanged;
@@ -97,8 +99,6 @@ namespace Kiosk.ViewModels
             StatusMessage = "Initializing retained infrastructure...";
             await _initializer.InitializeAsync();
             StatusMessage = "Infrastructure initialization complete.";
-           
-            ShowHome();
         }
 
         private void OnProgressChanged(string message)
@@ -131,6 +131,14 @@ namespace Kiosk.ViewModels
 
         private void OnExchangeHomeRequested(object? sender, EventArgs e)
         {
+            ShowHome();
+        }
+
+        private void OnExchangeCompleted(object? sender, ExchangeCompletedEventArgs e)
+        {
+            if (!e.PrintReceipt)
+                return;
+
             ShowHome();
         }
 
@@ -172,11 +180,11 @@ namespace Kiosk.ViewModels
 
         private async Task ShowExchangeAsync()
         {
+            await ExchangeShell.StartFlowAsync();
             CurrentScreenViewModel = ExchangeShell;
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));
-            await ExchangeShell.StartFlowAsync();
         }
 
         private void ToggleAccessibilityZoom()

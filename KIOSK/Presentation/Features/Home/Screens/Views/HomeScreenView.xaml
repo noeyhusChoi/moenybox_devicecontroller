@@ -16,12 +16,14 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontSize" Value="53" />
             <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style x:Key="ServiceCardSubtitleTextStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,16,0,0" />
             <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
             <Setter Property="FontWeight" Value="Medium" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
@@ -84,21 +86,16 @@
                         <TextBlock
                             Foreground="{DynamicResource OnDefaultPrimaryBrush}"
                             Style="{StaticResource ServiceCardTitleTextStyle}"
-                            Text="{Binding Title}" />
+                            Text="교통선불카드" />
                         <TextBlock Foreground="{DynamicResource OnDefaultSecondaryBrush}" Style="{StaticResource ServiceCardSubtitleTextStyle}">
-                            <Run>Prepaid Card</Run>
-                            <Ellipse
-                                Width="10"
-                                Height="10"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                Fill="AliceBlue" />
-                            <Run>プリペイドカード</Run>
+                            <Run FontFamily="{StaticResource AppFont}" Text="Prepaid Card" />
+                            <Run Text="•" />
+                            <Run Text="プリペイドカード" />
+                            <LineBreak />
+                            <Run Text="预付卡" />
+                            <Run Text="•" />
+                            <Run Text="預付卡" />
                         </TextBlock>
-                        <TextBlock
-                            Foreground="{DynamicResource OnDefaultSecondaryBrush}"
-                            Style="{StaticResource ServiceCardSubtitleTextStyle}"
-                            Text="预付卡· 預付卡" />
                     </StackPanel>
 
                     <Image
@@ -129,11 +126,16 @@
                         <TextBlock
                             Foreground="{DynamicResource OnAccentPrimaryBrush}"
                             Style="{StaticResource ServiceCardTitleTextStyle}"
-                            Text="{Binding Title}" />
-                        <TextBlock
-                            Foreground="{DynamicResource OnAccentSecondaryBrush}"
-                            Style="{StaticResource ServiceCardSubtitleTextStyle}"
-                            Text="{Binding Subtitle}" />
+                            Text="환전" />
+                        <TextBlock Foreground="{DynamicResource OnAccentSecondaryBrush}" Style="{StaticResource ServiceCardSubtitleTextStyle}">
+                            <Run Text="Exchange Card" />
+                            <Run Text="•" />
+                            <Run Text="外貨両替 " />
+                            <LineBreak />
+                            <Run Text="外币兑换" />
+                            <Run Text="•" />
+                            <Run Text="外幣兌換" />
+                        </TextBlock>
                     </StackPanel>
 
                     <Image
@@ -164,11 +166,16 @@
                         <TextBlock
                             Foreground="{DynamicResource OnStrongPrimaryBrush}"
                             Style="{StaticResource ServiceCardTitleTextStyle}"
-                            Text="{Binding Title}" />
-                        <TextBlock
-                            Foreground="{DynamicResource OnStrongSecondaryBrush}"
-                            Style="{StaticResource ServiceCardSubtitleTextStyle}"
-                            Text="{Binding Subtitle}" />
+                            Text="택스리펀드" />
+                        <TextBlock Foreground="{DynamicResource OnStrongSecondaryBrush}" Style="{StaticResource ServiceCardSubtitleTextStyle}">
+                            <Run Text="Tax Refund" />
+                            <Run Text="•" />
+                            <Run Text="免税" />
+                            <LineBreak />
+                            <Run Text="退税" />
+                            <Run Text="•" />
+                            <Run Text="退稅" />
+                        </TextBlock>
                     </StackPanel>
 
                     <Image

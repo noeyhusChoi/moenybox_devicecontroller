@@ -15,6 +15,7 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
     private readonly IExchangeScreenFactory _screenFactory;
 
     public event EventHandler? HomeRequested;
+    public event EventHandler<ExchangeCompletedEventArgs>? ExchangeCompleted;
 
     [ObservableProperty]
     private ExchangeStep currentStep;
@@ -32,7 +33,7 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
     private bool collapseShellChrome;
 
     [ObservableProperty]
-    private IReadOnlyList<ExchangeProgressStepViewModel>? progressSteps;
+    private int currentProgressStage;
 
     [ObservableProperty]
     private ExchangeStepViewModelBase? currentStepViewModel;
@@ -49,6 +50,7 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         _coordinator.FlowChanged += OnFlowChanged;
         _coordinator.ScanProgressChanged += OnScanProgressChanged;
         _coordinator.DepositProgressChanged += OnDepositProgressChanged;
+        _coordinator.ExchangeCompleted += OnExchangeCompleted;
         ApplyState(_coordinator.Context.CurrentStep, _coordinator.Context);
     }
 
@@ -83,9 +85,9 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         UseFeatureBackground = _screenFactory.ShouldUseFeatureBackground(step);
         CollapseShellChrome = _screenFactory.ShouldCollapseShellChrome(step);
 
-        ProgressSteps = ShowStepHeader
-            ? _screenFactory.CreateProgressSteps(step)
-            : null;
+        CurrentProgressStage = ShowStepHeader
+            ? _screenFactory.GetProgressStage(step)
+            : 0;
         CurrentStepViewModel = _screenFactory.CreateStepViewModel(step, context, ShowModalAsync);
         _screenFactory.ConfigureStepActions(step, context, CurrentStepViewModel, RequestHomeCommand);
 
@@ -101,9 +103,9 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         ShowStepHeader = _screenFactory.ShouldShowStepHeader(step);
         UseFeatureBackground = _screenFactory.ShouldUseFeatureBackground(step);
         CollapseShellChrome = _screenFactory.ShouldCollapseShellChrome(step);
-        ProgressSteps = ShowStepHeader
-            ? _screenFactory.CreateProgressSteps(step)
-            : null;
+        CurrentProgressStage = ShowStepHeader
+            ? _screenFactory.GetProgressStage(step)
+            : 0;
 
         _screenFactory.ConfigureStepActions(step, context, CurrentStepViewModel, RequestHomeCommand);
     }
@@ -122,6 +124,11 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
             return;
 
         depositProgressConsumer.ApplyDepositProgress(e);
+    }
+
+    private void OnExchangeCompleted(object? sender, ExchangeCompletedEventArgs e)
+    {
+        ExchangeCompleted?.Invoke(this, e);
     }
 
     private async void OnTermsAgreementStepPropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -24,7 +24,7 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
         Func<Task> showModalAsync)
         => step switch
         {
-            ExchangeStep.Idle => new MessageStepViewModel("환전", "초기 화면을 준비하고 있습니다."),
+            ExchangeStep.Idle => new ExchangeStartStepViewModel(() => _coordinator.ConfirmStartAsync()),
             ExchangeStep.Start => new ExchangeStartStepViewModel(() => _coordinator.ConfirmStartAsync()),
             ExchangeStep.MethodSelection => new MethodSelectionStepViewModel(
                 new AsyncRelayCommand(() => _coordinator.SelectMethodAsync(ExchangeMethod.PrepaidCard)),
@@ -76,7 +76,7 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
                 context.WithdrawalRequestedAmount,
                 context.WithdrawalDispensedAmount,
                 context.DispenseErrorMessage),
-            _ => new MessageStepViewModel("환전", "지원되지 않는 단계입니다.")
+            _ => throw new ArgumentOutOfRangeException(nameof(step), step, "Unsupported exchange step.")
         };
 
     public void ConfigureStepActions(
@@ -161,27 +161,18 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
         }
     }
 
-    public IReadOnlyList<ExchangeProgressStepViewModel> CreateProgressSteps(ExchangeStep step)
-    {
-        var progressStage = step switch
+    public int GetProgressStage(ExchangeStep step)
+        => step switch
         {
             ExchangeStep.CurrencySelection => 1,
-            ExchangeStep.Consent or ExchangeStep.ScanIntro or ExchangeStep.Scanning or ExchangeStep.ScanCompleted => 2,
-            ExchangeStep.Deposit or ExchangeStep.Dispensing => 3,
+            ExchangeStep.Consent
+                or ExchangeStep.ScanIntro
+                or ExchangeStep.Scanning
+                or ExchangeStep.ScanCompleted => 2,
+            ExchangeStep.Deposit => 3,
+            ExchangeStep.Dispensing => 4,
             _ => 0
         };
-
-        if (progressStage == 0)
-            return [];
-
-        return
-        [
-            CreateProgressStep("1", "통화 선택", progressStage == 1, progressStage > 1),
-            CreateProgressStep("2", "신분증 스캔", progressStage == 2, progressStage > 2),
-            CreateProgressStep("3", "외화 입금", progressStage == 3, progressStage > 3),
-            CreateProgressStep("4", "원화 수령", progressStage == 4, false)
-        ];
-    }
 
     public bool ShouldShowStepHeader(ExchangeStep step)
         => step is ExchangeStep.CurrencySelection or ExchangeStep.Consent or ExchangeStep.ScanIntro or ExchangeStep.Scanning or ExchangeStep.ScanCompleted or ExchangeStep.Deposit or ExchangeStep.Dispensing;
@@ -200,14 +191,4 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
     public bool ShouldCollapseShellChrome(ExchangeStep step)
         => step is ExchangeStep.DispenseSuccess or ExchangeStep.DispenseFailure;
 
-    private static ExchangeProgressStepViewModel CreateProgressStep(
-        string numberText,
-        string label,
-        bool isActive,
-        bool isComplete)
-        => new(numberText, label)
-        {
-            IsActive = isActive,
-            IsComplete = isComplete
-        };
 }

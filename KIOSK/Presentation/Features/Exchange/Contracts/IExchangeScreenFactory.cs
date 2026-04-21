@@ -17,7 +17,7 @@ public interface IExchangeScreenFactory
         ExchangeStepViewModelBase? stepViewModel,
         IAsyncRelayCommand homeCommand);
 
-    IReadOnlyList<ExchangeProgressStepViewModel> CreateProgressSteps(ExchangeStep step);
+    int GetProgressStage(ExchangeStep step);
 
     bool ShouldShowStepHeader(ExchangeStep step);
     bool ShouldUseFeatureBackground(ExchangeStep step);

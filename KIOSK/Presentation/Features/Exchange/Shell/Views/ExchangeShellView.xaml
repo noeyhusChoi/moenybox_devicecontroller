@@ -16,9 +16,6 @@
         <DataTemplate DataType="{x:Type stepVm:ExchangeStartStepViewModel}">
             <stepViews:ExchangeStartStepView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type stepVm:MessageStepViewModel}">
-            <stepViews:MessageStepView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type stepVm:ScanIntroStepViewModel}">
             <stepViews:ScanIntroStepView />
         </DataTemplate>
@@ -69,12 +66,12 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding ProgressSteps}">
+            <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding CurrentProgressStage}">
                 <views:ExchangeProgressView.Style>
                     <Style TargetType="{x:Type views:ExchangeProgressView}">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding DataContext, RelativeSource={RelativeSource Self}}" Value="0">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -85,7 +82,7 @@
             <ContentControl
                 x:Name="StepContentHost"
                 Grid.Row="1"
-                Margin="72"
+                Margin="72,72,72,48"
                 behavior:FocusContainer.Mode="None"
                 Content="{Binding CurrentStepViewModel}"
                 Focusable="False"

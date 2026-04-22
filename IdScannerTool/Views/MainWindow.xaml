@@ -39,6 +39,10 @@
             <overlayViews:ConfirmOverlayView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type overlayViewModels:UpdateOverlayViewModel}">
+            <overlayViews:UpdateOverlayView />
+        </DataTemplate>
+
     </Window.Resources>
 
     <Grid>
@@ -48,18 +52,11 @@
         </Grid.RowDefinitions>
 
         <ui:TitleBar
-            Title="신분증스캐너"
+            Title="M-Box ID Scanner"
             Grid.Row="0"
             ShowClose="True"
             ShowMaximize="True"
-            ShowMinimize="True">
-            <ui:TitleBar.TrailingContent>
-                <ui:ToggleSwitch
-                    VerticalAlignment="Center"
-                    Content="{Binding IsDarkTheme}"
-                    IsChecked="{Binding IsDarkTheme, Mode=TwoWay}" />
-            </ui:TitleBar.TrailingContent>
-        </ui:TitleBar>
+            ShowMinimize="True" />
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
 

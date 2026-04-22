@@ -5,7 +5,7 @@ namespace IdScannerTool.Services;
 
 /// <summary>
 /// 로컬 시리얼키 저장/조회 서비스.
-/// 기본 저장 위치: %LocalAppData%\IdScannerTool\serial-key.json
+/// 기본 저장 위치: %LocalAppData%\MBoxIDScanner\serial-key.json
 /// </summary>
 public sealed class LocalSerialKeyStore : ILocalSerialKeyStore
 {
@@ -16,7 +16,7 @@ public sealed class LocalSerialKeyStore : ILocalSerialKeyStore
         _filePath = string.IsNullOrWhiteSpace(filePath)
             ? Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "IdScannerTool",
+                "MBoxIDScanner",
                 "serial-key.json")
             : filePath;
     }

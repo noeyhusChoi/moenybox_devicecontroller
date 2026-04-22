@@ -12,7 +12,7 @@ public sealed class LocalApiKeyStore : IApiKeyStore
         _filePath = string.IsNullOrWhiteSpace(filePath)
             ? Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "IdScannerTool",
+                "MBoxIDScanner",
                 "api-key.json")
             : filePath;
     }

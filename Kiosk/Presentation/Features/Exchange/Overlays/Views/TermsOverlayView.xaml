@@ -37,14 +37,14 @@
                     FontSize="52"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextPrimaryBrush}"
-                    Text="{Binding Title}" />
+                    Text="이용약관" />
 
                 <TextBlock
                     Grid.Row="2"
                     FontSize="34"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     LineHeight="48"
-                    Text="{Binding Body}"
+                    Text="서비스 이용을 위해 본인 확인, 거래 처리, 법령상 의무 이행을 위한 정보가 수집 및 이용됩니다.&#x0a;&#x0a;자세한 내용은 안내 직원에게 문의하시거나 별도 고지된 약관 전문을 확인해 주세요."
                     TextWrapping="Wrap" />
 
                 <Button
@@ -60,7 +60,7 @@
                         VerticalAlignment="Center"
                         FontSize="46"
                         FontWeight="SemiBold"
-                        Text="{Binding ConfirmText}" />
+                        Text="확인" />
                 </Button>
             </Grid>
         </Border>

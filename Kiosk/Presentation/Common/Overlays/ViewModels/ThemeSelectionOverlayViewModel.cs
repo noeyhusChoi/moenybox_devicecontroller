@@ -17,9 +17,6 @@ public sealed class ThemeSelectionOverlayViewModel
     }
 
     public AppThemeKind CurrentTheme { get; }
-    public string Title => "Theme";
-    public string DefaultLabel => "Default";
-    public string HighContrastLabel => "High Contrast";
     public IRelayCommand CloseCommand { get; }
     public IRelayCommand SelectDefaultCommand { get; }
     public IRelayCommand SelectHighContrastCommand { get; }

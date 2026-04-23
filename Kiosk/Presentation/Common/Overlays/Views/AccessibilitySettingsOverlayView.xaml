@@ -115,7 +115,7 @@
                     <RowDefinition Height="120" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Style="{StaticResource AccessibilitySettingsTitleStyle}" Text="{Binding Title}" />
+                <TextBlock Style="{StaticResource AccessibilitySettingsTitleStyle}" Text="접근성 설정하기" />
 
                 <Border
                     Grid.Row="2"
@@ -137,7 +137,7 @@
                         <TextBlock
                             Grid.Column="0"
                             Style="{StaticResource AccessibilitySettingsRowLabelStyle}"
-                            Text="{Binding LowScreenLabel}" />
+                            Text="낮은 화면" />
 
                         <Border
                             Grid.Column="1"
@@ -150,7 +150,7 @@
                                     GroupName="LowScreenToggleGroup"
                                     IsChecked="{Binding IsLowScreenEnabled, Mode=OneWay}"
                                     Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
-                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OnText}" />
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="켜기" />
                                 </RadioButton>
 
                                 <RadioButton
@@ -158,7 +158,7 @@
                                     GroupName="LowScreenToggleGroup"
                                     IsChecked="{Binding IsLowScreenEnabled, Mode=OneWay, Converter={StaticResource BooleanNegationConverter}}"
                                     Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
-                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OffText}" />
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="끄기" />
                                 </RadioButton>
                             </StackPanel>
                         </Border>
@@ -185,7 +185,7 @@
                         <TextBlock
                             Grid.Column="0"
                             Style="{StaticResource AccessibilitySettingsRowLabelStyle}"
-                            Text="{Binding HighContrastLabel}" />
+                            Text="고대비" />
 
                         <Border
                             Grid.Column="1"
@@ -198,7 +198,7 @@
                                     GroupName="HighContrastToggleGroup"
                                     IsChecked="{Binding IsHighContrastEnabled, Mode=OneWay}"
                                     Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
-                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OnText}" />
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="켜기" />
                                 </RadioButton>
 
                                 <RadioButton
@@ -206,7 +206,7 @@
                                     GroupName="HighContrastToggleGroup"
                                     IsChecked="{Binding IsHighContrastEnabled, Mode=OneWay, Converter={StaticResource BooleanNegationConverter}}"
                                     Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
-                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OffText}" />
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="끄기" />
                                 </RadioButton>
                             </StackPanel>
                         </Border>
@@ -229,13 +229,13 @@
                     <Button
                         Grid.Column="0"
                         Command="{Binding ResetCommand}"
-                        Content="{Binding ResetText}"
+                        Content="초기화"
                         Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
 
                     <Button
                         Grid.Column="2"
                         Command="{Binding ConfirmCommand}"
-                        Content="{Binding ConfirmText}"
+                        Content="설정 완료"
                         Style="{StaticResource FilledActionPrimaryButtonStyle}" />
                 </Grid>
             </Grid>

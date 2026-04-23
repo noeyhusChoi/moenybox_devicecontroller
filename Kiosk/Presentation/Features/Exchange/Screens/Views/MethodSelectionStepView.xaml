@@ -32,7 +32,7 @@
             HorizontalAlignment="Center"
             FontSize="59"
             FontWeight="Bold"
-            Text="{Binding Title}" />
+            Text="환전 방법을 선택해주세요" />
 
         <Grid
             x:Name="MethodOptionContainer"
@@ -112,7 +112,7 @@
             VerticalAlignment="Bottom"
             behavior:FocusBoundary.UpTarget="{Binding ElementName=MethodOptionContainer}"
             Command="{Binding SecondaryCommand}"
-            Content="{Binding SecondaryText}"
+            Content="이전"
             IsEnabled="{Binding IsSecondaryEnabled}"
             Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
     </Grid>

@@ -5,12 +5,8 @@ namespace Kiosk.ViewModels.Steps;
 
 public partial class ScanningStepViewModel : ExchangeStepViewModelBase, IScannerEventConsumer
 {
-    public ScanningStepViewModel(
-        string? body = "얼굴 사진이 있는 면을 아래로 하여 스캐너에 올려주세요",
-        string? title = "신분증 스캔을 진행해 주세요")
+    public ScanningStepViewModel()
     {
-        Title = title;
-        Body = body;
         Presence = "WaitingForDocument";
         ProgressMessage = "스캐너를 준비하고 있습니다.";
         UpdateDebugStatusText();
@@ -27,8 +23,6 @@ public partial class ScanningStepViewModel : ExchangeStepViewModelBase, IScanner
 
     [ObservableProperty]
     private string debugStatusText = string.Empty;
-
-    public string SupportedDocumentTypes { get; } = "여권, 주민등록증, 운전면허증, 외국인등록증";
 
     public void ApplyScannerEvent(IdScannerEvent e)
     {

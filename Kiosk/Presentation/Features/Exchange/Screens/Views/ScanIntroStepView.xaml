@@ -18,7 +18,7 @@
         <TextBlock
             Grid.Row="0"
             Style="{StaticResource ExchangeStepTitleStyle}"
-            Text="{Binding Title}" />
+            Text="신분증 스캔을 진행해주세요" />
 
         <Grid Grid.Row="2" Background="Transparent">
             <Grid.RowDefinitions>
@@ -113,13 +113,13 @@
                 <Button
                     Grid.Column="0"
                     Command="{Binding SecondaryCommand}"
-                    Content="{Binding SecondaryText}"
+                    Content="이전"
                     IsEnabled="{Binding IsSecondaryEnabled}"
                     Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
                 <Button
                     Grid.Column="2"
                     Command="{Binding PrimaryCommand}"
-                    Content="{Binding PrimaryText}"
+                    Content="다음"
                     IsEnabled="{Binding IsPrimaryEnabled}"
                     Style="{StaticResource FilledActionPrimaryButtonStyle}" />
             </Grid>

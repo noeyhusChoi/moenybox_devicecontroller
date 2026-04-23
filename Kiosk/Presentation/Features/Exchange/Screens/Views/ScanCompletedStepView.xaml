@@ -144,13 +144,13 @@
             <Button
                 Grid.Column="0"
                 Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
+                Content="이전"
                 IsEnabled="{Binding IsSecondaryEnabled}"
                 Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
             <Button
                 Grid.Column="2"
                 Command="{Binding PrimaryCommand}"
-                Content="{Binding PrimaryText}"
+                Content="다음"
                 IsEnabled="{Binding IsPrimaryEnabled}"
                 Style="{StaticResource FilledActionPrimaryButtonStyle}" />
         </Grid>
@@ -180,7 +180,7 @@
             <Button
                 Width="936"
                 Command="{Binding PrimaryCommand}"
-                Content="{Binding PrimaryText}"
+                Content="다시하기"
                 IsEnabled="{Binding IsPrimaryEnabled}"
                 Style="{StaticResource FilledActionPrimaryButtonStyle}" />
         </Grid>

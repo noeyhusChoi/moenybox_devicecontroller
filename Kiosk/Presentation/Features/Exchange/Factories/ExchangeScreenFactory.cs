@@ -89,39 +89,31 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
             return;
 
         stepViewModel.SecondaryCommand = null;
-        stepViewModel.SecondaryText = null;
         stepViewModel.IsSecondaryEnabled = true;
         stepViewModel.PrimaryCommand = null;
-        stepViewModel.PrimaryText = null;
         stepViewModel.IsPrimaryEnabled = true;
 
         switch (step)
         {
             case ExchangeStep.Start:
                 stepViewModel.SecondaryCommand = homeCommand;
-                stepViewModel.SecondaryText = "이전";
                 break;
 
             case ExchangeStep.MethodSelection:
             case ExchangeStep.CurrencySelection:
             case ExchangeStep.Scanning:
                 stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
-                stepViewModel.SecondaryText = "이전";
                 break;
 
             case ExchangeStep.Consent:
                 stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
-                stepViewModel.SecondaryText = "이전";
                 stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.ConfirmConsentAsync());
-                stepViewModel.PrimaryText = "다음";
                 stepViewModel.IsPrimaryEnabled = context.IsTermsAgreed;
                 break;
 
             case ExchangeStep.ScanIntro:
                 stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
-                stepViewModel.SecondaryText = "이전";
                 stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.RunScanAsync(TimeSpan.FromSeconds(20)));
-                stepViewModel.PrimaryText = "다음";
                 stepViewModel.IsPrimaryEnabled = stepViewModel is IScanIntroStepViewModel scanIntro && scanIntro.CanProceed;
                 break;
 
@@ -129,34 +121,26 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
                 if (context.ScanResultState == ScanResultState.Failed)
                 {
                     stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
-                    stepViewModel.PrimaryText = "다시하기";
                 }
                 else
                 {
                     stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
-                    stepViewModel.SecondaryText = "이전";
                     stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.ProceedFromScanCompletedAsync());
-                    stepViewModel.PrimaryText = "다음";
                 }
                 break;
 
             case ExchangeStep.Deposit:
                 stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
-                stepViewModel.SecondaryText = "이전";
                 stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.ProceedFromDepositAsync());
-                stepViewModel.PrimaryText = "다음";
                 break;
 
             case ExchangeStep.DispenseSuccess:
                 stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(false));
-                stepViewModel.SecondaryText = "영수증 미출력";
                 stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(true));
-                stepViewModel.PrimaryText = "영수증 출력";
                 break;
 
             case ExchangeStep.DispenseFailure:
                 stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(true));
-                stepViewModel.PrimaryText = "영수증 출력";
                 break;
         }
     }

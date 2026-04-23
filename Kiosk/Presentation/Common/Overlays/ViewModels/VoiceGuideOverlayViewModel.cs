@@ -28,10 +28,6 @@ public sealed partial class VoiceGuideOverlayViewModel : ObservableObject
     [ObservableProperty]
     private int volumeLevel;
 
-    public string Title => "음량 조절";
-    public string StopText => "음성정지";
-    public string ReplayText => "다시듣기";
-    public string ConfirmText => "설정 완료";
     public string VolumeLevelText => VolumeLevel.ToString();
 
     public bool IsLevel1Active => VolumeLevel >= 1;

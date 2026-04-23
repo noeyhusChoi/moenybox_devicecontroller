@@ -33,7 +33,7 @@
                     FontSize="52"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextPrimaryBrush}"
-                    Text="{Binding Title}" />
+                    Text="Theme" />
 
                 <UniformGrid
                     Grid.Row="2"
@@ -71,7 +71,7 @@
                                 FontSize="28"
                                 FontWeight="SemiBold"
                                 Foreground="{DynamicResource TextPrimaryBrush}"
-                                Text="{Binding DefaultLabel}" />
+                                Text="Default" />
                         </StackPanel>
                     </Button>
 
@@ -104,7 +104,7 @@
                                 FontSize="28"
                                 FontWeight="SemiBold"
                                 Foreground="{DynamicResource TextPrimaryBrush}"
-                                Text="{Binding HighContrastLabel}" />
+                                Text="High Contrast" />
                         </StackPanel>
                     </Button>
                 </UniformGrid>

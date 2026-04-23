@@ -32,14 +32,6 @@ public sealed partial class AccessibilitySettingsOverlayViewModel : ObservableOb
     [ObservableProperty]
     private bool isHighContrastEnabled;
 
-    public string Title => "접근성 설정하기";
-    public string LowScreenLabel => "낮은 화면";
-    public string HighContrastLabel => "고대비";
-    public string OnText => "켜기";
-    public string OffText => "끄기";
-    public string ResetText => "초기화";
-    public string ConfirmText => "설정 완료";
-
     public IRelayCommand CloseCommand { get; }
     public IRelayCommand SelectLowScreenOnCommand { get; }
     public IRelayCommand SelectLowScreenOffCommand { get; }

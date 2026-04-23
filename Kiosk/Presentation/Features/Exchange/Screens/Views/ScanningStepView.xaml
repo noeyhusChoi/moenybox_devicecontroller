@@ -50,7 +50,7 @@
             <Button
                 x:Name="ScanningSecondaryButton"
                 Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
+                Content="이전"
                 IsEnabled="{Binding IsSecondaryEnabled}"
                 Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
         </Grid>

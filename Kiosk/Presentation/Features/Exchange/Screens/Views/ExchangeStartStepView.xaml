@@ -20,7 +20,7 @@
         <TextBlock
             Grid.Row="0"
             Style="{StaticResource ExchangeStepTitleStyle}"
-            Text="{Binding Title}" />
+            Text="외화를 원화로 환전할 수 있습니다." />
 
 
         <Border
@@ -47,7 +47,7 @@
                 VerticalAlignment="Center"
                 FontSize="60"
                 FontWeight="SemiBold"
-                Text="{Binding StartText}"
+                Text="외화 판매 시작하기"
                 TextAlignment="Center" />
         </Button>
 
@@ -58,7 +58,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Command="{Binding SecondaryCommand}"
-            Content="{Binding SecondaryText}"
+            Content="이전"
             IsEnabled="{Binding IsSecondaryEnabled}"
             Style="{StaticResource OutlinedActionSecondaryButtonStyle}"
             Visibility="{Binding HasSecondaryAction, Converter={StaticResource BooleanToVisibilityConverter}}" />

@@ -270,13 +270,13 @@
             <Button
                 Grid.Column="0"
                 Command="{Binding SecondaryCommand}"
-                Content="{Binding SecondaryText}"
+                Content="영수증 미출력"
                 IsEnabled="{Binding IsSecondaryEnabled}"
                 Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
             <Button
                 Grid.Column="2"
                 Command="{Binding PrimaryCommand}"
-                Content="{Binding PrimaryText}"
+                Content="영수증 출력"
                 IsEnabled="{Binding IsPrimaryEnabled}"
                 Style="{StaticResource FilledActionPrimaryButtonStyle}" />
         </Grid>

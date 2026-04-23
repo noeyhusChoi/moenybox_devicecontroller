@@ -20,7 +20,7 @@
         <TextBlock
             Grid.Row="0"
             Style="{StaticResource ExchangeStepTitleStyle}"
-            Text="{Binding Title}" />
+            Text="신분증을 준비해 주세요" />
 
         <Grid
             x:Name="ConsentContentContainer"
@@ -60,7 +60,7 @@
                     FontSize="34"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextAccentStrongBrush}"
-                    Text="{Binding SupportedDocumentTypes}" />
+                    Text="여권, 주민등록증, 운전면허증, 외국인등록증" />
             </Border>
 
             <Border
@@ -164,7 +164,7 @@
                             FontSize="40"
                             FontWeight="SemiBold"
                             Foreground="{DynamicResource TextPrimaryBrush}"
-                            Text="{Binding TermsTitle}" />
+                            Text="개인정보 수집 이용 및 제3자 제공 동의" />
                     </CheckBox>
 
                     <Rectangle
@@ -191,7 +191,7 @@
                                 FontSize="34"
                                 FontWeight="Medium"
                                 Foreground="{DynamicResource TextPrimaryBrush}"
-                                Text="{Binding TermsLinkText}" />
+                                Text="이용약관 보기" />
                             <TextBlock
                                 FontSize="34"
                                 Foreground="{DynamicResource TextPrimaryBrush}"
@@ -207,7 +207,7 @@
                 VerticalAlignment="Top"
                 FontSize="34"
                 Foreground="{DynamicResource TextPrimaryBrush}"
-                Text="{Binding Body}" />
+                Text="이용약관에 동의하셔야 다음 단계로 이동이 가능합니다." />
 
             <Grid
                 x:Name="ConsentActionContainer"
@@ -227,14 +227,14 @@
                 <Button
                     Grid.Column="0"
                     Command="{Binding SecondaryCommand}"
-                    Content="{Binding SecondaryText}"
+                    Content="이전"
                     IsEnabled="{Binding IsSecondaryEnabled}"
                     Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
 
                 <Button
                     Grid.Column="2"
                     Command="{Binding PrimaryCommand}"
-                    Content="{Binding PrimaryText}"
+                    Content="다음"
                     IsEnabled="{Binding IsPrimaryEnabled}"
                     Style="{StaticResource FilledActionPrimaryButtonStyle}" />
             </Grid>

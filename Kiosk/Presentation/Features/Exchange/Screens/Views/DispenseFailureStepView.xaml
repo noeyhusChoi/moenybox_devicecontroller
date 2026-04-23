@@ -275,7 +275,7 @@
             <Button
                 x:Name="DispenseFailurePrimaryButton"
                 Command="{Binding PrimaryCommand}"
-                Content="{Binding PrimaryText}"
+                Content="영수증 출력"
                 IsEnabled="{Binding IsPrimaryEnabled}"
                 Style="{StaticResource FilledActionPrimaryButtonStyle}" />
         </Grid>

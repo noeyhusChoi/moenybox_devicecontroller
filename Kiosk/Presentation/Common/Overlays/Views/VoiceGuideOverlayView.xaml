@@ -152,7 +152,7 @@
                     Grid.Row="0"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource VoiceGuideTitleStyle}" Text="{Binding Title}" />
+                    <TextBlock Style="{StaticResource VoiceGuideTitleStyle}" Text="음량 조절" />
                     <TextBlock
                         Margin="24,0,0,0"
                         Style="{StaticResource VoiceGuideLevelStyle}"
@@ -294,7 +294,7 @@
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <svg:SvgIcon Style="{StaticResource VoiceGuideActionSvgIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_stop.svg" />
                             <Separator Width="20" Background="Transparent" />
-                            <TextBlock Style="{StaticResource VoiceGuideActionTextStyle}" Text="{Binding StopText}" />
+                            <TextBlock Style="{StaticResource VoiceGuideActionTextStyle}" Text="음성정지" />
                         </StackPanel>
                     </Button>
 
@@ -306,7 +306,7 @@
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <svg:SvgIcon Style="{StaticResource VoiceGuideActionSvgIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_arrow-rotate.svg" />
                             <Separator Width="20" Background="Transparent" />
-                            <TextBlock Style="{StaticResource VoiceGuideActionTextStyle}" Text="{Binding ReplayText}" />
+                            <TextBlock Style="{StaticResource VoiceGuideActionTextStyle}" Text="다시듣기" />
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -325,7 +325,7 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="{Binding ConfirmText}" />
+                            Text="설정 완료" />
                     </Button>
                 </Grid>
             </Grid>

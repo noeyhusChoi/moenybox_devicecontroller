@@ -78,11 +78,11 @@
         </Style>
 
         <Style
-            x:Key="BottomThemeSelectedButtonStyle"
+            x:Key="BottomVoiceGuideSelectedButtonStyle"
             BasedOn="{StaticResource BottomUtilityButtonStyle}"
             TargetType="Button">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsThemeSelected}" Value="True">
+                <DataTrigger Binding="{Binding IsVoiceGuideSelected}" Value="True">
                     <Setter Property="Tag" Value="Selected" />
                     <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
                 </DataTrigger>
@@ -120,15 +120,15 @@
             Command="{Binding VoiceGuideCommand}"
             Content="음성안내"
             IsEnabled="True"
-            Style="{DynamicResource BottomUtilityButtonStyle}" />
+            Style="{StaticResource BottomVoiceGuideSelectedButtonStyle}" />
         <Button
             Command="{Binding AccessibilityCommand}"
             Content="접근성"
             IsEnabled="True"
             Style="{StaticResource BottomAccessibilitySelectedButtonStyle}" />
         <Button
-            Command="{Binding ThemeCommand}"
-            Content="테마"
-            Style="{StaticResource BottomThemeSelectedButtonStyle}" />
+            Command="{Binding CallCommand}"
+            Content="호출"
+            Style="{DynamicResource BottomUtilityButtonStyle}" />
     </UniformGrid>
 </UserControl>

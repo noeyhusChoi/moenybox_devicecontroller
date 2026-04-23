@@ -1,0 +1,334 @@
+<UserControl
+    x:Class="Kiosk.Views.Overlays.VoiceGuideOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Kiosk"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="VoiceGuideTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="53" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="VoiceGuideLevelStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="47" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextAccentBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="VoiceGuideOutlineButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource SurfaceDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="Foreground" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ButtonSurface"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="24">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource SurfaceDefaultPressedBrush}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="ButtonSurface" Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="VoiceGuideSquareButtonStyle"
+            BasedOn="{StaticResource VoiceGuideOutlineButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="80" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ButtonSurface"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="16">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource SurfaceDefaultPressedBrush}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="ButtonSurface" Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="VoiceGuideActionTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="VoiceGuideSquareSvgIconStyle" TargetType="svg:SvgIcon">
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="AppName" Value="KIOSK" />
+            <Setter Property="Fill" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+            <Setter Property="Stroke" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+        </Style>
+
+        <Style x:Key="VoiceGuideActionSvgIconStyle" TargetType="svg:SvgIcon">
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="AppName" Value="KIOSK" />
+            <Setter Property="Fill" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+            <Setter Property="Stroke" Value="{DynamicResource OnDefaultPrimaryBrush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid
+        Background="{DynamicResource OverlayDimBrush}"
+        Focusable="False"
+        KeyboardNavigation.DirectionalNavigation="Continue"
+        KeyboardNavigation.IsTabStop="False">
+        <Border
+            Width="960"
+            Padding="60"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource CardPrimaryBackgroundBrush}"
+            CornerRadius="32"
+            Effect="{DynamicResource FilledCardButtonShadowEffect}">
+            <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource VoiceGuideTitleStyle}" Text="{Binding Title}" />
+                    <TextBlock
+                        Margin="24,0,0,0"
+                        Style="{StaticResource VoiceGuideLevelStyle}"
+                        Text="{Binding VolumeLevelText}" />
+                </StackPanel>
+
+                <Grid
+                    x:Name="VoiceGuideVolumeContainer"
+                    Grid.Row="2"
+                    behavior:FocusBoundary.DownTarget="{Binding ElementName=VoiceGuidePlaybackContainer}"
+                    behavior:FocusContainer.InitialFocus="True"
+                    behavior:FocusContainer.Mode="HorizontalStack"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="32" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="32" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Command="{Binding DecreaseVolumeCommand}"
+                        Style="{StaticResource VoiceGuideSquareButtonStyle}">
+                        <svg:SvgIcon Style="{StaticResource VoiceGuideSquareSvgIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_minue.svg" />
+                    </Button>
+
+                    <Grid
+                        Grid.Column="2"
+                        Height="40"
+                        VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" CornerRadius="24,0,0,24">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLevel1Active}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <Border Grid.Column="2">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLevel2Active}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <Border Grid.Column="4">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLevel3Active}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <Border Grid.Column="6">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLevel4Active}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <Border Grid.Column="8" CornerRadius="0,24,24,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLevel5Active}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </Grid>
+
+                    <Button
+                        Grid.Column="4"
+                        Command="{Binding IncreaseVolumeCommand}"
+                        Style="{StaticResource VoiceGuideSquareButtonStyle}">
+                        <svg:SvgIcon Style="{StaticResource VoiceGuideSquareSvgIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_plus.svg" />
+                    </Button>
+                </Grid>
+
+                <Grid
+                    x:Name="VoiceGuidePlaybackContainer"
+                    Grid.Row="4"
+                    behavior:FocusBoundary.DownTarget="{Binding ElementName=VoiceGuideConfirmContainer}"
+                    behavior:FocusBoundary.UpTarget="{Binding ElementName=VoiceGuideVolumeContainer}"
+                    behavior:FocusContainer.Mode="HorizontalStack"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Height="110"
+                        Command="{Binding StopVoiceCommand}"
+                        Style="{StaticResource VoiceGuideOutlineButtonStyle}">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <svg:SvgIcon Style="{StaticResource VoiceGuideActionSvgIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_stop.svg" />
+                            <Separator Width="20" Background="Transparent" />
+                            <TextBlock Style="{StaticResource VoiceGuideActionTextStyle}" Text="{Binding StopText}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Grid.Column="2"
+                        Height="110"
+                        Command="{Binding ReplayVoiceCommand}"
+                        Style="{StaticResource VoiceGuideOutlineButtonStyle}">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <svg:SvgIcon Style="{StaticResource VoiceGuideActionSvgIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_arrow-rotate.svg" />
+                            <Separator Width="20" Background="Transparent" />
+                            <TextBlock Style="{StaticResource VoiceGuideActionTextStyle}" Text="{Binding ReplayText}" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <Grid
+                    x:Name="VoiceGuideConfirmContainer"
+                    Grid.Row="6"
+                    behavior:FocusBoundary.UpTarget="{Binding ElementName=VoiceGuidePlaybackContainer}"
+                    behavior:FocusContainer.Mode="HorizontalStack"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Button
+                        Height="120"
+                        Command="{Binding ConfirmCommand}"
+                        Style="{StaticResource FilledSecondaryButtonStyle}">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="{Binding ConfirmText}" />
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

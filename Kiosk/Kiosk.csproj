@@ -107,12 +107,16 @@
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_VND.gif" />
       <None Remove="Assets\Gif\IDScan_ID.gif" />
       <None Remove="Assets\Gif\IDScan_Passport.gif" />
+      <None Remove="Assets\Icon\chevron_left.svg" />
       <None Remove="Assets\Icon\ico.svg" />
       <None Remove="Assets\Icon\ico_accessibility.svg" />
+      <None Remove="Assets\Icon\ico_arrow-rotate.svg" />
       <None Remove="Assets\Icon\ico_arrow_rotate.png" />
       <None Remove="Assets\Icon\ico_call.svg" />
       <None Remove="Assets\Icon\ico_charge.png" />
+      <None Remove="Assets\Icon\ico_charge.svg" />
       <None Remove="Assets\Icon\ico_check.png" />
+      <None Remove="Assets\Icon\ico_check.svg" />
       <None Remove="Assets\Icon\ico_chevron_down.png" />
       <None Remove="Assets\Icon\ico_chevron_left.png" />
       <None Remove="Assets\Icon\ico_chevron_right.png" />
@@ -121,9 +125,13 @@
       <None Remove="Assets\Icon\ico_enlarge.svg" />
       <None Remove="Assets\Icon\ico_home.svg" />
       <None Remove="Assets\Icon\ico_minue.png" />
+      <None Remove="Assets\Icon\ico_minue.svg" />
       <None Remove="Assets\Icon\ico_plus.png" />
+      <None Remove="Assets\Icon\ico_plus.svg" />
       <None Remove="Assets\Icon\ico_stop.png" />
+      <None Remove="Assets\Icon\ico_stop.svg" />
       <None Remove="Assets\Icon\ico_timer.png" />
+      <None Remove="Assets\Icon\ico_timer.svg" />
       <None Remove="Assets\Icon\ico_voice.svg" />
       <None Remove="Assets\Image\Bill.png" />
       <None Remove="Assets\Image\Card.png" />
@@ -243,10 +251,16 @@
       <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Regular.otf">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\chevron_left.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_accessibility.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_arrow-rotate.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_arrow_rotate.png">
@@ -258,7 +272,13 @@
       <Resource Include="Assets\Icon\ico_charge.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\ico_charge.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico_check.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_check.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_chevron_down.png">
@@ -285,13 +305,25 @@
       <Resource Include="Assets\Icon\ico_minue.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\ico_minue.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico_plus.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_plus.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_stop.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\ico_stop.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico_timer.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_timer.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_voice.svg">

@@ -34,8 +34,11 @@
         <DataTemplate DataType="{x:Type overlayVm:TermsOverlayViewModel}">
             <overlayViews:TermsOverlayView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type overlayVm:ThemeSelectionOverlayViewModel}">
-            <overlayViews:ThemeSelectionOverlayView />
+        <DataTemplate DataType="{x:Type overlayVm:AccessibilitySettingsOverlayViewModel}">
+            <overlayViews:AccessibilitySettingsOverlayView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type overlayVm:VoiceGuideOverlayViewModel}">
+            <overlayViews:VoiceGuideOverlayView />
         </DataTemplate>
     </Window.Resources>
 

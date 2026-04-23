@@ -90,11 +90,11 @@
         </Style>
 
         <Style
-            x:Key="ModernThemeButtonStyle"
+            x:Key="ModernVoiceGuideButtonStyle"
             BasedOn="{StaticResource ModernUtilityButtonStyle}"
             TargetType="Button">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsThemeSelected}" Value="True">
+                <DataTrigger Binding="{Binding IsVoiceGuideSelected}" Value="True">
                     <Setter Property="Tag" Value="Selected" />
                     <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
                 </DataTrigger>
@@ -159,7 +159,7 @@
             <Button
                 Command="{Binding VoiceGuideCommand}"
                 IsEnabled="True"
-                Style="{StaticResource ModernUtilityButtonStyle}">
+                Style="{StaticResource ModernVoiceGuideButtonStyle}">
                 <StackPanel
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -188,7 +188,7 @@
                 </StackPanel>
             </Button>
 
-            <Button Command="{Binding ThemeCommand}" Style="{StaticResource ModernThemeButtonStyle}">
+            <Button Command="{Binding CallCommand}" Style="{StaticResource ModernUtilityButtonStyle}">
                 <StackPanel
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"

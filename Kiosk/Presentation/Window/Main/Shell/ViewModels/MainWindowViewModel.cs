@@ -4,6 +4,7 @@ using Kiosk.Application.Features.ExchangeV2.Orchestration;
 using Kiosk.Application.Services.Resx;
 using Kiosk.Application.Services.Theme;
 using Kiosk.Infrastructure.Initialization;
+using Kiosk.Infrastructure.Media;
 using System.ComponentModel;
 using Kiosk.ViewModels.Overlays;
 
@@ -24,6 +25,7 @@ namespace Kiosk.ViewModels
         private readonly IAppInitializer _initializer;
         private readonly IHeaderViewModelFactory _headerViewModelFactory;
         private readonly IAppTheme _appTheme;
+        private readonly IAudioPlayService _audioPlayService;
         private bool _initialized;
 
         [ObservableProperty]
@@ -69,12 +71,14 @@ namespace Kiosk.ViewModels
             IAppInitializer initializer,
             IHeaderViewModelFactory headerViewModelFactory,
             IAppTheme appTheme,
+            IAudioPlayService audioPlayService,
             HomeShellViewModel homeShell,
             ExchangeShellViewModel exchangeShell)
         {
             _initializer = initializer;
             _headerViewModelFactory = headerViewModelFactory;
             _appTheme = appTheme;
+            _audioPlayService = audioPlayService;
             HomeShell = homeShell;
             ExchangeShell = exchangeShell;
             HomeShell.ServiceEntryRequested += OnHomeServiceEntryRequested;
@@ -83,10 +87,14 @@ namespace Kiosk.ViewModels
             ExchangeShell.PropertyChanged += OnExchangeShellPropertyChanged;
             _initializer.ProgressChanged += OnProgressChanged;
             _appTheme.ThemeChanged += OnThemeChanged;
-            UtilityBarViewModel = new UtilityBarViewModel(ShowHome, ToggleAccessibilityZoom, ToggleKeyboardNavigation, OpenThemeSelector);
+            UtilityBarViewModel = new UtilityBarViewModel(
+                ShowHome,
+                ToggleAccessibilityZoom,
+                OpenVoiceGuideOverlay,
+                OpenAccessibilitySettings,
+                PlaceCall);
             UtilityBarViewModel.SetZoomState(false);
-            UtilityBarViewModel.SetAccessibilityState(KeyboardNavigationState.Instance.IsEnabled);
-            RefreshThemeButtonState();
+            RefreshUtilityButtonState();
             ShowHome();
         }
 
@@ -108,7 +116,7 @@ namespace Kiosk.ViewModels
 
         private void OnThemeChanged(object? sender, EventArgs e)
         {
-            RefreshThemeButtonState();
+            RefreshUtilityButtonState();
             HeaderViewModel.LogoAssetPath = _headerViewModelFactory.GetLogoAssetPath();
         }
 
@@ -203,32 +211,71 @@ namespace Kiosk.ViewModels
             NotifyMinimapChanged();
         }
 
-        private void ToggleKeyboardNavigation()
+        private void OpenVoiceGuideOverlay()
         {
-            KeyboardNavigationState.Instance.IsEnabled = !KeyboardNavigationState.Instance.IsEnabled;
-            UtilityBarViewModel.SetAccessibilityState(KeyboardNavigationState.Instance.IsEnabled);
+            CurrentUtilityOverlayViewModel = new VoiceGuideOverlayViewModel(
+                GetVoiceGuideVolumeLevel(),
+                ApplyVoiceGuideVolumeLevel,
+                StopVoiceGuide,
+                ReplayVoiceGuideAsync,
+                CloseVoiceGuideOverlayCommand);
+            RefreshUtilityButtonState();
         }
 
-        private void OpenThemeSelector()
+        private void OpenAccessibilitySettings()
         {
-            CurrentUtilityOverlayViewModel = new ThemeSelectionOverlayViewModel(
+            CurrentUtilityOverlayViewModel = new AccessibilitySettingsOverlayViewModel(
                 _appTheme.CurrentTheme,
                 ApplyTheme,
-                CloseThemeSelectorCommand);
-            RefreshThemeButtonState();
+                CloseAccessibilitySettingsCommand);
+            RefreshUtilityButtonState();
         }
 
         [RelayCommand]
-        private void CloseThemeSelector()
+        private void CloseAccessibilitySettings()
         {
             CurrentUtilityOverlayViewModel = null;
-            RefreshThemeButtonState();
+            RefreshUtilityButtonState();
+        }
+
+        private void PlaceCall()
+        {
+        }
+
+        [RelayCommand]
+        private void CloseVoiceGuideOverlay()
+        {
+            CurrentUtilityOverlayViewModel = null;
+            RefreshUtilityButtonState();
         }
 
         private void ApplyTheme(AppThemeKind theme)
         {
             _appTheme.SetTheme(theme);
-            CloseThemeSelector();
+            RefreshUtilityButtonState();
+        }
+
+        private void ApplyVoiceGuideVolumeLevel(int level)
+        {
+            _audioPlayService.Volume = level / 5f;
+        }
+
+        private int GetVoiceGuideVolumeLevel()
+        {
+            return Math.Clamp(
+                (int)Math.Round(_audioPlayService.Volume * 5f, MidpointRounding.AwayFromZero),
+                1,
+                5);
+        }
+
+        private void StopVoiceGuide()
+        {
+            _audioPlayService.StopAll();
+        }
+
+        private Task ReplayVoiceGuideAsync()
+        {
+            return Task.CompletedTask;
         }
 
         private void DisableAccessibilityZoom()
@@ -315,11 +362,12 @@ namespace Kiosk.ViewModels
             OnPropertyChanged(nameof(MinimapViewportTop));
         }
 
-        private void RefreshThemeButtonState()
+        private void RefreshUtilityButtonState()
         {
-            UtilityBarViewModel.SetThemeState(
-                CurrentUtilityOverlayViewModel is ThemeSelectionOverlayViewModel ||
+            UtilityBarViewModel.SetAccessibilityState(
+                CurrentUtilityOverlayViewModel is AccessibilitySettingsOverlayViewModel ||
                 _appTheme.CurrentTheme != AppThemeKind.Light);
+            UtilityBarViewModel.SetVoiceGuideState(CurrentUtilityOverlayViewModel is VoiceGuideOverlayViewModel);
         }
 
         partial void OnAccessibilityZoomScaleChanged(double value)

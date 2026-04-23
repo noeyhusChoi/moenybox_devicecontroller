@@ -1,0 +1,244 @@
+<UserControl
+    x:Class="Kiosk.Views.Overlays.AccessibilitySettingsOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:converters="clr-namespace:Kiosk.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Kiosk"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+
+        <Style x:Key="AccessibilitySettingsTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="53" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="AccessibilitySettingsRowLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="AccessibilitySegmentButtonTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="AccessibilitySegmentRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Width" Value="140" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border
+                            x:Name="ButtonSurface"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="16">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <Path
+                                    x:Name="SelectedCorner"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="0,8,8,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Data="M0.295,1.707 C-0.335,1.077 0.111,0 1.002,0 H13.588 C19.111,0 23.588,4.477 23.588,10 V22.586 C23.588,23.477 22.511,23.923 21.881,23.293 L0.295,1.707 Z"
+                                    Fill="{DynamicResource OnAccentPrimaryBrush}"
+                                    Stretch="Fill"
+                                    Visibility="Collapsed" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Width" Value="150" />
+                                <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+                                <Setter TargetName="SelectedCorner" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="SelectedCorner" Property="Fill" Value="{DynamicResource OnSecondaryPrimaryBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource OnSecondaryPrimaryBrush}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="ButtonSurface" Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
+                                <Setter TargetName="ButtonSurface" Property="BorderThickness" Value="4" />
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid
+        Background="{DynamicResource OverlayDimBrush}"
+        Focusable="False"
+        KeyboardNavigation.DirectionalNavigation="Continue"
+        KeyboardNavigation.IsTabStop="False">
+        <Border
+            Width="960"
+            Padding="60"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource CardPrimaryBackgroundBrush}"
+            CornerRadius="32"
+            Effect="{DynamicResource FilledCardButtonShadowEffect}">
+            <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="132" />
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="132" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Style="{StaticResource AccessibilitySettingsTitleStyle}" Text="{Binding Title}" />
+
+                <Border
+                    Grid.Row="2"
+                    Padding="48,24,24,24"
+                    Background="{DynamicResource AccessibilitySettingsTileBackgroundBrush}"
+                    CornerRadius="24">
+                    <Grid
+                        x:Name="LowScreenToggleContainer"
+                        behavior:FocusBoundary.DownTarget="{Binding ElementName=HighContrastToggleContainer}"
+                        behavior:FocusContainer.InitialFocus="True"
+                        behavior:FocusContainer.Mode="HorizontalStack"
+                        Focusable="False"
+                        KeyboardNavigation.IsTabStop="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Style="{StaticResource AccessibilitySettingsRowLabelStyle}"
+                            Text="{Binding LowScreenLabel}" />
+
+                        <Border
+                            Grid.Column="1"
+                            Width="290"
+                            Background="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}"
+                            CornerRadius="16">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton
+                                    Command="{Binding SelectLowScreenOnCommand}"
+                                    GroupName="LowScreenToggleGroup"
+                                    IsChecked="{Binding IsLowScreenEnabled, Mode=OneWay}"
+                                    Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OnText}" />
+                                </RadioButton>
+
+                                <RadioButton
+                                    Command="{Binding SelectLowScreenOffCommand}"
+                                    GroupName="LowScreenToggleGroup"
+                                    IsChecked="{Binding IsLowScreenEnabled, Mode=OneWay, Converter={StaticResource BooleanNegationConverter}}"
+                                    Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OffText}" />
+                                </RadioButton>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border
+                    Grid.Row="4"
+                    Padding="48,24,24,24"
+                    Background="{DynamicResource AccessibilitySettingsTileBackgroundBrush}"
+                    CornerRadius="24">
+                    <Grid
+                        x:Name="HighContrastToggleContainer"
+                        behavior:FocusBoundary.DownTarget="{Binding ElementName=AccessibilitySettingsActionContainer}"
+                        behavior:FocusBoundary.UpTarget="{Binding ElementName=LowScreenToggleContainer}"
+                        behavior:FocusContainer.Mode="HorizontalStack"
+                        Focusable="False"
+                        KeyboardNavigation.IsTabStop="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Style="{StaticResource AccessibilitySettingsRowLabelStyle}"
+                            Text="{Binding HighContrastLabel}" />
+
+                        <Border
+                            Grid.Column="1"
+                            Width="290"
+                            Background="{DynamicResource AccessibilitySettingsSegmentBackgroundBrush}"
+                            CornerRadius="16">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton
+                                    Command="{Binding SelectHighContrastOnCommand}"
+                                    GroupName="HighContrastToggleGroup"
+                                    IsChecked="{Binding IsHighContrastEnabled, Mode=OneWay}"
+                                    Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OnText}" />
+                                </RadioButton>
+
+                                <RadioButton
+                                    Command="{Binding SelectHighContrastOffCommand}"
+                                    GroupName="HighContrastToggleGroup"
+                                    IsChecked="{Binding IsHighContrastEnabled, Mode=OneWay, Converter={StaticResource BooleanNegationConverter}}"
+                                    Style="{StaticResource AccessibilitySegmentRadioButtonStyle}">
+                                    <TextBlock Style="{StaticResource AccessibilitySegmentButtonTextStyle}" Text="{Binding OffText}" />
+                                </RadioButton>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Grid
+                    x:Name="AccessibilitySettingsActionContainer"
+                    Grid.Row="6"
+                    behavior:FocusBoundary.UpTarget="{Binding ElementName=HighContrastToggleContainer}"
+                    behavior:FocusContainer.Mode="HorizontalStack"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="24" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Command="{Binding ResetCommand}"
+                        Content="{Binding ResetText}"
+                        Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+
+                    <Button
+                        Grid.Column="2"
+                        Command="{Binding ConfirmCommand}"
+                        Content="{Binding ConfirmText}"
+                        Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -8,13 +8,15 @@
     <SolidColorBrush x:Key="UtilityBarBackgroundBrush" Color="{StaticResource Gray100}" />
     <SolidColorBrush x:Key="CardSecondaryBackgroundBrush" Color="{StaticResource Gray100}" />
     <SolidColorBrush x:Key="CardSecondaryBorderBrush" Color="{StaticResource Gray100}" />
+    <SolidColorBrush x:Key="AccessibilitySettingsTileBackgroundBrush" Color="{StaticResource Gray50}" />
+    <SolidColorBrush x:Key="AccessibilitySettingsSegmentBackgroundBrush" Color="{StaticResource Gray100}" />
     <SolidColorBrush x:Key="AccentSurfaceBackgroundBrush" Color="{StaticResource Primary50}" />
     <SolidColorBrush x:Key="SurfaceInverseBackgroundBrush" Color="{StaticResource Gray950}" />
     <SolidColorBrush x:Key="SurfaceInversePressedBackgroundBrush" Color="{StaticResource Gray1000}" />
 
     <!--  Surface / Default Control  -->
     <SolidColorBrush x:Key="SurfaceDefaultBrush" Color="{StaticResource Gray0}" />
-    <SolidColorBrush x:Key="SurfaceDefaultPressedBrush" Color="{StaticResource Gray10}" />
+    <SolidColorBrush x:Key="SurfaceDefaultPressedBrush" Color="{StaticResource Gray50}" />
     <SolidColorBrush x:Key="SurfaceDefaultBorderBrush" Color="Transparent" />
     <SolidColorBrush x:Key="OnDefaultPrimaryBrush" Color="{StaticResource Gray1000}" />
     <SolidColorBrush x:Key="OnDefaultSecondaryBrush" Color="{StaticResource Gray700}" />
@@ -27,6 +29,13 @@
     <SolidColorBrush x:Key="SurfaceAccentBorderBrush" Color="Transparent" />
     <SolidColorBrush x:Key="OnAccentPrimaryBrush" Color="{StaticResource Gray0}" />
     <SolidColorBrush x:Key="OnAccentSecondaryBrush" Color="{StaticResource Gray50}" />
+
+    <!--  Surface / Secondary Control  -->
+    <SolidColorBrush x:Key="SurfaceSecondaryBrush" Color="{StaticResource Primary500}" />
+    <SolidColorBrush x:Key="SurfaceSecondaryPressedBrush" Color="{StaticResource Primary600}" />
+    <SolidColorBrush x:Key="SurfaceSecondaryBorderBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="OnSecondaryPrimaryBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnSecondarySecondaryBrush" Color="{StaticResource Gray50}" />
 
     <!--  Surface / Strong Control  -->
     <SolidColorBrush x:Key="SurfaceStrongBrush" Color="{StaticResource Gray950}" />
@@ -44,7 +53,7 @@
 
     <!--  Surface / Action Secondary  -->
     <SolidColorBrush x:Key="SurfaceActionSecondaryBrush" Color="{StaticResource Gray0}" />
-    <SolidColorBrush x:Key="SurfaceActionSecondaryPressedBrush" Color="{StaticResource Gray10}" />
+    <SolidColorBrush x:Key="SurfaceActionSecondaryPressedBrush" Color="{StaticResource Gray50}" />
     <SolidColorBrush x:Key="SurfaceActionSecondaryBorderBrush" Color="{StaticResource Gray200}" />
     <SolidColorBrush x:Key="OnActionSecondaryPrimaryBrush" Color="{StaticResource Gray1000}" />
     <SolidColorBrush x:Key="OnActionSecondarySecondaryBrush" Color="{StaticResource Gray600}" />

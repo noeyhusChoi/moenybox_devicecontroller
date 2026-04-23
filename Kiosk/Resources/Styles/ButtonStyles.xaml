@@ -148,6 +148,32 @@
     </Style>
 
     <Style
+        x:Key="FilledSecondaryButtonStyle"
+        BasedOn="{StaticResource FilledButtonBaseStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SurfaceSecondaryBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnSecondaryPrimaryBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource SurfaceSecondaryPressedBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource SurfaceDisabledBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource SurfaceDisabledBorderBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource OnDisabledPrimaryBrush}" />
+            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                    <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
         x:Key="FilledDarkButtonStyle"
         BasedOn="{StaticResource FilledButtonBaseStyle}"
         TargetType="Button">

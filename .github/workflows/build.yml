@@ -42,7 +42,7 @@ jobs:
             tools/M24hSqliteImporter/M24hSqliteImporter.csproj
 
       - name: Restore solution
-        run: dotnet restore .\Moneybox.sln
+        run: dotnet restore .\Moneybox.sln -r win-x64
 
       - name: Build solution (Debug)
         run: dotnet build .\Moneybox.sln -c Debug --no-restore

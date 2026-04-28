@@ -7,7 +7,7 @@ namespace Kiosk.Tests.Unit.Presentation.Home;
 public sealed class HomeShellViewModelTests
 {
     [Fact]
-    public async Task ExchangeSelection_ShowsLanguageScreen_AndRaisesEntryRequested()
+    public async Task ExchangeSelection_RaisesEntryRequestedWithoutLanguageSelection()
     {
         var appCulture = new TestAppCulture("ko-KR");
         var sut = new HomeShellViewModel(appCulture);
@@ -16,18 +16,10 @@ public sealed class HomeShellViewModelTests
 
         await sut.HomeScreen.ExchangeCard.Command.ExecuteAsync(null);
 
-        sut.CurrentScreenViewModel.Should().BeOfType<HomeLanguageSelectionViewModel>();
-        var languageSelection = sut.CurrentScreenViewModel.Should().BeOfType<HomeLanguageSelectionViewModel>().Subject;
-        languageSelection.KoreanLanguage.IsVisible.Should().BeTrue();
-        languageSelection.EnglishLanguage.IsVisible.Should().BeTrue();
-        languageSelection.TraditionalChineseLanguage.IsVisible.Should().BeTrue();
-
-        languageSelection.EnglishLanguage.SelectCommand.Execute(null);
-
+        sut.CurrentScreenViewModel.Should().BeSameAs(sut.HomeScreen);
         raisedEvent.Should().NotBeNull();
         raisedEvent!.ServiceType.Should().Be(HomeServiceType.Exchange);
-        raisedEvent.LanguageCode.Should().Be("en-US");
-        appCulture.CurrentCulture.Name.Should().Be("en-US");
+        appCulture.CurrentCulture.Name.Should().Be("ko-KR");
     }
 
     [Fact]
@@ -37,7 +29,7 @@ public sealed class HomeShellViewModelTests
         var sut = new HomeShellViewModel(appCulture);
 
         await sut.HomeScreen.ExchangeCard.Command.ExecuteAsync(null);
-        sut.CurrentScreenViewModel.Should().BeOfType<HomeLanguageSelectionViewModel>();
+        sut.CurrentScreenViewModel.Should().BeSameAs(sut.HomeScreen);
 
         sut.ResetToServiceSelection();
 

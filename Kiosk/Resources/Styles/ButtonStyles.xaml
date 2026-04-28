@@ -19,6 +19,11 @@
         <Setter Property="Effect" Value="{DynamicResource FilledCardButtonShadowEffect}" />
     </Style>
 
+    <Style x:Key="StepScreenRootBorderStyle" TargetType="Border">
+        <Setter Property="Padding" Value="72,72,72,48" />
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
     <Style x:Key="PlainLinkButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -66,8 +71,9 @@
         <Setter Property="BorderBrush" Value="{DynamicResource SurfaceDefaultBorderBrush}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="FontSize" Value="49" />
-        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSize_M}" />
+        <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+        <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
         <Setter Property="Opacity" Value="1" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -82,7 +88,13 @@
                         CornerRadius="32"
                         Effect="{DynamicResource FilledCardButtonShadowEffect}"
                         Opacity="{TemplateBinding Opacity}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            TextElement.FontFamily="{TemplateBinding FontFamily}"
+                            TextElement.FontSize="{TemplateBinding FontSize}"
+                            TextElement.FontWeight="{TemplateBinding FontWeight}"
+                            TextElement.Foreground="{TemplateBinding Foreground}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

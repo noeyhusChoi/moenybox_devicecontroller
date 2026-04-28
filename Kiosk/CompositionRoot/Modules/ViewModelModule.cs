@@ -11,7 +11,9 @@ namespace Kiosk.CompositionRoot.Modules
             services.AddSingleton<IExchangeScreenFactory, ExchangeScreenFactory>();
             services.AddSingleton<IHeaderViewModelFactory, HeaderViewModelFactory>();
             services.AddSingleton<HomeShellViewModel>();
-            services.AddSingleton<ExchangeShellViewModel>();
+            services.AddSingleton<ExchangeEntryShellViewModel>();
+            services.AddSingleton<CashExchangeShellViewModel>();
+            services.AddSingleton<PrepaidCardShellViewModel>();
             services.AddSingleton<MainWindowViewModel>();
             return services;
         }

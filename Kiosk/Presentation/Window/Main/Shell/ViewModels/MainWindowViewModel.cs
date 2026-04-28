@@ -46,9 +46,9 @@ namespace Kiosk.ViewModels
         [ObservableProperty]
         private object? currentUtilityOverlayViewModel;
 
-        public bool IsProgressChromeVisible => CurrentScreenViewModel == ExchangeShell &&
-                                               ExchangeShell.ShowStepHeader &&
-                                               !ExchangeShell.CollapseShellChrome;
+        public bool IsProgressChromeVisible => CurrentScreenViewModel is IProgressChromeShellViewModel shell &&
+                                               shell.ShowStepHeader &&
+                                               !shell.CollapseShellChrome;
 
         [ObservableProperty]
         private bool isAccessibilityZoomEnabled;
@@ -63,9 +63,10 @@ namespace Kiosk.ViewModels
         private double accessibilityPanY;
 
         private IModalSourceViewModel? _currentModalSource;
-
         public HomeShellViewModel HomeShell { get; }
-        public ExchangeShellViewModel ExchangeShell { get; }
+        public ExchangeEntryShellViewModel ExchangeEntryShell { get; }
+        public CashExchangeShellViewModel CashExchangeShell { get; }
+        public PrepaidCardShellViewModel PrepaidCardShell { get; }
 
         public MainWindowViewModel(
             IAppInitializer initializer,
@@ -73,18 +74,30 @@ namespace Kiosk.ViewModels
             IAppTheme appTheme,
             IAudioPlayService audioPlayService,
             HomeShellViewModel homeShell,
-            ExchangeShellViewModel exchangeShell)
+            ExchangeEntryShellViewModel exchangeEntryShell,
+            CashExchangeShellViewModel cashExchangeShell,
+            PrepaidCardShellViewModel prepaidCardShell)
         {
             _initializer = initializer;
             _headerViewModelFactory = headerViewModelFactory;
             _appTheme = appTheme;
             _audioPlayService = audioPlayService;
             HomeShell = homeShell;
-            ExchangeShell = exchangeShell;
+            ExchangeEntryShell = exchangeEntryShell;
+            CashExchangeShell = cashExchangeShell;
+            PrepaidCardShell = prepaidCardShell;
             HomeShell.ServiceEntryRequested += OnHomeServiceEntryRequested;
-            ExchangeShell.HomeRequested += OnExchangeHomeRequested;
-            ExchangeShell.ExchangeCompleted += OnExchangeCompleted;
-            ExchangeShell.PropertyChanged += OnExchangeShellPropertyChanged;
+            ExchangeEntryShell.HomeRequested += OnExchangeHomeRequested;
+            ExchangeEntryShell.CashExchangeRequested += OnCashExchangeRequested;
+            ExchangeEntryShell.PrepaidCardRequested += OnPrepaidCardFromEntryRequested;
+            ExchangeEntryShell.PropertyChanged += OnProgressShellPropertyChanged;
+            CashExchangeShell.HomeRequested += OnExchangeHomeRequested;
+            CashExchangeShell.EntryBackRequested += OnCashExchangeEntryBackRequested;
+            CashExchangeShell.ExchangeCompleted += OnExchangeCompleted;
+            CashExchangeShell.PropertyChanged += OnProgressShellPropertyChanged;
+            PrepaidCardShell.HomeRequested += OnExchangeHomeRequested;
+            PrepaidCardShell.EntryBackRequested += OnPrepaidCardEntryBackRequested;
+            PrepaidCardShell.PropertyChanged += OnProgressShellPropertyChanged;
             _initializer.ProgressChanged += OnProgressChanged;
             _appTheme.ThemeChanged += OnThemeChanged;
             UtilityBarViewModel = new UtilityBarViewModel(
@@ -120,10 +133,10 @@ namespace Kiosk.ViewModels
             HeaderViewModel.LogoAssetPath = _headerViewModelFactory.GetLogoAssetPath();
         }
 
-        private void OnExchangeShellPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void OnProgressShellPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName is nameof(ExchangeShellViewModel.ShowStepHeader)
-                or nameof(ExchangeShellViewModel.CollapseShellChrome))
+            if (e.PropertyName is nameof(IProgressChromeShellViewModel.ShowStepHeader)
+                or nameof(IProgressChromeShellViewModel.CollapseShellChrome))
             {
                 OnPropertyChanged(nameof(IsProgressChromeVisible));
             }
@@ -131,10 +144,35 @@ namespace Kiosk.ViewModels
 
         private async void OnHomeServiceEntryRequested(object? sender, HomeServiceEntryRequestedEventArgs e)
         {
-            if (e.ServiceType != HomeServiceType.Exchange)
-                return;
+            switch (e.ServiceType)
+            {
+                case HomeServiceType.Exchange:
+                    await ShowExchangeEntryAsync();
+                    break;
+                case HomeServiceType.TransportationCard:
+                    await ShowPrepaidCardFromHomeAsync();
+                    break;
+            }
+        }
 
-            await ShowExchangeAsync();
+        private async void OnCashExchangeRequested(object? sender, EventArgs e)
+        {
+            await ShowCashExchangeAsync();
+        }
+
+        private async void OnPrepaidCardFromEntryRequested(object? sender, EventArgs e)
+        {
+            await ShowPrepaidCardFromEntryAsync();
+        }
+
+        private async void OnCashExchangeEntryBackRequested(object? sender, EventArgs e)
+        {
+            await ShowExchangeEntryAtMethodAsync();
+        }
+
+        private async void OnPrepaidCardEntryBackRequested(object? sender, EventArgs e)
+        {
+            await ShowExchangeEntryAtMethodAsync();
         }
 
         private void OnExchangeHomeRequested(object? sender, EventArgs e)
@@ -186,12 +224,49 @@ namespace Kiosk.ViewModels
             OnPropertyChanged(nameof(IsProgressChromeVisible));
         }
 
-        private async Task ShowExchangeAsync()
+        private async Task ShowExchangeEntryAsync()
         {
-            await ExchangeShell.StartFlowAsync();
-            CurrentScreenViewModel = ExchangeShell;
+            await ExchangeEntryShell.StartFlowAsync();
+            CurrentScreenViewModel = ExchangeEntryShell;
             AttachModalSource(CurrentScreenViewModel);
-            ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeShell.TimerText));
+            ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeEntryShell.TimerText));
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
+        }
+
+        private Task ShowExchangeEntryAtMethodAsync()
+        {
+            ExchangeEntryShell.ReturnToMethodSelection();
+            CurrentScreenViewModel = ExchangeEntryShell;
+            AttachModalSource(CurrentScreenViewModel);
+            ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeEntryShell.TimerText));
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
+            return Task.CompletedTask;
+        }
+
+        private async Task ShowCashExchangeAsync()
+        {
+            await CashExchangeShell.StartFlowAsync();
+            CurrentScreenViewModel = CashExchangeShell;
+            AttachModalSource(CurrentScreenViewModel);
+            ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(CashExchangeShell.TimerText));
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
+        }
+
+        private async Task ShowPrepaidCardFromHomeAsync()
+        {
+            await PrepaidCardShell.StartFlowAsync(PrepaidCardEntrySource.Home);
+            CurrentScreenViewModel = PrepaidCardShell;
+            AttachModalSource(CurrentScreenViewModel);
+            ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(PrepaidCardShell.TimerText));
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
+        }
+
+        private async Task ShowPrepaidCardFromEntryAsync()
+        {
+            await PrepaidCardShell.StartFlowAsync(PrepaidCardEntrySource.ExchangeEntry);
+            CurrentScreenViewModel = PrepaidCardShell;
+            AttachModalSource(CurrentScreenViewModel);
+            ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(PrepaidCardShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));
         }
 

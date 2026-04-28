@@ -25,20 +25,44 @@
     mc:Ignorable="d">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Style x:Key="OverlayContentControlStyle" TargetType="ContentControl">
+            <Setter Property="Visibility" Value="Visible" />
+            <Setter Property="Focusable" Value="False" />
+            <Style.Triggers>
+                <Trigger Property="Content" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <DataTemplate DataType="{x:Type viewModels:HomeShellViewModel}">
             <views:HomeShellView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:ExchangeShellViewModel}">
-            <views:ExchangeShellView />
+        <DataTemplate DataType="{x:Type viewModels:ExchangeEntryShellViewModel}">
+            <views:ExchangeEntryShellView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:CashExchangeShellViewModel}">
+            <views:CashExchangeShellView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:PrepaidCardShellViewModel}">
+            <views:PrepaidCardShellView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type overlayVm:TermsOverlayViewModel}">
             <overlayViews:TermsOverlayView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type overlayVm:PrepaidCardChargeAmountOverlayViewModel}">
+            <overlayViews:PrepaidCardChargeAmountOverlayView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type overlayVm:PrepaidCardDepositLimitOverlayViewModel}">
+            <overlayViews:PrepaidCardDepositLimitOverlayView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type overlayVm:AccessibilitySettingsOverlayViewModel}">
             <overlayViews:AccessibilitySettingsOverlayView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type overlayVm:VoiceGuideOverlayViewModel}">
             <overlayViews:VoiceGuideOverlayView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type overlayVm:ThemeSelectionOverlayViewModel}">
+            <overlayViews:ThemeSelectionOverlayView />
         </DataTemplate>
     </Window.Resources>
 
@@ -132,30 +156,14 @@
             </Grid>
         </Border>
 
-        <ContentControl Panel.ZIndex="20" Content="{Binding CurrentModalViewModel}">
-            <ContentControl.Style>
-                <Style TargetType="ContentControl">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding CurrentModalViewModel}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+        <ContentControl
+            Panel.ZIndex="30"
+            Content="{Binding CurrentModalViewModel}"
+            Style="{StaticResource OverlayContentControlStyle}" />
 
-        <ContentControl Panel.ZIndex="30" Content="{Binding CurrentUtilityOverlayViewModel}">
-            <ContentControl.Style>
-                <Style TargetType="ContentControl">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding CurrentUtilityOverlayViewModel}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+        <ContentControl
+            Panel.ZIndex="31"
+            Content="{Binding CurrentUtilityOverlayViewModel}"
+            Style="{StaticResource OverlayContentControlStyle}" />
     </Grid>
 </Window>

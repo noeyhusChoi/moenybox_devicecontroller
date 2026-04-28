@@ -17,6 +17,8 @@ public interface IExchangeFlowCoordinator
     ExchangeFlowContext Context { get; }
 
     Task StartAsync(CancellationToken ct = default);
+    Task StartCashAsync(CancellationToken ct = default);
+    Task StartExecutionAsync(ExchangeMethod method, string currencyCode, decimal exchangeRate, CancellationToken ct = default);
     Task ConfirmStartAsync(CancellationToken ct = default);
     Task SelectMethodAsync(ExchangeMethod method, CancellationToken ct = default);
     Task SelectCurrencyAsync(string currencyCode, decimal exchangeRate, CancellationToken ct = default);
@@ -77,6 +79,31 @@ public sealed class ExchangeFlowCoordinator : IExchangeFlowCoordinator
     {
         Context.ResetForRestart();
         MoveTo(ExchangeStep.Start);
+        return Task.CompletedTask;
+    }
+
+    public Task StartCashAsync(CancellationToken ct = default)
+    {
+        Context.ResetForRestart();
+        Context.Method = ExchangeMethod.Cash;
+        MoveTo(ExchangeStep.CurrencySelection);
+        return Task.CompletedTask;
+    }
+
+    public Task StartExecutionAsync(
+        ExchangeMethod method,
+        string currencyCode,
+        decimal exchangeRate,
+        CancellationToken ct = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(currencyCode);
+
+        Context.ResetForRestart();
+        Context.Method = method;
+        Context.SourceCurrencyCode = currencyCode;
+        Context.ExchangeRate = exchangeRate;
+        Context.IsTermsAgreed = false;
+        MoveTo(ExchangeStep.Consent);
         return Task.CompletedTask;
     }
 

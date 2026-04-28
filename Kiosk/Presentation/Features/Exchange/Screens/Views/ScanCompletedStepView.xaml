@@ -10,32 +10,32 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
         <Style x:Key="ResultHeadlineStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="59" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XL}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style x:Key="ResultDescriptionStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="40" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_S}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style x:Key="ResultNoticeStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="40" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_S}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextAccentBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style x:Key="ErrorDetailStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -144,15 +144,17 @@
             <Button
                 Grid.Column="0"
                 Command="{Binding SecondaryCommand}"
-                Content="이전"
                 IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                <TextBlock Text="이전" />
+            </Button>
             <Button
                 Grid.Column="2"
                 Command="{Binding PrimaryCommand}"
-                Content="다음"
                 IsEnabled="{Binding IsPrimaryEnabled}"
-                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                <TextBlock Text="다음" />
+            </Button>
         </Grid>
 
         <Grid
@@ -180,9 +182,10 @@
             <Button
                 Width="936"
                 Command="{Binding PrimaryCommand}"
-                Content="다시하기"
                 IsEnabled="{Binding IsPrimaryEnabled}"
-                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                <TextBlock Text="다시하기" />
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

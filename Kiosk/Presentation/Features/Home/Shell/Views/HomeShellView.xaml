@@ -11,9 +11,6 @@
         <DataTemplate DataType="{x:Type viewModels:HomeScreenViewModel}">
             <views:HomeScreenView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:HomeLanguageSelectionViewModel}">
-            <views:HomeLanguageSelectionView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <ContentControl Content="{Binding CurrentScreenViewModel}" Focusable="False" />

@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="Kiosk.Views.HeaderView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -48,15 +48,15 @@
 
                 <TextBlock
                     Grid.Column="0"
-                    FontSize="40"
-                    FontWeight="SemiBold"
+                    FontSize="{StaticResource FontSize_S}"
+                    FontWeight="{StaticResource FontWeight_L}"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     Text="{Binding CurrentDateText}"
                     Typography.NumeralAlignment="Tabular" />
                 <TextBlock
                     Grid.Column="2"
-                    FontSize="40"
-                    FontWeight="Medium"
+                    FontSize="{StaticResource FontSize_S}"
+                    FontWeight="{StaticResource FontWeight_M}"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     Text="{Binding CurrentTimeText}"
                     Typography.NumeralAlignment="Tabular" />
@@ -79,13 +79,13 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
-                    FontSize="38"
+                    FontSize="{StaticResource FontSize_S}"
                     Foreground="{DynamicResource TextAccentStrongBrush}"
                     Text="◔" />
                 <TextBlock
                     Grid.Column="2"
-                    FontSize="38"
-                    FontWeight="SemiBold"
+                    FontSize="{StaticResource FontSize_S}"
+                    FontWeight="{StaticResource FontWeight_L}"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     Text="{Binding TimerText}" />
             </Grid>

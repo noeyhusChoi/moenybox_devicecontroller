@@ -1,0 +1,333 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCard.PrepaidCardDepositStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+    d:DesignHeight="1455"
+    d:DesignWidth="1080"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="PrepaidDepositLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="PrepaidDepositValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="PrepaidDepositAmountTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_M}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+
+        <Style x:Key="PrepaidDepositAmountAccentTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_M}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextAccentBrush}" />
+        </Style>
+
+        <Style x:Key="AcceptedDenominationImageStyle" TargetType="Image">
+            <Setter Property="Width" Value="152" />
+            <Setter Property="Height" Value="64" />
+            <Setter Property="Stretch" Value="Fill" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="120" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource ExchangeStepTitleStyle}"
+            Text="{Binding Title}" />
+
+        <Border
+            Grid.Row="2"
+            Padding="54"
+            Style="{StaticResource CardSurfaceBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition>
+                        <RowDefinition.Style>
+                            <Style TargetType="RowDefinition">
+                                <Setter Property="Height" Value="2" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
+                                        <Setter Property="Height" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RowDefinition.Style>
+                    </RowDefinition>
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="400" />
+                </Grid.RowDefinitions>
+
+                <DockPanel LastChildFill="True">
+                    <TextBlock Style="{StaticResource PrepaidDepositLabelStyle}" Text="입금가능 권종" />
+                    <ItemsControl HorizontalAlignment="Right" ItemsSource="{Binding AcceptedDenominationImagePaths}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    HorizontalAlignment="Right"
+                                    FlowDirection="RightToLeft"
+                                    Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,-32,0">
+                                    <Image Source="{Binding}" Style="{StaticResource AcceptedDenominationImageStyle}" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DockPanel>
+
+                <Border Grid.Row="1" Background="{DynamicResource FeatureDividerDefaultBrush}" />
+
+                <DockPanel Grid.Row="3" LastChildFill="True">
+                    <TextBlock Style="{StaticResource PrepaidDepositLabelStyle}" Text="환율" />
+                    <TextBlock Style="{StaticResource PrepaidDepositValueStyle}">
+                        <Run Text="{Binding ExchangeRateText, Mode=OneWay}" />
+                        <Run Text=" KRW" />
+                    </TextBlock>
+                </DockPanel>
+
+                <Grid Grid.Row="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="24" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border
+                        Grid.Column="0"
+                        Background="{DynamicResource CardSecondaryBackgroundBrush}"
+                        CornerRadius="32">
+                        <Image Source="{Binding GuideImagePath}" Stretch="Fill" />
+                    </Border>
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Padding="40"
+                            Background="{DynamicResource CardSecondaryBackgroundBrush}"
+                            CornerRadius="32">
+                            <StackPanel VerticalAlignment="Center">
+                                <Border
+                                    Width="54"
+                                    Height="54"
+                                    Background="White"
+                                    CornerRadius="27">
+                                    <Image Source="{Binding SourceFlagPath}" Stretch="Fill" />
+                                </Border>
+                                <TextBlock Margin="0,16,0,0" Style="{StaticResource PrepaidDepositAmountTextStyle}">
+                                    <Run Text="{Binding DepositAmountText, Mode=OneWay}" />
+                                    <Run Text=" " />
+                                    <Run FontSize="{StaticResource FontSize_XS}" Text="{Binding SourceCurrencyCode, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <Border
+                            Grid.Row="2"
+                            Padding="40"
+                            Background="{DynamicResource CardSecondaryBackgroundBrush}"
+                            CornerRadius="32">
+                            <StackPanel VerticalAlignment="Center">
+                                <Border
+                                    Width="54"
+                                    Height="54"
+                                    Background="White"
+                                    CornerRadius="27">
+                                    <Image Source="{Binding TargetFlagPath}" Stretch="Fill" />
+                                </Border>
+                                <TextBlock Margin="0,16,0,0" Style="{StaticResource PrepaidDepositAmountAccentTextStyle}">
+                                    <Run Text="{Binding ExchangeAmountText, Mode=OneWay}" />
+                                    <Run Text=" " />
+                                    <Run FontSize="{StaticResource FontSize_XS}" Text="KRW" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <Border
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Width="60"
+                            Height="60"
+                            VerticalAlignment="Center"
+                            Background="{DynamicResource CardPrimaryBackgroundBrush}"
+                            BorderBrush="{DynamicResource CardPrimaryBackgroundBrush}"
+                            BorderThickness="4"
+                            CornerRadius="30">
+                            <svg:SvgIcon
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                AppName="KIOSK"
+                                Fill="{DynamicResource TextPrimaryBrush}"
+                                RenderTransformOrigin="0.5,0.5"
+                                Stroke="{DynamicResource TextPrimaryBrush}"
+                                UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_chevron_right.svg">
+                                <svg:SvgIcon.RenderTransform>
+                                    <RotateTransform Angle="90" />
+                                </svg:SvgIcon.RenderTransform>
+                            </svg:SvgIcon>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="4" Style="{StaticResource CardSurfaceBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition>
+                        <RowDefinition.Style>
+                            <Style TargetType="RowDefinition">
+                                <Setter Property="Height" Value="109" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
+                                        <Setter Property="Height" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RowDefinition.Style>
+                    </RowDefinition>
+                    <RowDefinition Height="2" />
+                    <RowDefinition Height="109" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="54,0">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Style="{StaticResource PrepaidDepositLabelStyle}"
+                        Text="M-BOX 카드 구매 금액" />
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource PrepaidDepositValueStyle}"
+                        Text="{Binding CardPurchaseAmountText, StringFormat={}{0} KRW}" />
+                </Grid>
+
+                <Border
+                    Grid.Row="1"
+                    Margin="54,0"
+                    Background="{DynamicResource FeatureDividerDefaultBrush}">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+
+                <Button
+                    Grid.Row="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource FocusablePlainLinkButtonStyle}">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="{StaticResource FontSize_XS}"
+                            FontWeight="{StaticResource FontWeight_M}"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            Text="충전 금액 및 한도 금액 자세히보기" />
+                        <svg:SvgIcon
+                            Width="18"
+                            Height="18"
+                            Margin="8,2,0,0"
+                            AppName="KIOSK"
+                            Fill="{DynamicResource TextPrimaryBrush}"
+                            Stroke="{DynamicResource TextPrimaryBrush}"
+                            UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_chevron_right.svg" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Grid
+            x:Name="PrepaidDepositActionContainer"
+            Grid.Row="6"
+            behavior:FocusContainer.InitialFocus="True"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="336" />
+                <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Command="{Binding SecondaryCommand}"
+                IsEnabled="{Binding IsSecondaryEnabled}"
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                <TextBlock Text="이전" />
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                Command="{Binding PrimaryCommand}"
+                IsEnabled="{Binding IsPrimaryEnabled}"
+                Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                <TextBlock Text="다음" />
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

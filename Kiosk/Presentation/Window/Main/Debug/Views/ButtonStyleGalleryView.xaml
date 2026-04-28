@@ -18,13 +18,13 @@
 
             <StackPanel Margin="48,48,48,24">
                 <TextBlock
-                    FontSize="44"
-                    FontWeight="SemiBold"
+                    FontSize="{StaticResource FontSize_M}"
+                    FontWeight="{StaticResource FontWeight_L}"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     Text="Button Style Gallery" />
                 <TextBlock
                     Margin="0,12,0,0"
-                    FontSize="22"
+                    FontSize="{StaticResource FontSize_XS}"
                     Foreground="{DynamicResource TextSecondaryBrush}"
                     Text="Shared button style preview page" />
             </StackPanel>
@@ -36,13 +36,13 @@
                 Style="{StaticResource CardSurfaceBorderStyle}">
                 <StackPanel>
                     <TextBlock
-                        FontSize="30"
-                        FontWeight="SemiBold"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_L}"
                         Foreground="{DynamicResource TextPrimaryBrush}"
                         Text="Action Buttons" />
                     <TextBlock
                         Margin="0,12,0,0"
-                        FontSize="20"
+                        FontSize="{StaticResource FontSize_XS}"
                         Foreground="{DynamicResource TextSecondaryBrush}"
                         Text="Bottom action button examples" />
 
@@ -64,16 +64,18 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             Height="123"
-                            Content="Back"
-                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                            <TextBlock Text="Back" />
+                        </Button>
                         <Button
                             Grid.Row="0"
                             Grid.Column="2"
                             Height="123"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Content="Next"
-                    Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                            <TextBlock Text="Next" />
+                        </Button>
 
                         <Button
                             Grid.Row="2"
@@ -82,8 +84,9 @@
                             Height="123"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Content="Print Receipt"
-                    Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                            <TextBlock Text="Print Receipt" />
+                        </Button>
 
                         <Button
                             Grid.Row="4"
@@ -92,9 +95,10 @@
                             Height="123"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Content="Next (Disabled)"
                             IsEnabled="False"
-                    Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                            <TextBlock Text="Next (Disabled)" />
+                        </Button>
                     </Grid>
                 </StackPanel>
             </Border>
@@ -106,13 +110,13 @@
                 Style="{StaticResource CardSurfaceBorderStyle}">
                 <StackPanel>
                     <TextBlock
-                        FontSize="30"
-                        FontWeight="SemiBold"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_L}"
                         Foreground="{DynamicResource TextPrimaryBrush}"
                         Text="Filled Buttons" />
                     <TextBlock
                         Margin="0,12,0,0"
-                        FontSize="20"
+                        FontSize="{StaticResource FontSize_XS}"
                         Foreground="{DynamicResource TextSecondaryBrush}"
                         Text="Filled button variants in use" />
 
@@ -131,8 +135,8 @@
                             <Grid Margin="80,52">
                                 <TextBlock
                                     VerticalAlignment="Center"
-                                    FontSize="53"
-                                    FontWeight="Bold"
+                                    FontSize="{StaticResource FontSize_L}"
+                                    FontWeight="{StaticResource FontWeight_L}"
                                     Foreground="{DynamicResource OnDefaultPrimaryBrush}"
                                     Text="Filled White" />
                             </Grid>
@@ -144,8 +148,8 @@
                             <Grid Margin="80,52">
                                 <TextBlock
                                     VerticalAlignment="Center"
-                                    FontSize="53"
-                                    FontWeight="Bold"
+                                    FontSize="{StaticResource FontSize_L}"
+                                    FontWeight="{StaticResource FontWeight_L}"
                                     Foreground="{DynamicResource OnAccentPrimaryBrush}"
                                     Text="Filled Featured" />
                             </Grid>
@@ -157,8 +161,8 @@
                             <Grid Margin="80,52">
                                 <TextBlock
                                     VerticalAlignment="Center"
-                                    FontSize="53"
-                                    FontWeight="Bold"
+                                    FontSize="{StaticResource FontSize_L}"
+                                    FontWeight="{StaticResource FontWeight_L}"
                                     Foreground="{DynamicResource OnStrongPrimaryBrush}"
                                     Text="Filled Dark" />
                             </Grid>
@@ -169,14 +173,7 @@
                         Width="452"
                         Margin="0,32,0,0"
                         Style="{StaticResource FilledActionPrimaryButtonStyle}">
-                        <Grid Margin="80,52">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="53"
-                                FontWeight="Bold"
-                            Foreground="{DynamicResource OnActionPrimaryPrimaryBrush}"
-                                Text="Filled Action" />
-                        </Grid>
+                        <TextBlock Text="Filled Action" />
                     </Button>
                 </StackPanel>
             </Border>
@@ -188,13 +185,13 @@
                 Style="{StaticResource CardSurfaceBorderStyle}">
                 <StackPanel>
                     <TextBlock
-                        FontSize="30"
-                        FontWeight="SemiBold"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_L}"
                         Foreground="{DynamicResource TextPrimaryBrush}"
                         Text="Outline / Link" />
                     <TextBlock
                         Margin="0,12,0,0"
-                        FontSize="20"
+                        FontSize="{StaticResource FontSize_XS}"
                         Foreground="{DynamicResource TextSecondaryBrush}"
                         Text="Outline button and text link examples" />
 
@@ -202,8 +199,9 @@
                         <Button
                             Width="220"
                             Height="123"
-                            Content="Outlined Button"
-                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                            <TextBlock Text="Outlined Button" />
+                        </Button>
                         <Button
                             Width="220"
                             Margin="0,24,0,0"

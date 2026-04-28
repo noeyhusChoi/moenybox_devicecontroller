@@ -14,15 +14,15 @@
     <UserControl.Resources>
         <Style x:Key="LanguageTileLabelTextStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="39" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_S}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
     </UserControl.Resources>
 
-    <Grid Margin="72" Background="{DynamicResource AppBackgroundBrush}">
+    <Grid Background="{DynamicResource AppBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="190" />
             <RowDefinition Height="160" />
@@ -36,15 +36,15 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
             <TextBlock
-                FontSize="59"
-                FontWeight="Bold"
+                FontSize="{StaticResource FontSize_XL}"
+                FontWeight="{StaticResource FontWeight_L}"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="언어를 선택해주세요"
                 TextAlignment="Center" />
             <TextBlock
                 Margin="0,21,0,0"
-                FontSize="40"
-                FontWeight="Medium"
+                FontSize="{StaticResource FontSize_S}"
+                FontWeight="{StaticResource FontWeight_M}"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="Please select your language"
                 TextAlignment="Center" />

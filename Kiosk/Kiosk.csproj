@@ -109,12 +109,17 @@
       <None Remove="Assets\Gif\IDScan_Passport.gif" />
       <None Remove="Assets\Icon\chevron_left.svg" />
       <None Remove="Assets\Icon\ico.svg" />
+      <None Remove="Assets\Icon\icon_charge_over.svg" />
+      <None Remove="Assets\Icon\icon_recharge.svg" />
       <None Remove="Assets\Icon\ico_accessibility.svg" />
       <None Remove="Assets\Icon\ico_arrow-rotate.svg" />
       <None Remove="Assets\Icon\ico_arrow_rotate.png" />
       <None Remove="Assets\Icon\ico_call.svg" />
       <None Remove="Assets\Icon\ico_charge.png" />
       <None Remove="Assets\Icon\ico_charge.svg" />
+      <None Remove="Assets\Icon\ico_charge_limit_only.svg" />
+      <None Remove="Assets\Icon\ico_charge_over_only.svg" />
+      <None Remove="Assets\Icon\ico_charge_limit.svg" />
       <None Remove="Assets\Icon\ico_check.png" />
       <None Remove="Assets\Icon\ico_check.svg" />
       <None Remove="Assets\Icon\ico_chevron_down.png" />
@@ -128,6 +133,7 @@
       <None Remove="Assets\Icon\ico_minue.svg" />
       <None Remove="Assets\Icon\ico_plus.png" />
       <None Remove="Assets\Icon\ico_plus.svg" />
+      <None Remove="Assets\Icon\ico_recharge_only.svg" />
       <None Remove="Assets\Icon\ico_stop.png" />
       <None Remove="Assets\Icon\ico_stop.svg" />
       <None Remove="Assets\Icon\ico_timer.png" />
@@ -182,7 +188,15 @@
       <None Remove="Assets\Image\img_bill.png" />
       <None Remove="Assets\Image\img_bills.png" />
       <None Remove="Assets\Image\img_card.png" />
+      <None Remove="Assets\Image\img_card_charge.png" />
+      <None Remove="Assets\Image\img_card_guide.png" />
+      <None Remove="Assets\Image\img_card_purchase.png" />
       <None Remove="Assets\Image\img_exchange.png" />
+      <None Remove="Assets\Image\img_ezl.png" />
+      <None Remove="Assets\Image\img_moneybox_logotype.svg" />
+      <None Remove="Assets\Image\img_moneybox_symbol.png" />
+      <None Remove="Assets\Image\img_passport.png" />
+      <None Remove="Assets\Image\img_prepay_ezl.png" />
       <None Remove="Assets\Image\img_refund.png" />
       <None Remove="Assets\Image\img_scan_fail.png" />
       <None Remove="Assets\Image\img_scan_ing.png" />
@@ -257,43 +271,37 @@
       <Resource Include="Assets\Icon\ico.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Icon\icon_charge_over.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\icon_recharge.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Icon\ico_accessibility.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_arrow-rotate.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Icon\ico_arrow_rotate.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Assets\Icon\ico_call.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Icon\ico_charge.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_charge.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Icon\ico_check.png">
+      <Resource Include="Assets\Icon\ico_charge_limit_only.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_charge_over_only.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_charge_limit.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_check.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Icon\ico_chevron_down.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Icon\ico_chevron_left.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Icon\ico_chevron_right.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Assets\Icon\ico_chevron_right.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Icon\ico_chevron_up.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_enlarge.svg">
@@ -302,25 +310,16 @@
       <Resource Include="Assets\Icon\ico_home.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Icon\ico_minue.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Assets\Icon\ico_minue.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Icon\ico_plus.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_plus.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Icon\ico_stop.png">
+      <Resource Include="Assets\Icon\ico_recharge_only.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_stop.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Icon\ico_timer.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Icon\ico_timer.svg">
@@ -341,7 +340,31 @@
       <Resource Include="Assets\Image\img_card.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Image\img_card_charge.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_card_guide.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_card_purchase.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Image\img_exchange.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_ezl.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_moneybox_logotype.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_moneybox_symbol.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_passport.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_prepay_ezl.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\img_refund.png">
@@ -360,9 +383,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\LOGO_CI_white.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Image\Passport.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Fonts\NotoSans\Static\NotoSans-Bold.ttf">

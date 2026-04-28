@@ -1,0 +1,287 @@
+<UserControl
+    x:Class="Kiosk.Views.Overlays.PrepaidCardChargeAmountOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+    d:DesignHeight="1920"
+    d:DesignWidth="1080"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="ChargeOverlayTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_L}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="ChargeOverlayMetaStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="ChargeOverlaySummaryLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+
+        <Style x:Key="ChargeOverlaySummaryValueStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
+
+        <Style x:Key="ChargeOverlayIncrementPrimaryTextStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="ChargeOverlayIncrementSecondaryTextStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="ChargeOverlayIncrementButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="84" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Padding" Value="8,16,8,20" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ButtonSurface"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="16">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource SurfaceDefaultPressedBrush}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="ButtonSurface" Property="BorderBrush" Value="{DynamicResource BorderFocusBrush}" />
+                                <Setter TargetName="ButtonSurface" Property="BorderThickness" Value="3" />
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid
+        Background="{DynamicResource OverlayDimBrush}"
+        Focusable="False"
+        KeyboardNavigation.DirectionalNavigation="Continue"
+        KeyboardNavigation.IsTabStop="False">
+        <Border
+            Width="936"
+            Padding="60"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource CardPrimaryBackgroundBrush}"
+            BorderBrush="{DynamicResource BorderDefaultBrush}"
+            BorderThickness="3"
+            CornerRadius="32"
+            Effect="{DynamicResource FilledCardButtonShadowEffect}">
+            <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Style="{StaticResource ChargeOverlayTitleStyle}" Text="{Binding Title}" />
+
+                <Border
+                    Grid.Row="2"
+                    Background="{DynamicResource AccessibilitySettingsTileBackgroundBrush}"
+                    CornerRadius="32">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="84" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="3" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Foreground="{DynamicResource TextAccentStrongBrush}">
+                            <Run
+                                FontFamily="{DynamicResource AppFont}"
+                                FontSize="59"
+                                FontWeight="{StaticResource FontWeight_L}"
+                                Text="{Binding AmountNumberText, Mode=OneWay}" />
+                            <Run Text=" " />
+                            <Run
+                                FontFamily="{DynamicResource AppFont}"
+                                FontSize="34"
+                                FontWeight="{StaticResource FontWeight_M}"
+                                Text="{Binding AmountCurrencyText, Mode=OneWay}" />
+                        </TextBlock>
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Style="{StaticResource ChargeOverlayMetaStyle}"
+                            Text="{Binding MaxChargeableDescriptionText}" />
+
+                        <Grid
+                            x:Name="ChargeIncrementContainer"
+                            Grid.Row="5"
+                            Margin="60,0"
+                            behavior:FocusBoundary.DownTarget="{Binding ElementName=ChargeOverlayActionContainer}"
+                            behavior:FocusContainer.InitialFocus="True"
+                            behavior:FocusContainer.Mode="UniformGrid"
+                            Focusable="False"
+                            KeyboardNavigation.IsTabStop="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="16" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <UniformGrid
+                                Grid.Row="0"
+                                Columns="3"
+                                Rows="1">
+                                <Button
+                                    Margin="0,0,8,0"
+                                    Command="{Binding AddOneThousandCommand}"
+                                    Style="{StaticResource ChargeOverlayIncrementButtonStyle}">
+                                    <TextBlock Style="{StaticResource ChargeOverlayIncrementPrimaryTextStyle}" Text="+ 1,000" />
+                                </Button>
+                                <Button
+                                    Margin="8,0,8,0"
+                                    Command="{Binding AddFiveThousandCommand}"
+                                    Style="{StaticResource ChargeOverlayIncrementButtonStyle}">
+                                    <TextBlock Style="{StaticResource ChargeOverlayIncrementPrimaryTextStyle}" Text="+ 5,000" />
+                                </Button>
+                                <Button
+                                    Margin="8,0,0,0"
+                                    Command="{Binding AddTenThousandCommand}"
+                                    Style="{StaticResource ChargeOverlayIncrementButtonStyle}">
+                                    <TextBlock Style="{StaticResource ChargeOverlayIncrementPrimaryTextStyle}" Text="+ 10,000" />
+                                </Button>
+                            </UniformGrid>
+
+                            <UniformGrid
+                                Grid.Row="2"
+                                Columns="3"
+                                Rows="1">
+                                <Button
+                                    Margin="0,0,8,0"
+                                    Command="{Binding AddFiftyThousandCommand}"
+                                    Style="{StaticResource ChargeOverlayIncrementButtonStyle}">
+                                    <TextBlock Style="{StaticResource ChargeOverlayIncrementPrimaryTextStyle}" Text="+ 50,000" />
+                                </Button>
+                                <Button
+                                    Margin="8,0,8,0"
+                                    Command="{Binding AddMaxCommand}"
+                                    Style="{StaticResource ChargeOverlayIncrementButtonStyle}">
+                                    <TextBlock Style="{StaticResource ChargeOverlayIncrementSecondaryTextStyle}" Text="+ 최대금액" />
+                                </Button>
+                                <Button
+                                    Margin="8,0,0,0"
+                                    Command="{Binding ResetCommand}"
+                                    Style="{StaticResource ChargeOverlayIncrementButtonStyle}">
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                        <svg:SvgIcon
+                                            Width="24"
+                                            Height="24"
+                                            Margin="0,2,8,0"
+                                            AppName="KIOSK"
+                                            Fill="{DynamicResource TextPrimaryBrush}"
+                                            Stroke="{DynamicResource TextPrimaryBrush}"
+                                            UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_arrow-rotate.svg" />
+                                        <TextBlock Style="{StaticResource ChargeOverlayIncrementSecondaryTextStyle}" Text="초기화" />
+                                    </StackPanel>
+                                </Button>
+                            </UniformGrid>
+                        </Grid>
+
+                        <Border Grid.Row="7" Background="{DynamicResource FeatureDividerDefaultBrush}" />
+
+                        <Grid Grid.Row="8" Margin="60,40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource ChargeOverlaySummaryLabelStyle}" Text="충전가능 금액" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource ChargeOverlaySummaryValueStyle}">
+                                <Run Text="{Binding AvailableChargeAmountNumberText, Mode=OneWay}" />
+                                <Run Text=" " />
+                                <Run FontWeight="{StaticResource FontWeight_M}" Text="{Binding AvailableChargeAmountCurrencyText, Mode=OneWay}" />
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Grid
+                    x:Name="ChargeOverlayActionContainer"
+                    Grid.Row="4"
+                    behavior:FocusBoundary.UpTarget="{Binding ElementName=ChargeIncrementContainer}"
+                    behavior:FocusContainer.Mode="HorizontalStack"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="24" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Command="{Binding CancelCommand}" Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                        <TextBlock Text="취소" />
+                    </Button>
+
+                    <Button
+                        Grid.Column="2"
+                        Command="{Binding CompleteCommand}"
+                        Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                        <TextBlock Text="완료" />
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

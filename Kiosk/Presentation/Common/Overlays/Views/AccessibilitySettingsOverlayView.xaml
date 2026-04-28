@@ -15,25 +15,25 @@
         <converters:BooleanNegationConverter x:Key="BooleanNegationConverter" />
 
         <Style x:Key="AccessibilitySettingsTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="53" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_L}" />
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="AccessibilitySettingsRowLabelStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_S}" />
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="AccessibilitySegmentButtonTextStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
@@ -229,14 +229,16 @@
                     <Button
                         Grid.Column="0"
                         Command="{Binding ResetCommand}"
-                        Content="초기화"
-                        Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                        Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                        <TextBlock Text="초기화" />
+                    </Button>
 
                     <Button
                         Grid.Column="2"
                         Command="{Binding ConfirmCommand}"
-                        Content="설정 완료"
-                        Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                        Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                        <TextBlock Text="설정 완료" />
+                    </Button>
                 </Grid>
             </Grid>
         </Border>

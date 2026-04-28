@@ -1,0 +1,141 @@
+<UserControl
+    x:Class="Kiosk.Views.Overlays.PrepaidCardDepositLimitOverlayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="DepositLimitOverlayTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="53" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="DepositLimitOverlayLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="DepositLimitOverlayValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid
+        Background="{DynamicResource OverlayDimBrush}"
+        Focusable="False"
+        KeyboardNavigation.DirectionalNavigation="Continue"
+        KeyboardNavigation.IsTabStop="False">
+        <Border
+            Width="936"
+            Padding="60"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource CardPrimaryBackgroundBrush}"
+            CornerRadius="32"
+            Effect="{DynamicResource FilledCardButtonShadowEffect}">
+            <Grid Focusable="False" KeyboardNavigation.IsTabStop="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Style="{StaticResource DepositLimitOverlayTitleStyle}"
+                    Text="{Binding Title}" />
+
+                <Border
+                    Grid.Row="2"
+                    Padding="40,8"
+                    Background="{DynamicResource AccessibilitySettingsTileBackgroundBrush}"
+                    CornerRadius="32">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="96" />
+                            <RowDefinition Height="2" />
+                            <RowDefinition Height="96" />
+                            <RowDefinition Height="2" />
+                            <RowDefinition Height="96" />
+                            <RowDefinition Height="2" />
+                            <RowDefinition Height="96" />
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource DepositLimitOverlayLabelStyle}" Text="선불지갑 최대충전 금액" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource DepositLimitOverlayValueStyle}" Text="{Binding PrepaidWalletLimitText}" />
+                        </Grid>
+
+                        <Border Grid.Row="1" Background="{DynamicResource FeatureDividerDefaultBrush}" />
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource DepositLimitOverlayLabelStyle}" Text="교통지갑 최대충전 금액" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource DepositLimitOverlayValueStyle}" Text="{Binding TrafficWalletLimitText}" />
+                        </Grid>
+
+                        <Border Grid.Row="3" Background="{DynamicResource FeatureDividerDefaultBrush}" />
+
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource DepositLimitOverlayLabelStyle}" Text="1일 최대 환전 한도" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource DepositLimitOverlayValueStyle}" Text="{Binding DailyMaximumExchangeText}" />
+                        </Grid>
+
+                        <Border Grid.Row="5" Background="{DynamicResource FeatureDividerDefaultBrush}" />
+
+                        <Grid Grid.Row="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource DepositLimitOverlayLabelStyle}" Text="잔여 1일 최대 환전" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource DepositLimitOverlayValueStyle}" Text="{Binding DailyRemainingExchangeText}" />
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Grid
+                    x:Name="DepositLimitOverlayActionContainer"
+                    Grid.Row="4"
+                    behavior:FocusContainer.InitialFocus="True"
+                    behavior:FocusContainer.Mode="HorizontalStack"
+                    Focusable="False"
+                    KeyboardNavigation.IsTabStop="False">
+                    <Button
+                        Command="{Binding ConfirmCommand}"
+                        Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                        <TextBlock Text="확인" />
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

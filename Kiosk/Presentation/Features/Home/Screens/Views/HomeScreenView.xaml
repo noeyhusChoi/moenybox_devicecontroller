@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="Kiosk.Views.HomeScreenView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -14,17 +14,17 @@
     <UserControl.Resources>
         <Style x:Key="ServiceCardTitleTextStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="53" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_L}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style x:Key="ServiceCardSubtitleTextStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,16,0,0" />
-            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
             <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
     </UserControl.Resources>
@@ -42,15 +42,15 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
             <TextBlock
-                FontSize="60"
-                FontWeight="Bold"
+                FontSize="{StaticResource FontSize_XL}"
+                FontWeight="{StaticResource FontWeight_L}"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{resx:ResxLoc Menu.Title}"
                 TextAlignment="Center" />
             <TextBlock
                 Margin="0,21,0,0"
-                FontSize="40"
-                FontWeight="SemiBold"
+                FontSize="{StaticResource FontSize_S}"
+                FontWeight="{StaticResource FontWeight_L}"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="Please select the service"
                 TextAlignment="Center" />
@@ -75,6 +75,7 @@
                 Margin="0,0,0,32"
                 Command="{Binding Command}"
                 DataContext="{Binding TransportationCard}"
+                IsEnabled="{Binding IsEnabled}"
                 Style="{StaticResource FilledWhiteButtonStyle}">
                 <Grid Margin="90,52">
                     <Grid.ColumnDefinitions>
@@ -115,6 +116,7 @@
                 behavior:FocusContainer.IsPreferredFocus="True"
                 Command="{Binding Command}"
                 DataContext="{Binding ExchangeCard}"
+                IsEnabled="{Binding IsEnabled}"
                 Style="{StaticResource FilledPrimaryButtonStyle}">
                 <Grid Margin="90,52">
                     <Grid.ColumnDefinitions>
@@ -155,6 +157,7 @@
                 Height="310"
                 Command="{Binding Command}"
                 DataContext="{Binding TaxRefundCard}"
+                IsEnabled="{Binding IsEnabled}"
                 Style="{StaticResource FilledDarkButtonStyle}">
                 <Grid Margin="90,52">
                     <Grid.ColumnDefinitions>

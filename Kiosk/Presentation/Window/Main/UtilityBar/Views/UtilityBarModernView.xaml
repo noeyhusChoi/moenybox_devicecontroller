@@ -18,8 +18,8 @@
             <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}" />
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="FontSize" Value="34" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="Tag" Value="{x:Null}" />
             <Setter Property="Template">
@@ -105,8 +105,8 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
             <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
-            <Setter Property="FontSize" Value="32" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="NoWrap" />
         </Style>

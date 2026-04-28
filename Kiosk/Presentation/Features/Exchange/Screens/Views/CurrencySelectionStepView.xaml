@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="Kiosk.Views.Steps.CurrencySelectionStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -77,15 +77,15 @@
                             <TextBlock
                                 Grid.Row="2"
                                 HorizontalAlignment="Center"
-                                FontSize="40"
-                                FontWeight="SemiBold"
+                                FontSize="{StaticResource FontSize_S}"
+                                FontWeight="{StaticResource FontWeight_L}"
                                 Foreground="{DynamicResource OnDefaultPrimaryBrush}"
                                 Text="{Binding Code}" />
                             <TextBlock
                                 Grid.Row="3"
                                 HorizontalAlignment="Center"
-                                FontSize="34"
-                                FontWeight="SemiBold"
+                                FontSize="{StaticResource FontSize_XS}"
+                                FontWeight="{StaticResource FontWeight_L}"
                                 Foreground="{DynamicResource OnDefaultSecondaryBrush}"
                                 Text="{Binding RateText}" />
                         </Grid>
@@ -103,8 +103,9 @@
             VerticalAlignment="Bottom"
             behavior:FocusBoundary.UpTarget="{Binding ElementName=CurrencyOptionContainer}"
             Command="{Binding SecondaryCommand}"
-            Content="이전"
             IsEnabled="{Binding IsSecondaryEnabled}"
-            Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+            <TextBlock Text="이전" />
+        </Button>
     </Grid>
 </UserControl>

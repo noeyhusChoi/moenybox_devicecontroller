@@ -12,21 +12,21 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="ResultTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="59" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XL}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="SummaryLabelStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="34" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
         </Style>
 
         <Style x:Key="SummaryValueStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="34" />
-            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Right" />
         </Style>
@@ -79,8 +79,8 @@
                             <TextBlock
                                 Margin="16,0,0,0"
                                 VerticalAlignment="Center"
-                                FontSize="34"
-                                FontWeight="Bold"
+                                FontSize="{StaticResource FontSize_XS}"
+                                FontWeight="{StaticResource FontWeight_L}"
                                 Foreground="{DynamicResource TextPrimaryBrush}"
                                 Text="{Binding SourceCurrencyCode}" />
                         </StackPanel>
@@ -123,8 +123,8 @@
                             <TextBlock
                                 Margin="16,0,0,0"
                                 VerticalAlignment="Center"
-                                FontSize="34"
-                                FontWeight="Bold"
+                                FontSize="{StaticResource FontSize_XS}"
+                                FontWeight="{StaticResource FontWeight_L}"
                                 Foreground="{DynamicResource TextPrimaryBrush}"
                                 Text="{Binding TargetCurrencyCode}" />
                         </StackPanel>
@@ -189,8 +189,8 @@
 
                 <StackPanel Margin="54">
                     <TextBlock
-                        FontSize="34"
-                        FontWeight="Medium"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_M}"
                         Foreground="{DynamicResource TextPrimaryBrush}"
                         Text="{Binding ErrorMessage}"
                         TextAlignment="Center"
@@ -245,8 +245,8 @@
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
                         <TextBlock
-                            FontSize="34"
-                            FontWeight="Medium"
+                            FontSize="{StaticResource FontSize_XS}"
+                            FontWeight="{StaticResource FontWeight_M}"
                             Foreground="{DynamicResource TextPrimaryBrush}"
                             Text="관리자 정보 자세히 보기" />
                         <svg:SvgIcon
@@ -275,9 +275,10 @@
             <Button
                 x:Name="DispenseFailurePrimaryButton"
                 Command="{Binding PrimaryCommand}"
-                Content="영수증 출력"
                 IsEnabled="{Binding IsPrimaryEnabled}"
-                Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+                Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                <TextBlock Text="영수증 출력" />
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

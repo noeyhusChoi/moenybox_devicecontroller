@@ -23,15 +23,15 @@
             <TextBlock
                 Margin="0,78,0,0"
                 HorizontalAlignment="Center"
-                FontSize="59"
-                FontWeight="Bold"
+                FontSize="{StaticResource FontSize_XL}"
+                FontWeight="{StaticResource FontWeight_L}"
                 Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="신분증 스캔을 진행중입니다." />
             <TextBlock
                 Margin="0,24,0,0"
                 HorizontalAlignment="Center"
-                FontSize="39"
-                FontWeight="Medium"
+                FontSize="{StaticResource FontSize_S}"
+                FontWeight="{StaticResource FontWeight_M}"
                 Foreground="{DynamicResource TextSecondaryBrush}"
                 Text="잠시만 기다려주세요.." />
         </StackPanel>
@@ -50,9 +50,10 @@
             <Button
                 x:Name="ScanningSecondaryButton"
                 Command="{Binding SecondaryCommand}"
-                Content="이전"
                 IsEnabled="{Binding IsSecondaryEnabled}"
-                Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                <TextBlock Text="이전" />
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

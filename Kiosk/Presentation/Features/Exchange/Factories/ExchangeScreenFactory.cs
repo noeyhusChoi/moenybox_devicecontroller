@@ -29,7 +29,9 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
             ExchangeStep.MethodSelection => new MethodSelectionStepViewModel(
                 new AsyncRelayCommand(() => _coordinator.SelectMethodAsync(ExchangeMethod.PrepaidCard)),
                 new AsyncRelayCommand(() => _coordinator.SelectMethodAsync(ExchangeMethod.Cash))),
-            ExchangeStep.CurrencySelection => new CurrencySelectionStepViewModel(_optionProvider.CreateCurrencyOptions()),
+            ExchangeStep.CurrencySelection => new CurrencySelectionStepViewModel(_optionProvider.CreateCurrencyOptions(
+                (code, rate) => _coordinator.SelectCurrencyAsync(code, rate),
+                includeKrw: false)),
             ExchangeStep.Consent => new ConsentStepViewModel(
                 new AsyncRelayCommand(showModalAsync))
             {

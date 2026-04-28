@@ -11,8 +11,8 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="MethodOptionTextStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="53" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_L}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -21,6 +21,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="190" />
             <RowDefinition Height="80" />
             <RowDefinition Height="200" />
             <RowDefinition Height="592" />
@@ -28,15 +29,15 @@
         </Grid.RowDefinitions>
 
         <TextBlock
-            Grid.Row="0"
+            Grid.Row="1"
             HorizontalAlignment="Center"
-            FontSize="59"
-            FontWeight="Bold"
+            FontSize="{StaticResource FontSize_XL}"
+            FontWeight="{StaticResource FontWeight_L}"
             Text="환전 방법을 선택해주세요" />
 
         <Grid
             x:Name="MethodOptionContainer"
-            Grid.Row="2"
+            Grid.Row="3"
             VerticalAlignment="Stretch"
             behavior:FocusBoundary.DownTarget="{Binding ElementName=PreviousActionButton}"
             behavior:FocusContainer.InitialFocus="True"
@@ -105,15 +106,16 @@
 
         <Button
             x:Name="PreviousActionButton"
-            Grid.Row="3"
+            Grid.Row="4"
             Width="336"
             Height="120"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             behavior:FocusBoundary.UpTarget="{Binding ElementName=MethodOptionContainer}"
             Command="{Binding SecondaryCommand}"
-            Content="이전"
             IsEnabled="{Binding IsSecondaryEnabled}"
-            Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+            <TextBlock Text="이전" />
+        </Button>
     </Grid>
 </UserControl>

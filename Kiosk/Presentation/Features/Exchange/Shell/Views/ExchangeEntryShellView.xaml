@@ -1,0 +1,62 @@
+<UserControl
+    x:Class="Kiosk.Views.ExchangeEntryShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:stepViews="clr-namespace:Kiosk.Views.Steps"
+    xmlns:stepVm="clr-namespace:Kiosk.ViewModels.Steps"
+    xmlns:viewModels="clr-namespace:Kiosk.ViewModels"
+    xmlns:views="clr-namespace:Kiosk.Views"
+    behavior:FocusBoundary.EntryTarget="{Binding ElementName=StepContentHost}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewModels:HomeLanguageSelectionViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <views:HomeLanguageSelectionView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:ExchangeStartStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:ExchangeStartStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:MethodSelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:MethodSelectionStepView />
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Border Background="{DynamicResource AppBackgroundBrush}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Setter Property="Height" Value="190" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowStepHeader}" Value="False">
+                                    <Setter Property="Height" Value="0" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding CurrentProgressStage}" />
+
+            <ContentControl
+                x:Name="StepContentHost"
+                Grid.Row="1"
+                behavior:FocusContainer.Mode="None"
+                Content="{Binding CurrentStepViewModel}"
+                Focusable="False"
+                IsTabStop="False"
+                KeyboardNavigation.IsTabStop="False" />
+        </Grid>
+    </Border>
+</UserControl>

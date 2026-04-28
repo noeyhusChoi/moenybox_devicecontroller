@@ -1,10 +1,18 @@
 using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Kiosk.Application.Features.ExchangeV2.Services;
 using Kiosk.Application.Services.Exchange;
+using Kiosk.ViewModels;
 
 namespace Kiosk.ViewModels.Steps;
+
+public enum DepositInfoVariant
+{
+    Exchange,
+    PrepaidCard
+}
 
 public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, IDepositProgressConsumer
 {
@@ -14,7 +22,10 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
         decimal depositAmount,
         decimal previewExchangeAmount,
         decimal exchangeRate,
-        DepositLimitSnapshot? depositLimit)
+        DepositLimitSnapshot? depositLimit,
+        DepositInfoVariant infoVariant = DepositInfoVariant.Exchange,
+        PrepaidCardServiceKind? prepaidCardServiceKind = null,
+        IRelayCommand? showPrepaidLimitInfoCommand = null)
     {
         Title = string.Empty;
 
@@ -26,9 +37,11 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
             : targetCurrencyCode.ToUpperInvariant();
 
         Title = $"{sourceCurrency}를 입금해주세요";
+        InfoVariant = infoVariant;
         SourceCurrencyCode = sourceCurrency;
         TargetCurrencyCode = targetCurrency;
-        FlagImagePath = CreateAssetPath("Flag", $"{SourceCurrencyCode}.png");
+        SourceFlagPath = CreateAssetPath("Flag", $"{ResolveFlagAssetCode(SourceCurrencyCode)}.png");
+        TargetFlagPath = CreateAssetPath("Flag", $"{ResolveFlagAssetCode(TargetCurrencyCode)}.png");
         GuideImagePath = CreateAssetPath("Gif\\DepositGuide", $"Guide_Deposit_{SourceCurrencyCode}.gif");
         AcceptedDenominationImagePaths = ResolveAcceptedDenominations(SourceCurrencyCode);
 
@@ -40,11 +53,18 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
         DailyMaximumAmountText = ConvertKrwLimitForDisplay(depositLimit?.DailyMaximumAmount, exchangeRate).ToString("0.00");
         DailyRemainingMaximumAmountText = ConvertKrwLimitForDisplay(depositLimit?.DailyRemainingMaximumAmount, exchangeRate).ToString("0.00");
         DailyAvailableExchangeAmountText = ConvertKrwLimitForDisplay(depositLimit?.PerTransactionMaximumAmount, exchangeRate).ToString("0.00");
+        CardPurchaseAmountText = prepaidCardServiceKind == PrepaidCardServiceKind.PurchaseAndCharge ? "5,000" : "0";
+        ShowCardPurchaseAmount = prepaidCardServiceKind == PrepaidCardServiceKind.PurchaseAndCharge;
+        ShowPrepaidLimitInfoCommand = showPrepaidLimitInfoCommand;
     }
 
+    public DepositInfoVariant InfoVariant { get; }
+    public bool ShowExchangeLimitInfo => InfoVariant == DepositInfoVariant.Exchange;
+    public bool ShowPrepaidChargeInfo => InfoVariant == DepositInfoVariant.PrepaidCard;
     public string SourceCurrencyCode { get; }
     public string TargetCurrencyCode { get; }
-    public string? FlagImagePath { get; }
+    public string? SourceFlagPath { get; }
+    public string? TargetFlagPath { get; }
     public string? GuideImagePath { get; }
     public IReadOnlyList<string> AcceptedDenominationImagePaths { get; }
 
@@ -58,6 +78,9 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
     public string DailyMaximumAmountText { get; }
     public string DailyRemainingMaximumAmountText { get; }
     public string DailyAvailableExchangeAmountText { get; }
+    public string CardPurchaseAmountText { get; }
+    public bool ShowCardPurchaseAmount { get; }
+    public IRelayCommand? ShowPrepaidLimitInfoCommand { get; }
 
     [ObservableProperty]
     private string statusMessage = string.Empty;
@@ -97,6 +120,13 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
 
         return Path.Combine(AppContext.BaseDirectory, "Assets", folder, fileName);
     }
+
+    private static string ResolveFlagAssetCode(string currencyCode)
+        => currencyCode.ToUpperInvariant() switch
+        {
+            "KRW" => "KOR",
+            _ => currencyCode.ToUpperInvariant()
+        };
 
     private static DirectoryInfo? ResolveAssetDirectory(string folder)
     {

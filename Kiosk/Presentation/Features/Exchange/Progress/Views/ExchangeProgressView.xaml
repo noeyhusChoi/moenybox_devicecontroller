@@ -180,8 +180,8 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontSize" Value="32" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
             <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
         </Style>
 
@@ -295,8 +295,8 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontSize="34"
-                            FontWeight="SemiBold"
+                            FontSize="{StaticResource FontSize_XS}"
+                            FontWeight="{StaticResource FontWeight_L}"
                             Style="{StaticResource ProgressNumberStep1Style}"
                             Text="1" />
                         <Path
@@ -335,8 +335,8 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontSize="34"
-                            FontWeight="SemiBold"
+                            FontSize="{StaticResource FontSize_XS}"
+                            FontWeight="{StaticResource FontWeight_L}"
                             Style="{StaticResource ProgressNumberStep2Style}"
                             Text="2" />
                         <Path
@@ -375,8 +375,8 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontSize="34"
-                            FontWeight="SemiBold"
+                            FontSize="{StaticResource FontSize_XS}"
+                            FontWeight="{StaticResource FontWeight_L}"
                             Style="{StaticResource ProgressNumberStep3Style}"
                             Text="3" />
                         <Path
@@ -415,8 +415,8 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontSize="34"
-                            FontWeight="SemiBold"
+                            FontSize="{StaticResource FontSize_XS}"
+                            FontWeight="{StaticResource FontWeight_L}"
                             Style="{StaticResource ProgressNumberStep4Style}"
                             Text="4" />
                     </Grid>

@@ -27,13 +27,13 @@
                 CornerRadius="20">
                 <StackPanel Width="360">
                     <TextBlock
-                        FontSize="22"
-                        FontWeight="SemiBold"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_L}"
                         Foreground="{DynamicResource TextPrimaryBrush}"
                         Text="임시 출금 계획" />
                     <TextBlock
                         Margin="0,8,0,0"
-                        FontSize="18"
+                        FontSize="{StaticResource FontSize_XS}"
                         Foreground="{DynamicResource TextSecondaryBrush}"
                         Text="{Binding PlanSummary}" />
                     <ItemsControl Margin="0,12,0,0" ItemsSource="{Binding PlanLines}">
@@ -42,7 +42,7 @@
                                 <TextBlock
                                     Margin="0,0,0,4"
                                     FontFamily="Consolas"
-                                    FontSize="16"
+                                    FontSize="{StaticResource FontSize_XS}"
                                     Foreground="{DynamicResource TextPrimaryBrush}"
                                     Text="{Binding}" />
                             </DataTemplate>
@@ -55,8 +55,8 @@
                         Background="{DynamicResource FeatureDividerDefaultBrush}" />
 
                     <TextBlock
-                        FontSize="18"
-                        FontWeight="SemiBold"
+                        FontSize="{StaticResource FontSize_XS}"
+                        FontWeight="{StaticResource FontWeight_L}"
                         Foreground="{DynamicResource TextPrimaryBrush}"
                         Text="장치 요청" />
                     <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding CommandLines}">
@@ -65,7 +65,7 @@
                                 <TextBlock
                                     Margin="0,0,0,4"
                                     FontFamily="Consolas"
-                                    FontSize="16"
+                                    FontSize="{StaticResource FontSize_XS}"
                                     Foreground="{DynamicResource TextPrimaryBrush}"
                                     Text="{Binding}" />
                             </DataTemplate>
@@ -133,16 +133,16 @@
 
                 <TextBlock
                     Margin="0,48,0,0"
-                    FontSize="59"
-                    FontWeight="Bold"
+                    FontSize="{StaticResource FontSize_XL}"
+                    FontWeight="{StaticResource FontWeight_L}"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     Text="{Binding PrimaryMessage}"
                     TextAlignment="Center" />
 
                 <TextBlock
                     Margin="0,24,0,0"
-                    FontSize="40"
-                    FontWeight="Medium"
+                    FontSize="{StaticResource FontSize_S}"
+                    FontWeight="{StaticResource FontWeight_M}"
                     Foreground="{DynamicResource TextSecondaryBrush}"
                     Text="{Binding SecondaryMessage}"
                     TextAlignment="Center" />

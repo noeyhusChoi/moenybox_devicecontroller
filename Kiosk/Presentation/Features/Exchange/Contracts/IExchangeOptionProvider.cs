@@ -5,5 +5,7 @@ namespace Kiosk.ViewModels;
 
 public interface IExchangeOptionProvider
 {
-    IReadOnlyList<CurrencyOptionViewModel> CreateCurrencyOptions();
+    IReadOnlyList<CurrencyOptionViewModel> CreateCurrencyOptions(
+        Func<string, decimal, Task> selectAsync,
+        bool includeKrw = false);
 }

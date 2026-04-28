@@ -1,0 +1,210 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCard.PrepaidCardGuideStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1635"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="PrepaidGuideBackgroundBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Offset="0" Color="#FFFFFF" />
+            <GradientStop Offset="0.32" Color="#F0F6FF" />
+            <GradientStop Offset="0.54" Color="#CDE1FF" />
+            <GradientStop Offset="1" Color="#FFFFFF" />
+        </LinearGradientBrush>
+
+        <Style x:Key="PrepaidGuideHeadlineStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_L}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="LineHeight" Value="74" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style x:Key="PrepaidGuideSummaryStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="LineHeight" Value="45" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style
+            x:Key="WalletInfoCardStyle"
+            BasedOn="{StaticResource CardSurfaceBorderStyle}"
+            TargetType="Border">
+            <Setter Property="Padding" Value="54,32" />
+            <Setter Property="Effect" Value="{x:Null}" />
+        </Style>
+
+        <Style x:Key="WalletTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextAccentStrongBrush}" />
+        </Style>
+
+        <Style x:Key="WalletLabelStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="94" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        </Style>
+
+        <Style x:Key="WalletValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="{StaticResource PrepaidGuideBackgroundBrush}" Style="{StaticResource StepScreenRootBorderStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="428" />
+                <RowDefinition Height="256" />
+                <RowDefinition Height="77" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel
+                Grid.Row="0"
+                Margin="0,12,0,0"
+                HorizontalAlignment="Center">
+                <TextBlock Style="{StaticResource PrepaidGuideHeadlineStyle}">
+                    <Run Text="교통선불카드는" />
+                    <LineBreak />
+                    <Run Text="선불지갑과 교통지갑, 두 개의 지갑이" />
+                    <LineBreak />
+                    <Run Text="결합된 " />
+                    <Run Foreground="{DynamicResource TextAccentBrush}" Text="통합형 카드" />
+                    <Run Text="입니다" />
+                </TextBlock>
+
+                <TextBlock Margin="0,36,0,0" Style="{StaticResource PrepaidGuideSummaryStyle}">
+                    <Run Text="각 지갑은 최대 500,000KRW 까지 충전할 수 있으며," />
+                    <LineBreak />
+                    <Run Text="카드 구매 비용은 5,000KRW 입니다." />
+                </TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Row="1" HorizontalAlignment="Center">
+                <Image
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Source="pack://application:,,,/Assets/Image/img_card_guide.png"
+                    Stretch="Uniform" />
+
+
+            </Grid>
+
+            <StackPanel Grid.Row="3" VerticalAlignment="Top">
+                <Border Padding="54,32" Style="{StaticResource CardSurfaceBorderStyle}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource WalletTitleStyle}" Text="선불지갑 (일반결제용)" />
+                        <Grid Margin="0,18,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="45" />
+                                <RowDefinition Height="45" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="94" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Style="{StaticResource WalletLabelStyle}"
+                                Text="사용처" />
+                            <TextBlock
+                                Grid.Column="2"
+                                Style="{StaticResource WalletValueStyle}"
+                                Text="쇼핑·식당 등" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Style="{StaticResource WalletLabelStyle}"
+                                Text="결제" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource WalletValueStyle}"
+                                Text="현금 (환전, KRW입금)" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,16,0,0" Style="{StaticResource WalletInfoCardStyle}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource WalletTitleStyle}" Text="교통지갑 (교통결제용)" />
+                        <Grid Margin="0,18,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="45" />
+                                <RowDefinition Height="45" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="94" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource WalletLabelStyle}" Text="사용처" />
+                            <TextBlock
+                                Grid.Column="2"
+                                Style="{StaticResource WalletValueStyle}"
+                                Text="버스·지하철·편의점 등" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Style="{StaticResource WalletLabelStyle}"
+                                Text="결제" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource WalletValueStyle}"
+                                Text="현금·Alipay·WeChat Pay" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <Grid
+                x:Name="GuideActionContainer"
+                Grid.Row="4"
+                Height="120"
+                VerticalAlignment="Bottom"
+                behavior:FocusContainer.InitialFocus="True"
+                behavior:FocusContainer.Mode="HorizontalStack"
+                Focusable="False"
+                KeyboardNavigation.IsTabStop="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="336" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Command="{Binding SecondaryCommand}"
+                    IsEnabled="{Binding IsSecondaryEnabled}"
+                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}">
+                    <TextBlock Text="이전" />
+                </Button>
+
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding PrimaryCommand}"
+                    IsEnabled="{Binding IsPrimaryEnabled}"
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                    <TextBlock Text="다음" />
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

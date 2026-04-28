@@ -14,16 +14,16 @@
     <UserControl.Resources>
         <Style x:Key="VoiceGuideTitleStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontSize" Value="53" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_L}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="VoiceGuideLevelStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontSize" Value="47" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_M}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource TextAccentBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -100,8 +100,8 @@
 
         <Style x:Key="VoiceGuideActionTextStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
-            <Setter Property="FontSize" Value="40" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_S}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
             <Setter Property="Foreground" Value="{DynamicResource OnDefaultPrimaryBrush}" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />

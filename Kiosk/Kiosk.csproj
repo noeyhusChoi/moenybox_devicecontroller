@@ -13,6 +13,7 @@
 		<BaseOutputPath></BaseOutputPath>
 		<PackageOutputPath>$(OutputPath)</PackageOutputPath>
 		<ApplicationIcon>symbol.ico</ApplicationIcon>
+        <StartupObject>Kiosk.App</StartupObject>
     </PropertyGroup>
 
 	<!-- 플랫폼별 개별 출력 디렉토리 설정 -->
@@ -27,6 +28,11 @@
     <EmbeddedResource Remove="Domain\Entities_legacy\**" />
     <None Remove="Domain\Entities_legacy\**" />
     <Page Remove="Domain\Entities_legacy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+    <Page Include="App.xaml" />
   </ItemGroup>
 
 
@@ -61,6 +67,7 @@
       <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.8" />
       <PackageReference Include="Stateless" Version="5.18.0" />
       <PackageReference Include="System.IO.Ports" Version="10.0.0-preview.6.25358.103" />
+      <PackageReference Include="Velopack" Version="0.0.1298" />
     </ItemGroup>
 
     <ItemGroup>

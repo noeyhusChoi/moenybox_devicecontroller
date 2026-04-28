@@ -12,6 +12,7 @@ namespace Kiosk.CompositionRoot.Modules
             services.AddIntegrationModule();
             services.AddPlatformModule();
             services.AddOcrModule();
+            services.AddUpdateModule();
             services.AddAppServicesModule();
             services.AddViewModelModule();
             services.AddHostModule();

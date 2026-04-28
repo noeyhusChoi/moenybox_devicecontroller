@@ -1,0 +1,168 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (example: 1.2.3)"
+        required: true
+        type: string
+      publish_release:
+        description: Publish release instead of draft
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-velopack-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          cache: true
+          cache-dependency-path: |
+            Kiosk/Kiosk.csproj
+            DeviceKit/DeviceKit.csproj
+
+      - name: Resolve release settings
+        shell: pwsh
+        run: |
+          $version = '${{ github.event.inputs.version }}'
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            $tag = '${{ github.ref_name }}'
+            if ($tag -match '^v(.+)$') {
+              $version = $Matches[1]
+            } else {
+              throw "Unable to resolve release version."
+            }
+          }
+
+          $repoUrl = '${{ github.server_url }}/${{ github.repository }}'
+          $token = '${{ github.token }}'
+
+          "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VELOPACK_REPO_URL=$repoUrl" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VELOPACK_RELEASE_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Restore Kiosk
+        run: dotnet restore .\Kiosk\Kiosk.csproj -r win-x64
+
+      - name: Install vpk
+        shell: pwsh
+        run: |
+          dotnet tool install --tool-path .tools\vpk vpk --version 0.0.1298
+
+      - name: Download previous Velopack releases
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts\velopack | Out-Null
+
+          try {
+            .\.tools\vpk\vpk.exe download github `
+              --outputDir artifacts\velopack `
+              --repoUrl $env:VELOPACK_REPO_URL `
+              --token $env:VELOPACK_RELEASE_TOKEN `
+              --channel win
+          } catch {
+            Write-Host "No previous release artifacts were downloaded. Continuing with a full package only."
+          }
+
+      - name: Publish Kiosk
+        run: >
+          dotnet publish .\Kiosk\Kiosk.csproj
+          -c Release
+          --no-restore
+          --no-self-contained
+          -r win-x64
+          -p:Version=${{ env.APP_VERSION }}
+          -o artifacts\publish\Kiosk
+
+      - name: Verify publish artifacts
+        shell: pwsh
+        run: |
+          $requiredPaths = @(
+            'artifacts\publish\Kiosk\Kiosk.exe',
+            'artifacts\publish\Kiosk\DeviceKit.dll',
+            'artifacts\publish\Kiosk\Velopack.dll',
+            'artifacts\publish\Kiosk\Assets\Sound\sfx_click.wav'
+          )
+
+          foreach ($path in $requiredPaths) {
+            if (-not (Test-Path $path)) {
+              throw "Required publish artifact not found: $path"
+            }
+          }
+
+          $requiredReferenceJsonFiles = @(
+            'currency.json',
+            'deposit_denom.json',
+            'deposit_denom_attribute.json'
+          )
+
+          $referenceDirectory = 'artifacts\publish\Kiosk\Data\Reference'
+          if (-not (Test-Path $referenceDirectory)) {
+            throw "Required publish directory not found: $referenceDirectory"
+          }
+
+          $publishedReferenceFiles = Get-ChildItem -Path $referenceDirectory -Filter *.json -File | Select-Object -ExpandProperty Name
+          foreach ($fileName in $requiredReferenceJsonFiles) {
+            if ($fileName -notin $publishedReferenceFiles) {
+              throw "Required reference data file not found: $referenceDirectory\$fileName"
+            }
+          }
+
+          Write-Host 'Publish artifact verification completed.'
+
+      - name: Pack Velopack release
+        shell: pwsh
+        run: |
+          .\.tools\vpk\vpk.exe pack `
+            --packId MoneyBox.Kiosk `
+            --packVersion $env:APP_VERSION `
+            --packDir artifacts\publish\Kiosk `
+            --mainExe Kiosk.exe `
+            --packAuthors Moneybox `
+            --packTitle "MoneyBox Kiosk" `
+            --channel win `
+            --framework net9.0-x64-desktop `
+            --outputDir artifacts\velopack
+
+      - name: Upload Velopack packages to GitHub Releases
+        shell: pwsh
+        run: |
+          $publishRelease = '${{ github.event.inputs.publish_release }}'
+          $uploadArgs = @(
+            'upload', 'github',
+            '--outputDir', 'artifacts\\velopack',
+            '--repoUrl', $env:VELOPACK_REPO_URL,
+            '--token', $env:VELOPACK_RELEASE_TOKEN,
+            '--channel', 'win',
+            '--merge',
+            '--tag', "v$env:APP_VERSION",
+            '--releaseName', "MoneyBox Kiosk v$env:APP_VERSION"
+          )
+
+          if ($publishRelease -eq 'true' -or '${{ github.event_name }}' -eq 'push') {
+            $uploadArgs += '--publish'
+          }
+
+          .\.tools\vpk\vpk.exe @uploadArgs

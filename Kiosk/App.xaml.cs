@@ -1,8 +1,10 @@
 using Kiosk.Application.Services.Resx;
 using Kiosk.Infrastructure.Hosting;
+using Kiosk.Infrastructure.Updates;
 using Kiosk.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using Velopack;
 
 namespace Kiosk;
 
@@ -13,12 +15,26 @@ public partial class App : System.Windows.Application
 {
     private AppBootstrapper? _bootstrapper;
 
+    [STAThread]
+    private static void Main(string[] args)
+    {
+        VelopackApp.Build().Run();
+
+        var app = new App();
+        app.InitializeComponent();
+        app.Run();
+    }
+
     protected override void OnStartup(StartupEventArgs e)
     {
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         base.OnStartup(e);
 
         _bootstrapper = new AppBootstrapper();
+        var appUpdateService = _bootstrapper._serviceProvider.GetRequiredService<IAppUpdateService>();
+        appUpdateService.CheckAndApplyOnStartupAsync().GetAwaiter().GetResult();
+        var hostController = _bootstrapper._serviceProvider.GetRequiredService<IHostController>();
+        hostController.StartAsync().GetAwaiter().GetResult();
 
         var resxLocalizationService = _bootstrapper._serviceProvider.GetRequiredService<IResxLocalizationService>();
         ResxLocalizationProvider.Initialize(resxLocalizationService);
@@ -33,6 +49,12 @@ public partial class App : System.Windows.Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        if (_bootstrapper is not null)
+        {
+            var hostController = _bootstrapper._serviceProvider.GetService<IHostController>();
+            hostController?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+        }
+
         _bootstrapper?.Dispose();
         base.OnExit(e);
     }

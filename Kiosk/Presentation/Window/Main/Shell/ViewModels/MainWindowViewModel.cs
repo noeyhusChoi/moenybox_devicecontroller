@@ -5,6 +5,7 @@ using Kiosk.Application.Services.Resx;
 using Kiosk.Application.Services.Theme;
 using Kiosk.Infrastructure.Initialization;
 using Kiosk.Infrastructure.Media;
+using Kiosk.Infrastructure.Updates;
 using System.ComponentModel;
 using Kiosk.ViewModels.Overlays;
 
@@ -26,6 +27,7 @@ namespace Kiosk.ViewModels
         private readonly IHeaderViewModelFactory _headerViewModelFactory;
         private readonly IAppTheme _appTheme;
         private readonly IAudioPlayService _audioPlayService;
+        private readonly IAppUpdateService _appUpdateService;
         private bool _initialized;
 
         [ObservableProperty]
@@ -73,6 +75,7 @@ namespace Kiosk.ViewModels
             IHeaderViewModelFactory headerViewModelFactory,
             IAppTheme appTheme,
             IAudioPlayService audioPlayService,
+            IAppUpdateService appUpdateService,
             HomeShellViewModel homeShell,
             ExchangeEntryShellViewModel exchangeEntryShell,
             CashExchangeShellViewModel cashExchangeShell,
@@ -82,6 +85,7 @@ namespace Kiosk.ViewModels
             _headerViewModelFactory = headerViewModelFactory;
             _appTheme = appTheme;
             _audioPlayService = audioPlayService;
+            _appUpdateService = appUpdateService;
             HomeShell = homeShell;
             ExchangeEntryShell = exchangeEntryShell;
             CashExchangeShell = cashExchangeShell;
@@ -219,6 +223,7 @@ namespace Kiosk.ViewModels
         {
             HomeShell.ResetToServiceSelection();
             CurrentScreenViewModel = HomeShell;
+            _appUpdateService.SetMainIdleState(true);
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateHomeHeader());
             OnPropertyChanged(nameof(IsProgressChromeVisible));
@@ -228,6 +233,7 @@ namespace Kiosk.ViewModels
         {
             await ExchangeEntryShell.StartFlowAsync();
             CurrentScreenViewModel = ExchangeEntryShell;
+            _appUpdateService.SetMainIdleState(false);
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeEntryShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));
@@ -237,6 +243,7 @@ namespace Kiosk.ViewModels
         {
             ExchangeEntryShell.ReturnToMethodSelection();
             CurrentScreenViewModel = ExchangeEntryShell;
+            _appUpdateService.SetMainIdleState(false);
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeEntryShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));
@@ -247,6 +254,7 @@ namespace Kiosk.ViewModels
         {
             await CashExchangeShell.StartFlowAsync();
             CurrentScreenViewModel = CashExchangeShell;
+            _appUpdateService.SetMainIdleState(false);
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(CashExchangeShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));
@@ -256,6 +264,7 @@ namespace Kiosk.ViewModels
         {
             await PrepaidCardShell.StartFlowAsync(PrepaidCardEntrySource.Home);
             CurrentScreenViewModel = PrepaidCardShell;
+            _appUpdateService.SetMainIdleState(false);
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(PrepaidCardShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));
@@ -265,6 +274,7 @@ namespace Kiosk.ViewModels
         {
             await PrepaidCardShell.StartFlowAsync(PrepaidCardEntrySource.ExchangeEntry);
             CurrentScreenViewModel = PrepaidCardShell;
+            _appUpdateService.SetMainIdleState(false);
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(PrepaidCardShell.TimerText));
             OnPropertyChanged(nameof(IsProgressChromeVisible));

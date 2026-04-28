@@ -1,4 +1,5 @@
 using Kiosk.Infrastructure.Media;
+using Kiosk.Infrastructure.Updates;
 using Kiosk.ViewModels;
 using Kiosk.Views;
 using System.IO;
@@ -22,14 +23,16 @@ public partial class MainWindowView : Window
         "sfx_click.wav");
 
     private readonly IAudioPlayService _audioPlayService;
+    private readonly IAppUpdateService _appUpdateService;
     private bool _isAccessibilityPanPending;
     private bool _isAccessibilityPanning;
     private Point _accessibilityPanStartPoint;
     private Point _lastAccessibilityPanPoint;
 
-    public MainWindowView(IAudioPlayService audioPlayService)
+    public MainWindowView(IAudioPlayService audioPlayService, IAppUpdateService appUpdateService)
     {
         _audioPlayService = audioPlayService;
+        _appUpdateService = appUpdateService;
         InitializeComponent();
         AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(OnButtonBaseClick), true);
     }
@@ -55,6 +58,8 @@ public partial class MainWindowView : Window
 
     private void Window_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        _appUpdateService.NotifyUserInteraction();
+
         if (DataContext is not MainWindowViewModel vm || !vm.CanAccessibilityPan())
             return;
 
@@ -103,6 +108,8 @@ public partial class MainWindowView : Window
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        _appUpdateService.NotifyUserInteraction();
+
         if (e.Key != Key.F1)
             return;
 
@@ -118,6 +125,7 @@ public partial class MainWindowView : Window
         if (FindAncestor<ButtonBase>(source) is null)
             return;
 
+        _appUpdateService.NotifyUserInteraction();
         _audioPlayService.Play(ButtonClickSoundPath);
     }
 

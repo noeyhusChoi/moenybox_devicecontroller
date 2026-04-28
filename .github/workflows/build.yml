@@ -33,19 +33,15 @@ jobs:
           dotnet-version: 9.0.x
           cache: true
           cache-dependency-path: |
-            Moneybox.sln
             Kiosk/Kiosk.csproj
             Kiosk.Tests/Kiosk.Tests.csproj
             DeviceKit/DeviceKit.csproj
-            DeviceController/DeviceController.csproj
-            IdScannerTool/IdScannerTool.csproj
-            tools/M24hSqliteImporter/M24hSqliteImporter.csproj
 
-      - name: Restore solution
-        run: dotnet restore .\Moneybox.sln -r win-x64
+      - name: Restore Kiosk
+        run: dotnet restore .\Kiosk\Kiosk.csproj -r win-x64
 
-      - name: Build solution (Debug)
-        run: dotnet build .\Moneybox.sln -c Debug --no-restore
+      - name: Build Kiosk (Debug)
+        run: dotnet build .\Kiosk\Kiosk.csproj -c Debug --no-restore
 
       - name: Publish Kiosk (Release, framework-dependent)
         run: >
@@ -62,8 +58,8 @@ jobs:
           $requiredPaths = @(
             'artifacts\publish\Kiosk\Kiosk.exe',
             'artifacts\publish\Kiosk\Assets\Sound\sfx_click.wav',
-            'artifacts\publish\Kiosk\Assets\Fonts\NotoSans\Static\NotoSans-Regular.ttf',
-            'artifacts\publish\Kiosk\Assets\Icon\ico_voice.svg'
+            'artifacts\publish\Kiosk\DeviceKit.dll',
+            'artifacts\publish\Kiosk\Velopack.dll'
           )
 
           foreach ($path in $requiredPaths) {

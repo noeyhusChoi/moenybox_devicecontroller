@@ -1,126 +1,119 @@
-﻿<UserControl
+<UserControl
     x:Class="Kiosk.Views.Steps.MethodSelectionStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Focusable="False"
     IsTabStop="False"
     KeyboardNavigation.IsTabStop="False"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style x:Key="MethodOptionButtonStyle" TargetType="Button">
-            <Setter Property="Focusable" Value="True" />
-            <Setter Property="IsTabStop" Value="True" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="32">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
+        <Style x:Key="MethodOptionTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="53" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
     </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="592" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBlock
             Grid.Row="0"
-            Style="{StaticResource ExchangeStepTitleStyle}"
-            Text="{Binding Title}" />
+            HorizontalAlignment="Center"
+            FontSize="59"
+            FontWeight="Bold"
+            Text="환전 방법을 선택해주세요" />
 
         <Grid
-            Grid.Row="1"
-            Margin="0,121,0,0"
+            x:Name="MethodOptionContainer"
+            Grid.Row="2"
+            VerticalAlignment="Stretch"
+            behavior:FocusBoundary.DownTarget="{Binding ElementName=PreviousActionButton}"
             behavior:FocusContainer.InitialFocus="True"
-            behavior:FocusContainer.Mode="VerticalStack"
+            behavior:FocusContainer.Mode="HorizontalStack"
             Focusable="False"
             KeyboardNavigation.DirectionalNavigation="Continue"
             KeyboardNavigation.IsTabStop="False">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="310" />
-                <RowDefinition Height="32" />
-                <RowDefinition Height="310" />
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="452" />
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="452" />
+            </Grid.ColumnDefinitions>
+
             <Button
-                Grid.Row="0"
-                Height="310"
-                Padding="0"
-                HorizontalContentAlignment="Stretch"
-                VerticalContentAlignment="Stretch"
-                Background="{DynamicResource AccentSurfaceBackgroundBrush}"
+                Grid.Column="0"
                 Command="{Binding SelectPrepaidCardCommand}"
-                Cursor="Hand"
-                IsEnabled="False"
-                Style="{StaticResource MethodOptionButtonStyle}">
-                <DockPanel Margin="90,0,90,0">
+                Style="{StaticResource FilledWhiteButtonStyle}">
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="64" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
                     <Image
-                        Width="186"
+                        Grid.Row="0"
+                        Width="180"
                         Height="180"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        DockPanel.Dock="Right"
-                        Source="pack://application:,,,/Assets/Image/Card.png"
+                        Source="pack://application:,,,/Assets/Image/img_card.png"
                         Stretch="Uniform" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="60"
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextPrimaryBrush}"
-                        Text="선불카드로 환전" />
-                </DockPanel>
+
+                    <TextBlock Grid.Row="2" Style="{StaticResource MethodOptionTextStyle}">
+                        <Run Text="선불카드로" />
+                        <LineBreak />
+                        <Run Text="환전" />
+                    </TextBlock>
+                </Grid>
             </Button>
 
             <Button
-                Grid.Row="2"
-                Height="310"
-                Padding="0"
-                HorizontalContentAlignment="Stretch"
-                VerticalContentAlignment="Stretch"
-                Background="{DynamicResource AccentSurfaceBackgroundBrush}"
+                Grid.Column="2"
                 Command="{Binding SelectCashCommand}"
-                Cursor="Hand"
-                Style="{StaticResource MethodOptionButtonStyle}">
-                <DockPanel Margin="90,0,90,0">
+                Style="{StaticResource FilledWhiteButtonStyle}">
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="64" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
                     <Image
-                        Width="186"
+                        Grid.Row="0"
+                        Width="180"
                         Height="180"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        DockPanel.Dock="Right"
-                        Source="pack://application:,,,/Assets/Image/Bill.png"
+                        Source="pack://application:,,,/Assets/Image/img_bill.png"
                         Stretch="Uniform" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="60"
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextPrimaryBrush}"
-                        Text="지폐로 환전" />
-                </DockPanel>
+
+                    <TextBlock Grid.Row="2" Style="{StaticResource MethodOptionTextStyle}">
+                        <Run Text="지폐로" />
+                        <LineBreak />
+                        <Run Text="환전" />
+                    </TextBlock>
+                </Grid>
             </Button>
         </Grid>
+
+        <Button
+            x:Name="PreviousActionButton"
+            Grid.Row="3"
+            Width="336"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.UpTarget="{Binding ElementName=MethodOptionContainer}"
+            Command="{Binding SecondaryCommand}"
+            Content="이전"
+            IsEnabled="{Binding IsSecondaryEnabled}"
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
     </Grid>
 </UserControl>

@@ -7,7 +7,7 @@ public sealed class KeyboardNavigationState : INotifyPropertyChanged
 {
     public static KeyboardNavigationState Instance { get; } = new();
 
-    private bool _isEnabled = true;
+    private bool _isEnabled = false;    
 
     private KeyboardNavigationState()
     {

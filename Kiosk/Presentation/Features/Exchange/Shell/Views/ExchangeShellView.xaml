@@ -2,8 +2,6 @@
     x:Class="Kiosk.Views.ExchangeShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:actionViews="clr-namespace:Kiosk.Views.Actions"
-    xmlns:actionVm="clr-namespace:Kiosk.ViewModels.BottomActions"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,9 +15,6 @@
 
         <DataTemplate DataType="{x:Type stepVm:ExchangeStartStepViewModel}">
             <stepViews:ExchangeStartStepView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type stepVm:MessageStepViewModel}">
-            <stepViews:MessageStepView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stepVm:ScanIntroStepViewModel}">
             <stepViews:ScanIntroStepView />
@@ -51,15 +46,6 @@
         <DataTemplate DataType="{x:Type stepVm:DispenseFailureStepViewModel}">
             <stepViews:DispenseFailureStepView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type actionVm:BackOnlyActionViewModel}">
-            <actionViews:BackOnlyActionView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type actionVm:BackAndPrimaryActionViewModel}">
-            <actionViews:BackAndPrimaryActionView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type actionVm:PrimaryOnlyActionViewModel}">
-            <actionViews:PrimaryOnlyActionView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <Border>
@@ -68,7 +54,7 @@
                 <RowDefinition>
                     <RowDefinition.Style>
                         <Style TargetType="RowDefinition">
-                            <Setter Property="Height" Value="205" />
+                            <Setter Property="Height" Value="190" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding CollapseShellChrome}" Value="True">
                                     <Setter Property="Height" Value="0" />
@@ -78,15 +64,14 @@
                     </RowDefinition.Style>
                 </RowDefinition>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="256" />
             </Grid.RowDefinitions>
 
-            <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding ProgressSteps}">
+            <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding CurrentProgressStage}">
                 <views:ExchangeProgressView.Style>
                     <Style TargetType="{x:Type views:ExchangeProgressView}">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding DataContext, RelativeSource={RelativeSource Self}}" Value="0">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -97,21 +82,9 @@
             <ContentControl
                 x:Name="StepContentHost"
                 Grid.Row="1"
-                Margin="72,0"
-                behavior:FocusBoundary.DownTarget="{Binding ElementName=BottomActionHost}"
+                Margin="72,72,72,48"
                 behavior:FocusContainer.Mode="None"
                 Content="{Binding CurrentStepViewModel}"
-                Focusable="False"
-                IsTabStop="False"
-                KeyboardNavigation.IsTabStop="False" />
-
-            <ContentControl
-                x:Name="BottomActionHost"
-                Grid.Row="2"
-                Margin="72,0"
-                behavior:FocusBoundary.UpTarget="{Binding ElementName=StepContentHost}"
-                behavior:FocusContainer.Mode="None"
-                Content="{Binding CurrentBottomActionViewModel}"
                 Focusable="False"
                 IsTabStop="False"
                 KeyboardNavigation.IsTabStop="False" />
@@ -119,11 +92,11 @@
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource AppBackgroundBrush}" />
-                <Style.Triggers>
+                <!--<Style.Triggers>
                     <DataTrigger Binding="{Binding UseFeatureBackground}" Value="True">
                         <Setter Property="Background" Value="{DynamicResource FeatureBackgroundBrush}" />
                     </DataTrigger>
-                </Style.Triggers>
+                </Style.Triggers>-->
             </Style>
         </Border.Style>
     </Border>

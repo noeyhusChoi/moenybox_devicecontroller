@@ -1,0 +1,23 @@
+<FontFamily
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/composite-font"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    Baseline="0.30">
+
+    <FontFamily.FamilyNames>
+        <System:String x:Key="en-US">App Font</System:String>
+    </FontFamily.FamilyNames>
+
+    <FontFamily.FamilyTypefaces>
+        <FamilyTypeface Weight="Normal" Stretch="Normal" Style="Normal" />
+        <FamilyTypeface Weight="Medium" Stretch="Normal" Style="Normal" />
+        <FamilyTypeface Weight="Bold" Stretch="Normal" Style="Normal" />
+    </FontFamily.FamilyTypefaces>
+
+    <FontFamily.FamilyMaps>
+        <FontFamilyMap
+            Unicode="0000-10FFFF"
+            Target="./#Noto Sans CJK KR, ./Assets/Fonts/NotoSansCJK/#Noto Sans CJK KR, Global User Interface"
+            Scale="1.0" />
+    </FontFamily.FamilyMaps>
+</FontFamily>

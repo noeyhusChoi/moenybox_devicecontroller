@@ -4,56 +4,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Kiosk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Focusable="False"
     IsTabStop="False"
     KeyboardNavigation.IsTabStop="False"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <Style x:Key="CurrencyOptionButtonStyle" TargetType="Button">
-            <Setter Property="Focusable" Value="True" />
-            <Setter Property="IsTabStop" Value="True" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="24">
-                            <ContentPresenter />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="True" />
-                        <Condition Binding="{Binding Source={x:Static local:KeyboardNavigationState.Instance}, Path=IsEnabled}" Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBlock
             Grid.Row="0"
             Style="{StaticResource ExchangeStepTitleStyle}"
-            Text="{Binding Title}" />
+            Text="환전하실 통화를 선택해주세요" />
 
         <ItemsControl
-            Grid.Row="1"
+            x:Name="CurrencyOptionContainer"
+            Grid.Row="2"
+            behavior:FocusBoundary.DownTarget="{Binding ElementName=PreviousActionButton}"
             Focusable="False"
             ItemsSource="{Binding Options}"
             KeyboardNavigation.DirectionalNavigation="None"
@@ -79,45 +51,60 @@
                 <DataTemplate>
                     <Button
                         Margin="12"
-                        Background="{DynamicResource AccentStrongBackgroundBrush}"
                         Command="{Binding SelectCommand}"
                         Cursor="Hand"
-                        Style="{StaticResource CurrencyOptionButtonStyle}">
+                        Style="{StaticResource FilledWhiteButtonStyle}">
                         <Grid
                             Margin="0,24"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                            VerticalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="12" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Border
+
+                            <Ellipse
                                 Grid.Row="0"
                                 Width="70"
                                 Height="70"
-                                Margin="12"
-                                ClipToBounds="True"
-                                CornerRadius="32">
-                                <Image Source="{Binding AssetPath}" Stretch="Fill" />
-                            </Border>
-                            <TextBlock
-                                Grid.Row="1"
-                                HorizontalAlignment="Center"
-                                FontSize="40"
-                                FontWeight="SemiBold"
-                                Foreground="{DynamicResource TextOnAccentBrush}"
-                                Text="{Binding Code}" />
+                                Stroke="LightGray">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding AssetPath}" Stretch="Fill" />
+                                </Ellipse.Fill>
+                            </Ellipse>
                             <TextBlock
                                 Grid.Row="2"
                                 HorizontalAlignment="Center"
+                                FontSize="40"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource OnDefaultPrimaryBrush}"
+                                Text="{Binding Code}" />
+                            <TextBlock
+                                Grid.Row="3"
+                                HorizontalAlignment="Center"
                                 FontSize="34"
-                                Foreground="{DynamicResource TextOnAccentBrush}"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource OnDefaultSecondaryBrush}"
                                 Text="{Binding RateText}" />
                         </Grid>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <Button
+            x:Name="PreviousActionButton"
+            Grid.Row="3"
+            Width="336"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            behavior:FocusBoundary.UpTarget="{Binding ElementName=CurrencyOptionContainer}"
+            Command="{Binding SecondaryCommand}"
+            Content="이전"
+            IsEnabled="{Binding IsSecondaryEnabled}"
+            Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
     </Grid>
 </UserControl>

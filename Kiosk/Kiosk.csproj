@@ -53,6 +53,7 @@
       <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+      <PackageReference Include="SharpVectors" Version="1.8.5" />
       <PackageReference Include="SkiaSharp" Version="2.88.8" />
       <PackageReference Include="SkiaSharp.Skottie" Version="2.88.8" />
       <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.8" />
@@ -83,6 +84,9 @@
       <None Remove="Assets\Flag\TWD.png" />
       <None Remove="Assets\Flag\USD.png" />
       <None Remove="Assets\Flag\VND.png" />
+      <None Remove="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Bold.otf" />
+      <None Remove="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Medium.otf" />
+      <None Remove="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Regular.otf" />
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit1.gif" />
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit2.gif" />
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_AUD.gif" />
@@ -103,6 +107,32 @@
       <None Remove="Assets\Gif\DepositGuide\Guide_Deposit_VND.gif" />
       <None Remove="Assets\Gif\IDScan_ID.gif" />
       <None Remove="Assets\Gif\IDScan_Passport.gif" />
+      <None Remove="Assets\Icon\chevron_left.svg" />
+      <None Remove="Assets\Icon\ico.svg" />
+      <None Remove="Assets\Icon\ico_accessibility.svg" />
+      <None Remove="Assets\Icon\ico_arrow-rotate.svg" />
+      <None Remove="Assets\Icon\ico_arrow_rotate.png" />
+      <None Remove="Assets\Icon\ico_call.svg" />
+      <None Remove="Assets\Icon\ico_charge.png" />
+      <None Remove="Assets\Icon\ico_charge.svg" />
+      <None Remove="Assets\Icon\ico_check.png" />
+      <None Remove="Assets\Icon\ico_check.svg" />
+      <None Remove="Assets\Icon\ico_chevron_down.png" />
+      <None Remove="Assets\Icon\ico_chevron_left.png" />
+      <None Remove="Assets\Icon\ico_chevron_right.png" />
+      <None Remove="Assets\Icon\ico_chevron_right.svg" />
+      <None Remove="Assets\Icon\ico_chevron_up.png" />
+      <None Remove="Assets\Icon\ico_enlarge.svg" />
+      <None Remove="Assets\Icon\ico_home.svg" />
+      <None Remove="Assets\Icon\ico_minue.png" />
+      <None Remove="Assets\Icon\ico_minue.svg" />
+      <None Remove="Assets\Icon\ico_plus.png" />
+      <None Remove="Assets\Icon\ico_plus.svg" />
+      <None Remove="Assets\Icon\ico_stop.png" />
+      <None Remove="Assets\Icon\ico_stop.svg" />
+      <None Remove="Assets\Icon\ico_timer.png" />
+      <None Remove="Assets\Icon\ico_timer.svg" />
+      <None Remove="Assets\Icon\ico_voice.svg" />
       <None Remove="Assets\Image\Bill.png" />
       <None Remove="Assets\Image\Card.png" />
       <None Remove="Assets\Image\character-complete.png" />
@@ -149,6 +179,14 @@
       <None Remove="Assets\Image\Identification.png" />
       <None Remove="Assets\Image\IDScan_ID.png" />
       <None Remove="Assets\Image\IDScan_Passport.png" />
+      <None Remove="Assets\Image\img_bill.png" />
+      <None Remove="Assets\Image\img_bills.png" />
+      <None Remove="Assets\Image\img_card.png" />
+      <None Remove="Assets\Image\img_exchange.png" />
+      <None Remove="Assets\Image\img_refund.png" />
+      <None Remove="Assets\Image\img_scan_fail.png" />
+      <None Remove="Assets\Image\img_scan_ing.png" />
+      <None Remove="Assets\Image\img_scan_success.png" />
       <None Remove="Assets\Image\Info.png" />
       <None Remove="Assets\Image\Info_normal.png" />
       <None Remove="Assets\Image\Info_warn.png" />
@@ -164,9 +202,7 @@
       <None Remove="Assets\Image\bx-up-arrow-alt.png" />
       <None Remove="Assets\Image\Frame.png" />
       <None Remove="Assets\Image\Light.png" />
-      <None Remove="Assets\Sound\Bill.wav" />
-      <None Remove="Assets\Sound\Click.wav" />
-      <None Remove="Assets\Sound\Coin.wav" />
+      <None Remove="Assets\Sound\*.wav" />
       <None Remove="Assets\Vector.png" />
       <None Remove="Assets\Video\IDScan_ID.mp4" />
       <None Remove="Assets\Video\IDScan_Passport.mp4" />
@@ -206,13 +242,118 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Resource Include="Assets\Image\Bill.png">
+      <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Bold.otf">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Image\Card.png">
+      <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Medium.otf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Fonts\NotoSansCJK\NotoSansCJKkr-Regular.otf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\chevron_left.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_accessibility.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_arrow-rotate.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_arrow_rotate.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_call.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_charge.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_charge.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_check.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_check.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_chevron_down.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_chevron_left.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_chevron_right.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_chevron_right.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_chevron_up.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_enlarge.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_home.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_minue.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_minue.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_plus.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_plus.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_stop.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_stop.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_timer.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_timer.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Icon\ico_voice.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\Exchange.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_bill.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_bills.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_card.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_exchange.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_refund.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_scan_fail.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_scan_ing.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_scan_success.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\LOGO_CI_black.png">
@@ -357,13 +498,7 @@
       <Content Include="Assets\Gif\DepositGuide\Guide_Deposit_VND.gif">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-      <Content Include="Assets\Sound\Bill.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="Assets\Sound\Click.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="Assets\Sound\Coin.wav">
+      <Content Include="Assets\Sound\*.wav">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
       <Content Include="Assets\Video\IDScan_ID.mp4">

@@ -116,7 +116,7 @@ public sealed class DepositService : IDepositService
                 return new DepositStartResult(
                     false,
                     "DEV.DEPOSIT.CONNECTION.NOT_CONNECTED",
-                    "Failed to connect the deposit device.");
+                    $"Failed to connect withdrawal device '{session.DeviceId}'.");
             }
         }
 

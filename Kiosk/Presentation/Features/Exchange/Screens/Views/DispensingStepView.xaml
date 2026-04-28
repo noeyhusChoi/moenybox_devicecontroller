@@ -21,8 +21,8 @@
                 Padding="20,16"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Background="#F3F5FA"
-                BorderBrush="#D8DCE7"
+                Background="{DynamicResource DebugPanelBackgroundBrush}"
+                BorderBrush="{DynamicResource DebugPanelBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="20">
                 <StackPanel Width="360">
@@ -52,7 +52,7 @@
                     <Border
                         Height="1"
                         Margin="0,12,0,12"
-                        Background="{DynamicResource FeatureDividerBrush}" />
+                        Background="{DynamicResource FeatureDividerDefaultBrush}" />
 
                     <TextBlock
                         FontSize="18"

@@ -1,10 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Kiosk.Application.Features.ExchangeV2.Orchestration;
 using Kiosk.Application.Services.Resx;
 using Kiosk.Application.Services.Theme;
 using Kiosk.Infrastructure.Initialization;
+using Kiosk.Infrastructure.Media;
 using System.ComponentModel;
-using System.Windows.Media;
 using Kiosk.ViewModels.Overlays;
 
 namespace Kiosk.ViewModels
@@ -23,8 +24,8 @@ namespace Kiosk.ViewModels
 
         private readonly IAppInitializer _initializer;
         private readonly IHeaderViewModelFactory _headerViewModelFactory;
-        private readonly IAppCulture _appCulture;
         private readonly IAppTheme _appTheme;
+        private readonly IAudioPlayService _audioPlayService;
         private bool _initialized;
 
         [ObservableProperty]
@@ -45,8 +46,9 @@ namespace Kiosk.ViewModels
         [ObservableProperty]
         private object? currentUtilityOverlayViewModel;
 
-        [ObservableProperty]
-        private FontFamily currentAppFontFamily = null!;
+        public bool IsProgressChromeVisible => CurrentScreenViewModel == ExchangeShell &&
+                                               ExchangeShell.ShowStepHeader &&
+                                               !ExchangeShell.CollapseShellChrome;
 
         [ObservableProperty]
         private bool isAccessibilityZoomEnabled;
@@ -68,27 +70,31 @@ namespace Kiosk.ViewModels
         public MainWindowViewModel(
             IAppInitializer initializer,
             IHeaderViewModelFactory headerViewModelFactory,
-            IAppCulture appCulture,
             IAppTheme appTheme,
+            IAudioPlayService audioPlayService,
             HomeShellViewModel homeShell,
             ExchangeShellViewModel exchangeShell)
         {
             _initializer = initializer;
             _headerViewModelFactory = headerViewModelFactory;
-            _appCulture = appCulture;
             _appTheme = appTheme;
+            _audioPlayService = audioPlayService;
             HomeShell = homeShell;
             ExchangeShell = exchangeShell;
-            HomeShell.ExchangeRequested += OnHomeExchangeRequested;
+            HomeShell.ServiceEntryRequested += OnHomeServiceEntryRequested;
             ExchangeShell.HomeRequested += OnExchangeHomeRequested;
+            ExchangeShell.ExchangeCompleted += OnExchangeCompleted;
+            ExchangeShell.PropertyChanged += OnExchangeShellPropertyChanged;
             _initializer.ProgressChanged += OnProgressChanged;
-            _appCulture.CultureChanged += OnCultureChanged;
             _appTheme.ThemeChanged += OnThemeChanged;
-            UtilityBarViewModel = new UtilityBarViewModel(ToggleAccessibilityZoom, ToggleKeyboardNavigation, OpenThemeSelector);
-            CurrentAppFontFamily = ResolveFontFamily();
+            UtilityBarViewModel = new UtilityBarViewModel(
+                ShowHome,
+                ToggleAccessibilityZoom,
+                OpenVoiceGuideOverlay,
+                OpenAccessibilitySettings,
+                PlaceCall);
             UtilityBarViewModel.SetZoomState(false);
-            UtilityBarViewModel.SetAccessibilityState(KeyboardNavigationState.Instance.IsEnabled);
-            RefreshThemeButtonState();
+            RefreshUtilityButtonState();
             ShowHome();
         }
 
@@ -101,8 +107,6 @@ namespace Kiosk.ViewModels
             StatusMessage = "Initializing retained infrastructure...";
             await _initializer.InitializeAsync();
             StatusMessage = "Infrastructure initialization complete.";
-           
-            ShowHome();
         }
 
         private void OnProgressChanged(string message)
@@ -110,24 +114,39 @@ namespace Kiosk.ViewModels
             StatusMessage = message;
         }
 
-        private void OnCultureChanged(object? sender, EventArgs e)
-        {
-            CurrentAppFontFamily = ResolveFontFamily();
-        }
-
         private void OnThemeChanged(object? sender, EventArgs e)
         {
-            RefreshThemeButtonState();
+            RefreshUtilityButtonState();
             HeaderViewModel.LogoAssetPath = _headerViewModelFactory.GetLogoAssetPath();
         }
 
-        private async void OnHomeExchangeRequested(object? sender, EventArgs e)
+        private void OnExchangeShellPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName is nameof(ExchangeShellViewModel.ShowStepHeader)
+                or nameof(ExchangeShellViewModel.CollapseShellChrome))
+            {
+                OnPropertyChanged(nameof(IsProgressChromeVisible));
+            }
+        }
+
+        private async void OnHomeServiceEntryRequested(object? sender, HomeServiceEntryRequestedEventArgs e)
+        {
+            if (e.ServiceType != HomeServiceType.Exchange)
+                return;
+
             await ShowExchangeAsync();
         }
 
         private void OnExchangeHomeRequested(object? sender, EventArgs e)
         {
+            ShowHome();
+        }
+
+        private void OnExchangeCompleted(object? sender, ExchangeCompletedEventArgs e)
+        {
+            if (!e.PrintReceipt)
+                return;
+
             ShowHome();
         }
 
@@ -160,31 +179,20 @@ namespace Kiosk.ViewModels
 
         private void ShowHome()
         {
+            HomeShell.ResetToServiceSelection();
             CurrentScreenViewModel = HomeShell;
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateHomeHeader());
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
         }
 
         private async Task ShowExchangeAsync()
         {
+            await ExchangeShell.StartFlowAsync();
             CurrentScreenViewModel = ExchangeShell;
             AttachModalSource(CurrentScreenViewModel);
             ReplaceHeaderViewModel(_headerViewModelFactory.CreateExchangeHeader(ExchangeShell.TimerText));
-            await ExchangeShell.StartFlowAsync();
-        }
-
-        private FontFamily ResolveFontFamily()
-        {
-            var resourceKey = _appCulture.CurrentCulture.Name switch
-            {
-                "ko-KR" => "Noto Sans KR",
-                "ja-JP" => "Noto Sans JP",
-                "zh-CN" => "Noto Sans SC",
-                "zh-TW" => "Noto Sans TC",
-                _ => "Noto Sans",
-            };
-
-            return (FontFamily)System.Windows.Application.Current.Resources[resourceKey];
+            OnPropertyChanged(nameof(IsProgressChromeVisible));
         }
 
         private void ToggleAccessibilityZoom()
@@ -203,32 +211,71 @@ namespace Kiosk.ViewModels
             NotifyMinimapChanged();
         }
 
-        private void ToggleKeyboardNavigation()
+        private void OpenVoiceGuideOverlay()
         {
-            KeyboardNavigationState.Instance.IsEnabled = !KeyboardNavigationState.Instance.IsEnabled;
-            UtilityBarViewModel.SetAccessibilityState(KeyboardNavigationState.Instance.IsEnabled);
+            CurrentUtilityOverlayViewModel = new VoiceGuideOverlayViewModel(
+                GetVoiceGuideVolumeLevel(),
+                ApplyVoiceGuideVolumeLevel,
+                StopVoiceGuide,
+                ReplayVoiceGuideAsync,
+                CloseVoiceGuideOverlayCommand);
+            RefreshUtilityButtonState();
         }
 
-        private void OpenThemeSelector()
+        private void OpenAccessibilitySettings()
         {
-            CurrentUtilityOverlayViewModel = new ThemeSelectionOverlayViewModel(
+            CurrentUtilityOverlayViewModel = new AccessibilitySettingsOverlayViewModel(
                 _appTheme.CurrentTheme,
                 ApplyTheme,
-                CloseThemeSelectorCommand);
-            RefreshThemeButtonState();
+                CloseAccessibilitySettingsCommand);
+            RefreshUtilityButtonState();
         }
 
         [RelayCommand]
-        private void CloseThemeSelector()
+        private void CloseAccessibilitySettings()
         {
             CurrentUtilityOverlayViewModel = null;
-            RefreshThemeButtonState();
+            RefreshUtilityButtonState();
+        }
+
+        private void PlaceCall()
+        {
+        }
+
+        [RelayCommand]
+        private void CloseVoiceGuideOverlay()
+        {
+            CurrentUtilityOverlayViewModel = null;
+            RefreshUtilityButtonState();
         }
 
         private void ApplyTheme(AppThemeKind theme)
         {
             _appTheme.SetTheme(theme);
-            CloseThemeSelector();
+            RefreshUtilityButtonState();
+        }
+
+        private void ApplyVoiceGuideVolumeLevel(int level)
+        {
+            _audioPlayService.Volume = level / 5f;
+        }
+
+        private int GetVoiceGuideVolumeLevel()
+        {
+            return Math.Clamp(
+                (int)Math.Round(_audioPlayService.Volume * 5f, MidpointRounding.AwayFromZero),
+                1,
+                5);
+        }
+
+        private void StopVoiceGuide()
+        {
+            _audioPlayService.StopAll();
+        }
+
+        private Task ReplayVoiceGuideAsync()
+        {
+            return Task.CompletedTask;
         }
 
         private void DisableAccessibilityZoom()
@@ -315,11 +362,12 @@ namespace Kiosk.ViewModels
             OnPropertyChanged(nameof(MinimapViewportTop));
         }
 
-        private void RefreshThemeButtonState()
+        private void RefreshUtilityButtonState()
         {
-            UtilityBarViewModel.SetThemeState(
-                CurrentUtilityOverlayViewModel is ThemeSelectionOverlayViewModel ||
+            UtilityBarViewModel.SetAccessibilityState(
+                CurrentUtilityOverlayViewModel is AccessibilitySettingsOverlayViewModel ||
                 _appTheme.CurrentTheme != AppThemeKind.Light);
+            UtilityBarViewModel.SetVoiceGuideState(CurrentUtilityOverlayViewModel is VoiceGuideOverlayViewModel);
         }
 
         partial void OnAccessibilityZoomScaleChanged(double value)

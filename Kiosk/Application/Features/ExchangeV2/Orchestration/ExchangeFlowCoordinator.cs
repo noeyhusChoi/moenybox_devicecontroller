@@ -12,6 +12,7 @@ public interface IExchangeFlowCoordinator
     event EventHandler<ExchangeFlowChangedEventArgs>? FlowChanged;
     event EventHandler<IdScannerEvent>? ScanProgressChanged;
     event EventHandler<ExchangeDepositProgressChangedEventArgs>? DepositProgressChanged;
+    event EventHandler<ExchangeCompletedEventArgs>? ExchangeCompleted;
 
     ExchangeFlowContext Context { get; }
 
@@ -26,6 +27,16 @@ public interface IExchangeFlowCoordinator
     Task ProceedFromDepositAsync(CancellationToken ct = default);
     Task CompleteExchangeAsync(bool printReceipt, CancellationToken ct = default);
     Task<BackNavigationResult> GoBackAsync(CancellationToken ct = default);
+}
+
+public sealed class ExchangeCompletedEventArgs : EventArgs
+{
+    public ExchangeCompletedEventArgs(bool printReceipt)
+    {
+        PrintReceipt = printReceipt;
+    }
+
+    public bool PrintReceipt { get; }
 }
 
 public sealed class ExchangeFlowCoordinator : IExchangeFlowCoordinator
@@ -58,6 +69,7 @@ public sealed class ExchangeFlowCoordinator : IExchangeFlowCoordinator
     public event EventHandler<ExchangeFlowChangedEventArgs>? FlowChanged;
     public event EventHandler<IdScannerEvent>? ScanProgressChanged;
     public event EventHandler<ExchangeDepositProgressChangedEventArgs>? DepositProgressChanged;
+    public event EventHandler<ExchangeCompletedEventArgs>? ExchangeCompleted;
 
     public ExchangeFlowContext Context { get; } = new();
 
@@ -229,6 +241,7 @@ public sealed class ExchangeFlowCoordinator : IExchangeFlowCoordinator
             Context.TransactionId,
             printReceipt);
 
+        ExchangeCompleted?.Invoke(this, new ExchangeCompletedEventArgs(printReceipt));
         Context.ResetForRestart();
         MoveTo(ExchangeStep.Start);
         return Task.CompletedTask;

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Kiosk.Application.Features.ExchangeV2.Orchestration;
 using Kiosk.Application.Features.ExchangeV2.StateMachine;
 using Kiosk.Application.Services.Devices.IdScanner;
-using Kiosk.ViewModels.BottomActions;
 using Kiosk.ViewModels.Overlays;
 using Kiosk.ViewModels.Steps;
 using System.ComponentModel;
@@ -16,6 +15,7 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
     private readonly IExchangeScreenFactory _screenFactory;
 
     public event EventHandler? HomeRequested;
+    public event EventHandler<ExchangeCompletedEventArgs>? ExchangeCompleted;
 
     [ObservableProperty]
     private ExchangeStep currentStep;
@@ -33,13 +33,10 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
     private bool collapseShellChrome;
 
     [ObservableProperty]
-    private IReadOnlyList<ExchangeProgressStepViewModel>? progressSteps;
+    private int currentProgressStage;
 
     [ObservableProperty]
     private ExchangeStepViewModelBase? currentStepViewModel;
-
-    [ObservableProperty]
-    private BottomActionViewModelBase? currentBottomActionViewModel;
 
     [ObservableProperty]
     private object? currentModalViewModel;
@@ -53,6 +50,7 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         _coordinator.FlowChanged += OnFlowChanged;
         _coordinator.ScanProgressChanged += OnScanProgressChanged;
         _coordinator.DepositProgressChanged += OnDepositProgressChanged;
+        _coordinator.ExchangeCompleted += OnExchangeCompleted;
         ApplyState(_coordinator.Context.CurrentStep, _coordinator.Context);
     }
 
@@ -87,11 +85,11 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         UseFeatureBackground = _screenFactory.ShouldUseFeatureBackground(step);
         CollapseShellChrome = _screenFactory.ShouldCollapseShellChrome(step);
 
-        ProgressSteps = ShowStepHeader
-            ? _screenFactory.CreateProgressSteps(step)
-            : null;
+        CurrentProgressStage = ShowStepHeader
+            ? _screenFactory.GetProgressStage(step)
+            : 0;
         CurrentStepViewModel = _screenFactory.CreateStepViewModel(step, context, ShowModalAsync);
-        CurrentBottomActionViewModel = _screenFactory.CreateBottomAction(step, context, CurrentStepViewModel, RequestHomeCommand);
+        _screenFactory.ConfigureStepActions(step, context, CurrentStepViewModel, RequestHomeCommand);
 
         if (CurrentStepViewModel is ITermsAgreementStepViewModel termsVm)
             termsVm.PropertyChanged += OnTermsAgreementStepPropertyChanged;
@@ -105,10 +103,11 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         ShowStepHeader = _screenFactory.ShouldShowStepHeader(step);
         UseFeatureBackground = _screenFactory.ShouldUseFeatureBackground(step);
         CollapseShellChrome = _screenFactory.ShouldCollapseShellChrome(step);
-        ProgressSteps = ShowStepHeader
-            ? _screenFactory.CreateProgressSteps(step)
-            : null;
-        CurrentBottomActionViewModel = _screenFactory.CreateBottomAction(step, context, CurrentStepViewModel, RequestHomeCommand);
+        CurrentProgressStage = ShowStepHeader
+            ? _screenFactory.GetProgressStage(step)
+            : 0;
+
+        _screenFactory.ConfigureStepActions(step, context, CurrentStepViewModel, RequestHomeCommand);
     }
 
     private void OnScanProgressChanged(object? sender, IdScannerEvent e)
@@ -127,6 +126,11 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         depositProgressConsumer.ApplyDepositProgress(e);
     }
 
+    private void OnExchangeCompleted(object? sender, ExchangeCompletedEventArgs e)
+    {
+        ExchangeCompleted?.Invoke(this, e);
+    }
+
     private async void OnTermsAgreementStepPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (sender is not ITermsAgreementStepViewModel termsVm || e.PropertyName != nameof(ITermsAgreementStepViewModel.IsAgreed))
@@ -141,8 +145,8 @@ public partial class ExchangeShellViewModel : ObservableObject, IModalSourceView
         if (sender is not IScanIntroStepViewModel scanIntroVm || e.PropertyName != nameof(IScanIntroStepViewModel.CanProceed))
             return;
 
-        if (CurrentBottomActionViewModel is BackAndPrimaryActionViewModel actionVm)
-            actionVm.IsPrimaryEnabled = scanIntroVm.CanProceed;
+        if (CurrentStepViewModel is not null)
+            CurrentStepViewModel.IsPrimaryEnabled = scanIntroVm.CanProceed;
     }
 
     private void DetachCurrentStepSubscriptions()

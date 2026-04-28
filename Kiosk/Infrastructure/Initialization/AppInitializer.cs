@@ -127,6 +127,7 @@ public class AppInitializer : IAppInitializer
         List<string> audioList =
         [
             Path.Combine(baseDir, "Assets", "Sound", "Click.wav"),
+            Path.Combine(baseDir, "Assets", "Sound", "sfx_click.wav"),
             Path.Combine(baseDir, "Assets", "Sound", "Bill.wav"),
             Path.Combine(baseDir, "Assets", "Sound", "Coin.wav"),
         ];

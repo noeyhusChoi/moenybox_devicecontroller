@@ -1,25 +1,37 @@
-﻿using Kiosk.ViewModels;
+using Kiosk.Infrastructure.Media;
+using Kiosk.ViewModels;
 using Kiosk.Views;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace Kiosk;
 
 public partial class MainWindowView : Window
 {
     private const double AccessibilityPanThreshold = 8.0;
+    private static readonly string ButtonClickSoundPath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory,
+        "Assets",
+        "Sound",
+        "sfx_click.wav");
 
+    private readonly IAudioPlayService _audioPlayService;
     private bool _isAccessibilityPanPending;
     private bool _isAccessibilityPanning;
     private Point _accessibilityPanStartPoint;
     private Point _lastAccessibilityPanPoint;
 
-    public MainWindowView()
+    public MainWindowView(IAudioPlayService audioPlayService)
     {
+        _audioPlayService = audioPlayService;
         InitializeComponent();
+        AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(OnButtonBaseClick), true);
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -98,16 +110,32 @@ public partial class MainWindowView : Window
         e.Handled = true;
     }
 
+    private void OnButtonBaseClick(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is not DependencyObject source)
+            return;
+
+        if (FindAncestor<ButtonBase>(source) is null)
+            return;
+
+        _audioPlayService.Play(ButtonClickSoundPath);
+    }
+
     private static T? FindAncestor<T>(DependencyObject current) where T : DependencyObject
     {
-        var node = current;
+        DependencyObject? node = current;
 
         while (node is not null)
         {
             if (node is T matched)
                 return matched;
 
-            node = VisualTreeHelper.GetParent(node);
+            node = node switch
+            {
+                Visual or Visual3D => VisualTreeHelper.GetParent(node),
+                FrameworkContentElement contentElement => contentElement.Parent ?? LogicalTreeHelper.GetParent(contentElement),
+                _ => LogicalTreeHelper.GetParent(node)
+            };
         }
 
         return null;
@@ -208,5 +236,4 @@ public partial class MainWindowView : Window
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string szDevice;
     }
-
 }

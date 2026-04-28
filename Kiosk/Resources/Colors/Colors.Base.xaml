@@ -37,7 +37,20 @@
     <Color x:Key="Gray700">#555A65</Color>
     <Color x:Key="Gray800">#40444A</Color>
     <Color x:Key="Gray900">#2B2E32</Color>
+    <Color x:Key="Gray950">#303132</Color>
     <Color x:Key="Gray1000">#1A1A1A</Color>
+
+    <!--  Amber  -->
+    <Color x:Key="Amber50">#FFF7E8</Color>
+    <Color x:Key="Amber200">#FFD79C</Color>
+    <Color x:Key="Amber500">#FFCF41</Color>
+    <Color x:Key="Amber600">#E1BC3E</Color>
+    <Color x:Key="Amber700">#A35A00</Color>
+
+    <!--  Blue gray  -->
+    <Color x:Key="BlueGray50">#F3F5FA</Color>
+    <Color x:Key="BlueGray100">#D8DCE7</Color>
+    <Color x:Key="BlueGray200">#D4DEEC</Color>
 
     <!--  Common  -->
     <Color x:Key="White">#FFFFFF</Color>
@@ -77,7 +90,18 @@
     <SolidColorBrush x:Key="Gray700Brush" Color="{StaticResource Gray700}" />
     <SolidColorBrush x:Key="Gray800Brush" Color="{StaticResource Gray800}" />
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />
     <SolidColorBrush x:Key="Gray1000Brush" Color="{StaticResource Gray1000}" />
+
+    <SolidColorBrush x:Key="Amber50Brush" Color="{StaticResource Amber50}" />
+    <SolidColorBrush x:Key="Amber200Brush" Color="{StaticResource Amber200}" />
+    <SolidColorBrush x:Key="Amber500Brush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="Amber600Brush" Color="{StaticResource Amber600}" />
+    <SolidColorBrush x:Key="Amber700Brush" Color="{StaticResource Amber700}" />
+
+    <SolidColorBrush x:Key="BlueGray50Brush" Color="{StaticResource BlueGray50}" />
+    <SolidColorBrush x:Key="BlueGray100Brush" Color="{StaticResource BlueGray100}" />
+    <SolidColorBrush x:Key="BlueGray200Brush" Color="{StaticResource BlueGray200}" />
 
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />

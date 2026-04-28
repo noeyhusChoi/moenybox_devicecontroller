@@ -2,6 +2,7 @@
     x:Class="Kiosk.Views.Steps.ScanIntroStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
     xmlns:controls="clr-namespace:Kiosk.Presentation.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Focusable="False"
@@ -9,34 +10,25 @@
     KeyboardNavigation.IsTabStop="False">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBlock
             Grid.Row="0"
             Style="{StaticResource ExchangeStepTitleStyle}"
-            Text="{Binding Title}" />
+            Text="신분증 스캔을 진행해주세요" />
 
-        <Grid Grid.Row="1" Background="Transparent">
+        <Grid Grid.Row="2" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="710" />
                 <RowDefinition Height="24" />
                 <RowDefinition Height="224" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Border
-                Grid.Row="0"
-                Background="{DynamicResource CardBackgroundBrush}"
-                CornerRadius="32">
-                <Border.Effect>
-                    <DropShadowEffect
-                        BlurRadius="14"
-                        Opacity="0.08"
-                        RenderingBias="Quality"
-                        ShadowDepth="0"
-                        Color="#1F2023" />
-                </Border.Effect>
+            <Border Grid.Row="0" Style="{StaticResource CardSurfaceBorderStyle}">
                 <Grid Margin="54">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -56,7 +48,7 @@
 
                     <Border
                         Grid.Row="2"
-                        Background="#D4DEEC"
+                        Background="{DynamicResource MediaPreviewBackgroundBrush}"
                         CornerRadius="32">
                         <Grid ClipToBounds="True">
                             <controls:VideoPlayerControl
@@ -73,16 +65,7 @@
             <Border
                 Grid.Row="2"
                 Padding="52,0"
-                Background="{DynamicResource CardBackgroundBrush}"
-                CornerRadius="32">
-                <Border.Effect>
-                    <DropShadowEffect
-                        BlurRadius="14"
-                        Opacity="0.08"
-                        RenderingBias="Quality"
-                        ShadowDepth="0"
-                        Color="#1F2023" />
-                </Border.Effect>
+                Style="{StaticResource CardSurfaceBorderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -95,10 +78,10 @@
                         VerticalAlignment="Center"
                         FontSize="34"
                         FontWeight="SemiBold"
-                        Foreground="{DynamicResource AccentEmphasisForegroundBrush}"
+                        Foreground="{DynamicResource TextAccentStrongBrush}"
                         Text="스캔 가능 신분증"
                         TextAlignment="Center" />
-                    <Rectangle Grid.Row="1" Fill="{StaticResource FeatureDividerBrush}" />
+                    <Rectangle Grid.Row="1" Fill="{StaticResource FeatureDividerDefaultBrush}" />
                     <TextBlock
                         Grid.Row="2"
                         VerticalAlignment="Center"
@@ -109,6 +92,38 @@
                         TextAlignment="Center" />
                 </Grid>
             </Border>
+
+            <Grid
+                x:Name="ScanIntroActionContainer"
+                Grid.Row="3"
+                Width="936"
+                Height="120"
+                VerticalAlignment="Bottom"
+                behavior:FocusBoundary.EntryTarget="{Binding ElementName=ScanIntroActionContainer}"
+                behavior:FocusContainer.InitialFocus="True"
+                behavior:FocusContainer.Mode="HorizontalStack"
+                Focusable="False"
+                KeyboardNavigation.IsTabStop="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="12*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding SecondaryCommand}"
+                    Content="이전"
+                    IsEnabled="{Binding IsSecondaryEnabled}"
+                    Style="{StaticResource OutlinedActionSecondaryButtonStyle}" />
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding PrimaryCommand}"
+                    Content="다음"
+                    IsEnabled="{Binding IsPrimaryEnabled}"
+                    Style="{StaticResource FilledActionPrimaryButtonStyle}" />
+            </Grid>
         </Grid>
+
     </Grid>
 </UserControl>

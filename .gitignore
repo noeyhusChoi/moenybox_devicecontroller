@@ -29,5 +29,7 @@ coverage/
 # Codex local workspace artifacts
 .codex_tmp/
 
-# Bundled OCR runtime is distributed outside GitHub
-IdScannerTool/OCR/
+# Local packaging / release artifacts
+.tmp-vpk/
+.tools/
+artifacts/

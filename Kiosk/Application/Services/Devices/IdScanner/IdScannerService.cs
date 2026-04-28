@@ -119,7 +119,7 @@ public sealed class IdScannerService : IIdScannerService
                 return new ScanStartResult(
                     false,
                     "DEV.IDSCANNER.CONNECTION.NOT_CONNECTED",
-                    "Failed to connect the ID scanner.");
+                    $"Failed to connect withdrawal device '{session.DeviceId}'.");
             }
         }
 

@@ -5,26 +5,31 @@ namespace Kiosk.ViewModels;
 
 public partial class UtilityBarViewModel : ObservableObject
 {
-    public UtilityBarViewModel(Action toggleZoom, Action toggleKeyboardNavigation, Action openThemeSelector)
+    public UtilityBarViewModel(
+        Action goHome,
+        Action toggleZoom,
+        Action openVoiceGuideSettings,
+        Action openAccessibilitySettings,
+        Action placeCall)
     {
-        HomeCommand = new RelayCommand(() => { });
+        HomeCommand = new RelayCommand(goHome);
         ZoomCommand = new RelayCommand(toggleZoom);
-        VoiceGuideCommand = new RelayCommand(() => { });
-        AccessibilityCommand = new RelayCommand(toggleKeyboardNavigation);
-        ThemeCommand = new RelayCommand(openThemeSelector);
+        VoiceGuideCommand = new RelayCommand(openVoiceGuideSettings);
+        AccessibilityCommand = new RelayCommand(openAccessibilitySettings);
+        CallCommand = new RelayCommand(placeCall);
     }
 
     public IRelayCommand HomeCommand { get; }
     public IRelayCommand ZoomCommand { get; }
     public IRelayCommand VoiceGuideCommand { get; }
     public IRelayCommand AccessibilityCommand { get; }
-    public IRelayCommand ThemeCommand { get; }
+    public IRelayCommand CallCommand { get; }
 
     [ObservableProperty]
     private bool isZoomSelected;
 
     [ObservableProperty]
-    private bool isThemeSelected;
+    private bool isVoiceGuideSelected;
 
     [ObservableProperty]
     private bool isAccessibilitySelected;
@@ -34,9 +39,9 @@ public partial class UtilityBarViewModel : ObservableObject
         IsZoomSelected = isZoomed;
     }
 
-    public void SetThemeState(bool isActive)
+    public void SetVoiceGuideState(bool isActive)
     {
-        IsThemeSelected = isActive;
+        IsVoiceGuideSelected = isActive;
     }
 
     public void SetAccessibilityState(bool isActive)

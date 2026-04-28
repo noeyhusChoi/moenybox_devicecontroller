@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Kiosk.Application.Features.ExchangeV2.Orchestration;
 using Kiosk.Application.Features.ExchangeV2.StateMachine;
-using Kiosk.ViewModels.BottomActions;
 using Kiosk.ViewModels.Steps;
 
 namespace Kiosk.ViewModels;
@@ -25,7 +24,7 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
         Func<Task> showModalAsync)
         => step switch
         {
-            ExchangeStep.Idle => new MessageStepViewModel("환전", "초기화가 완료되었습니다."),
+            ExchangeStep.Idle => new ExchangeStartStepViewModel(() => _coordinator.ConfirmStartAsync()),
             ExchangeStep.Start => new ExchangeStartStepViewModel(() => _coordinator.ConfirmStartAsync()),
             ExchangeStep.MethodSelection => new MethodSelectionStepViewModel(
                 new AsyncRelayCommand(() => _coordinator.SelectMethodAsync(ExchangeMethod.PrepaidCard)),
@@ -77,83 +76,87 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
                 context.WithdrawalRequestedAmount,
                 context.WithdrawalDispensedAmount,
                 context.DispenseErrorMessage),
-            _ => new MessageStepViewModel("환전", "지원되지 않는 단계입니다.")
+            _ => throw new ArgumentOutOfRangeException(nameof(step), step, "Unsupported exchange step.")
         };
 
-    public BottomActionViewModelBase? CreateBottomAction(
+    public void ConfigureStepActions(
         ExchangeStep step,
         ExchangeFlowContext context,
         ExchangeStepViewModelBase? stepViewModel,
         IAsyncRelayCommand homeCommand)
+    {
+        if (stepViewModel is null)
+            return;
+
+        stepViewModel.SecondaryCommand = null;
+        stepViewModel.IsSecondaryEnabled = true;
+        stepViewModel.PrimaryCommand = null;
+        stepViewModel.IsPrimaryEnabled = true;
+
+        switch (step)
+        {
+            case ExchangeStep.Start:
+                stepViewModel.SecondaryCommand = homeCommand;
+                break;
+
+            case ExchangeStep.MethodSelection:
+            case ExchangeStep.CurrencySelection:
+            case ExchangeStep.Scanning:
+                stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
+                break;
+
+            case ExchangeStep.Consent:
+                stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
+                stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.ConfirmConsentAsync());
+                stepViewModel.IsPrimaryEnabled = context.IsTermsAgreed;
+                break;
+
+            case ExchangeStep.ScanIntro:
+                stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
+                stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.RunScanAsync(TimeSpan.FromSeconds(20)));
+                stepViewModel.IsPrimaryEnabled = stepViewModel is IScanIntroStepViewModel scanIntro && scanIntro.CanProceed;
+                break;
+
+            case ExchangeStep.ScanCompleted:
+                if (context.ScanResultState == ScanResultState.Failed)
+                {
+                    stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
+                }
+                else
+                {
+                    stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
+                    stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.ProceedFromScanCompletedAsync());
+                }
+                break;
+
+            case ExchangeStep.Deposit:
+                stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.GoBackAsync());
+                stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.ProceedFromDepositAsync());
+                break;
+
+            case ExchangeStep.DispenseSuccess:
+                stepViewModel.SecondaryCommand = new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(false));
+                stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(true));
+                break;
+
+            case ExchangeStep.DispenseFailure:
+                stepViewModel.PrimaryCommand = new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(true));
+                break;
+        }
+    }
+
+    public int GetProgressStage(ExchangeStep step)
         => step switch
         {
-            ExchangeStep.Start => new BackOnlyActionViewModel(homeCommand, true),
-            ExchangeStep.MethodSelection => new BackOnlyActionViewModel(new AsyncRelayCommand(() => _coordinator.GoBackAsync()), true),
-            ExchangeStep.CurrencySelection => new BackOnlyActionViewModel(new AsyncRelayCommand(() => _coordinator.GoBackAsync()), true),
-            ExchangeStep.Consent => new BackAndPrimaryActionViewModel(
-                new AsyncRelayCommand(() => _coordinator.GoBackAsync()),
-                true,
-                new AsyncRelayCommand(() => _coordinator.ConfirmConsentAsync()),
-                "다음",
-                context.IsTermsAgreed),
-            ExchangeStep.ScanIntro => new BackAndPrimaryActionViewModel(
-                new AsyncRelayCommand(() => _coordinator.GoBackAsync()),
-                true,
-                new AsyncRelayCommand(() => _coordinator.RunScanAsync(TimeSpan.FromSeconds(20))),
-                "다음",
-                stepViewModel is IScanIntroStepViewModel scanIntro && scanIntro.CanProceed),
-            ExchangeStep.Scanning => new BackOnlyActionViewModel(new AsyncRelayCommand(() => _coordinator.GoBackAsync()), true),
-            ExchangeStep.ScanCompleted => context.ScanResultState == ScanResultState.Failed
-                ? new PrimaryOnlyActionViewModel(
-                    new AsyncRelayCommand(() => _coordinator.GoBackAsync()),
-                    "다시하기")
-                : new BackAndPrimaryActionViewModel(
-                    new AsyncRelayCommand(() => _coordinator.GoBackAsync()),
-                    true,
-                    new AsyncRelayCommand(() => _coordinator.ProceedFromScanCompletedAsync()),
-                    "다음",
-                    true),
-            ExchangeStep.Deposit => new BackAndPrimaryActionViewModel(
-                new AsyncRelayCommand(() => _coordinator.GoBackAsync()),
-                true,
-                new AsyncRelayCommand(() => _coordinator.ProceedFromDepositAsync()),
-                "다음",
-                true),
-            ExchangeStep.Dispensing => null,
-            ExchangeStep.DispenseSuccess => new BackAndPrimaryActionViewModel(
-                new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(false)),
-                true,
-                new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(true)),
-                "영수증 출력",
-                true,
-                "영수증 미출력"),
-            ExchangeStep.DispenseFailure => new PrimaryOnlyActionViewModel(
-                new AsyncRelayCommand(() => _coordinator.CompleteExchangeAsync(true)),
-                "영수증 출력"),
-            _ => null
-        };
-
-    public IReadOnlyList<ExchangeProgressStepViewModel> CreateProgressSteps(ExchangeStep step)
-    {
-        var progressStage = step switch
-        {
             ExchangeStep.CurrencySelection => 1,
-            ExchangeStep.Consent or ExchangeStep.ScanIntro or ExchangeStep.Scanning or ExchangeStep.ScanCompleted => 2,
-            ExchangeStep.Deposit or ExchangeStep.Dispensing => 3,
+            ExchangeStep.Consent
+                or ExchangeStep.ScanIntro
+                or ExchangeStep.Scanning
+                or ExchangeStep.ScanCompleted => 2,
+            ExchangeStep.Deposit => 3,
+            ExchangeStep.Dispensing => 4,
             _ => 0
         };
-
-        if (progressStage == 0)
-            return [];
-
-        return
-        [
-            CreateProgressStep("1", "통화선택", progressStage == 1, progressStage > 1),
-            CreateProgressStep("2", "신분증 스캔", progressStage == 2, progressStage > 2),
-            CreateProgressStep("3", "외화 입금", progressStage == 3, progressStage > 3),
-            CreateProgressStep("4", "원화 수령", progressStage == 4, false)
-        ];
-    }
 
     public bool ShouldShowStepHeader(ExchangeStep step)
         => step is ExchangeStep.CurrencySelection or ExchangeStep.Consent or ExchangeStep.ScanIntro or ExchangeStep.Scanning or ExchangeStep.ScanCompleted or ExchangeStep.Deposit or ExchangeStep.Dispensing;
@@ -172,14 +175,4 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
     public bool ShouldCollapseShellChrome(ExchangeStep step)
         => step is ExchangeStep.DispenseSuccess or ExchangeStep.DispenseFailure;
 
-    private static ExchangeProgressStepViewModel CreateProgressStep(
-        string numberText,
-        string label,
-        bool isActive,
-        bool isComplete)
-        => new(numberText, label)
-        {
-            IsActive = isActive,
-            IsComplete = isComplete
-        };
 }

@@ -3,6 +3,7 @@ using System;
 using Kiosk.Infrastructure.Database.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kiosk.Migrations
 {
     [DbContext(typeof(KioskDbContext))]
-    partial class KioskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260428051734_AddOperationalReferenceTables")]
+    partial class AddOperationalReferenceTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");

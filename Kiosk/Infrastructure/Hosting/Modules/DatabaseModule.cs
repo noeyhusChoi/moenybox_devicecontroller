@@ -1,52 +1,58 @@
-﻿using Kiosk.Infrastructure.Database;
+using System;
+using Kiosk.Infrastructure.Database;
 using Kiosk.Infrastructure.Database.Ef;
 using Kiosk.Infrastructure.Database.Repositories;
+using Kiosk.Infrastructure.Initialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System;
 
-namespace Kiosk.Infrastructure.Hosting.Modules
+namespace Kiosk.Infrastructure.Hosting.Modules;
+
+public static class DatabaseModule
 {
-    public static class DatabaseModule
-    {
     public static IServiceCollection AddDatabaseModule(this IServiceCollection services)
     {
         services.AddMemoryCache();
+
         var connectionString = DatabaseConfig.DefaultConnectionString;
         services.AddDbContextFactory<KioskDbContext>(options =>
         {
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            options.UseSqlite(connectionString);
         });
 
-            services.AddSingleton<ApiConfigRepository>();
-            services.AddSingleton<DepositCurrencyRepository>();
-            services.AddSingleton<KioskRepository>();
-            services.AddSingleton<DeviceRepository>();
-            services.AddSingleton<DeviceCommandLogRepository>();
-            services.AddSingleton<ReceiptRepository>();
-            services.AddSingleton<LocaleInfoRepository>();
-            services.AddSingleton<WithdrawalCassetteRepository>();
+        services.AddSingleton<ApiConfigRepository>();
+        services.AddSingleton<DepositCurrencyRepository>();
+        services.AddSingleton<KioskRepository>();
+        services.AddSingleton<DeviceRepository>();
+        services.AddSingleton<DeviceCommandLogRepository>();
+        services.AddSingleton<ReceiptRepository>();
+        services.AddSingleton<LocaleInfoRepository>();
+        services.AddSingleton<WithdrawalCassetteRepository>();
+        services.AddSingleton<ReferenceDataSyncService>();
 
-            services.AddOptions<DeviceCommandLogOptions>().BindConfiguration("DeviceCommandLog");
+        services.AddOptions<DeviceCommandLogOptions>().BindConfiguration("DeviceCommandLog");
 
-            services.AddSingleton<NoopDeviceCommandLogSink>();
-            services.AddSingleton<BufferedDeviceCommandLogSink>();
-            services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<BufferedDeviceCommandLogSink>());
-            services.AddSingleton<IDeviceCommandLogSink>(sp =>
+        services.AddSingleton<NoopDeviceCommandLogSink>();
+        services.AddSingleton<BufferedDeviceCommandLogSink>();
+        services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<BufferedDeviceCommandLogSink>());
+        services.AddSingleton<IDeviceCommandLogSink>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<DeviceCommandLogOptions>>().Value;
+            if (!options.Enabled)
             {
-                var options = sp.GetRequiredService<IOptions<DeviceCommandLogOptions>>().Value;
-                if (!options.Enabled)
-                    return sp.GetRequiredService<NoopDeviceCommandLogSink>();
+                return sp.GetRequiredService<NoopDeviceCommandLogSink>();
+            }
 
-                if (string.Equals(options.Mode, "Buffered", StringComparison.OrdinalIgnoreCase))
-                    return sp.GetRequiredService<BufferedDeviceCommandLogSink>();
+            if (string.Equals(options.Mode, "Buffered", StringComparison.OrdinalIgnoreCase))
+            {
+                return sp.GetRequiredService<BufferedDeviceCommandLogSink>();
+            }
 
-                return sp.GetRequiredService<DeviceCommandLogRepository>();
-            });
+            return sp.GetRequiredService<DeviceCommandLogRepository>();
+        });
 
-            return services;
-        }
+        return services;
     }
 }

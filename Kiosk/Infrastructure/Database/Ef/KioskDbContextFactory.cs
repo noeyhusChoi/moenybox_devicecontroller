@@ -9,7 +9,7 @@ public sealed class KioskDbContextFactory : IDesignTimeDbContextFactory<KioskDbC
     {
         var optionsBuilder = new DbContextOptionsBuilder<KioskDbContext>();
         var connectionString = DatabaseConfig.DefaultConnectionString;
-        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        optionsBuilder.UseSqlite(connectionString);
         return new KioskDbContext(optionsBuilder.Options);
     }
 }

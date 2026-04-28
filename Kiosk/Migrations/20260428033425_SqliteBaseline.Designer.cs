@@ -3,6 +3,7 @@ using System;
 using Kiosk.Infrastructure.Database.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kiosk.Migrations
 {
     [DbContext(typeof(KioskDbContext))]
-    partial class KioskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260428033425_SqliteBaseline")]
+    partial class SqliteBaseline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -65,51 +68,6 @@ namespace Kiosk.Migrations
                     b.ToTable("server", (string)null);
                 });
 
-            modelBuilder.Entity("Kiosk.Infrastructure.Database.Ef.Entities.CurrencyEntity", b =>
-                {
-                    b.Property<string>("KioskId")
-                        .HasMaxLength(36)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("KIOSK_ID");
-
-                    b.Property<string>("CurrencyCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CURRENCY_CODE");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CREATED_AT");
-
-                    b.Property<string>("CultureCode")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CULTURE_CODE");
-
-                    b.Property<int>("CurrencyDecimal")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("CURRENCY_DECIMAL");
-
-                    b.Property<string>("CurrencySymbol")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CURRENCY_SYMBOL");
-
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("VLD");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("UPDATED_AT");
-
-                    b.HasKey("KioskId", "CurrencyCode");
-
-                    b.ToTable("currency", (string)null);
-                });
-
             modelBuilder.Entity("Kiosk.Infrastructure.Database.Ef.Entities.DepositCurrencyEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -158,40 +116,6 @@ namespace Kiosk.Migrations
                         .HasDatabaseName("UQ_DENOM_ATTR");
 
                     b.ToTable("deposit_denom_attribute", (string)null);
-                });
-
-            modelBuilder.Entity("Kiosk.Infrastructure.Database.Ef.Entities.DepositDenominationEntity", b =>
-                {
-                    b.Property<string>("KioskId")
-                        .HasMaxLength(36)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("KIOSK_ID");
-
-                    b.Property<string>("CurrencyCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CURRENCY_CODE");
-
-                    b.Property<decimal>("Denomination")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("VALUE");
-
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("VLD");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("UPDATED_AT");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(64)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("UPDATED_BY");
-
-                    b.HasKey("KioskId", "CurrencyCode", "Denomination");
-
-                    b.ToTable("deposit_denom", (string)null);
                 });
 
             modelBuilder.Entity("Kiosk.Infrastructure.Database.Ef.Entities.DeviceCatalogEntity", b =>
@@ -473,41 +397,6 @@ namespace Kiosk.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("kiosk", (string)null);
-                });
-
-            modelBuilder.Entity("Kiosk.Infrastructure.Database.Ef.Entities.KioskUpdateHistoryEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("ID");
-
-                    b.Property<string>("KioskId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("KIOSK_ID");
-
-                    b.Property<DateTime>("UpdateDateTime")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("UPDATE_DATETIME");
-
-                    b.Property<int>("UpdateNo")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("UPDATE_NO");
-
-                    b.Property<string>("UpdateSource")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("UPDATE_SOURCE");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KioskId")
-                        .HasDatabaseName("IX_kiosk_update_history_kiosk_id");
-
-                    b.ToTable("kiosk_update_history", (string)null);
                 });
 
             modelBuilder.Entity("Kiosk.Infrastructure.Database.Ef.Entities.LocaleInfoEntity", b =>

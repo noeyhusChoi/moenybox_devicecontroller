@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 		.runsettings = .runsettings
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E-EAC7-C090-1BA3-A61EC2A24D84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M24hSqliteImporter", "tools\M24hSqliteImporter\M24hSqliteImporter.csproj", "{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,9 +125,30 @@ Global
 		{4E597D87-B2D9-416E-91A4-35C6FF4EA9CA}.Remote|x64.Build.0 = Debug|Any CPU
 		{4E597D87-B2D9-416E-91A4-35C6FF4EA9CA}.Remote|x86.ActiveCfg = Debug|Any CPU
 		{4E597D87-B2D9-416E-91A4-35C6FF4EA9CA}.Remote|x86.Build.0 = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Debug|x64.Build.0 = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Debug|x86.Build.0 = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Release|x64.ActiveCfg = Release|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Release|x64.Build.0 = Release|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Release|x86.ActiveCfg = Release|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Release|x86.Build.0 = Release|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Remote|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Remote|Any CPU.Build.0 = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Remote|x64.ActiveCfg = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Remote|x64.Build.0 = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Remote|x86.ActiveCfg = Debug|Any CPU
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C}.Remote|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4A6F0CF9-1B2C-485B-8B76-65CDAE0FA43C} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AC70E7F-C759-4C16-8E24-0B2489C01BC0}

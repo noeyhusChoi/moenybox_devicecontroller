@@ -1,7 +1,30 @@
-﻿namespace Kiosk.Infrastructure.Database;
+using System;
+using System.IO;
+
+namespace Kiosk.Infrastructure.Database;
 
 public static class DatabaseConfig
 {
-    public const string DefaultConnectionString =
-        "Server=localhost;Port=3307;Database=m24h;User ID=dev;Password=devP@ss!;AllowUserVariables=True;ConnectionReset=false;DefaultCommandTimeout=300;SslMode=Required;";
+    public static string DefaultDatabasePath => ResolveDatabasePath();
+
+    public static string DefaultConnectionString => $"Data Source={DefaultDatabasePath}";
+
+    private static string ResolveDatabasePath()
+    {
+        var configuredPath = Environment.GetEnvironmentVariable("KIOSK_SQLITE_PATH");
+        if (!string.IsNullOrWhiteSpace(configuredPath))
+        {
+            var configuredDirectory = Path.GetDirectoryName(configuredPath);
+            if (!string.IsNullOrWhiteSpace(configuredDirectory))
+                Directory.CreateDirectory(configuredDirectory);
+
+            return configuredPath;
+        }
+
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var dataDirectory = Path.Combine(localAppData, "MoneyBox", "Kiosk");
+        Directory.CreateDirectory(dataDirectory);
+
+        return Path.Combine(dataDirectory, "m24h.db");
+    }
 }

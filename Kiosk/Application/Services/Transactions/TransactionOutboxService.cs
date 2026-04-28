@@ -1,5 +1,8 @@
-﻿using Kiosk.Infrastructure.Database.Ef;
+using Kiosk.Infrastructure.Database.Ef;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Kiosk.Application.Services.Transactions
 {
@@ -13,19 +16,31 @@ namespace Kiosk.Application.Services.Transactions
         public async Task MarkSuccessAsync(string transactionId, CancellationToken ct = default)
         {
             await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
-            await context.Database.ExecuteSqlRawAsync(
-                "CALL sp_update_tx_outbox_success({0})",
-                new object[] { transactionId },
-                ct).ConfigureAwait(false);
+            var row = await context.TransactionOutboxes
+                .SingleOrDefaultAsync(x => x.TransactionId == transactionId, ct)
+                .ConfigureAwait(false);
+            if (row is null)
+                return;
+
+            row.Status = "SENT";
+            row.LastTriedAt = DateTime.UtcNow;
+            await context.SaveChangesAsync(ct).ConfigureAwait(false);
         }
 
         public async Task MarkFailAsync(string transactionId, CancellationToken ct = default)
         {
             await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
-            await context.Database.ExecuteSqlRawAsync(
-                "CALL sp_update_tx_outbox_fail({0})",
-                new object[] { transactionId },
-                ct).ConfigureAwait(false);
+            var row = await context.TransactionOutboxes
+                .SingleOrDefaultAsync(x => x.TransactionId == transactionId, ct)
+                .ConfigureAwait(false);
+            if (row is null)
+                return;
+
+            row.Status = "FAILED";
+            row.RetryCount += 1;
+            row.LastTriedAt = DateTime.UtcNow;
+            row.NextRetryAt = DateTime.UtcNow.AddMinutes(1);
+            await context.SaveChangesAsync(ct).ConfigureAwait(false);
         }
     }
 }

@@ -1,8 +1,15 @@
-﻿using Kiosk.Infrastructure.Database.Ef;
+using Kiosk.Infrastructure.Cache;
+using Kiosk.Infrastructure.Database.Ef;
 using Kiosk.Infrastructure.Database.Ef.Entities;
-using Kiosk.Infrastructure.Common.Utils;
+using Kiosk.Infrastructure.Database.Models;
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Kiosk.Application.Services
 {
@@ -11,9 +18,14 @@ namespace Kiosk.Application.Services
     public sealed class WithdrawalCassetteService
     {
         private readonly IDbContextFactory<KioskDbContext> _contextFactory;
+        private readonly IMemoryCache _cache;
         private volatile HashSet<WithdrawalCassette> _withdrawalCassettes = new();
 
-        public WithdrawalCassetteService(IDbContextFactory<KioskDbContext> contextFactory) => _contextFactory = contextFactory;
+        public WithdrawalCassetteService(IDbContextFactory<KioskDbContext> contextFactory, IMemoryCache cache)
+        {
+            _contextFactory = contextFactory;
+            _cache = cache;
+        }
 
         public async Task InitializeAsync(CancellationToken ct = default)
         {
@@ -35,8 +47,8 @@ namespace Kiosk.Application.Services
             {
                 await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
                 var records = await context.WithdrawalCassettes
-                    .FromSqlRaw("CALL sp_get_cassette_info")
                     .AsNoTracking()
+                    .Where(x => x.IsValid)
                     .ToListAsync(ct)
                     .ConfigureAwait(false);
                 if (records.Count == 0)
@@ -45,23 +57,19 @@ namespace Kiosk.Application.Services
                 var next = new HashSet<WithdrawalCassette>(records.Count);
                 foreach (var record in records)
                 {
-                    next.Add(new WithdrawalCassette()
-                    {
-                        DeviceID = record.DeviceID,
-                        Slot = record.Slot,
-                        CurrencyCode = record.CurrencyCode,
-                        Denomination = record.Denomination,
-                        Capacity = record.Capacity,
-                        Count = record.Count,
-                    });
+                    next.Add(new WithdrawalCassette(
+                        record.DeviceID,
+                        record.Slot,
+                        record.CurrencyCode,
+                        record.Denomination,
+                        record.Capacity,
+                        record.Count));
                 }
 
-                // 교체형 캐시(락 없이 스레드-세이프 읽기)
                 _withdrawalCassettes = next;
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -69,41 +77,108 @@ namespace Kiosk.Application.Services
         {
             try
             {
-                const string sql = @"CALL sp_update_cassette_payout(@p_kiosk_id, @p_device_id, @p_currency_code, @p_slot, @p_denomination, @p_succeeded_count)";
+                var resultList = results.ToList();
+                if (resultList.Count == 0)
+                    return;
 
-                foreach (var result in results)
+                await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
+                var kioskId = ResolveKioskId();
+                var deviceIds = resultList.Select(x => x.deviceId).Distinct().ToList();
+                var slots = resultList.Select(x => x.slot).Distinct().ToList();
+
+                var query = context.WithdrawalCassettes
+                    .Where(x => deviceIds.Contains(x.DeviceID) && slots.Contains(x.Slot));
+
+                if (!string.IsNullOrWhiteSpace(kioskId))
+                    query = query.Where(x => x.KioskId == kioskId);
+
+                var rows = await query.ToListAsync(ct).ConfigureAwait(false);
+                var map = rows.ToDictionary(
+                    x => (x.DeviceID, x.CurrencyCode, x.Slot, x.Denomination),
+                    x => x);
+
+                foreach (var result in resultList)
                 {
-                    var parameters = new[]
-                    {
-                        new MySqlParameter("@p_kiosk_id", MySqlDbType.VarChar) { Value = "C4E7..." },
-                        new MySqlParameter("@p_device_id", MySqlDbType.VarChar) { Value = result.deviceId },
-                        new MySqlParameter("@p_currency_code", MySqlDbType.VarChar) { Value = result.currency_code },
-                        new MySqlParameter("@p_slot", MySqlDbType.Int32) { Value = result.slot },
-                        new MySqlParameter("@p_denomination", MySqlDbType.Decimal) { Value = result.denomination },
-                        new MySqlParameter("@p_succeeded_count", MySqlDbType.Int32) { Value = result.succeeded_count }
-                    };
+                    var key = (result.deviceId, result.currency_code, result.slot, result.denomination);
+                    if (!map.TryGetValue(key, out var row))
+                        continue;
 
-                    await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
-                    await context.Database.ExecuteSqlRawAsync(sql, parameters, ct).ConfigureAwait(false);
+                    row.Count = Math.Max(0, row.Count - result.succeeded_count);
+                    row.UpdatedAt = DateTime.UtcNow;
                 }
+
+                await context.SaveChangesAsync(ct).ConfigureAwait(false);
+                await LoadAsync(ct).ConfigureAwait(false);
             }
             catch (Exception)
             {
-
             }
         }
 
-        // TODO: 거래 결과인데 방출기에 있는 부분 어색함, 수정 필요
         public async Task ResultAsync(string json, CancellationToken ct = default)
         {
-            const string sql = @"CALL sp_save_tx_from_json(@p_tx)";
-            var parameters = new[]
-            {
-                new MySqlParameter("@p_tx", MySqlDbType.JSON) { Value = json }
-            };
-
             await using var context = await _contextFactory.CreateDbContextAsync(ct).ConfigureAwait(false);
-            await context.Database.ExecuteSqlRawAsync(sql, parameters, ct).ConfigureAwait(false);
+            var now = DateTime.UtcNow;
+            var transactionId = TryResolveTransactionId(json) ?? Guid.NewGuid().ToString("N");
+
+            var row = await context.TransactionOutboxes
+                .SingleOrDefaultAsync(x => x.TransactionId == transactionId, ct)
+                .ConfigureAwait(false);
+
+            if (row is null)
+            {
+                context.TransactionOutboxes.Add(new TransactionOutboxEntity
+                {
+                    KioskId = ResolveKioskId() ?? string.Empty,
+                    TransactionId = transactionId,
+                    MessageType = "TX_RESULT",
+                    PayloadJson = json,
+                    Status = "PENDING",
+                    RetryCount = 0,
+                    NextRetryAt = now,
+                    CreatedAt = now
+                });
+            }
+            else
+            {
+                row.PayloadJson = json;
+                row.MessageType = "TX_RESULT";
+                row.Status = "PENDING";
+                row.LastTriedAt = null;
+                row.NextRetryAt = now;
+            }
+
+            await context.SaveChangesAsync(ct).ConfigureAwait(false);
+        }
+
+        private string? ResolveKioskId()
+        {
+            var kiosks = _cache.Get<IReadOnlyList<KioskModel>>(DatabaseCacheKeys.Kiosk);
+            return kiosks?.FirstOrDefault()?.Id;
+        }
+
+        private static string? TryResolveTransactionId(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return null;
+
+            try
+            {
+                using var document = JsonDocument.Parse(json);
+                if (document.RootElement.ValueKind != JsonValueKind.Object)
+                    return null;
+
+                foreach (var propertyName in new[] { "TransactionId", "transactionId", "TransactionID", "transactionID" })
+                {
+                    if (document.RootElement.TryGetProperty(propertyName, out var value) && value.ValueKind == JsonValueKind.String)
+                        return value.GetString();
+                }
+            }
+            catch (JsonException)
+            {
+            }
+
+            return null;
         }
     }
 }

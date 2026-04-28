@@ -56,6 +56,7 @@ namespace Kiosk.Infrastructure.Database.Repositories
                     entity.Capacity = model.Capacity;
                     entity.Count = model.Count;
                     entity.IsValid = model.IsValid;
+                    entity.UpdatedAt = DateTime.UtcNow;
                 }
                 else
                 {
@@ -68,7 +69,9 @@ namespace Kiosk.Infrastructure.Database.Repositories
                         Denomination = model.Denomination,
                         Capacity = model.Capacity,
                         Count = model.Count,
-                        IsValid = model.IsValid
+                        IsValid = model.IsValid,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
                     });
                 }
             }

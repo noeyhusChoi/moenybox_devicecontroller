@@ -1,0 +1,162 @@
+[
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "EN-AU",
+    "currencyCode": "AUD",
+    "currencyDecimal": 2,
+    "currencySymbol": "$",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "EN-CA",
+    "currencyCode": "CAD",
+    "currencyDecimal": 2,
+    "currencySymbol": "$",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "ZH-CN",
+    "currencyCode": "CNY",
+    "currencyDecimal": 2,
+    "currencySymbol": "¥",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "DE-DE",
+    "currencyCode": "EUR",
+    "currencyDecimal": 2,
+    "currencySymbol": "€",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "EN-GB",
+    "currencyCode": "GBP",
+    "currencyDecimal": 2,
+    "currencySymbol": "£",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "ZH-HK",
+    "currencyCode": "HKD",
+    "currencyDecimal": 2,
+    "currencySymbol": "$",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "ID-ID",
+    "currencyCode": "IDR",
+    "currencyDecimal": 2,
+    "currencySymbol": "RP",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "JA-JP",
+    "currencyCode": "JPY",
+    "currencyDecimal": 2,
+    "currencySymbol": "¥",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "KO-KR",
+    "currencyCode": "KRW",
+    "currencyDecimal": 2,
+    "currencySymbol": "₩",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "MS-MY",
+    "currencyCode": "MYR",
+    "currencyDecimal": 2,
+    "currencySymbol": "RM",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "EN-PH",
+    "currencyCode": "PHP",
+    "currencyDecimal": 2,
+    "currencySymbol": "₱",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "EN-SG",
+    "currencyCode": "SGD",
+    "currencyDecimal": 2,
+    "currencySymbol": "$",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "TH-TH",
+    "currencyCode": "THB",
+    "currencyDecimal": 2,
+    "currencySymbol": "฿",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "ZH-TW",
+    "currencyCode": "TWD",
+    "currencyDecimal": 2,
+    "currencySymbol": "NT$",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "EN-US",
+    "currencyCode": "USD",
+    "currencyDecimal": 2,
+    "currencySymbol": "$",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "cultureCode": "VI-VN",
+    "currencyCode": "VND",
+    "currencyDecimal": 2,
+    "currencySymbol": "₫",
+    "isValid": true,
+    "createdAt": "2025-11-12 05:15:33",
+    "updatedAt": "2025-11-12 05:15:33"
+  }
+]

@@ -25,6 +25,7 @@ public class AppInitializer : IAppInitializer
     private readonly LocaleInfoRepository _localeInfoRepo;
     private readonly WithdrawalCassetteRepository _withdrawalCassetteRepo;
     private readonly WithdrawalCassetteService _withdrawalCassetteService;
+    private readonly ReferenceDataSyncService _referenceDataSyncService;
 
     public bool IsInitialized { get; private set; }
 
@@ -46,6 +47,7 @@ public class AppInitializer : IAppInitializer
         _withdrawalCassetteRepo = sp.GetRequiredService<WithdrawalCassetteRepository>();
 
         _withdrawalCassetteService = sp.GetRequiredService<WithdrawalCassetteService>();
+        _referenceDataSyncService = sp.GetRequiredService<ReferenceDataSyncService>();
     }
 
     public async Task InitializeAsync()
@@ -53,6 +55,7 @@ public class AppInitializer : IAppInitializer
         try
         {
             await RunStepAsync("DB Connecting ...", InitializeDatabaseAsync);
+            await RunStepAsync("Reference Data Sync ...", SyncReferenceDataAsync);
             await RunStepAsync("Cache Loading ...", LoadStaticCacheAsync);
             await RunStepAsync("Audio Preloading...", PreloadAudioAsync);
 
@@ -97,9 +100,13 @@ public class AppInitializer : IAppInitializer
     private async Task InitializeDatabaseAsync()
     {
         await using var context = await _dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
+        await context.Database.MigrateAsync().ConfigureAwait(false);
         if (!await context.Database.CanConnectAsync().ConfigureAwait(false))
             throw new InvalidOperationException("DB 연결 실패");
     }
+
+    private Task SyncReferenceDataAsync()
+        => _referenceDataSyncService.SyncAsync();
 
     private async Task LoadStaticCacheAsync()
     {

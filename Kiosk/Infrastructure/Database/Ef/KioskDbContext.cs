@@ -16,12 +16,15 @@ public sealed class KioskDbContext : DbContext
     public DbSet<DeviceInstanceEntity> DeviceInstances => Set<DeviceInstanceEntity>();
     public DbSet<DeviceCommEntity> DeviceComms => Set<DeviceCommEntity>();
     public DbSet<ApiConfigEntity> ApiConfigs => Set<ApiConfigEntity>();
+    public DbSet<CurrencyEntity> Currencies => Set<CurrencyEntity>();
+    public DbSet<DepositDenominationEntity> DepositDenominations => Set<DepositDenominationEntity>();
     public DbSet<DepositCurrencyEntity> DepositCurrencies => Set<DepositCurrencyEntity>();
     public DbSet<KioskInfoEntity> Kiosks => Set<KioskInfoEntity>();
+    public DbSet<KioskUpdateHistoryEntity> KioskUpdateHistories => Set<KioskUpdateHistoryEntity>();
     public DbSet<ReceiptEntity> Receipts => Set<ReceiptEntity>();
     public DbSet<LocaleInfoEntity> LocaleInfos => Set<LocaleInfoEntity>();
     public DbSet<WithdrawalCassetteEntity> WithdrawalCassettes => Set<WithdrawalCassetteEntity>();
-    public DbSet<TransactionOutboxRow> TransactionOutboxRows => Set<TransactionOutboxRow>();
+    public DbSet<TransactionOutboxEntity> TransactionOutboxes => Set<TransactionOutboxEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -129,6 +132,32 @@ public sealed class KioskDbContext : DbContext
             entity.Property(x => x.UpdatedAt).HasColumnName("UPDATED_AT");
         });
 
+        modelBuilder.Entity<CurrencyEntity>(entity =>
+        {
+            entity.ToTable("currency");
+            entity.HasKey(x => new { x.KioskId, x.CurrencyCode });
+            entity.Property(x => x.KioskId).HasColumnName("KIOSK_ID").HasMaxLength(36);
+            entity.Property(x => x.CultureCode).HasColumnName("CULTURE_CODE").HasMaxLength(5);
+            entity.Property(x => x.CurrencyCode).HasColumnName("CURRENCY_CODE").HasMaxLength(3);
+            entity.Property(x => x.CurrencyDecimal).HasColumnName("CURRENCY_DECIMAL");
+            entity.Property(x => x.CurrencySymbol).HasColumnName("CURRENCY_SYMBOL").HasMaxLength(8);
+            entity.Property(x => x.IsValid).HasColumnName("VLD");
+            entity.Property(x => x.CreatedAt).HasColumnName("CREATED_AT");
+            entity.Property(x => x.UpdatedAt).HasColumnName("UPDATED_AT");
+        });
+
+        modelBuilder.Entity<DepositDenominationEntity>(entity =>
+        {
+            entity.ToTable("deposit_denom");
+            entity.HasKey(x => new { x.KioskId, x.CurrencyCode, x.Denomination });
+            entity.Property(x => x.KioskId).HasColumnName("KIOSK_ID").HasMaxLength(36);
+            entity.Property(x => x.CurrencyCode).HasColumnName("CURRENCY_CODE").HasMaxLength(3);
+            entity.Property(x => x.Denomination).HasColumnName("VALUE");
+            entity.Property(x => x.IsValid).HasColumnName("VLD");
+            entity.Property(x => x.UpdatedBy).HasColumnName("UPDATED_BY").HasMaxLength(64);
+            entity.Property(x => x.UpdatedAt).HasColumnName("UPDATED_AT");
+        });
+
         modelBuilder.Entity<DepositCurrencyEntity>(entity =>
         {
             entity.ToTable("deposit_denom_attribute");
@@ -155,6 +184,18 @@ public sealed class KioskDbContext : DbContext
             entity.Property(x => x.IsValid).HasColumnName("VLD");
             entity.Property(x => x.CreatedAt).HasColumnName("CREATED_AT");
             entity.Property(x => x.UpdatedAt).HasColumnName("UPDATED_AT");
+        });
+
+        modelBuilder.Entity<KioskUpdateHistoryEntity>(entity =>
+        {
+            entity.ToTable("kiosk_update_history");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).HasColumnName("ID");
+            entity.Property(x => x.KioskId).HasColumnName("KIOSK_ID").HasMaxLength(36);
+            entity.Property(x => x.UpdateNo).HasColumnName("UPDATE_NO");
+            entity.Property(x => x.UpdateSource).HasColumnName("UPDATE_SOURCE").HasMaxLength(16);
+            entity.Property(x => x.UpdateDateTime).HasColumnName("UPDATE_DATETIME");
+            entity.HasIndex(x => x.KioskId).HasDatabaseName("IX_kiosk_update_history_kiosk_id");
         });
 
         modelBuilder.Entity<ReceiptEntity>(entity =>
@@ -209,12 +250,30 @@ public sealed class KioskDbContext : DbContext
             entity.Property(x => x.UpdatedAt).HasColumnName("UPDATED_AT");
         });
 
-        modelBuilder.Entity<TransactionOutboxRow>(entity =>
+        modelBuilder.Entity<TransactionOutboxEntity>(entity =>
         {
-            entity.HasNoKey();
-            entity.ToView(null);
-            entity.Property(x => x.TransactionId).HasColumnName("TRANSACTION_ID");
+            entity.ToTable("transaction_outbox");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).HasColumnName("ID");
+            entity.Property(x => x.KioskId).HasColumnName("KIOSK_ID").HasMaxLength(36);
+            entity.Property(x => x.TransactionId).HasColumnName("TRANSACTION_ID").HasMaxLength(64);
+            entity.Property(x => x.MessageType).HasColumnName("MESSAGE_TYPE").HasMaxLength(20);
             entity.Property(x => x.PayloadJson).HasColumnName("PAYLOAD_JSON");
+            entity.Property(x => x.Status)
+                .HasColumnName("STATUS")
+                .HasMaxLength(16)
+                .HasDefaultValue("PENDING");
+            entity.Property(x => x.RetryCount).HasColumnName("RETRY_COUNT");
+            entity.Property(x => x.NextRetryAt)
+                .HasColumnName("NEXT_RETRY_AT")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(x => x.LastTriedAt).HasColumnName("LAST_TRIED_AT");
+            entity.Property(x => x.CreatedAt)
+                .HasColumnName("CREATED_AT")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.HasIndex(x => x.TransactionId)
+                .HasDatabaseName("IX_transaction_outbox_transaction_id");
         });
     }
 }

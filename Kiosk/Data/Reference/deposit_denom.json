@@ -1,0 +1,306 @@
+[
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "AUD",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "AUD",
+    "denomination": "50.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "CAD",
+    "denomination": "50.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "CNY",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "EUR",
+    "denomination": "10.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "EUR",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "EUR",
+    "denomination": "20.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "EUR",
+    "denomination": "50.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "GBP",
+    "denomination": "10.0",
+    "isValid": false,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "GBP",
+    "denomination": "20.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "GBP",
+    "denomination": "5.0",
+    "isValid": false,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "GBP",
+    "denomination": "50.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "HKD",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "HKD",
+    "denomination": "1000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "HKD",
+    "denomination": "500.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "IDR",
+    "denomination": "100000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "JPY",
+    "denomination": "1000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "JPY",
+    "denomination": "10000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "JPY",
+    "denomination": "5000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "KRW",
+    "denomination": "1000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "KRW",
+    "denomination": "10000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "KRW",
+    "denomination": "5000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "KRW",
+    "denomination": "50000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "MYR",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "PHP",
+    "denomination": "100.0",
+    "isValid": false,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "PHP",
+    "denomination": "1000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "PHP",
+    "denomination": "50.0",
+    "isValid": false,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "PHP",
+    "denomination": "500.0",
+    "isValid": false,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "SGD",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "SGD",
+    "denomination": "50.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "THB",
+    "denomination": "1000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "TWD",
+    "denomination": "1000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "TWD",
+    "denomination": "500.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "USD",
+    "denomination": "10.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "USD",
+    "denomination": "100.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "USD",
+    "denomination": "20.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "USD",
+    "denomination": "50.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  },
+  {
+    "kioskId": "C4E7I4W5C4B6L3K4T2C4",
+    "currencyCode": "VND",
+    "denomination": "500000.0",
+    "isValid": true,
+    "updatedBy": null,
+    "updatedAt": "2025-11-12 05:15:54"
+  }
+]

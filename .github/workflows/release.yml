@@ -14,7 +14,7 @@ on:
         type: boolean
   push:
     tags:
-      - "v*"
+      - "kiosk-v*"
 
 permissions:
   contents: write
@@ -46,19 +46,24 @@ jobs:
         shell: pwsh
         run: |
           $version = '${{ github.event.inputs.version }}'
+          $releaseTag = ''
           if ([string]::IsNullOrWhiteSpace($version)) {
             $tag = '${{ github.ref_name }}'
-            if ($tag -match '^v(.+)$') {
+            if ($tag -match '^kiosk-v(.+)$') {
               $version = $Matches[1]
+              $releaseTag = $tag
             } else {
               throw "Unable to resolve release version."
             }
+          } else {
+            $releaseTag = "kiosk-v$version"
           }
 
           $repoUrl = '${{ github.server_url }}/${{ github.repository }}'
           $token = '${{ github.token }}'
 
           "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "RELEASE_TAG=$releaseTag" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "VELOPACK_REPO_URL=$repoUrl" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "VELOPACK_RELEASE_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
@@ -157,7 +162,7 @@ jobs:
             '--token', $env:VELOPACK_RELEASE_TOKEN,
             '--channel', 'win',
             '--merge',
-            '--tag', "v$env:APP_VERSION",
+            '--tag', $env:RELEASE_TAG,
             '--releaseName', "MoneyBox Kiosk v$env:APP_VERSION"
           )
 

@@ -1,5 +1,6 @@
 using Kiosk.Application.Abstractions;
 using Velopack;
+using Velopack.Sources;
 
 namespace Kiosk.Infrastructure.Updates;
 
@@ -226,6 +227,7 @@ public sealed class AppUpdateService : IAppUpdateService, IDisposable
             updateOptions.ExplicitChannel = _options.ExplicitChannel;
         }
 
-        return new UpdateManager(_options.FeedUrl!, updateOptions);
+        var source = new GithubSource(_options.FeedUrl!, string.Empty, prerelease: false);
+        return new UpdateManager(source, updateOptions);
     }
 }

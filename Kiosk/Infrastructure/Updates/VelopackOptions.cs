@@ -2,6 +2,7 @@ namespace Kiosk.Infrastructure.Updates;
 
 public sealed class VelopackOptions
 {
+    private const string DefaultFeedUrl = "https://github.com/noeyhusChoi/moenybox_devicecontroller";
     private const int DefaultPeriodicCheckMinutes = 60;
     private const int DefaultIdleApplySeconds = 60;
 
@@ -16,17 +17,11 @@ public sealed class VelopackOptions
     {
         return new VelopackOptions
         {
-            FeedUrl = ReadValue("KIOSK_UPDATE_FEED_URL"),
-            ExplicitChannel = ReadValue("KIOSK_UPDATE_CHANNEL"),
+            FeedUrl = DefaultFeedUrl,
+            ExplicitChannel = null,
             PeriodicCheckInterval = TimeSpan.FromMinutes(ReadInt("KIOSK_UPDATE_CHECK_MINUTES", DefaultPeriodicCheckMinutes)),
             IdleApplyThreshold = TimeSpan.FromSeconds(ReadInt("KIOSK_UPDATE_IDLE_SECONDS", DefaultIdleApplySeconds))
         };
-    }
-
-    private static string? ReadValue(string key)
-    {
-        var value = Environment.GetEnvironmentVariable(key);
-        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 
     private static int ReadInt(string key, int fallback)

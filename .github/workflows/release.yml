@@ -135,13 +135,14 @@ jobs:
         shell: pwsh
         run: |
           .\.tools\vpk\vpk.exe pack `
-            --packId MoneyBox.Kiosk `
+            --packId "MoneyBox Kiosk" `
             --packVersion $env:APP_VERSION `
             --packDir artifacts\publish\Kiosk `
             --mainExe Kiosk.exe `
             --packAuthors Moneybox `
             --packTitle "MoneyBox Kiosk" `
             --channel win `
+            --noPortable `
             --framework net9.0-x64-desktop `
             --outputDir artifacts\velopack
 

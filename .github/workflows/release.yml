@@ -3,6 +3,14 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      channel:
+        description: Release channel
+        required: true
+        default: stable
+        type: choice
+        options:
+          - stage
+          - stable
       version:
         description: "Release version (example: 1.2.3)"
         required: true
@@ -14,7 +22,8 @@ on:
         type: boolean
   push:
     tags:
-      - "kiosk-v*"
+      - "kiosk-stage-v*"
+      - "kiosk-stable-v*"
 
 permissions:
   contents: write
@@ -45,24 +54,31 @@ jobs:
       - name: Resolve release settings
         shell: pwsh
         run: |
+          $channel = '${{ github.event.inputs.channel }}'
           $version = '${{ github.event.inputs.version }}'
           $releaseTag = ''
           if ([string]::IsNullOrWhiteSpace($version)) {
             $tag = '${{ github.ref_name }}'
-            if ($tag -match '^kiosk-v(.+)$') {
-              $version = $Matches[1]
+            if ($tag -match '^kiosk-(stage|stable)-v(.+)$') {
+              $channel = $Matches[1]
+              $version = $Matches[2]
               $releaseTag = $tag
             } else {
               throw "Unable to resolve release version."
             }
           } else {
-            $releaseTag = "kiosk-v$version"
+            if ($channel -notin @('stage', 'stable')) {
+              throw "Invalid release channel: $channel"
+            }
+
+            $releaseTag = "kiosk-$channel-v$version"
           }
 
           $repoUrl = '${{ github.server_url }}/${{ github.repository }}'
           $token = '${{ github.token }}'
 
           "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "APP_CHANNEL=$channel" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "RELEASE_TAG=$releaseTag" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "VELOPACK_REPO_URL=$repoUrl" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "VELOPACK_RELEASE_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
@@ -85,7 +101,7 @@ jobs:
               --outputDir artifacts\velopack `
               --repoUrl $env:VELOPACK_REPO_URL `
               --token $env:VELOPACK_RELEASE_TOKEN `
-              --channel win
+              --channel $env:APP_CHANNEL
           } catch {
             Write-Host "No previous release artifacts were downloaded. Continuing with a full package only."
           }
@@ -146,7 +162,7 @@ jobs:
             --mainExe Kiosk.exe `
             --packAuthors Moneybox `
             --packTitle "MoneyBox Kiosk" `
-            --channel win `
+            --channel $env:APP_CHANNEL `
             --noPortable `
             --framework net9.0-x64-desktop `
             --outputDir artifacts\velopack
@@ -160,10 +176,10 @@ jobs:
             '--outputDir', 'artifacts\\velopack',
             '--repoUrl', $env:VELOPACK_REPO_URL,
             '--token', $env:VELOPACK_RELEASE_TOKEN,
-            '--channel', 'win',
+            '--channel', $env:APP_CHANNEL,
             '--merge',
             '--tag', $env:RELEASE_TAG,
-            '--releaseName', "MoneyBox Kiosk v$env:APP_VERSION"
+            '--releaseName', "MoneyBox Kiosk $env:APP_CHANNEL v$env:APP_VERSION"
           )
 
           if ($publishRelease -eq 'true' -or '${{ github.event_name }}' -eq 'push') {

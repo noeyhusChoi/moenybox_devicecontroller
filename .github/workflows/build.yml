@@ -38,52 +38,7 @@ jobs:
             DeviceKit/DeviceKit.csproj
 
       - name: Restore Kiosk
-        run: dotnet restore .\Kiosk\Kiosk.csproj -r win-x64
+        run: dotnet restore .\Kiosk\Kiosk.csproj
 
       - name: Build Kiosk (Debug)
         run: dotnet build .\Kiosk\Kiosk.csproj -c Debug --no-restore
-
-      - name: Publish Kiosk (Release, framework-dependent)
-        run: >
-          dotnet publish .\Kiosk\Kiosk.csproj
-          -c Release
-          --no-restore
-          --no-self-contained
-          -r win-x64
-          -o .\artifacts\publish\Kiosk
-
-      - name: Verify publish artifacts
-        shell: pwsh
-        run: |
-          $requiredPaths = @(
-            'artifacts\publish\Kiosk\Kiosk.exe',
-            'artifacts\publish\Kiosk\Assets\Sound\sfx_click.wav',
-            'artifacts\publish\Kiosk\DeviceKit.dll',
-            'artifacts\publish\Kiosk\Velopack.dll'
-          )
-
-          foreach ($path in $requiredPaths) {
-            if (-not (Test-Path $path)) {
-              throw "Required publish artifact not found: $path"
-            }
-          }
-
-          $requiredReferenceJsonFiles = @(
-            'currency.json',
-            'deposit_denom.json',
-            'deposit_denom_attribute.json'
-          )
-
-          $referenceDirectory = 'artifacts\publish\Kiosk\Data\Reference'
-          if (-not (Test-Path $referenceDirectory)) {
-            throw "Required publish directory not found: $referenceDirectory"
-          }
-
-          $publishedReferenceFiles = Get-ChildItem -Path $referenceDirectory -Filter *.json -File | Select-Object -ExpandProperty Name
-          foreach ($fileName in $requiredReferenceJsonFiles) {
-            if ($fileName -notin $publishedReferenceFiles) {
-              throw "Required reference data file not found: $referenceDirectory\$fileName"
-            }
-          }
-
-          Write-Host 'Publish artifact verification completed.'

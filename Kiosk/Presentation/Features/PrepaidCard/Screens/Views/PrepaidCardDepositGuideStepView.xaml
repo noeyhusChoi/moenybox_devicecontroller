@@ -1,0 +1,132 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCard.PrepaidCardDepositGuideStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+    d:DesignHeight="1455"
+    d:DesignWidth="1080"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="DepositGuideIconStyle" TargetType="svg:SvgIcon">
+            <Setter Property="Width" Value="140" />
+            <Setter Property="Height" Value="140" />
+            <Setter Property="AppName" Value="KIOSK" />
+            <Setter Property="Fill" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="Stroke" Value="{DynamicResource TextAccentBrush}" />
+        </Style>
+
+        <Style x:Key="DepositGuideItemTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource FontSize_M}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+
+        <Style x:Key="DepositGuideItemBodyStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,16,0,0" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="LineHeight" Value="46" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="56" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="48" />
+            <RowDefinition Height="120" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource ExchangeStepTitleStyle}"
+            Text="입금 전 확인해주세요" />
+
+        <Border
+            Grid.Row="2"
+            Width="936"
+            Padding="80"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch"
+            Style="{StaticResource CardSurfaceBorderStyle}">
+            <Grid VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140" />
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <svg:SvgIcon Style="{StaticResource DepositGuideIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/ico_charge_limit.svg" />
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource DepositGuideItemTitleStyle}" Text="충전 한도" />
+                        <TextBlock Style="{StaticResource DepositGuideItemBodyStyle}" Text="각 지갑 별 최대 500,000 KRW 까지 충전이 가능합니다." />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140" />
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <svg:SvgIcon Style="{StaticResource DepositGuideIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/icon_charge_over.svg" />
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource DepositGuideItemTitleStyle}" Text="환전 금액 초과 시 처리" />
+                        <TextBlock Style="{StaticResource DepositGuideItemBodyStyle}" Text="500,000 KRW 이상 환전 가능하며, 미충전 금액은 현금으로 지급됩니다." />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140" />
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <svg:SvgIcon Style="{StaticResource DepositGuideIconStyle}" UriSource="pack://application:,,,/KIOSK;component/Assets/Icon/icon_recharge.svg" />
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource DepositGuideItemTitleStyle}" Text="재충전 가능" />
+                        <TextBlock Style="{StaticResource DepositGuideItemBodyStyle}" Text="카드 이용 후, 각 지갑의 금액은 언제든지 재충전이 가능합니다." />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid
+            x:Name="DepositGuideActionContainer"
+            Grid.Row="4"
+            behavior:FocusContainer.InitialFocus="True"
+            behavior:FocusContainer.Mode="HorizontalStack"
+            Focusable="False"
+            KeyboardNavigation.IsTabStop="False">
+            <Button
+                Command="{Binding PrimaryCommand}"
+                IsEnabled="{Binding IsPrimaryEnabled}"
+                Style="{StaticResource FilledActionPrimaryButtonStyle}">
+                <TextBlock Text="입금 진행하기" />
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

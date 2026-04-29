@@ -30,6 +30,7 @@ public partial class MainRuntimeViewModel : ObservableObject
     private Task? _autoStandbyTask;
     private bool _autoStandbyEnabled;
     private bool _pauseAutoStandby;
+    private bool _pauseForUpdateFlow;
     private bool _awaitingEmptyAfterScan;
     private bool _detectedHandling;
     private bool _suspendSelectAllSync;
@@ -173,6 +174,22 @@ public partial class MainRuntimeViewModel : ObservableObject
         }
 
         _ = StopScanStandbyAsync();
+    }
+
+    public void SetUpdateFlowPaused(bool paused)
+    {
+        _pauseForUpdateFlow = paused;
+        if (paused)
+        {
+            _ = StopScanStandbyAsync();
+            HideOperationOverlay();
+            return;
+        }
+
+        if (_autoStandbyEnabled)
+        {
+            _pauseAutoStandby = false;
+        }
     }
 
     [RelayCommand]
@@ -454,6 +471,12 @@ public partial class MainRuntimeViewModel : ObservableObject
 
     private async Task<bool> ExecuteOcrAsync(OcrMode mode, CancellationToken cancellationToken)
     {
+        if (_pauseForUpdateFlow)
+        {
+            LastResult = "업데이트 확인 중에는 OCR을 실행하지 않습니다.";
+            return false;
+        }
+
         if (_lastCaptured is null)
         {
             LastResult = "No captured image/document bytes. Execute SAVEIMAGE first.";
@@ -553,6 +576,11 @@ public partial class MainRuntimeViewModel : ObservableObject
 
     private async Task SyncPendingUsageAsync(CancellationToken cancellationToken)
     {
+        if (_pauseForUpdateFlow)
+        {
+            return;
+        }
+
         if (!await _usageSyncLock.WaitAsync(0, cancellationToken))
         {
             return;
@@ -874,6 +902,11 @@ public partial class MainRuntimeViewModel : ObservableObject
     private async Task HandleScanProgressAsync(ScanSessionProgress progress)
     {
         ApplyScanProgress(progress);
+        if (_pauseForUpdateFlow)
+        {
+            return;
+        }
+
         UpdateScanOverlayByPresence(progress);
         if (!progress.Success)
         {
@@ -928,7 +961,7 @@ public partial class MainRuntimeViewModel : ObservableObject
             return;
         }
 
-        if (_detectedHandling || _pauseAutoStandby)
+        if (_detectedHandling || _pauseAutoStandby || _pauseForUpdateFlow)
         {
             return;
         }
@@ -1020,7 +1053,7 @@ public partial class MainRuntimeViewModel : ObservableObject
             return;
         }
 
-        if (_awaitingEmptyAfterScan || _detectedHandling || _pauseAutoStandby)
+        if (_awaitingEmptyAfterScan || _detectedHandling || _pauseAutoStandby || _pauseForUpdateFlow)
         {
             return;
         }

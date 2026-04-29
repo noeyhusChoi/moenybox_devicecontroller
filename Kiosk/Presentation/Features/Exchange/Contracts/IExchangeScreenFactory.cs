@@ -1,0 +1,25 @@
+using CommunityToolkit.Mvvm.Input;
+using Kiosk.Application.Features.ExchangeV2.StateMachine;
+using Kiosk.ViewModels.Steps;
+
+namespace Kiosk.ViewModels;
+
+public interface IExchangeScreenFactory
+{
+    ExchangeStepViewModelBase CreateStepViewModel(
+        ExchangeStep step,
+        ExchangeFlowContext context,
+        Func<Task> showModalAsync);
+
+    void ConfigureStepActions(
+        ExchangeStep step,
+        ExchangeFlowContext context,
+        ExchangeStepViewModelBase? stepViewModel,
+        IAsyncRelayCommand homeCommand);
+
+    int GetProgressStage(ExchangeStep step);
+
+    bool ShouldShowStepHeader(ExchangeStep step);
+    bool ShouldUseFeatureBackground(ExchangeStep step);
+    bool ShouldCollapseShellChrome(ExchangeStep step);
+}

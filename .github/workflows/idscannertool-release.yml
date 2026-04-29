@@ -1,0 +1,137 @@
+name: IdScannerTool Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (example: 1.0.0)"
+        required: true
+        type: string
+      publish_release:
+        description: Publish release instead of draft
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          cache: true
+          cache-dependency-path: |
+            IdScannerTool/IdScannerTool.csproj
+            DeviceKit/DeviceKit.csproj
+
+      - name: Resolve release settings
+        shell: pwsh
+        run: |
+          $version = '${{ github.event.inputs.version }}'
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            $tag = '${{ github.ref_name }}'
+            if ($tag -match '^v(.+)$') {
+              $version = $Matches[1]
+            } else {
+              throw "Unable to resolve release version."
+            }
+          }
+
+          $repoUrl = '${{ vars.VELOPACK_REPO_URL }}'
+          if ([string]::IsNullOrWhiteSpace($repoUrl)) {
+            $repoUrl = 'https://github.com/noeyhusChoi/moenybox_devicecontroller'
+          }
+
+          $token = '${{ secrets.VELOPACK_RELEASE_TOKEN }}'
+          if ([string]::IsNullOrWhiteSpace($token)) {
+            $token = '${{ github.token }}'
+          }
+
+          "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VELOPACK_REPO_URL=$repoUrl" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VELOPACK_RELEASE_TOKEN=$token" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Restore
+        run: dotnet restore IdScannerTool\IdScannerTool.csproj
+
+      - name: Install vpk
+        shell: pwsh
+        run: |
+          dotnet tool install --tool-path .tools\vpk vpk --version 0.0.1298
+
+      - name: Download previous Velopack releases
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts\velopack | Out-Null
+
+          try {
+            .\.tools\vpk\vpk.exe download github `
+              --outputDir artifacts\velopack `
+              --repoUrl $env:VELOPACK_REPO_URL `
+              --token $env:VELOPACK_RELEASE_TOKEN `
+              --channel win
+          } catch {
+            Write-Host "No previous release artifacts were downloaded. Continuing with a full package only."
+          }
+
+      - name: Publish IdScannerTool
+        run: >
+          dotnet publish IdScannerTool\IdScannerTool.csproj
+          -c Release
+          -r win-x86
+          --self-contained true
+          -p:Platform=x86
+          -p:Version=${{ env.APP_VERSION }}
+          -o artifacts\publish\IdScannerTool
+
+      - name: Pack Velopack release
+        shell: pwsh
+        run: |
+          $packId = 'MBoxIDScanner'
+          $mainExe = 'M-Box ID Scanner.exe'
+          .\.tools\vpk\vpk.exe pack `
+            --packId $packId `
+            --packVersion $env:APP_VERSION `
+            --packDir artifacts\publish\IdScannerTool `
+            --mainExe $mainExe `
+            --packAuthors Moneybox `
+            --packTitle "M-Box ID Scanner" `
+            --noPortable `
+            --channel win `
+            --outputDir artifacts\velopack
+
+      - name: Upload Velopack packages to GitHub Releases
+        shell: pwsh
+        run: |
+          $publishRelease = '${{ github.event.inputs.publish_release }}'
+          $uploadArgs = @(
+            'upload', 'github',
+            '--outputDir', 'artifacts\\velopack',
+            '--repoUrl', $env:VELOPACK_REPO_URL,
+            '--token', $env:VELOPACK_RELEASE_TOKEN,
+            '--channel', 'win',
+            '--merge',
+            '--tag', "v$env:APP_VERSION",
+            '--releaseName', "M-Box ID Scanner v$env:APP_VERSION"
+          )
+
+          if ($publishRelease -eq 'true' -or '${{ github.event_name }}' -eq 'push') {
+            $uploadArgs += '--publish'
+          }
+
+          .\.tools\vpk\vpk.exe @uploadArgs

@@ -1,0 +1,133 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCardShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prepaidViews="clr-namespace:Kiosk.Views.PrepaidCard"
+    xmlns:prepaidVm="clr-namespace:Kiosk.ViewModels.PrepaidCard"
+    xmlns:stepViews="clr-namespace:Kiosk.Views.Steps"
+    xmlns:stepVm="clr-namespace:Kiosk.ViewModels.Steps"
+    xmlns:views="clr-namespace:Kiosk.Views"
+    behavior:FocusBoundary.EntryTarget="{Binding ElementName=StepContentHost}"
+    d:DesignHeight="1705"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardGuideStepViewModel}">
+            <prepaidViews:PrepaidCardGuideStepView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardServiceSelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardServiceSelectionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardChargeMethodSelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardChargeMethodSelectionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardWalletSelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardWalletSelectionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardCardRecognitionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardCardRecognitionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardPaymentMethodSelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardPaymentMethodSelectionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardEasyPayMethodSelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardEasyPayMethodSelectionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:CurrencySelectionStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:CurrencySelectionStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:ConsentStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:ConsentStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:ScanIntroStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:ScanIntroStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:ScanningStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:ScanningStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:ScanCompletedStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:ScanCompletedStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardDepositGuideStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardDepositGuideStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:DepositStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:DepositStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardAmountEntryStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardAmountEntryStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardBaseCashAmountEntryStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardBaseCashAmountEntryStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardEasyPayAmountEntryStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardEasyPayAmountEntryStepView />
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Border Background="{DynamicResource AppBackgroundBrush}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Setter Property="Height" Value="190" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowStepHeader}" Value="False">
+                                    <Setter Property="Height" Value="0" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <views:ExchangeProgressView Grid.Row="0" DataContext="{Binding CurrentProgressStage}" />
+
+            <ContentControl
+                x:Name="StepContentHost"
+                Grid.Row="1"
+                behavior:FocusContainer.Mode="None"
+                Content="{Binding CurrentStepViewModel}"
+                Focusable="False"
+                IsTabStop="False"
+                KeyboardNavigation.IsTabStop="False" />
+        </Grid>
+    </Border>
+</UserControl>

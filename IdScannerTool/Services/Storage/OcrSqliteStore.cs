@@ -25,7 +25,10 @@ public sealed class OcrSqliteStore : IOcrHistoryStore
     public OcrSqliteStore(string? dbPath = null)
     {
         _dbPath = string.IsNullOrWhiteSpace(dbPath)
-            ? Path.Combine(AppContext.BaseDirectory, "ocr-history.db")
+            ? Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "MBoxIDScanner",
+                "ocr-history.db")
             : dbPath;
     }
 

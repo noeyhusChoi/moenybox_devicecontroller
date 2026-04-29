@@ -1,0 +1,145 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  App  -->
+    <SolidColorBrush x:Key="AppBackgroundBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="FeatureBackgroundBrush" Color="{StaticResource Gray900}" />
+
+    <!--  Surface / Layout  -->
+    <SolidColorBrush x:Key="CardPrimaryBackgroundBrush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="UtilityBarBackgroundBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="CardSecondaryBackgroundBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="CardSecondaryBorderBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="AccessibilitySettingsTileBackgroundBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="AccessibilitySettingsSegmentBackgroundBrush" Color="{StaticResource Gray700}" />
+    <SolidColorBrush x:Key="AccentSurfaceBackgroundBrush" Color="{StaticResource Primary900}" />
+    <SolidColorBrush x:Key="SurfaceInverseBackgroundBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="SurfaceInversePressedBackgroundBrush" Color="{StaticResource Gray900}" />
+
+    <!--  Surface / Default Control  -->
+    <SolidColorBrush x:Key="SurfaceDefaultBrush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="SurfaceDefaultPressedBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="SurfaceDefaultBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnDefaultPrimaryBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnDefaultSecondaryBrush" Color="{StaticResource Gray100}" />
+
+    <!--  Surface / Accent Control  -->
+    <SolidColorBrush x:Key="AccentBackgroundBrush" Color="{StaticResource Primary500}" />
+    <SolidColorBrush x:Key="AccentStrongBackgroundBrush" Color="{StaticResource Primary700}" />
+    <SolidColorBrush x:Key="SurfaceAccentBrush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="SurfaceAccentPressedBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="SurfaceAccentBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnAccentPrimaryBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnAccentSecondaryBrush" Color="{StaticResource Gray100}" />
+
+    <!--  Surface / Secondary Control  -->
+    <SolidColorBrush x:Key="SurfaceSecondaryBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="SurfaceSecondaryPressedBrush" Color="{StaticResource Amber600}" />
+    <SolidColorBrush x:Key="SurfaceSecondaryBorderBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="OnSecondaryPrimaryBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="OnSecondarySecondaryBrush" Color="{StaticResource Gray900}" />
+
+    <!--  Surface / Strong Control  -->
+    <SolidColorBrush x:Key="SurfaceStrongBrush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="SurfaceStrongPressedBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="SurfaceStrongBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnStrongPrimaryBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnStrongSecondaryBrush" Color="{StaticResource Gray100}" />
+
+    <!--  Surface / Action Primary  -->
+    <SolidColorBrush x:Key="SurfaceActionPrimaryBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush
+        x:Key="SurfaceActionPrimaryPressedBrush"
+        Opacity="0.15"
+        Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="SurfaceActionPrimaryBorderBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="OnActionPrimaryPrimaryBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="OnActionPrimarySecondaryBrush" Color="{StaticResource Gray800}" />
+
+    <!--  Surface / Action Secondary  -->
+    <SolidColorBrush x:Key="SurfaceActionSecondaryBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="SurfaceActionSecondaryPressedBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="SurfaceActionSecondaryBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnActionSecondaryPrimaryBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="OnActionSecondarySecondaryBrush" Color="{StaticResource Gray100}" />
+
+    <!--  Surface / Disabled  -->
+    <SolidColorBrush x:Key="SurfaceDisabledBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="SurfaceDisabledBorderBrush" Color="{StaticResource Gray100}" />
+    <SolidColorBrush x:Key="OnDisabledPrimaryBrush" Color="{StaticResource Gray300}" />
+
+    <!--  Text  -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource Gray100}" />
+    <SolidColorBrush x:Key="TextTertiaryBrush" Color="{StaticResource Gray300}" />
+    <SolidColorBrush x:Key="TextAccentBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="TextAccentStrongBrush" Color="{StaticResource Gray0}" />
+
+    <!--  Progress  -->
+    <SolidColorBrush x:Key="ProgressBackgroundBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="ProgressCurrentBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="ProgressCurrentForegroundBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="ProgressPendingBrush" Color="{StaticResource Gray700}" />
+
+    <!--  Status  -->
+    <SolidColorBrush x:Key="StatusSuccessBackgroundBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="StatusSuccessForegroundBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="StatusErrorBackgroundBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="StatusErrorForegroundBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="StatusInfoBackgroundBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="StatusInfoForegroundBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="StatusWarningBackgroundBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="StatusWarningForegroundBrush" Color="{StaticResource Gray1000}" />
+
+    <!--  Border  -->
+    <SolidColorBrush x:Key="BorderDefaultBrush" Color="{StaticResource Gray700}" />
+    <SolidColorBrush x:Key="BorderStrongBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="BorderFocusBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="BorderAccentBrush" Color="{StaticResource Primary300}" />
+    <SolidColorBrush x:Key="CheckboxBackgroundBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="CheckboxBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="CheckboxCheckedBackgroundBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="CheckboxCheckmarkBrush" Color="{StaticResource Gray1000}" />
+    <SolidColorBrush x:Key="CheckboxFocusRingBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="SelectionMarkerBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="FilledWhiteButtonBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="FilledPrimaryButtonBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="FilledDarkButtonBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="FeatureDividerDefaultBrush" Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="FeatureDividerAccentBrush" Color="{StaticResource Gray700}" />
+
+    <!--  Debug  -->
+    <SolidColorBrush x:Key="DebugBadgeBackgroundBrush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="DebugBadgeBorderBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="DebugBadgeForegroundBrush" Color="{StaticResource Amber500}" />
+    <SolidColorBrush x:Key="DebugPanelBackgroundBrush" Color="{StaticResource Gray900}" />
+    <SolidColorBrush x:Key="DebugPanelBorderBrush" Color="{StaticResource Gray0}" />
+    <SolidColorBrush x:Key="MediaPreviewBackgroundBrush" Color="{StaticResource Gray800}" />
+
+    <!--  Accessibility  -->
+    <SolidColorBrush
+        x:Key="AccessibilityMinimapBackgroundBrush"
+        Opacity="0.9"
+        Color="{StaticResource Gray1000}" />
+    <SolidColorBrush
+        x:Key="AccessibilityMinimapBorderBrush"
+        Opacity="0.6"
+        Color="{StaticResource White}" />
+    <SolidColorBrush
+        x:Key="AccessibilityMinimapSurfaceBackgroundBrush"
+        Opacity="0.2"
+        Color="{StaticResource Black}" />
+    <SolidColorBrush
+        x:Key="AccessibilityMinimapSurfaceBorderBrush"
+        Opacity="0.4"
+        Color="{StaticResource White}" />
+    <SolidColorBrush
+        x:Key="AccessibilityMinimapViewportBackgroundBrush"
+        Opacity="0.4"
+        Color="{StaticResource Primary500}" />
+    <SolidColorBrush x:Key="AccessibilityMinimapViewportBorderBrush" Color="{StaticResource Primary300}" />
+
+    <!--  Overlay  -->
+    <SolidColorBrush
+        x:Key="OverlayDimBrush"
+        Opacity="0.72"
+        Color="{StaticResource Black}" />
+</ResourceDictionary>

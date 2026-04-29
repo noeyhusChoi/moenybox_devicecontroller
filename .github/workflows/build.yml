@@ -1,0 +1,43 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches-ignore:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          cache: true
+          cache-dependency-path: |
+            Kiosk/Kiosk.csproj
+            Kiosk.Tests/Kiosk.Tests.csproj
+            DeviceKit/DeviceKit.csproj
+
+      - name: Restore Kiosk
+        run: dotnet restore .\Kiosk\Kiosk.csproj
+
+      - name: Build Kiosk (Debug)
+        run: dotnet build .\Kiosk\Kiosk.csproj -c Debug --no-restore

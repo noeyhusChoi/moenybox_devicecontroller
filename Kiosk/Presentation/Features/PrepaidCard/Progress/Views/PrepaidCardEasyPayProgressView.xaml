@@ -1,0 +1,270 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCard.PrepaidCardEasyPayProgressView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="190"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="EasyPayStepCircleBaseStyle" TargetType="Border">
+            <Setter Property="Width" Value="68" />
+            <Setter Property="Height" Value="68" />
+            <Setter Property="CornerRadius" Value="34" />
+            <Setter Property="Background" Value="{DynamicResource ProgressPendingBrush}" />
+        </Style>
+
+        <Style x:Key="EasyPayStepNumberBaseStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+
+        <Style x:Key="EasyPayStepLabelBaseStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="NoWrap" />
+        </Style>
+
+        <Style x:Key="Step1CircleStyle" TargetType="Border" BasedOn="{StaticResource EasyPayStepCircleBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="1">
+                    <Setter Property="Background" Value="{DynamicResource ProgressCurrentBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                    <Setter Property="Background" Value="{DynamicResource ProgressBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ProgressCurrentBrush}" />
+                    <Setter Property="BorderThickness" Value="3" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="Background" Value="{DynamicResource ProgressBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ProgressCurrentBrush}" />
+                    <Setter Property="BorderThickness" Value="3" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step2CircleStyle" TargetType="Border" BasedOn="{StaticResource EasyPayStepCircleBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                    <Setter Property="Background" Value="{DynamicResource ProgressCurrentBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="Background" Value="{DynamicResource ProgressBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ProgressCurrentBrush}" />
+                    <Setter Property="BorderThickness" Value="3" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step3CircleStyle" TargetType="Border" BasedOn="{StaticResource EasyPayStepCircleBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="Background" Value="{DynamicResource ProgressCurrentBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step1NumberStyle" TargetType="TextBlock" BasedOn="{StaticResource EasyPayStepNumberBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="1">
+                    <Setter Property="Foreground" Value="{DynamicResource ProgressCurrentForegroundBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step2NumberStyle" TargetType="TextBlock" BasedOn="{StaticResource EasyPayStepNumberBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                    <Setter Property="Foreground" Value="{DynamicResource ProgressCurrentForegroundBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step3NumberStyle" TargetType="TextBlock" BasedOn="{StaticResource EasyPayStepNumberBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="Foreground" Value="{DynamicResource ProgressCurrentForegroundBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step1LabelStyle" TargetType="TextBlock" BasedOn="{StaticResource EasyPayStepLabelBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="1">
+                    <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step2LabelStyle" TargetType="TextBlock" BasedOn="{StaticResource EasyPayStepLabelBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                    <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Step3LabelStyle" TargetType="TextBlock" BasedOn="{StaticResource EasyPayStepLabelBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                    <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CompletedStepCheckStyle" TargetType="Path">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Data" Value="M 2,10 L 11,19 L 28,2" />
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="Stroke" Value="{DynamicResource ProgressCurrentBrush}" />
+            <Setter Property="StrokeThickness" Value="5" />
+            <Setter Property="StrokeStartLineCap" Value="Round" />
+            <Setter Property="StrokeEndLineCap" Value="Round" />
+            <Setter Property="StrokeLineJoin" Value="Round" />
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Height="190" Background="{DynamicResource ProgressBackgroundBrush}">
+        <Rectangle
+            Width="653"
+            Height="6"
+            Margin="0,48,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Fill="{DynamicResource ProgressPendingBrush}" />
+
+        <Grid Margin="72,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="26" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="26" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="103" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="7" />
+                </Grid.RowDefinitions>
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource Step1CircleStyle}">
+                    <Grid>
+                        <TextBlock Style="{StaticResource Step1NumberStyle}" Text="1" />
+                        <Path HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Path.Style>
+                                <Style TargetType="Path" BasedOn="{StaticResource CompletedStepCheckStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Path.Style>
+                        </Path>
+                    </Grid>
+                </Border>
+                <TextBlock Grid.Row="1" Style="{StaticResource Step1LabelStyle}" Text="금액설정" />
+                <Border Grid.Row="2" Background="{DynamicResource ProgressCurrentBrush}">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="1">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="103" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="7" />
+                </Grid.RowDefinitions>
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource Step2CircleStyle}">
+                    <Grid>
+                        <TextBlock Style="{StaticResource Step2NumberStyle}" Text="2" />
+                        <Path HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Path.Style>
+                                <Style TargetType="Path" BasedOn="{StaticResource CompletedStepCheckStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Path.Style>
+                        </Path>
+                    </Grid>
+                </Border>
+                <TextBlock Grid.Row="1" Style="{StaticResource Step2LabelStyle}" Text="{Binding EasyPayPaymentStepLabel}" />
+                <Border Grid.Row="2" Background="{DynamicResource ProgressCurrentBrush}">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="2">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="103" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="7" />
+                </Grid.RowDefinitions>
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource Step3CircleStyle}">
+                    <TextBlock Style="{StaticResource Step3NumberStyle}" Text="3" />
+                </Border>
+                <TextBlock Grid.Row="1" Style="{StaticResource Step3LabelStyle}" Text="교통지갑 충전" />
+                <Border Grid.Row="2" Background="{DynamicResource ProgressCurrentBrush}">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentProgressStage}" Value="3">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

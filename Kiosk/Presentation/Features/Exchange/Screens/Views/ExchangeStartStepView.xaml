@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
+
     <Grid behavior:FocusContainer.InitialFocus="True" behavior:FocusContainer.Mode="VerticalStack">
         <Grid.RowDefinitions>
             <RowDefinition Height="190" />
@@ -32,7 +33,7 @@
             <Image
                 Width="300"
                 Height="300"
-                Source="{Binding ImageAssetPath}"
+                Source="pack://application:,,,/Assets/Image/img_exchange.png"
                 Stretch="Uniform" />
         </Border>
 

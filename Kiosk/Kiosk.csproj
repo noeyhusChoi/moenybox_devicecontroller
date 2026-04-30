@@ -150,8 +150,6 @@
       <None Remove="Assets\Icon\ico_voice.svg" />
       <None Remove="Assets\Image\Bill.png" />
       <None Remove="Assets\Image\Card.png" />
-      <None Remove="Assets\Image\character-complete.png" />
-      <None Remove="Assets\Image\Character.png" />
       <None Remove="Assets\Image\Common_Logo.png" />
       <None Remove="Assets\Image\Denomination\AUD_100.png" />
       <None Remove="Assets\Image\Denomination\AUD_50.png" />
@@ -187,10 +185,11 @@
       <None Remove="Assets\Image\Denomination\USD_50.png" />
       <None Remove="Assets\Image\Denomination\VND_500000.png" />
       <None Remove="Assets\Image\Error.png" />
-      <None Remove="Assets\Image\Exchange.png" />
       <None Remove="Assets\Image\exchange_buy.png" />
       <None Remove="Assets\Image\exchange_sell.png" />
       <None Remove="Assets\Image\GTF_LOGO2.bmp" />
+      <None Remove="Assets\Image\ico_ali.png" />
+      <None Remove="Assets\Image\ico_wechat.png" />
       <None Remove="Assets\Image\Identification.png" />
       <None Remove="Assets\Image\IDScan_ID.png" />
       <None Remove="Assets\Image\IDScan_Passport.png" />
@@ -202,10 +201,16 @@
       <None Remove="Assets\Image\img_card_purchase.png" />
       <None Remove="Assets\Image\img_exchange.png" />
       <None Remove="Assets\Image\img_ezl.png" />
+      <None Remove="Assets\Image\img_mascot.png" />
+      <None Remove="Assets\Image\img_mascot2.png" />
       <None Remove="Assets\Image\img_moneybox_logotype.svg" />
       <None Remove="Assets\Image\img_moneybox_symbol.png" />
       <None Remove="Assets\Image\img_passport.png" />
       <None Remove="Assets\Image\img_prepay_ezl.png" />
+      <None Remove="Assets\Image\ico_easy_pay_alipay.svg" />
+      <None Remove="Assets\Image\ico_easy_pay_wechat.svg" />
+      <None Remove="Assets\Image\img_easy_pay_qr_phone_frame.svg" />
+      <None Remove="Assets\Image\img_easy_pay_qr_sample.png" />
       <None Remove="Assets\Image\img_refund.png" />
       <None Remove="Assets\Image\img_scan_fail.png" />
       <None Remove="Assets\Image\img_scan_ing.png" />
@@ -214,8 +219,6 @@
       <None Remove="Assets\Image\Info_normal.png" />
       <None Remove="Assets\Image\Info_warn.png" />
       <None Remove="Assets\Image\LOGO_CI.png" />
-      <None Remove="Assets\Image\LOGO_CI_black.png" />
-      <None Remove="Assets\Image\LOGO_CI_white.png" />
       <None Remove="Assets\Image\Passport.png" />
       <None Remove="Assets\Image\Refund.png" />
       <None Remove="Assets\Image\succss.png" />
@@ -337,7 +340,10 @@
       <Resource Include="Assets\Icon\ico_voice.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Image\Exchange.png">
+      <Resource Include="Assets\Image\ico_ali.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\ico_wechat.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\img_bill.png">
@@ -364,6 +370,12 @@
       <Resource Include="Assets\Image\img_ezl.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <Resource Include="Assets\Image\img_mascot.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_mascot2.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\Image\img_moneybox_logotype.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -374,6 +386,18 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\img_prepay_ezl.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\ico_easy_pay_alipay.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\ico_easy_pay_wechat.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_easy_pay_qr_phone_frame.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Assets\Image\img_easy_pay_qr_sample.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Image\img_refund.png">
@@ -388,10 +412,10 @@
       <Resource Include="Assets\Image\img_scan_success.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Image\LOGO_CI_black.png">
+      <Resource Include="Assets\Image\img_logo_black.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Assets\Image\LOGO_CI_white.png">
+      <Resource Include="Assets\Image\img_logo_white.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <Resource Include="Assets\Fonts\NotoSans\Static\NotoSans-Bold.ttf">
@@ -703,12 +727,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
       <Content Include="symbol.ico" />
-      <Resource Include="Assets\Image\character-complete.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
-      <Resource Include="Assets\Image\Character.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Assets\Image\Terms\Terms_ko-KR.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>

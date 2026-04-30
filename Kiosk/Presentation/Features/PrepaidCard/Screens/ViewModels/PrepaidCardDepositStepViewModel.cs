@@ -71,7 +71,7 @@ public sealed partial class PrepaidCardDepositStepViewModel : ExchangeStepViewMo
 
         return directory
             .GetFiles($"{currencyCode.ToUpperInvariant()}_*.png", SearchOption.TopDirectoryOnly)
-            .OrderBy(file => ParseDenomination(file.Name))
+            .OrderByDescending(file => ParseDenomination(file.Name))
             .Select(file => file.FullName)
             .ToArray();
     }

@@ -57,15 +57,15 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="48" />
+            <RowDefinition Height="68" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="24" />
             <RowDefinition Height="496" />
             <RowDefinition Height="24" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="48" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="48" />
+            <RowDefinition Height="68" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="55" />
             <RowDefinition Height="120" />
         </Grid.RowDefinitions>
 
@@ -217,7 +217,7 @@
             CornerRadius="32"
             Effect="{DynamicResource FilledCardButtonShadowEffect}">
             <TextBlock
-                Margin="45"
+                Margin="40"
                 HorizontalAlignment="Center"
                 Style="{StaticResource AmountEntrySummaryLabelStyle}">
                 <Run Text="현금지급 금액 :" />
@@ -235,12 +235,15 @@
         <TextBlock
             Grid.Row="8"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Style="{StaticResource AmountEntrySummaryNoteStyle}"
             Text="1,000원 미만 잔액은 자동으로 선불 지갑에 충전됩니다" />
 
         <Button
             x:Name="ForeignCashPrimaryActionButton"
             Grid.Row="10"
+            Height="120"
+            VerticalAlignment="Bottom"
             Command="{Binding PrimaryCommand}"
             IsEnabled="{Binding IsPrimaryEnabled}"
             Style="{StaticResource FilledActionPrimaryButtonStyle}">

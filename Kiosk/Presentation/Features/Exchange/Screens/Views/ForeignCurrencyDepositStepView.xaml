@@ -1,5 +1,5 @@
 <UserControl
-    x:Class="Kiosk.Views.Steps.DepositStepView"
+    x:Class="Kiosk.Views.Steps.ForeignCurrencyDepositStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="clr-namespace:Kiosk.Behaviors"
@@ -284,45 +284,12 @@
                     </Grid.Style>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition>
-                            <RowDefinition.Style>
-                                <Style TargetType="RowDefinition">
-                                    <Setter Property="Height" Value="109" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
-                                            <Setter Property="Height" Value="0" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RowDefinition.Style>
-                        </RowDefinition>
-                        <RowDefinition>
-                            <RowDefinition.Style>
-                                <Style TargetType="RowDefinition">
-                                    <Setter Property="Height" Value="2" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
-                                            <Setter Property="Height" Value="0" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RowDefinition.Style>
-                        </RowDefinition>
+                        <RowDefinition Height="109" />
+                        <RowDefinition Height="2" />
                         <RowDefinition Height="109" />
                     </Grid.RowDefinitions>
 
                     <Grid Margin="54,0">
-                        <Grid.Style>
-                            <Style TargetType="Grid">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Grid.Style>
-
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -331,36 +298,36 @@
                         <TextBlock
                             VerticalAlignment="Center"
                             Style="{StaticResource LimitLabelStyle}"
-                            Text="M-BOX 카드 구매 금액" />
-                        <TextBlock
+                            Text="{Binding PrimaryPrepaidInfoLabel}" />
+                        <StackPanel
                             Grid.Column="1"
                             VerticalAlignment="Center"
-                            Style="{StaticResource LimitValueStyle}"
-                            Text="{Binding CardPurchaseAmountText, StringFormat={}{0} KRW}" />
+                            Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource LimitValueStyle}" Text="{Binding PrimaryPrepaidInfoAmountText}" />
+                            <TextBlock Style="{StaticResource LimitValueStyle}" Text=" KRW" />
+                        </StackPanel>
                     </Grid>
 
                     <Border
                         Grid.Row="1"
                         Margin="54,0"
-                        Background="{DynamicResource FeatureDividerDefaultBrush}">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ShowCardPurchaseAmount}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
+                        Background="{DynamicResource FeatureDividerDefaultBrush}" />
 
                     <Button
                         Grid.Row="2"
-                        Command="{Binding ShowPrepaidLimitInfoCommand}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Style="{StaticResource FocusablePlainLinkButtonStyle}">
+                        Command="{Binding ShowPrepaidLimitInfoCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource FocusablePlainLinkButtonStyle}" TargetType="Button">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowPrepaidLimitInfoLink}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"

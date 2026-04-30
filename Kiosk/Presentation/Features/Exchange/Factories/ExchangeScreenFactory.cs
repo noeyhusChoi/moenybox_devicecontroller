@@ -44,7 +44,7 @@ public sealed class ExchangeScreenFactory : IExchangeScreenFactory
                 context.ScanOcr?.DocumentType,
                 context.ScanOcr?.Fields,
                 context.ScanErrorMessage),
-            ExchangeStep.Deposit => new DepositStepViewModel(
+            ExchangeStep.Deposit => new ForeignCurrencyDepositStepViewModel(
                 context.SourceCurrencyCode ?? "usd",
                 context.TargetCurrencyCode,
                 context.DepositAmount,

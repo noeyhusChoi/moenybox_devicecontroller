@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Kiosk.Application.Features.ExchangeV2.Services;
 using Kiosk.Application.Services.Exchange;
 using Kiosk.ViewModels;
+using Kiosk.ViewModels.PrepaidCard;
 
 namespace Kiosk.ViewModels.Steps;
 
@@ -14,9 +15,15 @@ public enum DepositInfoVariant
     PrepaidCard
 }
 
-public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, IDepositProgressConsumer
+public sealed record DepositInfoRowItem(
+    string Label,
+    string AmountText,
+    bool HasTopDivider,
+    double RowHeight);
+
+public abstract partial class DepositStepViewModelBase : ExchangeStepViewModelBase, IDepositProgressConsumer
 {
-    public DepositStepViewModel(
+    protected DepositStepViewModelBase(
         string sourceCurrencyCode,
         string targetCurrencyCode,
         decimal depositAmount,
@@ -25,6 +32,7 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
         DepositLimitSnapshot? depositLimit,
         DepositInfoVariant infoVariant = DepositInfoVariant.Exchange,
         PrepaidCardServiceKind? prepaidCardServiceKind = null,
+        PrepaidCardWalletKind prepaidCardWalletKind = PrepaidCardWalletKind.Prepaid,
         IRelayCommand? showPrepaidLimitInfoCommand = null)
     {
         Title = string.Empty;
@@ -40,29 +48,49 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
         InfoVariant = infoVariant;
         SourceCurrencyCode = sourceCurrency;
         TargetCurrencyCode = targetCurrency;
+        IsBaseCurrencyDeposit = string.Equals(SourceCurrencyCode, TargetCurrencyCode, StringComparison.OrdinalIgnoreCase);
+        PrepaidCardWalletKind = prepaidCardWalletKind;
         SourceFlagPath = CreateAssetPath("Flag", $"{ResolveFlagAssetCode(SourceCurrencyCode)}.png");
         TargetFlagPath = CreateAssetPath("Flag", $"{ResolveFlagAssetCode(TargetCurrencyCode)}.png");
         GuideImagePath = CreateAssetPath("Gif\\DepositGuide", $"Guide_Deposit_{SourceCurrencyCode}.gif");
         AcceptedDenominationImagePaths = ResolveAcceptedDenominations(SourceCurrencyCode);
 
         DepositAmountText = depositAmount.ToString("0.##");
-        ExchangeAmountText = previewExchangeAmount.ToString("0.00");
-        ExchangeRateText = exchangeRate.ToString("0.00");
-        StatusMessage = "외화를 투입해주세요.";
+        ExchangeAmountText = previewExchangeAmount.ToString("0.##");
+        ExchangeRateText = exchangeRate.ToString("#,0.##");
+        StatusMessage = IsBaseCurrencyDeposit ? "원화를 투입해주세요." : "외화를 투입해주세요.";
 
         DailyMaximumAmountText = ConvertKrwLimitForDisplay(depositLimit?.DailyMaximumAmount, exchangeRate).ToString("0.00");
         DailyRemainingMaximumAmountText = ConvertKrwLimitForDisplay(depositLimit?.DailyRemainingMaximumAmount, exchangeRate).ToString("0.00");
         DailyAvailableExchangeAmountText = ConvertKrwLimitForDisplay(depositLimit?.PerTransactionMaximumAmount, exchangeRate).ToString("0.00");
         CardPurchaseAmountText = prepaidCardServiceKind == PrepaidCardServiceKind.PurchaseAndCharge ? "5,000" : "0";
         ShowCardPurchaseAmount = prepaidCardServiceKind == PrepaidCardServiceKind.PurchaseAndCharge;
+        BaseCurrencyInfoRows = CreateBaseCurrencyInfoRows();
         ShowPrepaidLimitInfoCommand = showPrepaidLimitInfoCommand;
     }
 
     public DepositInfoVariant InfoVariant { get; }
     public bool ShowExchangeLimitInfo => InfoVariant == DepositInfoVariant.Exchange;
     public bool ShowPrepaidChargeInfo => InfoVariant == DepositInfoVariant.PrepaidCard;
+    public bool IsBaseCurrencyDeposit { get; }
+    public bool ShowExchangeRateInfo => !IsBaseCurrencyDeposit;
+    public bool ShowConvertedAmountPanel => !IsBaseCurrencyDeposit;
     public string SourceCurrencyCode { get; }
     public string TargetCurrencyCode { get; }
+    public PrepaidCardWalletKind PrepaidCardWalletKind { get; }
+    public string WalletDisplayName => PrepaidCardWalletKind == PrepaidCardWalletKind.Traffic ? "교통지갑" : "선불지갑";
+    public string WalletChargeStepLabel => $"{WalletDisplayName} 충전";
+    public string WalletBalanceLabel => $"{WalletDisplayName} 잔여금액";
+    public string MaxChargeableLabel => $"{WalletDisplayName} 최대 충전 가능 금액";
+    public string WalletBalanceAmountText => "15,000";
+    public string MaxChargeableAmountText => "35,000";
+    public string EachWalletMaximumAmountText => "500,000";
+    public string MaximumDepositAmountText => "1,005,000";
+    public string PrimaryPrepaidInfoLabel => ShowCardPurchaseAmount ? "M-BOX 카드 구매 금액" : WalletBalanceLabel;
+    public string PrimaryPrepaidInfoAmountText => ShowCardPurchaseAmount ? CardPurchaseAmountText : WalletBalanceAmountText;
+    public bool ShowBaseCurrencyChargeLimitInfo => ShowPrepaidChargeInfo && IsBaseCurrencyDeposit && !ShowCardPurchaseAmount;
+    public bool ShowPrepaidLimitInfoLink => ShowPrepaidChargeInfo && !ShowBaseCurrencyChargeLimitInfo;
+    public IReadOnlyList<DepositInfoRowItem> BaseCurrencyInfoRows { get; }
     public string? SourceFlagPath { get; }
     public string? TargetFlagPath { get; }
     public string? GuideImagePath { get; }
@@ -88,8 +116,27 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
     public void ApplyDepositProgress(ExchangeDepositProgressChangedEventArgs progress)
     {
         DepositAmountText = progress.ApprovedDepositAmount.ToString("0.##");
-        ExchangeAmountText = progress.ExchangedAmount.ToString("0.00");
+        ExchangeAmountText = progress.ExchangedAmount.ToString("0.##");
         StatusMessage = progress.StatusMessage;
+    }
+
+    private IReadOnlyList<DepositInfoRowItem> CreateBaseCurrencyInfoRows()
+    {
+        if (ShowCardPurchaseAmount)
+        {
+            return
+            [
+                new DepositInfoRowItem("M-BOX 카드 구매 금액", CardPurchaseAmountText, false, 87),
+                new DepositInfoRowItem("각 지갑 최대 가능금액", EachWalletMaximumAmountText, true, 87),
+                new DepositInfoRowItem("최대 입금 가능 금액", MaximumDepositAmountText, true, 87)
+            ];
+        }
+
+        return
+        [
+            new DepositInfoRowItem(WalletBalanceLabel, WalletBalanceAmountText, false, 109),
+            new DepositInfoRowItem(MaxChargeableLabel, MaxChargeableAmountText, true, 109)
+        ];
     }
 
     private static IReadOnlyList<string> ResolveAcceptedDenominations(string currencyCode)
@@ -100,7 +147,7 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
 
         return directory
             .GetFiles($"{currencyCode.ToUpperInvariant()}_*.png", SearchOption.TopDirectoryOnly)
-            .OrderBy(file => ParseDenomination(file.Name))
+            .OrderByDescending(file => ParseDenomination(file.Name))
             .Select(file => file.FullName)
             .ToArray();
     }
@@ -170,5 +217,61 @@ public sealed partial class DepositStepViewModel : ExchangeStepViewModelBase, ID
             return amountInKrw.Value;
 
         return decimal.Round(amountInKrw.Value / exchangeRate, 2, MidpointRounding.AwayFromZero);
+    }
+}
+
+public sealed class ForeignCurrencyDepositStepViewModel : DepositStepViewModelBase
+{
+    public ForeignCurrencyDepositStepViewModel(
+        string sourceCurrencyCode,
+        string targetCurrencyCode,
+        decimal depositAmount,
+        decimal previewExchangeAmount,
+        decimal exchangeRate,
+        DepositLimitSnapshot? depositLimit,
+        DepositInfoVariant infoVariant = DepositInfoVariant.Exchange,
+        PrepaidCardServiceKind? prepaidCardServiceKind = null,
+        PrepaidCardWalletKind prepaidCardWalletKind = PrepaidCardWalletKind.Prepaid,
+        IRelayCommand? showPrepaidLimitInfoCommand = null)
+        : base(
+            sourceCurrencyCode,
+            targetCurrencyCode,
+            depositAmount,
+            previewExchangeAmount,
+            exchangeRate,
+            depositLimit,
+            infoVariant,
+            prepaidCardServiceKind,
+            prepaidCardWalletKind,
+            showPrepaidLimitInfoCommand)
+    {
+    }
+}
+
+public sealed class BaseCurrencyDepositStepViewModel : DepositStepViewModelBase
+{
+    public BaseCurrencyDepositStepViewModel(
+        string sourceCurrencyCode,
+        string targetCurrencyCode,
+        decimal depositAmount,
+        decimal previewExchangeAmount,
+        decimal exchangeRate,
+        DepositLimitSnapshot? depositLimit,
+        DepositInfoVariant infoVariant = DepositInfoVariant.Exchange,
+        PrepaidCardServiceKind? prepaidCardServiceKind = null,
+        PrepaidCardWalletKind prepaidCardWalletKind = PrepaidCardWalletKind.Prepaid,
+        IRelayCommand? showPrepaidLimitInfoCommand = null)
+        : base(
+            sourceCurrencyCode,
+            targetCurrencyCode,
+            depositAmount,
+            previewExchangeAmount,
+            exchangeRate,
+            depositLimit,
+            infoVariant,
+            prepaidCardServiceKind,
+            prepaidCardWalletKind,
+            showPrepaidLimitInfoCommand)
+    {
     }
 }

@@ -48,9 +48,9 @@
                 <stepViews:ScanCompletedStepView />
             </Border>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type stepVm:DepositStepViewModel}">
+        <DataTemplate DataType="{x:Type stepVm:ForeignCurrencyDepositStepViewModel}">
             <Border Style="{StaticResource StepScreenRootBorderStyle}">
-                <stepViews:DepositStepView />
+                <stepViews:ForeignCurrencyDepositStepView />
             </Border>
         </DataTemplate>
         <DataTemplate DataType="{x:Type stepVm:DispensingStepViewModel}">

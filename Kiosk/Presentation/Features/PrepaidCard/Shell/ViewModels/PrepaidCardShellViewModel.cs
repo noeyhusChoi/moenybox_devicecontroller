@@ -39,6 +39,11 @@ public enum PrepaidCardStep
     EasyPayCharging,
     EasyPaySuccess,
     EasyPayFailure,
+    DepositAmountConfirmation,
+    CardCharging,
+    CardChargeSuccess,
+    CardChargeFailure,
+    CardChargeCompletion,
     EasyPayCompletion
 }
 
@@ -53,6 +58,15 @@ public enum PrepaidCardChargeMethod
     BothWallets,
     PrepaidWalletOnly,
     TrafficWalletOnly
+}
+
+public sealed record PrepaidCardProgressStepItem(
+    int StepNumber,
+    string Label,
+    bool IsCurrent,
+    bool IsCompleted)
+{
+    public string StepNumberText => StepNumber.ToString();
 }
 
 public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceViewModel, IProgressChromeShellViewModel
@@ -92,11 +106,35 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
     [ObservableProperty]
     private int currentProgressStage;
 
+    [ObservableProperty]
+    private IReadOnlyList<PrepaidCardProgressStepItem> cashProgressItems = [];
+
+    public int CashProgressStepCount => CashProgressItems.Count;
+
     public string EasyPayPaymentStepLabel => _selectedEasyPayKind == PrepaidCardEasyPayKind.Alipay
         ? "Alipay 결제"
         : "WeChat pay 결제";
 
-    private bool RequiresIdentityScan => _selectedFundingType != PrepaidCardFundingType.BaseCash;
+    private bool IsBaseCurrencySelected
+        => _selectedFundingType == PrepaidCardFundingType.BaseCash
+           || string.Equals(_selectedCurrencyCode, "KRW", StringComparison.OrdinalIgnoreCase);
+
+    private bool RequiresIdentityScan => !IsBaseCurrencySelected;
+
+    private bool ShouldShowDepositGuide => _selectedService == PrepaidCardServiceKind.PurchaseAndCharge;
+
+    private bool IsCardPurchaseFlow => _selectedService == PrepaidCardServiceKind.PurchaseAndCharge;
+
+    private bool IsCashFundingSelected
+        => _selectedFundingType is PrepaidCardFundingType.BaseCash or PrepaidCardFundingType.ForeignCash;
+
+    private bool ShouldSkipWalletAmountEntry
+        => _selectedService == PrepaidCardServiceKind.ChargeExistingCard && IsCashFundingSelected;
+
+    private PrepaidCardWalletKind SelectedWalletKind
+        => _selectedChargeMethod == PrepaidCardChargeMethod.TrafficWalletOnly
+            ? PrepaidCardWalletKind.Traffic
+            : PrepaidCardWalletKind.Prepaid;
 
     [ObservableProperty]
     private PrepaidCardStep currentStep;
@@ -211,15 +249,19 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
             ? PrepaidCardFundingType.BaseCash
             : PrepaidCardFundingType.ForeignCash;
         _scanResult = null;
+        if (IsBaseCurrencySelected)
+            return ProceedToDepositEntryAsync();
+
         ApplyState(PrepaidCardStep.Consent);
         return Task.CompletedTask;
     }
 
     private Task ConfirmConsentAsync()
     {
-        ApplyState(RequiresIdentityScan
-            ? PrepaidCardStep.ScanIntro
-            : PrepaidCardStep.DepositGuide);
+        if (!RequiresIdentityScan)
+            return ProceedToDepositEntryAsync();
+
+        ApplyState(PrepaidCardStep.ScanIntro);
         return Task.CompletedTask;
     }
 
@@ -276,11 +318,11 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
             case PrepaidCardStep.DepositGuide:
                 ApplyState(RequiresIdentityScan
                     ? PrepaidCardStep.ScanCompleted
-                    : PrepaidCardStep.Consent);
+                    : PrepaidCardStep.CurrencySelection);
                 break;
             case PrepaidCardStep.Deposit:
                 await StopDepositIfRunningAsync();
-                ApplyState(PrepaidCardStep.DepositGuide);
+                ApplyState(GetDepositBackStep());
                 break;
             case PrepaidCardStep.AmountEntry:
                 if (_selectedFundingType == PrepaidCardFundingType.EasyPay)
@@ -305,6 +347,19 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
             case PrepaidCardStep.EasyPayFailure:
                 ApplyState(PrepaidCardStep.EasyPayCharging);
                 break;
+            case PrepaidCardStep.DepositAmountConfirmation:
+                await ShowDepositStepAsync();
+                break;
+            case PrepaidCardStep.CardCharging:
+                ApplyState(PrepaidCardStep.DepositAmountConfirmation);
+                break;
+            case PrepaidCardStep.CardChargeSuccess:
+            case PrepaidCardStep.CardChargeFailure:
+                ApplyState(PrepaidCardStep.CardCharging);
+                break;
+            case PrepaidCardStep.CardChargeCompletion:
+                ApplyState(PrepaidCardStep.CardChargeSuccess);
+                break;
             case PrepaidCardStep.EasyPayCompletion:
                 ApplyState(PrepaidCardStep.EasyPaySuccess);
                 break;
@@ -316,7 +371,6 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
         DetachCurrentStepSubscriptions();
         CurrentStep = step;
         ShowStepHeader = step is PrepaidCardStep.Consent
-            or PrepaidCardStep.CurrencySelection
             or PrepaidCardStep.ScanIntro
             or PrepaidCardStep.Scanning
             or PrepaidCardStep.ScanCompleted
@@ -325,23 +379,17 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
             or PrepaidCardStep.AmountEntry
             or PrepaidCardStep.EasyPayAmountConfirmation
             or PrepaidCardStep.EasyPayQrPayment
-            or PrepaidCardStep.EasyPayCharging;
+            or PrepaidCardStep.EasyPayCharging
+            or PrepaidCardStep.DepositAmountConfirmation
+            or PrepaidCardStep.CardCharging;
         UseEasyPayProgressHeader = _selectedFundingType == PrepaidCardFundingType.EasyPay
             && step is PrepaidCardStep.AmountEntry
                 or PrepaidCardStep.EasyPayAmountConfirmation
                 or PrepaidCardStep.EasyPayQrPayment
                 or PrepaidCardStep.EasyPayCharging;
         CollapseShellChrome = false;
-        CurrentProgressStage = step switch
-        {
-            PrepaidCardStep.CurrencySelection => 1,
-            PrepaidCardStep.Consent or PrepaidCardStep.ScanIntro or PrepaidCardStep.Scanning or PrepaidCardStep.ScanCompleted => 2,
-            PrepaidCardStep.DepositGuide or PrepaidCardStep.Deposit => 3,
-            PrepaidCardStep.AmountEntry or PrepaidCardStep.EasyPayAmountConfirmation => UseEasyPayProgressHeader ? 1 : 3,
-            PrepaidCardStep.EasyPayQrPayment => 2,
-            PrepaidCardStep.EasyPayCharging or PrepaidCardStep.EasyPaySuccess or PrepaidCardStep.EasyPayFailure => 3,
-            _ => 0
-        };
+        CurrentProgressStage = ShowStepHeader ? CalculateProgressStage(step) : 0;
+        CashProgressItems = CreateCashProgressItems(CurrentProgressStage);
         OnPropertyChanged(nameof(EasyPayPaymentStepLabel));
         CurrentStepViewModel = CreateStepViewModel(step);
         ConfigureStepActions(step);
@@ -377,16 +425,7 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
             PrepaidCardStep.Scanning => new ScanningStepViewModel(),
             PrepaidCardStep.ScanCompleted => CreateScanCompletedStepViewModel(),
             PrepaidCardStep.DepositGuide => new PrepaidCardDepositGuideStepViewModel(),
-            PrepaidCardStep.Deposit => new DepositStepViewModel(
-                _selectedCurrencyCode ?? "USD",
-                "KRW",
-                _approvedDepositAmount,
-                _approvedExchangeAmount,
-                _selectedCurrencyRate ?? 0m,
-                _depositLimit,
-                DepositInfoVariant.PrepaidCard,
-                _selectedService,
-                ShowPrepaidLimitInfoCommand),
+            PrepaidCardStep.Deposit => CreateDepositStepViewModel(),
             PrepaidCardStep.AmountEntry => CreateAmountEntryStepViewModel(),
             PrepaidCardStep.EasyPayAmountConfirmation => new PrepaidCardEasyPayAmountConfirmationStepViewModel(
                 _selectedEasyPayKind,
@@ -403,9 +442,55 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
                 false,
                 _selectedEasyPayKind,
                 _easyPayChargeAmount),
+            PrepaidCardStep.DepositAmountConfirmation => new PrepaidCardDepositAmountConfirmationStepViewModel(
+                SelectedWalletKind,
+                CalculateAvailableChargeAmount()),
+            PrepaidCardStep.CardCharging => new PrepaidCardCashChargingStepViewModel(
+                SelectedWalletKind,
+                CalculateAvailableChargeAmount()),
+            PrepaidCardStep.CardChargeSuccess => new PrepaidCardCashResultStepViewModel(
+                true,
+                SelectedWalletKind,
+                CalculateAvailableChargeAmount()),
+            PrepaidCardStep.CardChargeFailure => new PrepaidCardCashResultStepViewModel(
+                false,
+                SelectedWalletKind,
+                CalculateAvailableChargeAmount()),
+            PrepaidCardStep.CardChargeCompletion => new PrepaidCardEasyPayCompletionStepViewModel(),
             PrepaidCardStep.EasyPayCompletion => new PrepaidCardEasyPayCompletionStepViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(step), step, "Unsupported prepaid card step.")
         };
+
+    private DepositStepViewModelBase CreateDepositStepViewModel()
+    {
+        var sourceCurrency = _selectedCurrencyCode ?? "USD";
+        var targetCurrency = "KRW";
+        var exchangeRate = _selectedCurrencyRate ?? 0m;
+
+        return IsBaseCurrencySelected
+            ? new BaseCurrencyDepositStepViewModel(
+                sourceCurrency,
+                targetCurrency,
+                _approvedDepositAmount,
+                _approvedExchangeAmount,
+                exchangeRate,
+                _depositLimit,
+                DepositInfoVariant.PrepaidCard,
+                _selectedService,
+                SelectedWalletKind,
+                ShowPrepaidLimitInfoCommand)
+            : new ForeignCurrencyDepositStepViewModel(
+                sourceCurrency,
+                targetCurrency,
+                _approvedDepositAmount,
+                _approvedExchangeAmount,
+                exchangeRate,
+                _depositLimit,
+                DepositInfoVariant.PrepaidCard,
+                _selectedService,
+                SelectedWalletKind,
+                ShowPrepaidLimitInfoCommand);
+    }
 
     private ExchangeStepViewModelBase CreateAmountEntryStepViewModel()
     {
@@ -479,11 +564,7 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
                     ? new AsyncRelayCommand(GoBackAsync)
                     : null;
                 CurrentStepViewModel.PrimaryCommand = _scanResult?.Success == true
-                    ? new AsyncRelayCommand(() =>
-                    {
-                        ApplyState(PrepaidCardStep.DepositGuide);
-                        return Task.CompletedTask;
-                    })
+                    ? new AsyncRelayCommand(ProceedToDepositEntryAsync)
                     : new AsyncRelayCommand(() =>
                     {
                         ApplyState(PrepaidCardStep.ScanIntro);
@@ -538,6 +619,39 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
                     return Task.CompletedTask;
                 });
                 break;
+            case PrepaidCardStep.DepositAmountConfirmation:
+                CurrentStepViewModel.PrimaryCommand = new AsyncRelayCommand(() =>
+                {
+                    ApplyState(PrepaidCardStep.CardCharging);
+                    return Task.CompletedTask;
+                });
+                break;
+            case PrepaidCardStep.CardCharging:
+                CurrentStepViewModel.SecondaryCommand = new AsyncRelayCommand(() =>
+                {
+                    ApplyState(PrepaidCardStep.CardChargeFailure);
+                    return Task.CompletedTask;
+                });
+                CurrentStepViewModel.PrimaryCommand = new AsyncRelayCommand(() =>
+                {
+                    ApplyState(PrepaidCardStep.CardChargeSuccess);
+                    return Task.CompletedTask;
+                });
+                break;
+            case PrepaidCardStep.CardChargeSuccess:
+            case PrepaidCardStep.CardChargeFailure:
+                CurrentStepViewModel.SecondaryCommand = new AsyncRelayCommand(() =>
+                {
+                    ApplyState(PrepaidCardStep.CardChargeCompletion);
+                    return Task.CompletedTask;
+                });
+                CurrentStepViewModel.PrimaryCommand = new AsyncRelayCommand(() =>
+                {
+                    ApplyState(PrepaidCardStep.CardChargeCompletion);
+                    return Task.CompletedTask;
+                });
+                break;
+            case PrepaidCardStep.CardChargeCompletion:
             case PrepaidCardStep.EasyPayCompletion:
                 CurrentStepViewModel.SecondaryCommand = null;
                 CurrentStepViewModel.PrimaryCommand = new AsyncRelayCommand(() =>
@@ -619,7 +733,7 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
     [RelayCommand]
     private void ShowPrepaidLimitInfo()
     {
-        if (CurrentStepViewModel is not DepositStepViewModel depositStepViewModel)
+        if (CurrentStepViewModel is not DepositStepViewModelBase depositStepViewModel)
             return;
 
         CurrentModalViewModel = new PrepaidCardDepositLimitOverlayViewModel(
@@ -673,6 +787,12 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
     private async Task ProceedFromDepositAsync()
     {
         await StopDepositIfRunningAsync();
+        if (ShouldSkipWalletAmountEntry)
+        {
+            ApplyState(PrepaidCardStep.DepositAmountConfirmation);
+            return;
+        }
+
         ApplyState(PrepaidCardStep.AmountEntry);
     }
 
@@ -687,9 +807,72 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
         return Task.CompletedTask;
     }
 
+    private Task ProceedToDepositEntryAsync()
+    {
+        if (ShouldShowDepositGuide)
+        {
+            ApplyState(PrepaidCardStep.DepositGuide);
+            return Task.CompletedTask;
+        }
+
+        return ShowDepositStepAsync();
+    }
+
+    private PrepaidCardStep GetDepositBackStep()
+    {
+        if (ShouldShowDepositGuide)
+            return PrepaidCardStep.DepositGuide;
+
+        return RequiresIdentityScan
+            ? PrepaidCardStep.ScanCompleted
+            : PrepaidCardStep.CurrencySelection;
+    }
+
     private async Task StopDepositIfRunningAsync()
     {
         await _depositSession.StopAsync();
+    }
+
+    private int CalculateProgressStage(PrepaidCardStep step)
+        => step switch
+        {
+            PrepaidCardStep.Consent or PrepaidCardStep.ScanIntro or PrepaidCardStep.Scanning or PrepaidCardStep.ScanCompleted => 1,
+            PrepaidCardStep.DepositGuide or PrepaidCardStep.Deposit => IsBaseCurrencySelected ? 1 : 2,
+            PrepaidCardStep.AmountEntry or PrepaidCardStep.EasyPayAmountConfirmation => UseEasyPayProgressHeader
+                ? 1
+                : IsBaseCurrencySelected ? 2 : 3,
+            PrepaidCardStep.EasyPayQrPayment => 2,
+            PrepaidCardStep.EasyPayCharging or PrepaidCardStep.EasyPaySuccess or PrepaidCardStep.EasyPayFailure => 3,
+            PrepaidCardStep.DepositAmountConfirmation or PrepaidCardStep.CardCharging => IsBaseCurrencySelected ? 2 : 3,
+            _ => 0
+        };
+
+    private IReadOnlyList<PrepaidCardProgressStepItem> CreateCashProgressItems(int currentStage)
+    {
+        if (currentStage <= 0)
+            return [];
+
+        var depositLabel = IsBaseCurrencySelected ? "원화입금" : "외화입금";
+        var walletChargeLabel = SelectedWalletKind == PrepaidCardWalletKind.Traffic
+            ? "교통지갑 충전"
+            : "선불지갑 충전";
+        var labels = IsBaseCurrencySelected && IsCardPurchaseFlow
+            ? new[] { depositLabel, "충전금액설정", "수령" }
+            : IsBaseCurrencySelected
+            ? new[] { depositLabel, walletChargeLabel }
+            : new[] { "신분증스캔", depositLabel, walletChargeLabel };
+
+        return labels
+            .Select((label, index) =>
+            {
+                var stepNumber = index + 1;
+                return new PrepaidCardProgressStepItem(
+                    stepNumber,
+                    label,
+                    stepNumber == currentStage,
+                    stepNumber < currentStage);
+            })
+            .ToArray();
     }
 
     private int CalculateAvailableChargeAmount()
@@ -698,6 +881,9 @@ public partial class PrepaidCardShellViewModel : ObservableObject, IModalSourceV
         var cardPurchaseAmount = _selectedService == PrepaidCardServiceKind.PurchaseAndCharge ? 5_000 : 0;
         return Math.Max(0, exchangedAmount - cardPurchaseAmount);
     }
+
+    partial void OnCashProgressItemsChanged(IReadOnlyList<PrepaidCardProgressStepItem> value)
+        => OnPropertyChanged(nameof(CashProgressStepCount));
 
     private Task ShowChargeAmountOverlayAsync(PrepaidCardWalletKind walletKind)
     {

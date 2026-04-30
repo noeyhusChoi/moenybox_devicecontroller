@@ -9,7 +9,6 @@
     xmlns:prepaidVm="clr-namespace:Kiosk.ViewModels.PrepaidCard"
     xmlns:stepViews="clr-namespace:Kiosk.Views.Steps"
     xmlns:stepVm="clr-namespace:Kiosk.ViewModels.Steps"
-    xmlns:views="clr-namespace:Kiosk.Views"
     x:Name="Root"
     behavior:FocusBoundary.EntryTarget="{Binding ElementName=StepContentHost}"
     d:DesignHeight="1705"
@@ -79,9 +78,14 @@
                 <prepaidViews:PrepaidCardDepositGuideStepView />
             </Border>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type stepVm:DepositStepViewModel}">
+        <DataTemplate DataType="{x:Type stepVm:BaseCurrencyDepositStepViewModel}">
             <Border Style="{StaticResource StepScreenRootBorderStyle}">
-                <stepViews:DepositStepView />
+                <stepViews:BaseCurrencyDepositStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stepVm:ForeignCurrencyDepositStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <stepViews:ForeignCurrencyDepositStepView />
             </Border>
         </DataTemplate>
         <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardAmountEntryStepViewModel}">
@@ -119,6 +123,21 @@
                 <prepaidViews:PrepaidCardEasyPayResultStepView />
             </Border>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardDepositAmountConfirmationStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardDepositAmountConfirmationStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardCashChargingStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardCashChargingStepView />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardCashResultStepViewModel}">
+            <Border Style="{StaticResource StepScreenRootBorderStyle}">
+                <prepaidViews:PrepaidCardCashResultStepView />
+            </Border>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type prepaidVm:PrepaidCardEasyPayCompletionStepViewModel}">
             <Border Style="{StaticResource StepScreenRootBorderStyle}">
                 <prepaidViews:PrepaidCardEasyPayCompletionStepView />
@@ -145,9 +164,9 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <views:ExchangeProgressView DataContext="{Binding CurrentProgressStage}">
-                    <views:ExchangeProgressView.Style>
-                        <Style TargetType="{x:Type views:ExchangeProgressView}">
+                <prepaidViews:PrepaidCardCashProgressView>
+                    <prepaidViews:PrepaidCardCashProgressView.Style>
+                        <Style TargetType="{x:Type prepaidViews:PrepaidCardCashProgressView}">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding DataContext.UseEasyPayProgressHeader, ElementName=Root}" Value="True">
@@ -155,8 +174,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </views:ExchangeProgressView.Style>
-                </views:ExchangeProgressView>
+                    </prepaidViews:PrepaidCardCashProgressView.Style>
+                </prepaidViews:PrepaidCardCashProgressView>
 
                 <prepaidViews:PrepaidCardEasyPayProgressView>
                     <prepaidViews:PrepaidCardEasyPayProgressView.Style>

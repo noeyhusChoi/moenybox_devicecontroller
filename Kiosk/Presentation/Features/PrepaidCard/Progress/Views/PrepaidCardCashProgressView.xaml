@@ -1,0 +1,131 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCard.PrepaidCardCashProgressView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="190"
+    d:DesignWidth="1080"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="CashProgressCircleStyle" TargetType="Border">
+            <Setter Property="Width" Value="68" />
+            <Setter Property="Height" Value="68" />
+            <Setter Property="CornerRadius" Value="34" />
+            <Setter Property="Background" Value="{DynamicResource ProgressPendingBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ProgressCurrentBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ProgressBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ProgressCurrentBrush}" />
+                    <Setter Property="BorderThickness" Value="3" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CashProgressNumberStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource ProgressCurrentForegroundBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CashProgressCheckStyle" TargetType="Path">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Data" Value="M 2,10 L 11,19 L 28,2" />
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="Stroke" Value="{DynamicResource ProgressCurrentBrush}" />
+            <Setter Property="StrokeThickness" Value="5" />
+            <Setter Property="StrokeStartLineCap" Value="Round" />
+            <Setter Property="StrokeEndLineCap" Value="Round" />
+            <Setter Property="StrokeLineJoin" Value="Round" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CashProgressLabelStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_XS}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                    <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CashProgressUnderlineStyle" TargetType="Border">
+            <Setter Property="Visibility" Value="Hidden" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Background" Value="{DynamicResource ProgressCurrentBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Height="190" Background="{DynamicResource ProgressBackgroundBrush}">
+        <Rectangle
+            Width="653"
+            Height="6"
+            Margin="0,48,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Fill="{DynamicResource ProgressPendingBrush}" />
+
+        <ItemsControl ItemsSource="{Binding CashProgressItems}" Margin="72,0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding DataContext.CashProgressStepCount, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="103" />
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="7" />
+                        </Grid.RowDefinitions>
+
+                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CashProgressCircleStyle}">
+                            <Grid>
+                                <TextBlock Style="{StaticResource CashProgressNumberStyle}" Text="{Binding StepNumberText}" />
+                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CashProgressCheckStyle}" />
+                            </Grid>
+                        </Border>
+
+                        <TextBlock Grid.Row="1" Style="{StaticResource CashProgressLabelStyle}" Text="{Binding Label}" />
+                        <Border Grid.Row="2" Style="{StaticResource CashProgressUnderlineStyle}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

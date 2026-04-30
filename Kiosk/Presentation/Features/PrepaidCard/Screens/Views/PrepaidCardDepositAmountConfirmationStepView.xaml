@@ -1,0 +1,109 @@
+<UserControl
+    x:Class="Kiosk.Views.PrepaidCard.PrepaidCardDepositAmountConfirmationStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="clr-namespace:Kiosk.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1455"
+    d:DesignWidth="1080"
+    Focusable="False"
+    IsTabStop="False"
+    KeyboardNavigation.IsTabStop="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="ConfirmationCardTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize_S}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="ConfirmationAmountNumberStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="59" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_L}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextAccentStrongBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="ConfirmationAmountCurrencyStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight_M}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextAccentStrongBrush}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="76" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="120" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource ExchangeStepTitleStyle}"
+            Text="금액을 확인해주세요" />
+
+        <Border
+            Grid.Row="2"
+            Width="936"
+            Height="397"
+            HorizontalAlignment="Center"
+            Background="{DynamicResource CardPrimaryBackgroundBrush}"
+            CornerRadius="32">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="32"
+                    Opacity="0.08"
+                    ShadowDepth="0"
+                    Color="#4A5576" />
+            </Border.Effect>
+
+            <Grid Margin="48">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource ConfirmationCardTitleStyle}"
+                    Text="{Binding WalletChargeAmountLabel, Mode=OneWay}" />
+
+                <Border
+                    Grid.Row="2"
+                    Background="{DynamicResource AppBackgroundBrush}"
+                    CornerRadius="32">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Style="{StaticResource ConfirmationAmountNumberStyle}"
+                            Text="{Binding ChargeAmountNumberText, Mode=OneWay}" />
+                        <TextBlock
+                            Margin="8,14,0,0"
+                            Style="{StaticResource ConfirmationAmountCurrencyStyle}"
+                            Text="{Binding ChargeAmountCurrencyText, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Button
+            Grid.Row="4"
+            Command="{Binding PrimaryCommand}"
+            IsEnabled="{Binding IsPrimaryEnabled}"
+            Style="{StaticResource FilledActionPrimaryButtonStyle}">
+            <TextBlock Text="{Binding ConfirmButtonText, Mode=OneWay}" />
+        </Button>
+    </Grid>
+</UserControl>
